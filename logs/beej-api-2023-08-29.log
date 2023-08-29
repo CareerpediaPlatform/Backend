@@ -56,3 +56,14 @@
 2023-08-29 13:09:08 index.ts[info]: data_stores_mysql_lib_user.checkEmailOrPhoneExist()  ==> 
 2023-08-29 13:09:11 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
 2023-08-29 13:09:11 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-08-29 14:40:12 index.ts[info]: passportConfiguration() 
+2023-08-29 14:40:12 index.ts[info]: env validation started 
+2023-08-29 14:40:13 index.ts[info]: initializeRoutes() 
+2023-08-29 14:40:13 index.ts[info]: SERVER listening on PORT:5000 
+2023-08-29 14:41:00 index.ts[info]: services.auth.signupUser() 
+2023-08-29 14:41:00 index.ts[debug]: services.auth.signupUser() Object = {"email":"babunaikbanoth7@gmail.com","password":"babu@201"} 
+2023-08-29 14:41:00 index.ts[info]: helpers.data_mapping.user.userDataMapping() 
+2023-08-29 14:41:00 index.ts[info]: services.auth.signupUser() ==>  
+2023-08-29 14:41:01 index.ts[info]: data_stores_mysql_lib_user.checkEmailOrPhoneExist()  ==> 
+2023-08-29 14:41:02 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-08-29 14:41:02 index.ts[info]: helper.response_builder.responseBuilder() 
