@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\myProject\\Careerpedia-Backend\\Backend\\logs\\.94b24d6a664c1bc330feae545d0310c54d11b628-audit.json",
+    "files": [
+        {
+            "date": 1693300209745,
+            "name": "D:\\myProject\\Careerpedia-Backend\\Backend\\logs\\beej-api-2023-08-29.log",
+            "hash": "6d83f3523750379d0db0cd109f1214b78c4a951f4e3d04e11f94da20939f4e9f"
+        }
+    ],
+    "hashType": "sha256"
+}
