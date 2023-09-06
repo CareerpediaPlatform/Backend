@@ -1,10 +1,10 @@
 import { MentorAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor_auth";
+import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor/mentor_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken ,verifyAccessToken} from '../helpers/authentication'
+import {generateAccessToken ,verifyAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IMentor} from "src/models/lib/auth";
 

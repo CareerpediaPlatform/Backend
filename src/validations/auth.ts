@@ -7,7 +7,7 @@ const TAG = 'validations.auth'
 export const login = async (req, res, next) => {
   const schema = Joi.object().keys({
     //User ID - user email or phone number
-    userLoginId: Joi.string().required(),
+    email:Joi.string().required(),
     password: Joi.string().required(),
   });
   await validate(schema, req, res, next);

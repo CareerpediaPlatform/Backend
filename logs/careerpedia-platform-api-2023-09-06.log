@@ -542,3 +542,45 @@
 2023-09-06 15:16:45 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
 2023-09-06 15:16:47 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
 2023-09-06 15:16:47 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 15:29:42 index.ts[info]: passportConfiguration() 
+2023-09-06 15:29:42 index.ts[info]: passportConfiguration() 
+2023-09-06 15:29:42 index.ts[info]: passportConfiguration() 
+2023-09-06 15:29:42 index.ts[info]: passportConfiguration() 
+2023-09-06 15:29:43 index.ts[info]: env validation started 
+2023-09-06 15:29:43 index.ts[info]: initializeRoutes() 
+2023-09-06 15:29:43 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:38:16 index.ts[info]: passportConfiguration() 
+2023-09-06 15:38:16 index.ts[info]: passportConfiguration() 
+2023-09-06 15:38:16 index.ts[info]: passportConfiguration() 
+2023-09-06 15:38:16 index.ts[info]: passportConfiguration() 
+2023-09-06 15:38:16 index.ts[info]: env validation started 
+2023-09-06 15:38:16 index.ts[info]: initializeRoutes() 
+2023-09-06 15:38:16 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:38:30 index.ts[info]: services.auth.loginMentor() 
+2023-09-06 15:38:30 index.ts[debug]: services.auth.loginMentor() Object = {"email":"mentor1@gmail.com","password":"babunaik"} 
+2023-09-06 15:38:30 index.ts[info]: helpers.data_mapping.mentor.mentorDataMapping() 
+2023-09-06 15:38:30 index.ts[info]: services.auth.loginUser() ==>  
+2023-09-06 15:38:30 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 15:38:31 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 15:38:31 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 15:39:11 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:11 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:11 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:11 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:12 index.ts[info]: env validation started 
+2023-09-06 15:39:12 index.ts[info]: initializeRoutes() 
+2023-09-06 15:39:12 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 15:39:59 index.ts[info]: env validation started 
+2023-09-06 15:39:59 index.ts[info]: initializeRoutes() 
+2023-09-06 15:40:00 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:40:09 index.ts[info]: services.auth.loginMentor() 
+2023-09-06 15:40:09 index.ts[debug]: services.auth.loginMentor() Object = {"email":"mentor1@gmail.com","password":"babunaik"} 
+2023-09-06 15:40:09 index.ts[info]: helpers.data_mapping.mentor.mentorDataMapping() 
+2023-09-06 15:40:09 index.ts[info]: services.auth.loginUser() ==>  
+2023-09-06 15:40:09 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 15:40:10 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 15:40:10 index.ts[info]: helper.response_builder.responseBuilder() 

@@ -1,9 +1,9 @@
 import { NextFunction, Response } from 'express'
-import { responseBuilder } from '../helpers/response_builder'
-import log from '../logger'
-import {IServiceResponse, IUser} from '../models'
-import * as authService from '../services/mentor_auth'
-import {mentorDataMapping} from "../helpers/data_mapping/auth";
+import { responseBuilder } from '../../helpers/response_builder'
+import log from '../../logger'
+import {IServiceResponse, IUser} from '../../models'
+import * as authService from '../../services/mentor/mentor_auth'
+import {mentorDataMapping} from "../../helpers/data_mapping/auth";
 import { IMentor } from 'src/models/lib/auth'
 
 const TAG = 'services.auth'

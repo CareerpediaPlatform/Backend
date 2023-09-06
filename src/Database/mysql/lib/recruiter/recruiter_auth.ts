@@ -1,13 +1,13 @@
 import logger from "src/logger";
-import { executeQuery } from "../helpers/sql.query.util";
+import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
 import { hashPassword } from "src/helpers/encryption";
-import { ICollege } from "src/models/lib/auth";
+import { IRecruiter } from "src/models/lib/auth";
 var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'
 
-export async function signUp(user: ICollege) {
+export async function signUp(user: IRecruiter) {
   logger.info(`${TAG}.saveUser()`);
   try {
     const hashedPassword = await hashPassword(user.password);
@@ -16,10 +16,10 @@ export async function signUp(user: ICollege) {
       email: user.email,
       password: hashedPassword
     };
-    let collegeInsertQuery = `insert into COLLEGE(UID, EMAIL, PASSWORD)
+    let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD)
     values(:uid, :email, :password)`;
 
-    await executeQuery(collegeInsertQuery, QueryTypes.INSERT, {
+    await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
       ...data,
     });
     return data;
@@ -35,7 +35,7 @@ export async function checkEmailExist(email: string) {
     try {
       logger.info(`${TAG}.checkEmailExist()  ==>`, email);
   
-      let query = 'select * from COLLEGE where EMAIL=:email ';
+      let query = 'select * from RECRUITER where EMAIL=:email ';
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         email
       });
@@ -50,7 +50,7 @@ export async function checkEmailExist(email: string) {
   export async function checkUidExist(uid: string) {
     try {
       logger.info(`${TAG}.checkUidExist() ==>`, uid);
-      let query = 'SELECT * FROM COLLEGE WHERE UID = :uid'; 
+      let query = 'SELECT * FROM RECRUITER WHERE UID = :uid'; 
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         uid
       });  
@@ -61,29 +61,29 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-
-export async function login(user:ICollege) {
+export async function login(user:IRecruiter) {
   
   try{
     logger.info(`${TAG}.saveUser()`);
-    let query = 'SELECT * FROM COLLEGE WHERE EMAIL=:email'
-    const collgeloginQuery  = await executeQuery(query,QueryTypes.SELECT,{
+    let query = 'SELECT * FROM RECRUITER WHERE EMAIL=:email'
+    const recruiterloginQuery  = await executeQuery(query,QueryTypes.SELECT,{
       email: user.email
     })
-    return collgeloginQuery
+    return recruiterloginQuery
   }catch(error){
     logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
     throw error;
   }
 }
 
+
 export async function changePassword(user:any): Promise<void> {
   try {
     let hashedPassword=await hashPassword(user.password)
     // Update the mentor's password in the database
-    const query = `UPDATE COLLEGE SET PASSWORD = :hashedPassword WHERE UID = :uid`;
-    const collegeChangePassword = await executeQuery(query, QueryTypes.UPDATE, {hashedPassword ,...user});
-    return collegeChangePassword;
+    const query = `UPDATE RECRUITER SET PASSWORD = :hashedPassword WHERE UID = :uid`;
+    const recruiterChangePassword = await executeQuery(query, QueryTypes.UPDATE, {hashedPassword ,...user});
+    return recruiterChangePassword;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.changePassword()`, error);
     throw error;

@@ -1,9 +1,9 @@
-import * as APIPaths from '../../constants/api_path_constants'
-import * as controller from '../../controller/adminAuth'
+import * as APIPaths from '../../../constants/api_path_constants'
+import * as controller from '../../../controller/admin/adminAuth'
 import { Router } from 'express'
-import { passportConfiguration } from '../../middlewares/passport'
+import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-import * as validation from '../../validations/auth'
+import * as validation from '../../../validations/auth'
 
 
 

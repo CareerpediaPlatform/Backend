@@ -1,5 +1,5 @@
 import { AdminAuth } from "src/Database/mysql";
-import { checkEmailExist } from "src/Database/mysql/lib/admin_auth";
+import { checkEmailExist } from "src/Database/mysql/lib/admin/admin_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import { generateAccessToken ,verifyAccessToken} from "src/helpers/authentication";
 import { comparePasswords } from "src/helpers/encryption";

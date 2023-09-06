@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express'
-import { responseBuilder } from '../helpers/response_builder'
-import log from '../logger'
-import {IServiceResponse, IAdmin} from '../models'
-import * as authService from '../services/admin_auth'
+import { responseBuilder } from '../../helpers/response_builder'
+import log from '../../logger'
+import {IServiceResponse, IAdmin} from '../../models'
+import * as authService from '../../services/admin/admin_auth'
 import { AdminDataMapping } from 'src/helpers/data_mapping/auth'
 
 

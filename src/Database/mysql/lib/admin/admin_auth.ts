@@ -1,6 +1,6 @@
 import logger from "src/logger";
 import { IAdmin } from "src/models";
-import { executeQuery } from "../helpers/sql.query.util";
+import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
 import { hashPassword } from "src/helpers/encryption";
 var crypto=require("crypto") 

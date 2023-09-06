@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { ROOT_AUTH } from "src/constants/api_path_constants";
-import MentorRoutes from "./mentorAuth";
-import AdminRoutes from "./adminAuth";
-import RecruiterRoutes from "./recruiterAuth";
-import CollegeRoutes from "./collegeAuth"
+import MentorRoutes from "./mentor/mentorAuth";
+import AdminRoutes from "./admin/adminAuth";
+import RecruiterRoutes from "./recruiter/recruiterAuth";
+import CollegeRoutes from "./college/collegeAuth"
 
 const router = Router();
 

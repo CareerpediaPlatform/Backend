@@ -1,35 +1,35 @@
-import { RecruiterAuth } from "src/Database/mysql";
-import { checkEmailExist ,checkUidExist} from "src/Database/mysql/lib/recruiter_auth";
+import { CollegeAuth } from "src/Database/mysql";
+import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/college/college_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken} from '../helpers/authentication'
-import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
-import { IRecruiter } from "src/models/lib/auth";
+import {generateAccessToken} from '../../helpers/authentication'
+import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
+import { ICollege } from "src/models/lib/auth";
 
 
 const TAG = 'services.auth'
 
 
-export async function signupUser(user: IRecruiter) {
+export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
-        serviceResponse.message = 'Email  is already exist';
+        serviceResponse.message = 'Email is already exist';
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const recruiter = await RecruiterAuth.signUp(user);
-      const accessToken = await generateAccessToken({ ...recruiter  });
-      const recruiter_uid = recruiter.uid
+      const college_admin = await CollegeAuth.signUp(user);
+      const accessToken = await generateAccessToken({ ...college_admin   });
+      const college_uid = college_admin.uid
       const data = {
         accessToken,
-        recruiter_uid         
+        college_uid        
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -41,7 +41,7 @@ export async function signupUser(user: IRecruiter) {
 
 
   
-  export async function loginUser(user: IRecruiter) {
+  export async function loginUser(user: ICollege) {
     log.info(`${TAG}.loginUser() ==> `, user);
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -66,14 +66,14 @@ export async function signupUser(user: IRecruiter) {
             serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
-          const recruiter_login = await RecruiterAuth.login(user)
-            const accessToken = await generateAccessToken({ ...recruiter_login});
-            const recruiter_uid = existedUser.uid;
+          const college_login = await CollegeAuth.login(user)
+            const accessToken = await generateAccessToken({ ...college_login});
+            const college_uid = existedUser.uid;
             
             const data = {
                 accessToken,
-                recruiter_login,
-                recruiter_uid
+                college_login,
+                college_uid
             };
 
             serviceResponse.data = data;
@@ -87,13 +87,14 @@ export async function signupUser(user: IRecruiter) {
 }
 
 
+
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-  try { 
+  try {
     const existedUser = await checkUidExist(user.uid);
     console.log(existedUser)
     console.log(existedUser.password)
-
+    
     if (!existedUser) {
       serviceResponse.message = 'User not found'; 
       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
@@ -102,7 +103,7 @@ export async function changeUserPassword(user: any) {
       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
 
       if (isValid) {
-        const response = await RecruiterAuth.changePassword({ password: user.newPassword, ...user });
+        const response = await CollegeAuth.changePassword({ password: user.newPassword, ...user });
         serviceResponse.message = "Password changed successfully";
         serviceResponse.data = response;
       } else {
@@ -118,5 +119,4 @@ export async function changeUserPassword(user: any) {
 
   return serviceResponse;
 }
-
 
