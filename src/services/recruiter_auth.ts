@@ -1,19 +1,18 @@
-import { MentorAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor_auth";
+import { RecruiterAuth } from "src/Database/mysql";
+import { checkEmailExist ,checkUidExist} from "src/Database/mysql/lib/recruiter_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken ,verifyAccessToken} from '../helpers/authentication'
+import {generateAccessToken} from '../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
-import { IMentor} from "src/models/lib/auth";
-
+import { IRecruiter } from "src/models/lib/auth";
 
 
 const TAG = 'services.auth'
 
 
-export async function signupUser(user: IMentor) {
+export async function signupUser(user: IRecruiter) {
     log.info(`${TAG}.signupUser() ==> `, user);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -25,12 +24,12 @@ export async function signupUser(user: IMentor) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const mentor = await MentorAuth.signUp(user);
-      const accessToken = await generateAccessToken({ ...mentor  });
-      const mentor_uid = mentor.uid
+      const recruiter = await RecruiterAuth.signUp(user);
+      const accessToken = await generateAccessToken({ ...recruiter  });
+      const recruiter_uid = recruiter.uid
       const data = {
         accessToken,
-        mentor_uid        
+        recruiter_uid         
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -42,12 +41,15 @@ export async function signupUser(user: IMentor) {
 
 
   
-  export async function loginUser(user: IMentor) {
+  export async function loginUser(user: IRecruiter) {
     log.info(`${TAG}.loginUser() ==> `, user);
+
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    
     try {
         // Check if the user with the given email exists
         const existedUser = await checkEmailExist(user.email);
+        console.log(existedUser)
 
         //if email does not exist 
         if(!existedUser) {
@@ -64,14 +66,14 @@ export async function signupUser(user: IMentor) {
             serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
-          const mentor_login = await MentorAuth.login(user)
-            const accessToken = await generateAccessToken({ ...mentor_login});
-            const mentor_uid = existedUser.uid;
+          const recruiter_login = await RecruiterAuth.login(user)
+            const accessToken = await generateAccessToken({ ...recruiter_login});
+            const recruiter_uid = existedUser.uid;
             
             const data = {
                 accessToken,
-                mentor_login,
-                mentor_uid
+                recruiter_login,
+                recruiter_uid
             };
 
             serviceResponse.data = data;
@@ -85,14 +87,13 @@ export async function signupUser(user: IMentor) {
 }
 
 
-
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-  try {
+  try { 
     const existedUser = await checkUidExist(user.uid);
     console.log(existedUser)
     console.log(existedUser.password)
-    
+
     if (!existedUser) {
       serviceResponse.message = 'User not found'; 
       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
@@ -101,7 +102,7 @@ export async function changeUserPassword(user: any) {
       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
 
       if (isValid) {
-        const response = await MentorAuth.changePassword({ password: user.newPassword, ...user });
+        const response = await RecruiterAuth.changePassword({ password: user.newPassword, ...user });
         serviceResponse.message = "Password changed successfully";
         serviceResponse.data = response;
       } else {
@@ -117,10 +118,5 @@ export async function changeUserPassword(user: any) {
 
   return serviceResponse;
 }
-
-
-
-
-
 
 

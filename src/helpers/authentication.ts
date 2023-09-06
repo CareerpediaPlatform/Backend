@@ -53,3 +53,5 @@ export async function generateOTPToken(payload: object, expiresIn = OTP_EXPIRY_T
 export const verifyOTPJWT = async (token: string) => {
   return jsonwebtoken.verify(token, JWT_ACCESS_TOKEN_SECRET);
 };
+
+

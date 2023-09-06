@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import { getNumber, isNull } from '../utils/strings';
 import AppError from '../models/lib/app_error';
 import logger from '../logger';
+import { resolve } from 'path'
 
 
 dotenv.config()
@@ -17,6 +18,8 @@ export const JWT_REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_TOKEN_SECRET || 
 export const JWT_ACCESS_TOKEN_EXPIRY_TIME = 2 * 60 * 60
 export const JWT_REFRESH_TOKEN_EXPIRY_TIME = 30 * 24 * 60 * 60
 export const OTP_EXPIRY_TIME = 600
+
+export const SWAGGER_DOC_PATH = process.env.SWAGGER_DOC_PATH ?? resolve('./careerpedia-doc.yml')
 
 /*MySQL DB config*/
 export const MYSQL_DATABASE = {

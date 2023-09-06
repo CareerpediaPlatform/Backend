@@ -1,0 +1,544 @@
+2023-09-06 11:32:46 index.ts[info]: passportConfiguration() 
+2023-09-06 11:32:46 index.ts[info]: passportConfiguration() 
+2023-09-06 11:32:46 index.ts[info]: passportConfiguration() 
+2023-09-06 11:32:46 index.ts[info]: passportConfiguration() 
+2023-09-06 11:32:46 index.ts[info]: env validation started 
+2023-09-06 11:32:46 index.ts[info]: initializeRoutes() 
+2023-09-06 11:32:46 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 11:58:38 index.ts[info]: passportConfiguration() 
+2023-09-06 11:58:38 index.ts[info]: passportConfiguration() 
+2023-09-06 11:58:38 index.ts[info]: passportConfiguration() 
+2023-09-06 11:58:38 index.ts[info]: passportConfiguration() 
+2023-09-06 11:58:38 index.ts[info]: env validation started 
+2023-09-06 11:58:38 index.ts[info]: initializeRoutes() 
+2023-09-06 11:58:38 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 11:59:07 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:07 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:07 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:07 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:08 index.ts[info]: env validation started 
+2023-09-06 11:59:08 index.ts[info]: initializeRoutes() 
+2023-09-06 11:59:08 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 11:59:29 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:29 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:29 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:30 index.ts[info]: passportConfiguration() 
+2023-09-06 11:59:30 index.ts[info]: env validation started 
+2023-09-06 11:59:30 index.ts[info]: initializeRoutes() 
+2023-09-06 11:59:30 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:00:46 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:00:46 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"17b88290-8097-4074-8ecd-07fcebaf57f7","newPassword":"babuna","oldPassword":"babunaik"} 
+2023-09-06 12:00:46 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:00:47 index.ts[error]: ERROR in executeQuery() => Error: Named replacement ":email" has no entry in the replacement map. 
+2023-09-06 12:00:47 index.ts[error]: ERROR occurred in data_stores_mysql_lib_user.checkEmailExist() Named replacement ":email" has no entry in the replacement map. Error: Named replacement ":email" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2023-09-06 12:00:47 index.ts[error]: ERROR occurred in services.auth.changeUserPassword Named replacement ":email" has no entry in the replacement map. Error: Named replacement ":email" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2023-09-06 12:00:47 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:02:29 index.ts[info]: passportConfiguration() 
+2023-09-06 12:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 12:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 12:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 12:02:30 index.ts[info]: env validation started 
+2023-09-06 12:02:30 index.ts[info]: initializeRoutes() 
+2023-09-06 12:02:30 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:02:39 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:02:39 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"17b88290-8097-4074-8ecd-07fcebaf57f7","newPassword":"babuna","oldPassword":"babunaik"} 
+2023-09-06 12:02:39 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:02:40 index.ts[error]: ERROR in executeQuery() => Error: Named replacement ":uid" has no entry in the replacement map. 
+2023-09-06 12:02:40 index.ts[error]: ERROR occurred in data_stores_mysql_lib_user.checkEmailExist() Named replacement ":uid" has no entry in the replacement map. Error: Named replacement ":uid" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2023-09-06 12:02:40 index.ts[error]: ERROR occurred in services.auth.changeUserPassword Named replacement ":uid" has no entry in the replacement map. Error: Named replacement ":uid" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2023-09-06 12:02:40 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:03:38 index.ts[info]: passportConfiguration() 
+2023-09-06 12:03:38 index.ts[info]: passportConfiguration() 
+2023-09-06 12:03:38 index.ts[info]: passportConfiguration() 
+2023-09-06 12:03:38 index.ts[info]: passportConfiguration() 
+2023-09-06 12:03:38 index.ts[info]: env validation started 
+2023-09-06 12:03:38 index.ts[info]: initializeRoutes() 
+2023-09-06 12:03:38 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:03:46 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:03:46 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"17b88290-8097-4074-8ecd-07fcebaf57f7","newPassword":"babuna","oldPassword":"babunaik"} 
+2023-09-06 12:03:46 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:03:47 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:08:55 index.ts[info]: passportConfiguration() 
+2023-09-06 12:08:55 index.ts[info]: passportConfiguration() 
+2023-09-06 12:08:55 index.ts[info]: passportConfiguration() 
+2023-09-06 12:08:55 index.ts[info]: passportConfiguration() 
+2023-09-06 12:08:55 index.ts[info]: env validation started 
+2023-09-06 12:08:55 index.ts[info]: initializeRoutes() 
+2023-09-06 12:08:55 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:09:11 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:11 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:11 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:11 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:11 index.ts[info]: env validation started 
+2023-09-06 12:09:11 index.ts[info]: initializeRoutes() 
+2023-09-06 12:09:11 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:09:34 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:34 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:34 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:34 index.ts[info]: passportConfiguration() 
+2023-09-06 12:09:34 index.ts[info]: env validation started 
+2023-09-06 12:09:34 index.ts[info]: initializeRoutes() 
+2023-09-06 12:09:34 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:09:45 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:09:45 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"17b88290-8097-4074-8ecd-07fcebaf57f7","newPassword":"babunaik","oldPassword":"babuna"} 
+2023-09-06 12:09:45 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:09:46 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:10:20 index.ts[info]: passportConfiguration() 
+2023-09-06 12:10:20 index.ts[info]: passportConfiguration() 
+2023-09-06 12:10:20 index.ts[info]: passportConfiguration() 
+2023-09-06 12:10:20 index.ts[info]: passportConfiguration() 
+2023-09-06 12:10:20 index.ts[info]: env validation started 
+2023-09-06 12:10:20 index.ts[info]: initializeRoutes() 
+2023-09-06 12:10:20 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:11:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:11:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:11:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:11:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:11:07 index.ts[info]: env validation started 
+2023-09-06 12:11:07 index.ts[info]: initializeRoutes() 
+2023-09-06 12:11:07 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:12:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:12:08 index.ts[info]: passportConfiguration() 
+2023-09-06 12:12:08 index.ts[info]: passportConfiguration() 
+2023-09-06 12:12:08 index.ts[info]: passportConfiguration() 
+2023-09-06 12:12:08 index.ts[info]: env validation started 
+2023-09-06 12:12:08 index.ts[info]: initializeRoutes() 
+2023-09-06 12:12:08 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:13:24 index.ts[info]: passportConfiguration() 
+2023-09-06 12:13:25 index.ts[info]: passportConfiguration() 
+2023-09-06 12:13:25 index.ts[info]: passportConfiguration() 
+2023-09-06 12:13:25 index.ts[info]: passportConfiguration() 
+2023-09-06 12:13:25 index.ts[info]: env validation started 
+2023-09-06 12:13:25 index.ts[info]: initializeRoutes() 
+2023-09-06 12:13:25 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:14:25 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:14:25 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"e32e6166-422e-4878-bf25-1bcffe343763","newPassword":"babu","oldPassword":"babunaik"} 
+2023-09-06 12:14:25 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:14:26 index.ts[error]: ERROR occurred in services.auth.changeUserPassword Cannot read properties of undefined (reading 'password') TypeError: Cannot read properties of undefined (reading 'password')
+    at Object.<anonymous> (D:\myProject\Careeroedia-Backend\Backend\src\services\college_auth.ts:96:29)
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\services\college_auth.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2023-09-06 12:14:26 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:17:08 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:09 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:09 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:09 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:09 index.ts[info]: env validation started 
+2023-09-06 12:17:09 index.ts[info]: initializeRoutes() 
+2023-09-06 12:17:09 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:17:48 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:49 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:49 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:49 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:49 index.ts[info]: env validation started 
+2023-09-06 12:17:49 index.ts[info]: initializeRoutes() 
+2023-09-06 12:17:49 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:17:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:17:58 index.ts[info]: env validation started 
+2023-09-06 12:17:58 index.ts[info]: initializeRoutes() 
+2023-09-06 12:17:58 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:18:08 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:18:08 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"e32e6166-422e-4878-bf25-1bcffe343763","newPassword":"babu","oldPassword":"babunaik"} 
+2023-09-06 12:18:08 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:18:09 index.ts[error]: ERROR in executeQuery() => Error: Named replacement ":email" has no entry in the replacement map. 
+2023-09-06 12:18:10 index.ts[error]: ERROR occurred in data_stores_mysql_lib_user.changePassword() Named replacement ":email" has no entry in the replacement map. Error: Named replacement ":email" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+2023-09-06 12:18:10 index.ts[error]: ERROR occurred in services.auth.changeUserPassword Named replacement ":email" has no entry in the replacement map. Error: Named replacement ":email" has no entry in the replacement map.
+    at injectReplacements (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\utils\sql.ts:176:15)
+    at Sequelize.query (D:\myProject\Careeroedia-Backend\Backend\node_modules\sequelize\src\sequelize.js:612:13)
+    at D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:8:45
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\myProject\Careeroedia-Backend\Backend\src\Database\mysql\helpers\sql.query.util.ts:5:58)
+2023-09-06 12:18:10 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:22:06 index.ts[info]: passportConfiguration() 
+2023-09-06 12:22:06 index.ts[info]: passportConfiguration() 
+2023-09-06 12:22:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:22:07 index.ts[info]: passportConfiguration() 
+2023-09-06 12:22:07 index.ts[info]: env validation started 
+2023-09-06 12:22:07 index.ts[info]: initializeRoutes() 
+2023-09-06 12:22:07 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:22:15 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:22:15 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"e32e6166-422e-4878-bf25-1bcffe343763","newPassword":"babu","oldPassword":"babunaik"} 
+2023-09-06 12:22:15 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:22:16 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:24:32 index.ts[info]: services.auth.signupRecruiter() 
+2023-09-06 12:24:32 index.ts[debug]: services.auth.signupRecruiter() Object = {"email":"babunaikbanoth@gmail.com","password":"babuuu"} 
+2023-09-06 12:24:32 index.ts[info]: helpers.data_mapping.recruiter.recruiterDataMapping() 
+2023-09-06 12:24:32 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-06 12:24:32 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:24:32 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 12:24:33 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:24:45 index.ts[info]: services.auth.signupRecruiter() 
+2023-09-06 12:24:45 index.ts[debug]: services.auth.signupRecruiter() Object = {"email":"babunaikbanoth@gmail.com","password":"babuuu"} 
+2023-09-06 12:24:45 index.ts[info]: helpers.data_mapping.recruiter.recruiterDataMapping() 
+2023-09-06 12:24:45 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-06 12:24:45 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:24:45 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:25:45 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:25:45 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"664e3b8c-a209-4016-a5ed-53c60523fe2d","newPassword":"babuuunaIK","oldPassword":"babuuu"} 
+2023-09-06 12:25:45 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:25:45 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:25:54 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:25:54 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"664e3b8c-a209-4016-a5ed-53c60523fe2d","newPassword":"babuuunaIK","oldPassword":"babuuu"} 
+2023-09-06 12:25:54 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:25:54 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:26:08 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:26:08 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"664e3b8c-a209-4016-a5ed-53c60523fe2d","newPassword":"babu","oldPassword":"babuuunaIK"} 
+2023-09-06 12:26:08 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:26:08 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:26:52 index.ts[info]: passportConfiguration() 
+2023-09-06 12:26:52 index.ts[info]: passportConfiguration() 
+2023-09-06 12:26:52 index.ts[info]: passportConfiguration() 
+2023-09-06 12:26:52 index.ts[info]: passportConfiguration() 
+2023-09-06 12:26:52 index.ts[info]: env validation started 
+2023-09-06 12:26:52 index.ts[info]: initializeRoutes() 
+2023-09-06 12:26:52 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:27:31 index.ts[info]: services.auth.signupRecruiter() 
+2023-09-06 12:27:31 index.ts[debug]: services.auth.signupRecruiter() Object = {"email":"babunaikbanoth@gmail.com","password":"babuuu"} 
+2023-09-06 12:27:31 index.ts[info]: helpers.data_mapping.recruiter.recruiterDataMapping() 
+2023-09-06 12:27:31 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-06 12:27:31 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 12:27:32 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 12:27:32 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:28:10 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:28:10 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"84abd7cc-8a54-4a6d-b9f3-b7a541b11ff9","newPassword":"babuNAIK","oldPassword":"babuuu"} 
+2023-09-06 12:28:10 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:28:10 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:28:16 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:28:16 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"84abd7cc-8a54-4a6d-b9f3-b7a541b11ff9","newPassword":"babuNAIK","oldPassword":"babuuu"} 
+2023-09-06 12:28:16 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:28:16 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:28:29 index.ts[info]: services.auth.changePasswordController() 
+2023-09-06 12:28:29 index.ts[debug]: services.auth.changePasswordController() Object = {"uid":"84abd7cc-8a54-4a6d-b9f3-b7a541b11ff9","newPassword":"babuNAIKPP","oldPassword":"babuNAIK"} 
+2023-09-06 12:28:29 index.ts[info]: data_stores_mysql_lib_user.checkUidExist() ==> 
+2023-09-06 12:28:29 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 12:39:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:39:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 12:39:59 index.ts[info]: passportConfiguration() 
+2023-09-06 12:39:59 index.ts[info]: env validation started 
+2023-09-06 12:39:59 index.ts[info]: initializeRoutes() 
+2023-09-06 12:39:59 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:41:27 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:28 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:28 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:28 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:28 index.ts[info]: env validation started 
+2023-09-06 12:41:28 index.ts[info]: initializeRoutes() 
+2023-09-06 12:41:28 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:41:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:41:54 index.ts[info]: env validation started 
+2023-09-06 12:41:54 index.ts[info]: initializeRoutes() 
+2023-09-06 12:41:54 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:49:24 index.ts[info]: passportConfiguration() 
+2023-09-06 12:49:24 index.ts[info]: passportConfiguration() 
+2023-09-06 12:49:24 index.ts[info]: passportConfiguration() 
+2023-09-06 12:49:24 index.ts[info]: passportConfiguration() 
+2023-09-06 12:49:24 index.ts[info]: env validation started 
+2023-09-06 12:49:24 index.ts[info]: initializeRoutes() 
+2023-09-06 12:49:24 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:55:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:55:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:55:54 index.ts[info]: passportConfiguration() 
+2023-09-06 12:55:55 index.ts[info]: passportConfiguration() 
+2023-09-06 12:55:55 index.ts[info]: env validation started 
+2023-09-06 12:55:55 index.ts[info]: initializeRoutes() 
+2023-09-06 12:55:55 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 12:59:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:59:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:59:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:59:58 index.ts[info]: passportConfiguration() 
+2023-09-06 12:59:58 index.ts[info]: env validation started 
+2023-09-06 12:59:58 index.ts[info]: initializeRoutes() 
+2023-09-06 12:59:59 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 13:00:22 index.ts[info]: passportConfiguration() 
+2023-09-06 13:00:22 index.ts[info]: passportConfiguration() 
+2023-09-06 13:00:22 index.ts[info]: passportConfiguration() 
+2023-09-06 13:00:22 index.ts[info]: passportConfiguration() 
+2023-09-06 13:00:22 index.ts[info]: env validation started 
+2023-09-06 13:00:22 index.ts[info]: initializeRoutes() 
+2023-09-06 13:00:22 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:23:12 index.ts[info]: passportConfiguration() 
+2023-09-06 14:23:12 index.ts[info]: passportConfiguration() 
+2023-09-06 14:23:13 index.ts[info]: passportConfiguration() 
+2023-09-06 14:23:13 index.ts[info]: passportConfiguration() 
+2023-09-06 14:23:13 index.ts[info]: env validation started 
+2023-09-06 14:23:13 index.ts[info]: initializeRoutes() 
+2023-09-06 14:23:13 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:27:19 index.ts[info]: passportConfiguration() 
+2023-09-06 14:27:19 index.ts[info]: passportConfiguration() 
+2023-09-06 14:27:19 index.ts[info]: passportConfiguration() 
+2023-09-06 14:27:20 index.ts[info]: passportConfiguration() 
+2023-09-06 14:27:20 index.ts[info]: env validation started 
+2023-09-06 14:27:20 index.ts[info]: initializeRoutes() 
+2023-09-06 14:27:20 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:28:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:28:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:28:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:28:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:28:39 index.ts[info]: env validation started 
+2023-09-06 14:28:40 index.ts[info]: initializeRoutes() 
+2023-09-06 14:28:42 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:29:23 index.ts[info]: passportConfiguration() 
+2023-09-06 14:29:23 index.ts[info]: passportConfiguration() 
+2023-09-06 14:29:23 index.ts[info]: passportConfiguration() 
+2023-09-06 14:29:23 index.ts[info]: passportConfiguration() 
+2023-09-06 14:29:23 index.ts[info]: env validation started 
+2023-09-06 14:29:23 index.ts[info]: initializeRoutes() 
+2023-09-06 14:29:23 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:33:21 index.ts[info]: passportConfiguration() 
+2023-09-06 14:33:21 index.ts[info]: passportConfiguration() 
+2023-09-06 14:33:21 index.ts[info]: passportConfiguration() 
+2023-09-06 14:33:21 index.ts[info]: passportConfiguration() 
+2023-09-06 14:33:21 index.ts[info]: env validation started 
+2023-09-06 14:33:21 index.ts[info]: initializeRoutes() 
+2023-09-06 14:33:21 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:34:00 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:00 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:01 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:01 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:02 index.ts[info]: env validation started 
+2023-09-06 14:34:02 index.ts[info]: initializeRoutes() 
+2023-09-06 14:34:02 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:34:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:34:15 index.ts[info]: env validation started 
+2023-09-06 14:34:15 index.ts[info]: initializeRoutes() 
+2023-09-06 14:34:15 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:36:14 index.ts[info]: passportConfiguration() 
+2023-09-06 14:36:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:36:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:36:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:36:15 index.ts[info]: env validation started 
+2023-09-06 14:36:15 index.ts[info]: initializeRoutes() 
+2023-09-06 14:36:15 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:44:55 index.ts[info]: passportConfiguration() 
+2023-09-06 14:44:56 index.ts[info]: passportConfiguration() 
+2023-09-06 14:44:56 index.ts[info]: passportConfiguration() 
+2023-09-06 14:44:56 index.ts[info]: passportConfiguration() 
+2023-09-06 14:44:56 index.ts[info]: env validation started 
+2023-09-06 14:44:56 index.ts[info]: initializeRoutes() 
+2023-09-06 14:44:56 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:45:08 index.ts[info]: services.auth.adminLogin() 
+2023-09-06 14:45:08 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-06 14:45:08 index.ts[info]: helpers.data_mapping.admin.adminDataMapping() 
+2023-09-06 14:45:08 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-06 14:45:08 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 14:45:11 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 14:45:11 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:45:41 index.ts[info]: authentication.isAuthenticated() 
+2023-09-06 14:45:41 index.ts[debug]: TOKEN is missing! 
+2023-09-06 14:45:41 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:46:12 index.ts[info]: authentication.isAuthenticated() 
+2023-09-06 14:46:12 index.ts[debug]: TOKEN is missing! 
+2023-09-06 14:46:12 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:46:49 index.ts[info]: authentication.isAuthenticated() 
+2023-09-06 14:46:49 index.ts[debug]: LOGGED IN USER:undefined 
+2023-09-06 14:46:49 index.ts[info]: services.auth.signupMentor() 
+2023-09-06 14:46:49 index.ts[debug]: services.auth.signupMentor() Object = {"email":"babunaikbanoth2@gmail.com","password":"babuuu"} 
+2023-09-06 14:46:49 index.ts[info]: helpers.data_mapping.mentor.mentorDataMapping() 
+2023-09-06 14:46:49 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-06 14:46:49 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 14:46:49 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 14:46:49 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:49:45 index.ts[info]: passportConfiguration() 
+2023-09-06 14:49:45 index.ts[info]: passportConfiguration() 
+2023-09-06 14:49:45 index.ts[info]: passportConfiguration() 
+2023-09-06 14:49:46 index.ts[info]: passportConfiguration() 
+2023-09-06 14:49:46 index.ts[info]: env validation started 
+2023-09-06 14:49:46 index.ts[info]: initializeRoutes() 
+2023-09-06 14:49:46 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:50:01 index.ts[info]: authentication.isAuthenticated() 
+2023-09-06 14:50:01 index.ts[debug]: TOKEN is missing! 
+2023-09-06 14:50:01 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:50:44 index.ts[info]: services.auth.adminLogin() 
+2023-09-06 14:50:44 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-06 14:50:44 index.ts[info]: helpers.data_mapping.admin.adminDataMapping() 
+2023-09-06 14:50:44 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-06 14:50:44 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 14:50:45 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 14:50:45 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:51:04 index.ts[info]: authentication.isAuthenticated() 
+2023-09-06 14:51:04 index.ts[debug]: LOGGED IN USER:UserSession {
+  userId: undefined,
+  role: undefined,
+  userName: undefined,
+  permissions: undefined
+} 
+2023-09-06 14:51:04 index.ts[info]: services.auth.signupMentor() 
+2023-09-06 14:51:04 index.ts[debug]: services.auth.signupMentor() Object = {"email":"babunaikbanoth233@gmail.com","password":"babuuu"} 
+2023-09-06 14:51:04 index.ts[info]: helpers.data_mapping.mentor.mentorDataMapping() 
+2023-09-06 14:51:04 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-06 14:51:04 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 14:51:04 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 14:51:05 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-06 14:52:38 index.ts[info]: passportConfiguration() 
+2023-09-06 14:52:38 index.ts[info]: passportConfiguration() 
+2023-09-06 14:52:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:52:39 index.ts[info]: passportConfiguration() 
+2023-09-06 14:52:39 index.ts[info]: env validation started 
+2023-09-06 14:52:39 index.ts[info]: initializeRoutes() 
+2023-09-06 14:52:39 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:53:22 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:22 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:22 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:22 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:22 index.ts[info]: env validation started 
+2023-09-06 14:53:22 index.ts[info]: initializeRoutes() 
+2023-09-06 14:53:22 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:53:35 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:36 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:36 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:36 index.ts[info]: passportConfiguration() 
+2023-09-06 14:53:36 index.ts[info]: env validation started 
+2023-09-06 14:53:36 index.ts[info]: initializeRoutes() 
+2023-09-06 14:53:36 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:54:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:15 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:16 index.ts[info]: env validation started 
+2023-09-06 14:54:16 index.ts[info]: initializeRoutes() 
+2023-09-06 14:54:16 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:54:33 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:33 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:33 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:33 index.ts[info]: passportConfiguration() 
+2023-09-06 14:54:33 index.ts[info]: env validation started 
+2023-09-06 14:54:33 index.ts[info]: initializeRoutes() 
+2023-09-06 14:54:33 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 14:59:32 index.ts[info]: passportConfiguration() 
+2023-09-06 14:59:32 index.ts[info]: passportConfiguration() 
+2023-09-06 14:59:32 index.ts[info]: passportConfiguration() 
+2023-09-06 14:59:32 index.ts[info]: passportConfiguration() 
+2023-09-06 14:59:32 index.ts[info]: env validation started 
+2023-09-06 14:59:32 index.ts[info]: initializeRoutes() 
+2023-09-06 14:59:32 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:00:57 index.ts[info]: passportConfiguration() 
+2023-09-06 15:00:58 index.ts[info]: passportConfiguration() 
+2023-09-06 15:00:58 index.ts[info]: passportConfiguration() 
+2023-09-06 15:00:58 index.ts[info]: passportConfiguration() 
+2023-09-06 15:00:58 index.ts[info]: env validation started 
+2023-09-06 15:00:58 index.ts[info]: initializeRoutes() 
+2023-09-06 15:00:58 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:01:06 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:06 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:06 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:06 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:06 index.ts[info]: env validation started 
+2023-09-06 15:01:06 index.ts[info]: initializeRoutes() 
+2023-09-06 15:01:06 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:01:54 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:55 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:55 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:55 index.ts[info]: passportConfiguration() 
+2023-09-06 15:01:55 index.ts[info]: env validation started 
+2023-09-06 15:01:55 index.ts[info]: initializeRoutes() 
+2023-09-06 15:01:55 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:02:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:02:30 index.ts[info]: env validation started 
+2023-09-06 15:02:30 index.ts[info]: initializeRoutes() 
+2023-09-06 15:02:30 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:05:10 index.ts[info]: passportConfiguration() 
+2023-09-06 15:05:10 index.ts[info]: passportConfiguration() 
+2023-09-06 15:05:10 index.ts[info]: passportConfiguration() 
+2023-09-06 15:05:10 index.ts[info]: passportConfiguration() 
+2023-09-06 15:05:10 index.ts[info]: env validation started 
+2023-09-06 15:05:10 index.ts[info]: initializeRoutes() 
+2023-09-06 15:05:10 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:06:18 index.ts[info]: passportConfiguration() 
+2023-09-06 15:06:18 index.ts[info]: passportConfiguration() 
+2023-09-06 15:06:18 index.ts[info]: passportConfiguration() 
+2023-09-06 15:06:19 index.ts[info]: passportConfiguration() 
+2023-09-06 15:06:19 index.ts[info]: env validation started 
+2023-09-06 15:06:19 index.ts[info]: initializeRoutes() 
+2023-09-06 15:06:19 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:07:13 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:13 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:13 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:14 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:14 index.ts[info]: env validation started 
+2023-09-06 15:07:14 index.ts[info]: initializeRoutes() 
+2023-09-06 15:07:14 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:07:29 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:29 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:29 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:29 index.ts[info]: passportConfiguration() 
+2023-09-06 15:07:29 index.ts[info]: env validation started 
+2023-09-06 15:07:29 index.ts[info]: initializeRoutes() 
+2023-09-06 15:07:29 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:09:52 index.ts[info]: passportConfiguration() 
+2023-09-06 15:09:52 index.ts[info]: passportConfiguration() 
+2023-09-06 15:09:52 index.ts[info]: passportConfiguration() 
+2023-09-06 15:09:53 index.ts[info]: passportConfiguration() 
+2023-09-06 15:09:53 index.ts[info]: env validation started 
+2023-09-06 15:09:53 index.ts[info]: initializeRoutes() 
+2023-09-06 15:09:53 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:12:55 index.ts[info]: passportConfiguration() 
+2023-09-06 15:12:55 index.ts[info]: passportConfiguration() 
+2023-09-06 15:12:56 index.ts[info]: passportConfiguration() 
+2023-09-06 15:12:56 index.ts[info]: passportConfiguration() 
+2023-09-06 15:12:56 index.ts[info]: env validation started 
+2023-09-06 15:12:56 index.ts[info]: initializeRoutes() 
+2023-09-06 15:12:56 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:14:43 index.ts[info]: passportConfiguration() 
+2023-09-06 15:14:43 index.ts[info]: passportConfiguration() 
+2023-09-06 15:14:43 index.ts[info]: passportConfiguration() 
+2023-09-06 15:14:43 index.ts[info]: passportConfiguration() 
+2023-09-06 15:14:43 index.ts[info]: env validation started 
+2023-09-06 15:14:43 index.ts[info]: initializeRoutes() 
+2023-09-06 15:14:43 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:16:29 index.ts[info]: passportConfiguration() 
+2023-09-06 15:16:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:16:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:16:30 index.ts[info]: passportConfiguration() 
+2023-09-06 15:16:30 index.ts[info]: env validation started 
+2023-09-06 15:16:30 index.ts[info]: initializeRoutes() 
+2023-09-06 15:16:30 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-06 15:16:45 index.ts[info]: services.auth.adminLogin() 
+2023-09-06 15:16:45 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-06 15:16:45 index.ts[info]: helpers.data_mapping.admin.adminDataMapping() 
+2023-09-06 15:16:45 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-06 15:16:45 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-06 15:16:47 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-06 15:16:47 index.ts[info]: helper.response_builder.responseBuilder() 

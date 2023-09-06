@@ -1,39 +1,37 @@
 import { NextFunction, Response } from 'express'
 import { responseBuilder } from '../helpers/response_builder'
 import log from '../logger'
-import {IServiceResponse, IUser} from '../models'
-import * as authService from '../services/mentor_auth'
-import {mentorDataMapping} from "../helpers/data_mapping/auth";
-import { IMentor } from 'src/models/lib/auth'
-
+import {IServiceResponse} from '../models'
+import * as authService from '../services/recruiter_auth'
+import {recruiterDataMapping} from "../helpers/data_mapping/auth";
+import { IRecruiter} from 'src/models/lib/auth'
 const TAG = 'services.auth'
 
-export async function signupMentor (req: any, res: Response, next: NextFunction): Promise<void> {
+export async function signupRecruiter (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      log.info(`${TAG}.signupMentor()`);
-      log.debug(`${TAG}.signupMentor() Object = ${JSON.stringify(req.body)}`)
-      const user: IMentor = mentorDataMapping(req.body);
+      log.info(`${TAG}.signupRecruiter()`);
+      log.debug(`${TAG}.signupRecruiter() Object = ${JSON.stringify(req.body)}`)
+      const user: IRecruiter = recruiterDataMapping(req.body);
       const authResponse: IServiceResponse = await authService.signupUser(user)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupMentor() `, error)
+      log.error(`ERROR occurred in ${TAG}.signupRecruiter() `, error)
       next(error)
     }
   }
 
-  export async function loginMentor(req: any, res: Response, next: NextFunction): Promise<void>{
+  export async function loginRecruiter(req: any, res: Response, next: NextFunction): Promise<void>{
     try{
-      log.info(`${TAG}.loginMentor()`);
-      log.debug(`${TAG}.loginMentor() Object = ${JSON.stringify(req.body)}`)
-      const user:IMentor = mentorDataMapping(req.body)
+      log.info(`${TAG}.loginRecruiter()`);
+      log.debug(`${TAG}.loginRecruiter() Object = ${JSON.stringify(req.body)}`)
+      const user:IRecruiter = recruiterDataMapping(req.body)
       const authResponse:IServiceResponse = await authService.loginUser(user)
       responseBuilder(authResponse,res,next,req)
     }catch(error){
-      log.error(`ERROR occurred in ${TAG}.loginMentor() `, error)
+      log.error(`ERROR occurred in ${TAG}.loginRecruiter()`, error)
       next(error)
     } 
   }
-
 
   export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -47,5 +45,3 @@ export async function signupMentor (req: any, res: Response, next: NextFunction)
       next(error);
     }
   }
-
-

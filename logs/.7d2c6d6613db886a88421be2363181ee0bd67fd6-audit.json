@@ -1,0 +1,35 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\.7d2c6d6613db886a88421be2363181ee0bd67fd6-audit.json",
+    "files": [
+        {
+            "date": 1693474968396,
+            "name": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\beej-api-2023-08-31.log",
+            "hash": "a8ca163e8df5d28108e564560aa67eafcf78344f71a86514288d821e0ccda17c"
+        },
+        {
+            "date": 1693543577186,
+            "name": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\beej-api-2023-09-01.log",
+            "hash": "849d1ef9b1e886ca7bebebe60c3bfbf8abe1b20e0ef2a04e5f4fbb4c6542e182"
+        },
+        {
+            "date": 1693832616757,
+            "name": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\beej-api-2023-09-04.log",
+            "hash": "152b03b37ec8719d762ac8a2aa83ef6684a39be42da7b1887efadbd4e6f39cfa"
+        },
+        {
+            "date": 1693855254200,
+            "name": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\beej-api-2023-09-05.log",
+            "hash": "4a8cfb3e8438ce6ab52ea6235d28f71af898eb1e46b8b3196fccf643758956f9"
+        },
+        {
+            "date": 1693975061107,
+            "name": "D:\\myProject\\Careeroedia-Backend\\Backend\\logs\\beej-api-2023-09-06.log",
+            "hash": "4162b0bc6c0fb86e95ac1157f51e08aab4f5d7955e509af976b0af0c04d20cbe"
+        }
+    ],
+    "hashType": "sha256"
+}

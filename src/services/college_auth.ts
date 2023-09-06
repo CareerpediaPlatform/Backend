@@ -1,36 +1,35 @@
-import { MentorAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor_auth";
+import { CollegeAuth } from "src/Database/mysql";
+import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/college_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken ,verifyAccessToken} from '../helpers/authentication'
-import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
-import { IMentor} from "src/models/lib/auth";
-
+import {generateAccessToken} from '../helpers/authentication'
+import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
+import { ICollege } from "src/models/lib/auth";
 
 
 const TAG = 'services.auth'
 
 
-export async function signupUser(user: IMentor) {
+export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
-        serviceResponse.message = 'Email  is already exist';
+        serviceResponse.message = 'Email is already exist';
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const mentor = await MentorAuth.signUp(user);
-      const accessToken = await generateAccessToken({ ...mentor  });
-      const mentor_uid = mentor.uid
+      const college_admin = await CollegeAuth.signUp(user);
+      const accessToken = await generateAccessToken({ ...college_admin   });
+      const college_uid = college_admin.uid
       const data = {
         accessToken,
-        mentor_uid        
+        college_uid        
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -42,12 +41,15 @@ export async function signupUser(user: IMentor) {
 
 
   
-  export async function loginUser(user: IMentor) {
+  export async function loginUser(user: ICollege) {
     log.info(`${TAG}.loginUser() ==> `, user);
+
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    
     try {
         // Check if the user with the given email exists
         const existedUser = await checkEmailExist(user.email);
+        console.log(existedUser)
 
         //if email does not exist 
         if(!existedUser) {
@@ -64,14 +66,14 @@ export async function signupUser(user: IMentor) {
             serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
-          const mentor_login = await MentorAuth.login(user)
-            const accessToken = await generateAccessToken({ ...mentor_login});
-            const mentor_uid = existedUser.uid;
+          const college_login = await CollegeAuth.login(user)
+            const accessToken = await generateAccessToken({ ...college_login});
+            const college_uid = existedUser.uid;
             
             const data = {
                 accessToken,
-                mentor_login,
-                mentor_uid
+                college_login,
+                college_uid
             };
 
             serviceResponse.data = data;
@@ -101,7 +103,7 @@ export async function changeUserPassword(user: any) {
       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
 
       if (isValid) {
-        const response = await MentorAuth.changePassword({ password: user.newPassword, ...user });
+        const response = await CollegeAuth.changePassword({ password: user.newPassword, ...user });
         serviceResponse.message = "Password changed successfully";
         serviceResponse.data = response;
       } else {
@@ -117,10 +119,4 @@ export async function changeUserPassword(user: any) {
 
   return serviceResponse;
 }
-
-
-
-
-
-
 

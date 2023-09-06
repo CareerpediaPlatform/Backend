@@ -1,0 +1,417 @@
+2023-09-04 18:39:30 index.ts[info]: passportConfiguration() 
+2023-09-04 18:39:31 index.ts[info]: passportConfiguration() 
+2023-09-04 18:39:31 index.ts[info]: env validation started 
+2023-09-04 18:39:31 index.ts[info]: initializeRoutes() 
+2023-09-04 18:39:31 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 18:39:41 index.ts[info]: services.auth.adminLogin() 
+2023-09-04 18:39:41 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-04 18:39:41 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-04 18:39:41 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-04 18:39:43 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 18:39:43 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 18:40:57 index.ts[info]: passportConfiguration() 
+2023-09-04 18:40:57 index.ts[info]: passportConfiguration() 
+2023-09-04 18:40:57 index.ts[info]: env validation started 
+2023-09-04 18:40:57 index.ts[info]: initializeRoutes() 
+2023-09-04 18:40:57 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 18:41:46 index.ts[info]: passportConfiguration() 
+2023-09-04 18:41:46 index.ts[info]: passportConfiguration() 
+2023-09-04 18:41:46 index.ts[info]: env validation started 
+2023-09-04 18:41:46 index.ts[info]: initializeRoutes() 
+2023-09-04 18:41:46 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 18:43:37 index.ts[info]: authentication.isAuthenticated() 
+2023-09-04 18:43:37 index.ts[error]: ERROR occurred in isAuthenticated()  invalid signature JsonWebTokenError: invalid signature
+    at D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:171:19
+    at getSecret (D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:97:14)
+    at Object.module.exports [as verify] (D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:101:10)
+    at verifyAccessToken (D:\myProject\Careeroedia-Backend\Backend\src\helpers\authentication.ts:26:23)
+    at isAdminAuthenticated (D:\myProject\Careeroedia-Backend\Backend\src\middlewares\admin.ts:29:44)
+    at Layer.handle [as handle_request] (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\route.js:144:13)
+    at Route.dispatch (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\route.js:114:3)
+    at Layer.handle [as handle_request] (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\index.js:284:15
+2023-09-04 18:43:37 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 18:48:45 index.ts[info]: passportConfiguration() 
+2023-09-04 18:48:45 index.ts[info]: passportConfiguration() 
+2023-09-04 18:48:45 index.ts[info]: env validation started 
+2023-09-04 18:48:45 index.ts[info]: initializeRoutes() 
+2023-09-04 18:48:45 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 18:48:54 index.ts[info]: services.auth.adminLogin() 
+2023-09-04 18:48:54 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-04 18:48:54 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-04 18:48:54 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-04 18:48:56 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 18:48:56 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 18:51:58 index.ts[info]: authentication.isAuthenticated() 
+2023-09-04 18:51:58 index.ts[debug]: LOGGED IN USER:undefined 
+2023-09-04 18:51:58 index.ts[info]: services.auth.signupMentor() 
+2023-09-04 18:51:58 index.ts[debug]: services.auth.signupMentor() Object = {"email":"babunaikbanoth29@gmail.com","password":"babuuu"} 
+2023-09-04 18:51:58 index.ts[info]: helpers.data_mapping.user.userDataMapping() 
+2023-09-04 18:51:58 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-04 18:51:58 index.ts[info]: data_stores_mysql_lib_user.checkEmailOrPhoneExist()  ==> 
+2023-09-04 18:51:58 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 18:51:58 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 18:52:22 index.ts[info]: authentication.isAuthenticated() 
+2023-09-04 18:52:22 index.ts[error]: ERROR occurred in isAuthenticated()  invalid signature JsonWebTokenError: invalid signature
+    at D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:171:19
+    at getSecret (D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:97:14)
+    at Object.module.exports [as verify] (D:\myProject\Careeroedia-Backend\Backend\node_modules\jsonwebtoken\verify.js:101:10)
+    at verifyAccessToken (D:\myProject\Careeroedia-Backend\Backend\src\helpers\authentication.ts:26:23)
+    at isAdminAuthenticated (D:\myProject\Careeroedia-Backend\Backend\src\middlewares\admin.ts:29:44)
+    at Layer.handle [as handle_request] (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\route.js:144:13)
+    at Route.dispatch (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\route.js:114:3)
+    at Layer.handle [as handle_request] (D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at D:\myProject\Careeroedia-Backend\Backend\node_modules\express\lib\router\index.js:284:15
+2023-09-04 18:52:22 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 19:59:49 index.ts[info]: passportConfiguration() 
+2023-09-04 19:59:49 index.ts[info]: passportConfiguration() 
+2023-09-04 19:59:49 index.ts[info]: env validation started 
+2023-09-04 19:59:49 index.ts[info]: initializeRoutes() 
+2023-09-04 19:59:49 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 20:00:08 index.ts[info]: passportConfiguration() 
+2023-09-04 20:00:08 index.ts[info]: passportConfiguration() 
+2023-09-04 20:00:08 index.ts[info]: env validation started 
+2023-09-04 20:00:08 index.ts[info]: initializeRoutes() 
+2023-09-04 20:00:08 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:02:02 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:02 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:03 index.ts[info]: env validation started 
+2023-09-04 21:02:03 index.ts[info]: initializeRoutes() 
+2023-09-04 21:02:03 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:02:23 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:24 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:24 index.ts[info]: env validation started 
+2023-09-04 21:02:24 index.ts[info]: initializeRoutes() 
+2023-09-04 21:02:24 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:02:40 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:40 index.ts[info]: passportConfiguration() 
+2023-09-04 21:02:40 index.ts[info]: env validation started 
+2023-09-04 21:02:40 index.ts[info]: initializeRoutes() 
+2023-09-04 21:02:40 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:05:28 index.ts[info]: passportConfiguration() 
+2023-09-04 21:05:28 index.ts[info]: passportConfiguration() 
+2023-09-04 21:05:28 index.ts[info]: env validation started 
+2023-09-04 21:05:28 index.ts[info]: initializeRoutes() 
+2023-09-04 21:05:28 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:07:33 index.ts[info]: passportConfiguration() 
+2023-09-04 21:07:33 index.ts[info]: passportConfiguration() 
+2023-09-04 21:07:33 index.ts[info]: env validation started 
+2023-09-04 21:07:33 index.ts[info]: initializeRoutes() 
+2023-09-04 21:07:33 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:08:31 index.ts[info]: authentication.isAuthenticated() 
+2023-09-04 21:08:31 index.ts[debug]: TOKEN is missing! 
+2023-09-04 21:08:31 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 21:08:47 index.ts[info]: services.auth.loginMentor() 
+2023-09-04 21:08:47 index.ts[debug]: services.auth.loginMentor() Object = {"email":"babunaikbanoth26@gmail.com","password":"babuuu"} 
+2023-09-04 21:08:47 index.ts[info]: helpers.data_mapping.user.userDataMapping() 
+2023-09-04 21:08:47 index.ts[info]: services.auth.loginUser() ==>  
+2023-09-04 21:08:47 index.ts[info]: data_stores_mysql_lib_user.checkEmailOrPhoneExist()  ==> 
+2023-09-04 21:08:49 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 21:08:49 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 21:10:23 index.ts[info]: passportConfiguration() 
+2023-09-04 21:10:23 index.ts[info]: passportConfiguration() 
+2023-09-04 21:10:23 index.ts[info]: env validation started 
+2023-09-04 21:10:23 index.ts[info]: initializeRoutes() 
+2023-09-04 21:10:23 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:18:21 index.ts[info]: passportConfiguration() 
+2023-09-04 21:18:21 index.ts[info]: passportConfiguration() 
+2023-09-04 21:18:21 index.ts[info]: env validation started 
+2023-09-04 21:18:21 index.ts[info]: initializeRoutes() 
+2023-09-04 21:18:21 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:20:06 index.ts[info]: passportConfiguration() 
+2023-09-04 21:20:06 index.ts[info]: passportConfiguration() 
+2023-09-04 21:20:06 index.ts[info]: env validation started 
+2023-09-04 21:20:06 index.ts[info]: initializeRoutes() 
+2023-09-04 21:20:06 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:31:07 index.ts[info]: passportConfiguration() 
+2023-09-04 21:31:07 index.ts[info]: passportConfiguration() 
+2023-09-04 21:31:07 index.ts[info]: env validation started 
+2023-09-04 21:31:07 index.ts[info]: initializeRoutes() 
+2023-09-04 21:31:07 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:32:55 index.ts[info]: passportConfiguration() 
+2023-09-04 21:32:55 index.ts[info]: passportConfiguration() 
+2023-09-04 21:32:55 index.ts[info]: env validation started 
+2023-09-04 21:32:55 index.ts[info]: initializeRoutes() 
+2023-09-04 21:32:55 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:33:09 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:09 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:09 index.ts[info]: env validation started 
+2023-09-04 21:33:09 index.ts[info]: initializeRoutes() 
+2023-09-04 21:33:09 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:33:29 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:29 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:29 index.ts[info]: env validation started 
+2023-09-04 21:33:29 index.ts[info]: initializeRoutes() 
+2023-09-04 21:33:29 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:33:48 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:48 index.ts[info]: passportConfiguration() 
+2023-09-04 21:33:48 index.ts[info]: env validation started 
+2023-09-04 21:33:48 index.ts[info]: initializeRoutes() 
+2023-09-04 21:33:48 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:34:04 index.ts[info]: passportConfiguration() 
+2023-09-04 21:34:04 index.ts[info]: passportConfiguration() 
+2023-09-04 21:34:04 index.ts[info]: env validation started 
+2023-09-04 21:34:04 index.ts[info]: initializeRoutes() 
+2023-09-04 21:34:04 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:34:24 index.ts[info]: passportConfiguration() 
+2023-09-04 21:34:25 index.ts[info]: passportConfiguration() 
+2023-09-04 21:34:25 index.ts[info]: env validation started 
+2023-09-04 21:34:25 index.ts[info]: initializeRoutes() 
+2023-09-04 21:34:25 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:35:41 index.ts[info]: passportConfiguration() 
+2023-09-04 21:35:41 index.ts[info]: passportConfiguration() 
+2023-09-04 21:35:41 index.ts[info]: env validation started 
+2023-09-04 21:35:41 index.ts[info]: initializeRoutes() 
+2023-09-04 21:35:41 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:46:11 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:11 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:11 index.ts[info]: env validation started 
+2023-09-04 21:46:11 index.ts[info]: initializeRoutes() 
+2023-09-04 21:46:11 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:46:28 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:28 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:28 index.ts[info]: env validation started 
+2023-09-04 21:46:28 index.ts[info]: initializeRoutes() 
+2023-09-04 21:46:28 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:46:58 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:58 index.ts[info]: passportConfiguration() 
+2023-09-04 21:46:58 index.ts[info]: env validation started 
+2023-09-04 21:46:58 index.ts[info]: initializeRoutes() 
+2023-09-04 21:46:58 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:57:11 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:12 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:12 index.ts[info]: env validation started 
+2023-09-04 21:57:12 index.ts[info]: initializeRoutes() 
+2023-09-04 21:57:12 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:57:45 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:45 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:45 index.ts[info]: env validation started 
+2023-09-04 21:57:46 index.ts[info]: initializeRoutes() 
+2023-09-04 21:57:46 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:57:56 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:56 index.ts[info]: passportConfiguration() 
+2023-09-04 21:57:56 index.ts[info]: env validation started 
+2023-09-04 21:57:56 index.ts[info]: initializeRoutes() 
+2023-09-04 21:57:56 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 21:59:25 index.ts[info]: passportConfiguration() 
+2023-09-04 21:59:25 index.ts[info]: passportConfiguration() 
+2023-09-04 21:59:25 index.ts[info]: env validation started 
+2023-09-04 21:59:25 index.ts[info]: initializeRoutes() 
+2023-09-04 21:59:25 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:00:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:08 index.ts[info]: env validation started 
+2023-09-04 22:00:08 index.ts[info]: initializeRoutes() 
+2023-09-04 22:00:09 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:00:29 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:29 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:29 index.ts[info]: env validation started 
+2023-09-04 22:00:29 index.ts[info]: initializeRoutes() 
+2023-09-04 22:00:29 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:00:41 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:41 index.ts[info]: passportConfiguration() 
+2023-09-04 22:00:41 index.ts[info]: env validation started 
+2023-09-04 22:00:41 index.ts[info]: initializeRoutes() 
+2023-09-04 22:00:41 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:01:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:01:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:01:39 index.ts[info]: env validation started 
+2023-09-04 22:01:39 index.ts[info]: initializeRoutes() 
+2023-09-04 22:01:39 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:02:37 index.ts[info]: passportConfiguration() 
+2023-09-04 22:02:37 index.ts[info]: passportConfiguration() 
+2023-09-04 22:02:37 index.ts[info]: env validation started 
+2023-09-04 22:02:37 index.ts[info]: initializeRoutes() 
+2023-09-04 22:02:37 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:03:51 index.ts[info]: passportConfiguration() 
+2023-09-04 22:03:51 index.ts[info]: passportConfiguration() 
+2023-09-04 22:03:52 index.ts[info]: env validation started 
+2023-09-04 22:03:52 index.ts[info]: initializeRoutes() 
+2023-09-04 22:03:52 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:04:25 index.ts[info]: passportConfiguration() 
+2023-09-04 22:04:26 index.ts[info]: passportConfiguration() 
+2023-09-04 22:04:26 index.ts[info]: env validation started 
+2023-09-04 22:04:26 index.ts[info]: initializeRoutes() 
+2023-09-04 22:04:26 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:05:51 index.ts[info]: passportConfiguration() 
+2023-09-04 22:05:51 index.ts[info]: passportConfiguration() 
+2023-09-04 22:05:51 index.ts[info]: env validation started 
+2023-09-04 22:05:52 index.ts[info]: initializeRoutes() 
+2023-09-04 22:05:52 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:07:50 index.ts[info]: passportConfiguration() 
+2023-09-04 22:07:50 index.ts[info]: passportConfiguration() 
+2023-09-04 22:07:50 index.ts[info]: env validation started 
+2023-09-04 22:07:50 index.ts[info]: initializeRoutes() 
+2023-09-04 22:07:51 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:08:22 index.ts[info]: passportConfiguration() 
+2023-09-04 22:08:22 index.ts[info]: passportConfiguration() 
+2023-09-04 22:08:22 index.ts[info]: env validation started 
+2023-09-04 22:08:22 index.ts[info]: initializeRoutes() 
+2023-09-04 22:08:22 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:08:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:08:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:08:39 index.ts[info]: env validation started 
+2023-09-04 22:08:39 index.ts[info]: initializeRoutes() 
+2023-09-04 22:08:39 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:09:04 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:04 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:04 index.ts[info]: env validation started 
+2023-09-04 22:09:04 index.ts[info]: initializeRoutes() 
+2023-09-04 22:09:04 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:09:25 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:26 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:26 index.ts[info]: env validation started 
+2023-09-04 22:09:26 index.ts[info]: initializeRoutes() 
+2023-09-04 22:09:26 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:09:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:39 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:39 index.ts[info]: env validation started 
+2023-09-04 22:09:39 index.ts[info]: initializeRoutes() 
+2023-09-04 22:09:39 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:09:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:09:47 index.ts[info]: env validation started 
+2023-09-04 22:09:47 index.ts[info]: initializeRoutes() 
+2023-09-04 22:09:47 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:10:16 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:16 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:16 index.ts[info]: env validation started 
+2023-09-04 22:10:16 index.ts[info]: initializeRoutes() 
+2023-09-04 22:10:16 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:10:41 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:41 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:41 index.ts[info]: env validation started 
+2023-09-04 22:10:41 index.ts[info]: initializeRoutes() 
+2023-09-04 22:10:41 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:10:59 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:59 index.ts[info]: passportConfiguration() 
+2023-09-04 22:10:59 index.ts[info]: env validation started 
+2023-09-04 22:10:59 index.ts[info]: initializeRoutes() 
+2023-09-04 22:10:59 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:11:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:11:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:11:08 index.ts[info]: env validation started 
+2023-09-04 22:11:08 index.ts[info]: initializeRoutes() 
+2023-09-04 22:11:08 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:11:49 index.ts[info]: passportConfiguration() 
+2023-09-04 22:11:49 index.ts[info]: passportConfiguration() 
+2023-09-04 22:11:49 index.ts[info]: env validation started 
+2023-09-04 22:11:49 index.ts[info]: initializeRoutes() 
+2023-09-04 22:11:49 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:12:15 index.ts[info]: passportConfiguration() 
+2023-09-04 22:12:15 index.ts[info]: passportConfiguration() 
+2023-09-04 22:12:15 index.ts[info]: env validation started 
+2023-09-04 22:12:15 index.ts[info]: initializeRoutes() 
+2023-09-04 22:12:15 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:13:06 index.ts[info]: passportConfiguration() 
+2023-09-04 22:13:07 index.ts[info]: passportConfiguration() 
+2023-09-04 22:13:07 index.ts[info]: env validation started 
+2023-09-04 22:13:07 index.ts[info]: initializeRoutes() 
+2023-09-04 22:13:07 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:16:05 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:05 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:05 index.ts[info]: env validation started 
+2023-09-04 22:16:05 index.ts[info]: initializeRoutes() 
+2023-09-04 22:16:05 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:16:22 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:22 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:22 index.ts[info]: env validation started 
+2023-09-04 22:16:22 index.ts[info]: initializeRoutes() 
+2023-09-04 22:16:22 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:16:42 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:42 index.ts[info]: passportConfiguration() 
+2023-09-04 22:16:42 index.ts[info]: env validation started 
+2023-09-04 22:16:42 index.ts[info]: initializeRoutes() 
+2023-09-04 22:16:42 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:16:48 index.ts[info]: services.auth.adminLogin() 
+2023-09-04 22:16:48 index.ts[debug]: services.auth.adminLogin() Object = {"email":"careerpediaplatform@gmail.com","password":"inkprog"} 
+2023-09-04 22:16:48 index.ts[info]: helpers.data_mapping.admin.adminDataMapping() 
+2023-09-04 22:16:48 index.ts[info]: services.auth.loginAdmin() ==>  
+2023-09-04 22:16:48 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-04 22:16:49 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 22:16:49 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 22:29:04 index.ts[info]: passportConfiguration() 
+2023-09-04 22:29:04 index.ts[info]: passportConfiguration() 
+2023-09-04 22:29:04 index.ts[info]: env validation started 
+2023-09-04 22:29:04 index.ts[info]: initializeRoutes() 
+2023-09-04 22:29:04 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:29:54 index.ts[info]: passportConfiguration() 
+2023-09-04 22:29:54 index.ts[info]: passportConfiguration() 
+2023-09-04 22:29:54 index.ts[info]: env validation started 
+2023-09-04 22:29:54 index.ts[info]: initializeRoutes() 
+2023-09-04 22:29:55 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:31:49 index.ts[info]: passportConfiguration() 
+2023-09-04 22:31:49 index.ts[info]: passportConfiguration() 
+2023-09-04 22:31:49 index.ts[info]: env validation started 
+2023-09-04 22:31:49 index.ts[info]: initializeRoutes() 
+2023-09-04 22:31:49 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:32:12 index.ts[info]: passportConfiguration() 
+2023-09-04 22:32:12 index.ts[info]: passportConfiguration() 
+2023-09-04 22:32:12 index.ts[info]: env validation started 
+2023-09-04 22:32:12 index.ts[info]: initializeRoutes() 
+2023-09-04 22:32:12 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:32:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:32:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:32:47 index.ts[info]: env validation started 
+2023-09-04 22:32:47 index.ts[info]: initializeRoutes() 
+2023-09-04 22:32:47 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:33:58 index.ts[info]: passportConfiguration() 
+2023-09-04 22:33:58 index.ts[info]: passportConfiguration() 
+2023-09-04 22:33:59 index.ts[info]: env validation started 
+2023-09-04 22:33:59 index.ts[info]: initializeRoutes() 
+2023-09-04 22:33:59 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:35:11 index.ts[info]: passportConfiguration() 
+2023-09-04 22:35:11 index.ts[info]: passportConfiguration() 
+2023-09-04 22:35:11 index.ts[info]: env validation started 
+2023-09-04 22:35:11 index.ts[info]: initializeRoutes() 
+2023-09-04 22:35:11 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:36:44 index.ts[info]: passportConfiguration() 
+2023-09-04 22:36:44 index.ts[info]: passportConfiguration() 
+2023-09-04 22:36:44 index.ts[info]: env validation started 
+2023-09-04 22:36:44 index.ts[info]: initializeRoutes() 
+2023-09-04 22:36:44 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:37:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:37:08 index.ts[info]: passportConfiguration() 
+2023-09-04 22:37:08 index.ts[info]: env validation started 
+2023-09-04 22:37:08 index.ts[info]: initializeRoutes() 
+2023-09-04 22:37:08 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:38:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:38:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:38:47 index.ts[info]: passportConfiguration() 
+2023-09-04 22:38:47 index.ts[info]: env validation started 
+2023-09-04 22:38:47 index.ts[info]: initializeRoutes() 
+2023-09-04 22:38:47 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:39:17 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:17 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:18 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:18 index.ts[info]: env validation started 
+2023-09-04 22:39:18 index.ts[info]: initializeRoutes() 
+2023-09-04 22:39:18 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:39:33 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:33 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:34 index.ts[info]: passportConfiguration() 
+2023-09-04 22:39:34 index.ts[info]: env validation started 
+2023-09-04 22:39:34 index.ts[info]: initializeRoutes() 
+2023-09-04 22:39:34 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:40:35 index.ts[info]: services.auth.signupRecruiter() 
+2023-09-04 22:40:35 index.ts[debug]: services.auth.signupRecruiter() Object = {"email":"babunaikbanoth@gmail.com","password":"babuuu"} 
+2023-09-04 22:40:35 index.ts[info]: helpers.data_mapping.recruiter.recruiterDataMapping() 
+2023-09-04 22:40:35 index.ts[info]: services.auth.signupUser() ==>  
+2023-09-04 22:40:35 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-04 22:40:36 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 22:40:36 index.ts[info]: helper.response_builder.responseBuilder() 
+2023-09-04 22:42:24 index.ts[info]: passportConfiguration() 
+2023-09-04 22:42:24 index.ts[info]: passportConfiguration() 
+2023-09-04 22:42:24 index.ts[info]: passportConfiguration() 
+2023-09-04 22:42:24 index.ts[info]: env validation started 
+2023-09-04 22:42:24 index.ts[info]: initializeRoutes() 
+2023-09-04 22:42:24 index.ts[info]: SERVER listening on PORT:5000 
+2023-09-04 22:43:19 index.ts[info]: services.auth.loginRecruiter() 
+2023-09-04 22:43:19 index.ts[debug]: services.auth.loginRecruiter() Object = {"email":"babunaikbanoth@gmail.com","password":"babuuu"} 
+2023-09-04 22:43:19 index.ts[info]: helpers.data_mapping.recruiter.recruiterDataMapping() 
+2023-09-04 22:43:19 index.ts[info]: services.auth.loginUser() ==>  
+2023-09-04 22:43:19 index.ts[info]: data_stores_mysql_lib_user.checkEmailExist()  ==> 
+2023-09-04 22:43:20 index.ts[info]: data_stores_mysql_lib_user.saveUser() 
+2023-09-04 22:43:20 index.ts[info]: helper.response_builder.responseBuilder() 
