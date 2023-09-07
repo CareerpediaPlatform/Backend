@@ -18,3 +18,4 @@ async function startApplication (): Promise<void> {
 }
 
 startApplication().catch((err) => log.error('ERROR occurred while starting Application.', err))
+// test
