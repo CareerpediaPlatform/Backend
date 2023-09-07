@@ -29,8 +29,7 @@ export{
     ListAPIResponse,
     IListAPIResponse,
     IUserSession,
-    UserSession,userOTP,Otp
-    
+    UserSession,userOTP,Otp   
 }
 
 
