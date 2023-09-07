@@ -6,6 +6,8 @@ import {
   JWT_REFRESH_TOKEN_EXPIRY_TIME, OTP_EXPIRY_TIME
 } from '../Loaders/config'
 import logger from '../logger'
+const otpGenerator = require('otp-generator')
+
 
 function generateJWT (payload: object, expiresIn: number, secret: string): string {
   return jsonwebtoken.sign(payload, secret, {
@@ -54,4 +56,6 @@ export const verifyOTPJWT = async (token: string) => {
   return jsonwebtoken.verify(token, JWT_ACCESS_TOKEN_SECRET);
 };
 
-
+export const OTP=async() => {
+  return otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+};
