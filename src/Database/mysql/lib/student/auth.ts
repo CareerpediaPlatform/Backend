@@ -1,0 +1,178 @@
+import logger from "src/logger";
+import { IUser } from "src/models";
+import { executeQuery } from "../../helpers/sql.query.util";
+import { QueryTypes } from "sequelize";
+import { hashPassword } from "src/helpers/encryption";
+import { OTP } from "src/helpers/authentication";
+import { userOTP } from "src/models";
+var crypto=require("crypto") 
+
+
+const TAG = 'data_stores_mysql_lib_user'
+
+export async function signUp(user: IUser) {
+  logger.info(`${TAG}.signUp()`);
+  try {
+    const hashedPassword = await hashPassword(user.password);
+    const data = {
+      uid: crypto.randomUUID(),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: hashedPassword,
+      phoneNumber:user.phoneNumber,
+      role:"student"
+    };
+    let userInsertQuery = `
+      INSERT INTO STUDENT_DETAILS(uid, first_name, last_name, email, password,phone_number,role)
+      VALUES (:uid, :firstName, :lastName, :email, :password, :phoneNumber, :role)
+    `;
+
+    await executeQuery(userInsertQuery, QueryTypes.INSERT, {
+      ...data,
+    });
+    return data;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+    throw error;
+  }
+}
+
+// signup with email and linked in
+export async function signupWithSocialAccount(user: IUser) {
+  logger.info(`${TAG}.signUp()`);
+  try {
+    const hashedPassword = await hashPassword(user.uuid);
+    const data = {
+      uid: crypto.randomUUID(),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      uuid: hashedPassword,
+      phoneNumber:user.phoneNumber,
+    };
+    let userInsertQuery = `
+      INSERT INTO STUDENT_AUTH (uid, first_name, last_name, email, uniqId,phone_number)
+      VALUES (:uid, :firstName, :lastName, :email, :uuid, :phoneNumber)
+    `;
+
+    await executeQuery(userInsertQuery, QueryTypes.INSERT, {
+      ...data,
+    });
+    return data;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+    throw error;
+  }
+}
+
+export async function changePassword(user:any){
+  let hashedPassword=await hashPassword(user.password)
+try{
+  logger.info(`${TAG}.changePassword()  ==>`,user);
+
+  let query = 'UPDATE STUDENT_DETAILS SET password= :hashedPassword WHERE uid= :uid';
+  const response= await executeQuery(query, QueryTypes.UPDATE, {
+    hashedPassword,...user});
+  return response;
+}catch (error) {
+  logger.error(`ERROR occurred in ${TAG}.checkEmailOrPhoneExist()`, error);
+  throw error;
+}
+}
+
+  // otp generator
+
+
+  export async function saveOTP(user:userOTP){
+  logger.info(`${TAG}.saveOTP()`);
+  try{
+    const otp = await OTP();
+    const info={
+      student_id:user.id,
+      otp:otp,
+      phoneNumber:user.phoneNumber,
+      type:user.type,
+      accesstoken:user.accessToken
+    }
+
+    let userInsertQuery = `
+    INSERT INTO OTP_AUTH(student_id, otp, phone_number, access_token, type)
+    VALUES (:student_id, :otp, :phoneNumber, :accesstoken, :type)`;
+
+    await executeQuery(userInsertQuery, QueryTypes.INSERT, {
+      ...info,
+    });
+    return info;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.saveOTP()`, error);
+    throw error;
+  }
+}
+
+export async function  verifyOTP(userotp: any) {
+  try {
+    const otp=userotp.otp
+    logger.info(`${TAG}.checkEmailOrPhoneExist()  ==>`, otp);
+
+    let query = 'select * from OTP_AUTH where otp=:otp';
+    const [user] = await executeQuery(query, QueryTypes.SELECT,{
+      otp
+    });
+    if(user){
+      return user;
+    }
+    else{
+      return false
+    }
+    // console.log("error")
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.verifyOTP()`, error);
+    throw error;
+  }
+}
+
+
+export async function checkEmailOrPhoneExist(info) {
+  try {
+    logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
+
+    let query1: string;
+    let query2: string;
+    let queries: string[] = [];
+    let user;
+
+    if (info.email && info.phoneNumber) {
+      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE email = :email OR phone_number = :phoneNumber';
+      query2 = 'SELECT * FROM STUDENT_AUTH WHERE email = :email OR phone_number = :phoneNumber';
+      queries = [query1, query2];
+    } else if (info.email) {
+      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE email = :email';
+      query2 = 'SELECT * FROM STUDENT_AUTH WHERE email = :email';
+      queries = [query1, query2];
+    } else if (info.phoneNumber) {
+      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE phone_number = :phoneNumber';
+      query2 = 'SELECT * FROM STUDENT_AUTH WHERE phone_number = :phoneNumber';
+      queries = [query1, query2];
+    } else if (info.uid) {
+      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE uid = :uid';
+      query2 = 'SELECT * FROM STUDENT_AUTH WHERE uid = :uid';
+      queries = [query1, query2];
+    }
+
+    for (const query of queries) {
+      user = await executeQuery(query, QueryTypes.SELECT, { ...info });
+      if (user && user.length > 0) {
+        return user[0]; // Return the first matching user found
+      }
+    }
+
+    return null; // Return null if no user is found
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.checkEmailOrPhoneExist()`, error);
+    throw error;
+  }
+}

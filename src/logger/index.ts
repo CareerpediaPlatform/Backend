@@ -44,7 +44,7 @@ function logger (): Logger {
         )
       }),
       new DailyRotateFile({
-        filename: path.resolve('./logs', 'beej-api-%DATE%.log'),
+        filename: path.resolve('./logs', 'careerpedia-platform-api-%DATE%.log'),
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
         maxSize: '50m',
