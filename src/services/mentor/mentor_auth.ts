@@ -1,12 +1,13 @@
 import { MentorAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor/mentor_auth";
+import { checkEmailExist,getMentorUid } from "src/Database/mysql/lib/mentor/mentor_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken ,verifyAccessToken} from '../../helpers/authentication'
+import {generateAccessToken } from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IMentor} from "src/models/lib/auth";
+
 
 
 
@@ -89,7 +90,7 @@ export async function signupUser(user: IMentor) {
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    const existedUser = await checkUidExist(user.uid);
+    const existedUser = await getMentorUid(user.uid);
     console.log(existedUser)
     console.log(existedUser.password)
     
@@ -118,6 +119,75 @@ export async function changeUserPassword(user: any) {
   return serviceResponse;
 }
 
+
+// export async function savePersonalDetails(
+//   mentorPersonalData: any,
+//   mentorUid: string
+// ) {
+//   log.info(`${TAG}.savePersonalDetails() ==> `, mentorPersonalData);
+
+//   const serviceResponse: IServiceResponse = new ServiceResponse(
+//     HttpStatusCodes.CREATED,
+//     "",
+//     false
+//   );
+//   try {
+//     console.log(mentorUid);
+//     console.log(mentorPersonalData);
+
+//     const mentorUserId = await getMentorUid(mentorUid);
+//     console.log(mentorUserId);
+//     if (!mentorUserId) {
+//       serviceResponse.message = "Invalid mentor ID";
+//       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+//       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+//       return serviceResponse;
+//     }
+
+//     const existingPersonalDetails =
+//       await mentorPersonalData.getPersonalDetailsByMentorId(
+//         mentorUserId.userId
+//       );
+//     if (existingPersonalDetails) {
+//       existingPersonalDetails.gender = invPersonalData.gender;
+//       existingPersonalDetails.website = invPersonalData.website;
+//       existingPersonalDetails.currentCompany = invPersonalData.currentCompany;
+//       existingPersonalDetails.pastInvestment = invPersonalData.pastInvestment;
+//       existingPersonalDetails.country = invPersonalData.country;
+//       existingPersonalDetails.state = invPersonalData.state;
+//       existingPersonalDetails.investmentAllocated =
+//         invPersonalData.investmentAllocated;
+//       existingPersonalDetails.achievementWish = invPersonalData.achievementWish;
+//       existingPersonalDetails.yourHeadline = invPersonalData.yourHeadline;
+//       existingPersonalDetails.yourBio = invPersonalData.yourBio;
+//       existingPersonalDetails.industry = invPersonalData.industry;
+
+//       const updatedPersonalDataResponse =
+//         await InvestorPersonalData.updatePersonalDetails(
+//           investorUserId.userId,
+//           existingPersonalDetails
+//         );
+//       serviceResponse.data = {
+//         investorPersonaDetailsUid: updatedPersonalDataResponse,
+//       };
+//     } else {
+//       const personalDataResponse =
+//         await InvestorPersonalData.savePersonalDetails(
+//           invPersonalData,
+//           investorUserId.userId
+//         );
+//       serviceResponse.data = {
+//         investorPersonaDetailsUid: personalDataResponse,
+//       };
+//     }
+//   } catch (error) {
+//     log.error(`ERROR occurred in ${TAG}.savePersonalDetails`, error);
+//     serviceResponse.addServerError(
+//       "Failed to add investor personal details due to technical difficulties"
+//     );
+//   }
+//   return serviceResponse;
+// }
 
 
 
