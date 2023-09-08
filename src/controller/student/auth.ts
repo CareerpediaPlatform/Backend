@@ -28,6 +28,22 @@ export async function signupUser (req: any, res: Response, next: NextFunction): 
     }
   }
 
+export async function signupPhonenumber (req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.signupPhonenumber()`);
+      log.debug(`${TAG}.signupPhonenumber() Object = ${JSON.stringify(req.body)}`)
+      const user: IUser =req.body;
+      console.log("first")
+      console.log(user)
+      const headerValue=req.headers.authorization
+        const authResponse: IServiceResponse = await authService.signupPhonenumber({user,headerValue})
+        responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.signupUser() `, error)
+      next(error)
+    }
+  }
+
 export async function signinUser (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.signinUser()`);

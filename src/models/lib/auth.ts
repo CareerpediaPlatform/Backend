@@ -4,7 +4,6 @@ export interface IUser {
   lastName: string
   email: string
   password?:string
-  phoneNumber: string
   role: string
   uuid?:string
   accessToken?:string
@@ -15,7 +14,6 @@ export class User implements IUser {
   public firstName: string
   public lastName: string
   public email: string
-  public phoneNumber: string
   public role: string
   public uuid?:string
    public password?:string
@@ -25,7 +23,6 @@ export class User implements IUser {
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string,
     role: string,
     password?:string,
     uuid?:string,
@@ -35,7 +32,6 @@ export class User implements IUser {
     this.firstName = firstName
     this.lastName = lastName
     this.email = email
-    this.phoneNumber = phoneNumber
     this.role = role
     this.accessToken = accessToken
     this.uuid = uuid

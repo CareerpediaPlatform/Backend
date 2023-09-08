@@ -16,6 +16,10 @@ const router = Router()
  router.route('/google-signup')
      .post(validation.linkedInSignup,controller.signupUser);
 
+ router.route('/number-signup')
+     .post(validation.numberLogin,controller.signupPhonenumber);
+
+     
     //  signin
  router.route('/form-signin')
      .post(validation.emailLogin,controller.signinUser);

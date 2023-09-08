@@ -20,12 +20,12 @@ export async function signUp(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       password: hashedPassword,
-      phoneNumber:user.phoneNumber,
+      // phoneNumber:user.phoneNumber,
       role:"student"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_DETAILS(uid, first_name, last_name, email, password,phone_number,role)
-      VALUES (:uid, :firstName, :lastName, :email, :password, :phoneNumber, :role)
+      INSERT INTO STUDENT_DETAILS(uid, first_name, last_name, email, password,role)
+      VALUES (:uid, :firstName, :lastName, :email, :password, :role)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -50,11 +50,10 @@ export async function signupWithSocialAccount(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
-      phoneNumber:user.phoneNumber,
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH (uid, first_name, last_name, email, uniqId,phone_number)
-      VALUES (:uid, :firstName, :lastName, :email, :uuid, :phoneNumber)
+      INSERT INTO STUDENT_AUTH (uid, first_name, last_name, email, uniqId)
+      VALUES (:uid, :firstName, :lastName, :email, :uuid)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -79,6 +78,32 @@ try{
   return response;
 }catch (error) {
   logger.error(`ERROR occurred in ${TAG}.checkEmailOrPhoneExist()`, error);
+  throw error;
+}
+}
+export async function signupPhonenumber(user:any){
+try{
+  logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
+
+  let query = 'UPDATE STUDENT_DETAILS SET phone_number= :phoneNumber WHERE uid= :uid';
+  const response= await executeQuery(query, QueryTypes.UPDATE, {
+    ...user});
+  return response;
+}catch (error) {
+  logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
+  throw error;
+}
+}
+export async function signupPhonenumbers(user:any){
+try{
+  logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
+
+  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
+  const response= await executeQuery(query, QueryTypes.UPDATE, {
+    ...user});
+  return response;
+}catch (error) {
+  logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
   throw error;
 }
 }

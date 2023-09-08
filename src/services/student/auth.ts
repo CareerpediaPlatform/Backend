@@ -17,9 +17,7 @@ export async function signupUser(user: IUser) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let email=user.email
-      let phoneNumber=user.phoneNumber
-      const existedUser = await StudentAuth.checkEmailOrPhoneExist({email,phoneNumber});
-      console.log("existedUsermmmm")
+      const existedUser = await StudentAuth.checkEmailOrPhoneExist({email});
       if(existedUser) {
         serviceResponse.message = 'Email or Mobile is already exist';
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
@@ -28,14 +26,12 @@ export async function signupUser(user: IUser) {
       }
       
       //TODO send OTP to mobile/ email
-      const accessToken = await generateOTPToken({ ...user });
-      const student = await StudentAuth.signUp({...user,accessToken});
-      const findUser = await StudentAuth.checkEmailOrPhoneExist({email})     
-      const saveOTP = await StudentAuth.saveOTP({...findUser,accessToken:accessToken,type:"signup"});
-      const uid=student.uid
+      const student = await StudentAuth.signUp({...user});
+      const findUser = await StudentAuth.checkEmailOrPhoneExist({email})    
+      const accessToken = await generateAccessToken({uid:findUser.uid,otp:true,id:findUser.id,type:"signup"}); 
       const data = {
         accessToken,
-        saveOTP
+        type:"signup"
       }
       serviceResponse.data = data
     } catch (error) {
@@ -45,6 +41,38 @@ export async function signupUser(user: IUser) {
     return serviceResponse;
   }
 
+
+  // signup setting phone number
+  export async function signupPhonenumber(user) {
+    log.info(`${TAG}.signupPhonenumber() ==> `, user);
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+try{
+  const decoded=await verifyAccessToken(user.headerValue)
+  if(decoded){
+    const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
+    if(existedUser) {
+      serviceResponse.message = 'Mobile Number is already exist';
+      serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+      return serviceResponse;
+    }
+    const accessToken = await generateOTPToken({phoneNumber:user.user.phoneNumber,uid:decoded.uid})
+    const saveOTP = await StudentAuth.saveOTP({...decoded,accessToken:accessToken,phoneNumber:user.user.phoneNumber});
+    const data = {
+      accessToken,
+      saveOTP
+    }
+    serviceResponse.data = data
+  }
+return serviceResponse
+
+}catch(error){
+  log.error(`ERROR occurred in ${TAG}.signupPhonenumber`, error);
+  serviceResponse.addServerError('Failed to create user due to technical difficulties');
+}
+
+  }
+
   // signup with google and linked in
   export async function signupWithSocialAccount(user: IUser) {
     log.info(`${TAG}.signupUser() ==> `, user);
@@ -52,8 +80,8 @@ export async function signupUser(user: IUser) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let email=user.email
-      let phoneNumber=user.phoneNumber
-      const existedUser = await StudentAuth.checkEmailOrPhoneExist({email,phoneNumber});
+      // let phoneNumber=user.phoneNumber
+      const existedUser = await StudentAuth.checkEmailOrPhoneExist({email});
       if(existedUser) {
         serviceResponse.message = 'Email or Mobile is already exist';
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
@@ -62,14 +90,13 @@ export async function signupUser(user: IUser) {
       }
       
       //TODO send OTP to mobile/ email
-      const accessToken = await generateOTPToken({ ...user });
       const student = await StudentAuth.signupWithSocialAccount({...user});
-      const findUser = await StudentAuth.checkEmailOrPhoneExist({email,phoneNumber})      
-      const saveOTP = await StudentAuth.saveOTP({...findUser,accessToken:accessToken,type:"signup"});
-      const uid=student.uid
+      const findUser = await StudentAuth.checkEmailOrPhoneExist({email})      
+      const accessToken = await generateAccessToken({uid:findUser.uid,otp:true,id:findUser.id,type:"signupgoogle"}); 
+
       const data = {
         accessToken,
-        saveOTP
+        type:"signup"
       }
       serviceResponse.data = data
     } catch (error) {
@@ -87,8 +114,6 @@ export async function signupUser(user: IUser) {
     let phoneNumber=user.phoneNumber
     // let uniqID=user.uniqID
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({email,phoneNumber});
-    console.log("existing")
-    console.log(existedUser)
     try{
       if(existedUser){
         if(user.password || user.uuid){
@@ -188,6 +213,28 @@ catch (error) {
         const student = await StudentAuth.verifyOTP(otpInfo);
         const type=student.type
          if(student.type){
+          if(student.type==="signup"){
+         const savenumber=await StudentAuth.signupPhonenumber({phoneNumber:IsAutharaized.phoneNumber,uid:IsAutharaized.uid})
+         const token=await generateAccessToken({uid:IsAutharaized.uid,type:type})
+         const data = {
+          token,
+          type
+        }
+        serviceResponse.message = "otp validated"
+          serviceResponse.data = data
+          return serviceResponse
+          }
+          else if(student.type==="signupgoogle"){
+            const savenumber=await StudentAuth.signupPhonenumbers({phoneNumber:IsAutharaized.phoneNumber,uid:IsAutharaized.uid})
+            const token=await generateAccessToken({uid:IsAutharaized.uid,type:type})
+            const data = {
+             token,
+             type
+           }
+           serviceResponse.message = "otp validated"
+             serviceResponse.data = data
+             return serviceResponse
+          }
           const user=await StudentAuth.checkEmailOrPhoneExist({phoneNumber:student.phoneNumber})
         const token=await generateAccessToken({uid:user.uid,type:type})
           const data = {
