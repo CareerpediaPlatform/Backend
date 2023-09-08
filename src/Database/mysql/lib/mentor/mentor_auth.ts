@@ -44,7 +44,7 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-  export async function checkUidExist(uid: string) {
+  export async function getMentorUid(uid: string) {
     try {
       logger.info(`${TAG}.checkUidExist() ==>`, uid);
       let query = 'SELECT * FROM MENTOR WHERE UID = :uid'; 
