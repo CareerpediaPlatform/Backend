@@ -162,6 +162,8 @@ export async function  verifyOTP(userotp: any) {
 
 
 export async function checkEmailOrPhoneExist(info) {
+  console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+  console.log(info)
   try {
     logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
 

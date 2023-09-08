@@ -50,14 +50,16 @@ try{
   const decoded=await verifyAccessToken(user.headerValue)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
+    console.log("ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
+    console.log(existedUser)
     if(existedUser) {
       serviceResponse.message = 'Mobile Number is already exist';
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       return serviceResponse;
     }
-    const accessToken = await generateOTPToken({phoneNumber:user.user.phoneNumber,uid:decoded.uid})
-    const saveOTP = await StudentAuth.saveOTP({...decoded,accessToken:accessToken,phoneNumber:user.user.phoneNumber});
+    const accessToken = await generateOTPToken({phoneNumber:user.phoneNumber,uid:decoded.uid})
+    const saveOTP = await StudentAuth.saveOTP({...decoded,accessToken:accessToken,phoneNumber:user.phoneNumber});
     const data = {
       accessToken,
       saveOTP

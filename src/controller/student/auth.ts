@@ -36,7 +36,7 @@ export async function signupPhonenumber (req: any, res: Response, next: NextFunc
       console.log("first")
       console.log(user)
       const headerValue=req.headers.authorization
-        const authResponse: IServiceResponse = await authService.signupPhonenumber({user,headerValue})
+        const authResponse: IServiceResponse = await authService.signupPhonenumber({...user,headerValue})
         responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.signupUser() `, error)
