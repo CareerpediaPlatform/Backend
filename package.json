@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@joi/date": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "aws-sdk": "^2.1452.0",
@@ -36,6 +37,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
     "nodemon": "^3.0.1",
+    "otp-generator": "^4.0.1",
     "passport": "^0.6.0",
     "sequelize": "^6.32.1",
     "swagger-jsdoc": "^6.2.8",

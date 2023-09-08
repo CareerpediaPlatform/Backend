@@ -4,7 +4,6 @@ import AppError from '../models/lib/app_error';
 import logger from '../logger';
 import { resolve } from 'path'
 
-
 dotenv.config()
 export const AES_ENC_KEY = process.env.ASE_ENC_KEY ?? 'bf3c199c2470we477d907b1e0917c17c'
 export const PORT = process.env.PORT ?? 3307

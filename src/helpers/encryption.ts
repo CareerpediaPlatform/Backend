@@ -21,7 +21,6 @@ export async function comparehashPasswords(hashedPassword, hashedOldPassword) {
   }
 }
 
-
 export async function decryptString (encrypted: string): Promise<string> {
   return CryptoJS.AES.decrypt(encrypted, AES_ENC_KEY, {}).toString(CryptoJS.enc.Utf8)
 }

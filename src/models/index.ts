@@ -1,6 +1,6 @@
 import { APIError, IAPIError } from './lib/api_error'
 import  AppError  from './lib/app_error'
-import { IUser,User,Admin,IAdmin,IMentor,Mentor,Recruiter,IRecruiter,College,ICollege} from "./lib/auth";
+import { IUser,User,Admin,IAdmin,IMentor,Mentor,Recruiter,IRecruiter,College,ICollege,userOTP,Otp} from "./lib/auth";
 import { IServiceResponse, ServiceResponse } from './lib/service_response'
 import { BaseRecord, IBaseRecord } from './lib/base_record'
 import { BaseListAPIRequest, IBaseListAPIRequest } from './lib/api_requests/base_list_api_request'
@@ -20,6 +20,7 @@ export{
     ServiceResponse,
     IServiceResponse,
     APIError,
+    IAPIError,
     AppError,
     BaseRecord,
     IBaseRecord,
@@ -28,8 +29,7 @@ export{
     ListAPIResponse,
     IListAPIResponse,
     IUserSession,
-    UserSession
-    
+    UserSession,userOTP,Otp   
 }
 
 
