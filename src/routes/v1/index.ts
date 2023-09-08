@@ -15,6 +15,4 @@ router.use(`${ROOT_AUTH}/recruiter`, RecruiterRoutes);
 router.use(`${ROOT_AUTH}/college-admin`, CollegeRoutes);
 router.use('/student',StudentAuth);  // api/v1/student/auth/form-signup
 
-
-
 export default router;

@@ -59,3 +59,4 @@ export const verifyOTPJWT = async (token: string) => {
 export const OTP=async() => {
   return otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
 };
+

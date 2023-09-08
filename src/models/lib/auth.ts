@@ -189,3 +189,4 @@ export class College implements ICollege {
     this.password = password;
   }
 }
+

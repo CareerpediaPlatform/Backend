@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\myProject\\mysql_DB\\backend\\logs\\.da1a572c05abfb10995493f79e9ae654c3856051-audit.json",
+    "files": [
+        {
+            "date": 1693223116016,
+            "name": "D:\\myProject\\mysql_DB\\backend\\logs\\beej-api-2023-08-28.log",
+            "hash": "81a5c7fb61f4eaf76b8bce03e6d92a85dd41c67eafa7d4b0069f719d883ca230"
+        }
+    ],
+    "hashType": "sha256"
+}
