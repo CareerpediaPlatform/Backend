@@ -44,8 +44,17 @@ export function recruiterDataMapping (payload: any): IRecruiter {
   try {
     if (payload != null && payload !== undefined) {
       return new Recruiter(
+        payload.USER_ID,
         payload.email,
         payload.password,
+        payload.logo,
+        payload.companyName,
+        payload.founderName,
+        payload.phoneNumber,
+        payload.websiteUrl,
+        payload.linkedInUrl,
+       
+        
 
       )
     }

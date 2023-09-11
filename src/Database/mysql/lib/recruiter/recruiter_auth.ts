@@ -89,9 +89,21 @@ export async function changePassword(user:any): Promise<void> {
     throw error;
   }
 }
+export async function getUserId(uid:string) {
+  try {
+    
+    logger.info(`${TAG}.getUserId()  ==>`, uid);
+    console.log("uisjdfdfdkfldkf");
+console.log(uid)
+    let query = 'select USER_ID from RECRUITER where USER_ID=:uid';
+    const [recruiterId] = await executeQuery(query, QueryTypes.SELECT, {
+      uid
+    });
+    console.log(recruiterId)
+    return recruiterId;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserId`, error);
+    throw error;
+  }
+}
 
-
-
-
-
- 

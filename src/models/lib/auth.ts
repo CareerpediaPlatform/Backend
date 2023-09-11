@@ -1,3 +1,5 @@
+import { string } from "joi"
+
 export interface IUser {
   uid: string
   firstName: string
@@ -159,6 +161,14 @@ export interface IRecruiter {
   uid?: string;
   email: string;
   password: string;
+  logo: string;
+  companyName: string;
+  founderName:string;
+  phoneNumber:string;
+  websiteUrl:string;
+  linkedInUrl:string;
+  USER_ID: string;
+  
 }
 
 export class Recruiter implements IRecruiter {
@@ -166,10 +176,26 @@ export class Recruiter implements IRecruiter {
   public uid?: string;
   public email: string;
   public password: string;
+  public logo: string;
+  public companyName: string;
+  public founderName: string;
+  public phoneNumber: string;
+  public websiteUrl: string;
+  public linkedInUrl: string;
+  public USER_ID: string;
 
-  constructor(email: string, password: string) {
+
+  constructor(USER_ID: string, email: string, password: string, logo:string, companyName:string, founderName:string, phoneNmber:string,websiteUrl:string, linkedInUrl:string) {
+    this.USER_ID=USER_ID;
     this.email = email;
     this.password = password;
+    this.logo = logo;
+    this.companyName = companyName;
+    this.founderName = founderName;
+    this.phoneNumber = phoneNmber;
+    this.websiteUrl = websiteUrl;
+    this.linkedInUrl = linkedInUrl;
+    
   }
 }
 
