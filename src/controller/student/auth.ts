@@ -72,6 +72,18 @@ export async function verifyOTP(req: any, res: Response, next: NextFunction):Pro
     }
   }
 
+export async function resendOTP(req: any, res: Response, next: NextFunction):Promise<void>{
+  try{
+    log.info(`${TAG}.resendOTP()`);
+    log.debug(`${TAG}.resendOTP() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization;
+    const response: IServiceResponse = await authService.resendOTP(headerValue)
+    responseBuilder(response, res, next, req)
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.resendOTP() `, error)
+    next(error)
+  }
+}
 export async function changePassword(req: any, res: Response, next: NextFunction):Promise<void>{
   try{
     log.info(`${TAG}.changePassword()`);

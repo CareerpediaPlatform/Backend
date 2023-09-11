@@ -86,8 +86,6 @@ export class Otp implements userOTP {
   public accessToken:string
   public createdAt?:string
 
- 
-
   constructor (
     student_id:string,
     phoneNumber:string,

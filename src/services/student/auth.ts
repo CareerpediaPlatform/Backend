@@ -50,8 +50,6 @@ try{
   const decoded=await verifyAccessToken(user.headerValue)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
-    console.log("ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
-    console.log(existedUser)
     if(existedUser) {
       serviceResponse.message = 'Mobile Number is already exist';
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
@@ -124,11 +122,11 @@ return serviceResponse
               // let compare2=await comparePasswords(existedUser.uniqId,user.uuid)
               if(compare){
                 const uid=existedUser.uid
-                const accessToken=await generateAccessToken(existedUser)
+                const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
                 console.log(accessToken)
                 const data = {
                   accessToken,
-                  uid
+                  signin:true
                 }
                 serviceResponse.data = data
               }
@@ -140,15 +138,12 @@ return serviceResponse
             }
             else{
               let compare=await comparePasswords(existedUser.uniqId,user.uuid)
-              console.log("first")
-              console.log("compare")
               if(compare){
-                const uid=existedUser.uid
-                const accessToken=await generateAccessToken(existedUser)
-                // console.log(accessToken)
+                // const uid=existedUser.uid
+                const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
                 const data = {
                   accessToken,
-                  uid
+                  signin:true
                 }
                 serviceResponse.data = data
               }
@@ -221,6 +216,7 @@ catch (error) {
          const data = {
           token,
           type
+          
         }
         serviceResponse.message = "otp validated"
           serviceResponse.data = data
@@ -267,6 +263,19 @@ catch (error) {
     return await serviceResponse;
   }
 
+  export async function resendOTP(user){
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try{
+      // finde student is valid or not
+      const uid=await verifyAccessToken(user.headerValue)
+      const student=await StudentAuth.checkEmailOrPhoneExist({uid:uid.uid})
+      
+    }catch (error) {
+      log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return await serviceResponse
+  }
   export async function changePassword(user){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{

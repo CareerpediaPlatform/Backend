@@ -20,7 +20,6 @@ export async function signUp(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       password: hashedPassword,
-      // phoneNumber:user.phoneNumber,
       role:"student"
     };
     let userInsertQuery = `
@@ -137,6 +136,55 @@ try{
     throw error;
   }
 }
+  export async function resendOTP(user){
+  logger.info(`${TAG}.resendOTP()`);
+  try{
+    const otp = await OTP();
+    const info={
+      otp:otp,
+      accesstoken:user.accessToken,
+      resendOtp:user.resendOtp
+    }
+    const updateQuery = `
+    UPDATE COLLEGE_BASIC_DETAILS
+    SET
+    otp=:instituteName,
+    access_token= :founderName,
+        WHERE otp=:resendOtp;
+  `;
+    const [res]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
+      ...info,
+    });
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.resendOTP()`, error);
+    throw error;
+  }
+}
+
+export async function  deleteOTP(userotp: any) {
+  try {
+    const otp=userotp.otp
+    logger.info(`${TAG}.checkEmailOrPhoneExist()  ==>`, otp);
+
+    let query = 'DELETE FROM OTP_AUTH WHERE otp=:otp';
+    const [user] = await executeQuery(query, QueryTypes.DELETE,{
+      otp
+    });
+    if(user){
+      return user;
+    }
+    else{
+      return false
+    }
+    // console.log("error")
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.verifyOTP()`, error);
+    throw error;
+  }
+}
+
 
 export async function  verifyOTP(userotp: any) {
   try {
@@ -162,8 +210,6 @@ export async function  verifyOTP(userotp: any) {
 
 
 export async function checkEmailOrPhoneExist(info) {
-  console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-  console.log(info)
   try {
     logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
 
