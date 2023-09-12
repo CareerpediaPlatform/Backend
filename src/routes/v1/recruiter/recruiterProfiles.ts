@@ -15,4 +15,7 @@ const router = Router()
  router.route('/details/:userID')
  .get(controller.getrecruiterProfile);
 
+
+ router.route('/details/:userID').delete(controller.deleterecruiterProfile);
+
  export default router

@@ -1,9 +1,10 @@
 import logger from "src/logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
+var crypto=require("crypto")
+const TAG = 'data_stores_mysql_lib_user-recruiterprofile';
 
-const TAG = 'data_stores_mysql_lib_user-recruiterprofile'
-
+//get all profile details
 export async function checkProfilExist(userID) {
   try {
     logger.info(`${TAG}.checkProfileExist() ==>`, userID);
@@ -21,6 +22,7 @@ export async function checkProfilExist(userID) {
   }
 }
 
+// check uesrId in recruiter basic details
 export async function checkExist(userID) {
 
   try {
@@ -33,7 +35,7 @@ export async function checkExist(userID) {
     throw error;
   }
 }
-
+//check userId in recruiter 
 export async function isValid(userID) {
   try {
     logger.info(`${TAG}.checkProfilExist() ==>`, userID);
@@ -45,33 +47,37 @@ export async function isValid(userID) {
     throw error;
   }
 }
-
+// post recruiter all profile data
 export async function recruiterProfilePost(user) {
+  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrruuuuuuuuuuuuuuuuuuuuuuuuuuurrrrrrrrrrrr")
+  console.log(user)
   const uid=crypto.randomUUID()
   logger.info(`${TAG}.recruiterProfilePost()`);
   try {
     const basicInsertQuery = 
     `INSERT INTO RECRUITER_BASIC_DETAILS
     (USER_ID, UID, LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER, WEBSITE, LINKEDINPROFILE )
-      values(:userID, :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;;
+      values(:userID, :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
 
-      const contactInsertQuery = `INSERT INTO recruiter_contact_details
-      (USER_ID, UID, ADDRESS, CITY, DISRICT, STATE, PINCODE,COUNTRY)
-        values(:recruiterUserId, :uid, :address, :city, :district, 
+      const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
+      (USER_ID, UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
+        values(:userID, :uid, :address, :city, :district, 
           :state, :pincode, :country)`;
 
     const companyInsertQuery = 
-    `INSERT INTO recruiter_company_details
+    `INSERT INTO RECRUITER_COMPANY_DETAILS
     (USER_ID, UID, ESTABLISHEDYEAR, NUMBEROFEMPLOYEES, DEPARTMENTS, STARTYEAR, ANNUALREVENUE)
       values(:userID, :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
 
    
      let [basic]=await executeQuery(basicInsertQuery, QueryTypes.INSERT, {
-            ...user.basicDetails,userID:user.userID,uid});
+            ...user.Profile,userID:user.userID,uid});
      let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
-                ...user.contactDetails,userID:user.userID,uid});
+                ...user.Contact,userID:user.userID,uid});
+
+             
     let [company]=await executeQuery(companyInsertQuery, QueryTypes.INSERT, {
-      ...user.companyDetails,userID:user.userID,uid});
+      ...user.Company,userID:user.userID,uid});
 
 
     return {basic,contact,company};
@@ -81,10 +87,9 @@ export async function recruiterProfilePost(user) {
     throw error;
   }
 }
-
+//update basic details
 export async function recruitereBasicDetailsUpdate(user) {
-  // console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrruuuuuuuuuuuuuuuuuuuuuuuuuuurrrrrrrrrrrr")
-  // console.log(user)
+  
 
   logger.info(`${TAG}.recruitereBasicDetailsUpdate()`);
   try {
@@ -102,7 +107,7 @@ export async function recruitereBasicDetailsUpdate(user) {
     throw error;
   }
 }
-
+// update contact details
 export async function recruiterContactUpdate(user) {
   logger.info(`${TAG}.recruiterContactUpdate()`);
   try {
@@ -121,7 +126,7 @@ export async function recruiterContactUpdate(user) {
     throw error;
   }
 }
-
+//update company details
 export async function recruitercompanyDetailUpdate(user) {
   logger.info(`${TAG}.recruitercompanyDetailUpdate()`);
   try {
@@ -136,6 +141,42 @@ export async function recruitercompanyDetailUpdate(user) {
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.recruitercompanyDetailUpdate()`, error);
+    throw error;
+  }
+}
+//delete
+export async function deleteRecruiter(userID) {
+  try {
+    logger.info(`${TAG}.deleteRecruiter() ==>`, userID);
+    console.log(" **************************llib*************")
+    console.log(userID)
+    const response=[]
+
+    const deleteQueries = [
+
+      "DELETE FROM RECRUITER_BASIC_DETAILS WHERE USER_ID= :userID;",
+
+      "DELETE FROM RECRUITER_CONTACT_DETAILS WHERE USER_ID=:userID;",
+
+      "DELETE FROM RECRUITER_COMPANY_DETAILS WHERE USER_ID=:userID;",
+
+      "DELETE FROM RECRUITER WHERE USER_ID=:userID;",
+
+    ];
+
+    for (const query of deleteQueries) {
+      const res=await executeQuery(query, QueryTypes.DELETE, {
+        userID
+      });
+
+      response.push(res)
+
+    }
+
+    return {message:"college deleted",response};
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.deleteRecruiter()`, error);
     throw error;
   }
 }

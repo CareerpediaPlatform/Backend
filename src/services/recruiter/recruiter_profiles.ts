@@ -69,3 +69,27 @@ export async function getRecruiterProfile(userID) {
     }
     return serviceResponse;
   }
+  export async function deleteRecruiterProfile(userID){
+    console.log("SERvices**********************")
+    console.log(userID)
+    log.info(`${TAG}.deleteRecruiterProfile() ==> `, userID);
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try{
+      const deleteProfile=await RecruiterProfileDetailsData.deleteRecruiter(userID)
+      if(deleteProfile){
+      
+        serviceResponse.message="user deleted successfully"
+        return serviceResponse
+        
+      }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
+    }
+    catch(error){
+      log.error(`ERROR occurred in ${TAG}.deleteRecruiterProfile`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse
+  }

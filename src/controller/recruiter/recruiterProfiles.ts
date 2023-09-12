@@ -32,3 +32,17 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+  export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.deleterecruiterProfile()`);
+      log.debug(`${TAG}.deleterecruiterProfile() Object = ${JSON.stringify(req.body)}`)
+      let userID = req.params.userID
+      console.log("controller****************")
+      console.log(userID)
+      const authResponse= await recruiterProfileServices.deleteRecruiterProfile(userID)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.deleterecruiterProfile() `, error)
+      next(error)
+    }
+  }
