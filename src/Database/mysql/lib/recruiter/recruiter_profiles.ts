@@ -26,7 +26,7 @@ export async function checkProfilExist(userID) {
 export async function checkExist(userID) {
 
   try {
-    logger.info(`${TAG}.checkProfilExist() ==>`, userID);
+    logger.info(`${TAG}.checkExist() ==>`, userID);
     const checkQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE USER_ID=:userID';
     const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {userID});
     return basic// Return null if no user is found
@@ -83,15 +83,14 @@ export async function recruiterProfilePost(user) {
     return {basic,contact,company};
 
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.collegeProfilePost()`, error);
+    logger.error(`ERROR occurred in ${TAG}.recruiterProfilePost()`, error);
     throw error;
   }
 }
 //update basic details
-export async function recruitereBasicDetailsUpdate(user) {
+export async function recruiterBasicDetailsUpdate(user) {
   
-
-  logger.info(`${TAG}.recruitereBasicDetailsUpdate()`);
+  logger.info(`${TAG}.recruiterBasicDetailsUpdate()`);
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANYNAME = :companyName, FOUNDERNAME = :founderName, 
@@ -103,7 +102,7 @@ export async function recruitereBasicDetailsUpdate(user) {
     return user;
 
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.recruitereBasicDetailsUpdate`, error);
+    logger.error(`ERROR occurred in ${TAG}.recruiterBasicDetailsUpdate`, error);
     throw error;
   }
 }
@@ -144,7 +143,7 @@ export async function recruitercompanyDetailUpdate(user) {
     throw error;
   }
 }
-//delete
+//delete recruiter
 export async function deleteRecruiter(userID) {
   try {
     logger.info(`${TAG}.deleteRecruiter() ==>`, userID);
@@ -173,7 +172,7 @@ export async function deleteRecruiter(userID) {
 
     }
 
-    return {message:"college deleted",response};
+    return {message:"recruiter deleted",response};
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.deleteRecruiter()`, error);

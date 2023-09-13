@@ -4,7 +4,7 @@ import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 
 import {  RecruiterProfileDetailsData } from "../../Database/mysql";
-const TAG = 'services.aut'
+const TAG = 'services.profile'
 
 
 export async function recruiterProfile(user) {
@@ -19,7 +19,7 @@ export async function recruiterProfile(user) {
       if(isValid){
         const existedProfile=await RecruiterProfileDetailsData.checkExist(userID)
         if(existedProfile){
-          const basicDetails= await RecruiterProfileDetailsData.recruitereBasicDetailsUpdate({...user.Profile,userID});
+          const basicDetails= await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({...user.Profile,userID});
           const contactDetails= await RecruiterProfileDetailsData.recruiterContactUpdate({...user.Contact,userID});
           const companyDetsils= await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({...user.Company,userID});
           const data = {
