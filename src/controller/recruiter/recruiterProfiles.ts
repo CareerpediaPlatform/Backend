@@ -1,7 +1,11 @@
 import { NextFunction, Response } from 'express'
 import { responseBuilder } from '../../helpers/response_builder'
 import log from '../../logger'
-import {IServiceResponse} from '../../models'
+import nodeUtil from 'util'
+import {IServiceResponse,ServiceResponse} from '../../models'
+import { HttpStatusCodes } from "src/constants/status_codes";
+// import * as startupFilesService from '../services/file'
+
 
 import * as recruiterProfileServices from '../../services/recruiter/recruiter_profiles'
 const TAG = 'controler.recruiterProfile'
@@ -43,6 +47,41 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.deleterecruiterProfile() `, error)
+      next(error)
+    }
+  }
+
+  //***************companylog************** */
+
+  export async function uploadCompanyLogo(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.uploadCompanyLogo()`)
+      const response: IServiceResponse = new ServiceResponse(HttpStatusCodes.OK, 'File uploaded Successfully.', false)
+      response.data = {
+        fileLocation: req.files[0].location
+      }
+      responseBuilder(response, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.uploadCompanyLogo() `, error)
+      next(error)
+    }
+  }
+  export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.uploadCompanyLogoFile()`)
+      log.debug(`LOGGED IN USER: ${nodeUtil.inspect(req.userSession)}`)
+     // const startupUid = req.params['startupUid']
+    //   const userSession = req.userSession
+      log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file))
+  
+      const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadCompanyLogoFile(
+       
+        req.file
+      )
+  
+      responseBuilder(serviceResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.uploadCompanyLogoFile() `, error)
       next(error)
     }
   }

@@ -21,6 +21,9 @@ export const OTP_EXPIRY_TIME = 600
 
 export const SWAGGER_DOC_PATH = process.env.SWAGGER_DOC_PATH ?? resolve('./careerpedia-doc.yml')
 
+//nodemailer
+export const SENDER_EMAIL_ID = process.env.SENDER_EMAIL_ID || '';
+
 /*MySQL DB config*/
 export const MYSQL_DATABASE = {
   address: process.env.SQL_DATABASE_ADDRESS || 'localhost',
@@ -47,6 +50,16 @@ export const sqlConfig = {
     trustServerCertificate: true
   }
 }
+// for image
+export const AWS_S3 = {
+  ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
+  SECRET_ACCESS_KEY: process.env.AWS_SECRET_KEY,
+  BUCKET_NAME: process.env.AWS_BUCKET,
+  ACL: process.env.S3_ACL || 'public-read',
+  REGION: process.env.AWS_BUCKET_REGION,
+  SECURE_BUCKET_NAME: process.env.S3_SECURE_BUCKET_NAME
+};
+
   // checking required information in .env file
   export const checkEnv=async()=>{
     logger.info("env validation started")

@@ -7,29 +7,38 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import {generateAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
+import { sendRegistrationNotification } from "../nodemail";
 
-
+import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
 const TAG = 'services.auth'
+
 
 
 export async function signupUser(user: IRecruiter) {
     log.info(`${TAG}.signupUser() ==> `, user);
-      
+    let transaction = null
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
+   
         serviceResponse.message = 'Email  is already exist';
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const recruiter = await RecruiterAuth.signUp(user);
+      transaction = await getTransaction()
+      const recruiter = await RecruiterAuth.signUp(user,transaction);
+      await transaction.commit() 
+      sendRegistrationNotification(user)
       const accessToken = await generateAccessToken({ ...recruiter  });
+      
       const recruiter_uid = recruiter.uid
+      const recruiter_email = recruiter.email
       const data = {
         accessToken,
-        recruiter_uid         
+        recruiter_uid ,    
+        recruiter_email
       }    
       serviceResponse.data = data
     } catch (error) {

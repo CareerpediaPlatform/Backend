@@ -179,3 +179,38 @@ export async function deleteRecruiter(userID) {
     throw error;
   }
 }
+
+
+//*******************companylogo******************* */
+export async function saveFile(fileDetails: any): Promise<any> {
+  logger.info(`${TAG}.saveFile()`)
+  try {
+    fileDetails['uid'] = crypto.randomUUID()
+ 
+    fileDetails['metaData'] = JSON.stringify(fileDetails?.metaData || {})
+
+    const fileInsertQuery = `INSERT INTO FILE_DETAILS
+(UID, FILE_NAME,ORIGINAL_FILE_NAME, CONTENT_TYPE, S3_BUCKET, FILE_PATH, FILE_URL, IS_PUBLIC, METADATA, CREATED_AT)
+VALUES(:uid,:fileName,:originalFileName, :contentType, :s3Bucket, :filePath, :fileUrl, :isPublic, :metaData, CURRENT_TIMESTAMP)`
+
+    const [id] = await executeQuery(fileInsertQuery, QueryTypes.INSERT, {
+      ...fileDetails
+    })
+    return { id: id, uid: fileDetails.uid }
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
+    throw error
+  }
+}
+export async function getRecruiterFile(userID){
+  logger.info(`${TAG}.getRecruiterFile() ==>`, userID);
+  try{
+    const getQuery=`SELECT * FROM FILE_DETAILS WHERE USER_ID= userID`
+    const [filedetails] = await executeQuery(getQuery, QueryTypes.SELECT,{ userID})
+ return filedetails
+  }
+  catch(error){
+    logger.error(`ERROR occurred in ${TAG}.getRecruiterFile()`, error)
+    throw error
+  }
+}
