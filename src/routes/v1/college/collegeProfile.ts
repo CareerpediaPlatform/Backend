@@ -1,8 +1,8 @@
-// collegeProfilePostAndUpdate
 import * as controller from '../../../controller/college/collegeProfile'
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
+import {isAuthenticated} from '../../../middlewares/authentication'
 
 
 
@@ -12,8 +12,10 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/profile/:userID')
- .post(controller.collegeProfilePostAndUpdate);
+ .post(isAuthenticated,controller.collegeProfilePostAndUpdate);
  router.route('/profile/:userID')
- .get(controller.getCollegeProfile);
+ .get(isAuthenticated,controller.getCollegeProfile);
+ router.route('/profile/:userID')
+ .delete(isAuthenticated,controller.collegeProfileDelete);
 
  export default router

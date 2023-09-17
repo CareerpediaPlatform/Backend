@@ -6,7 +6,6 @@ const router=Router()
 
 
 // router.use(isAuthenticated)
-router.route('/change-password')
-.patch(controller.changePassword);
+
 
 export default router

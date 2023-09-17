@@ -23,24 +23,24 @@ export async function checkProfilExist(userID) {
 
 export async function checkExist(userID) {
   try {
-    logger.info(`${TAG}.checkProfilExist() ==>`, userID);
+    logger.info(`${TAG}.checkExist() ==>`, userID);
     const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE userID=:userID';
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {userID});
     return contact// Return null if no user is found
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+    logger.error(`ERROR occurred in ${TAG}.checkExist()`, error);
     throw error;
   }
 }
 
 export async function isValid(userID) {
   try {
-    logger.info(`${TAG}.checkProfilExist() ==>`, userID);
+    logger.info(`${TAG}.isValid() ==>`, userID);
     const contactQuery = 'SELECT * FROM `COLLEGE` WHERE USER_ID=:userID';
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {userID});
     return contact// Return null if no user is found
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+    logger.error(`ERROR occurred in ${TAG}.isValid()`, error);
     throw error;
   }
 }
@@ -153,6 +153,32 @@ export async function collegeDetailUpdate(user) {
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.collegeDetailUpdate()`, error);
+    throw error;
+  }
+}
+export async function collegeProfileDelete(user) {
+  logger.info(`${TAG}.collegeProfileDelete()`);
+  try {
+    const response=[]
+    const deleteQueries = [
+      "DELETE FROM COLLEGE_BASIC_DETAILS WHERE userID = :userID;",
+      "DELETE FROM CONTACT_DETAILS WHERE userID = :userID;",
+      "DELETE FROM COLLEGE_DETAILS WHERE userID = :userID;",
+      "DELETE FROM college WHERE user_ID = :userID;",
+    ];
+    // const deleteQueries =`"DELETE FROM  COLLEGE WHERE user_ID = :userID";`
+    
+    for (const query of deleteQueries) {
+      const res=await executeQuery(query, QueryTypes.DELETE, {
+        userID: user
+      });
+      response.push(res)
+    }
+    
+    return {message:"college deleted",response};
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.collegeProfileDelete()`, error);
     throw error;
   }
 }
