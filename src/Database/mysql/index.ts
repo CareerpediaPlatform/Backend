@@ -23,13 +23,9 @@ export{
     AdminAuth,
     MentorAuth,
     RecruiterAuth,
-
-    CollegeAuth,
-  StudentAuth,
-  RecruiterProfileDetailsData
-
     CollegeAuth,
     StudentAuth,
+    RecruiterProfileDetailsData,
     mentorPersonalAndContactData,
     mentorEducationData,
     mentorWorkExperienceData,
