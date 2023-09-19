@@ -4,6 +4,9 @@ import * as RecruiterAuth from './lib/recruiter/recruiter_auth'
 import * as CollegeAuth from './lib/college/college_auth'
 import * as StudentAuth from './lib/student/auth'
 
+
+import * as RecruiterProfileDetailsData from './lib/recruiter/recruiter_profiles'
+
 import * as AdminProfile from './lib/admin/adminProfile'
 
 //MENTOR PROFILE
@@ -15,10 +18,16 @@ import * as StudentProfile from './lib/student/profile'
 
 
 
+
 export{
     AdminAuth,
     MentorAuth,
     RecruiterAuth,
+
+    CollegeAuth,
+  StudentAuth,
+  RecruiterProfileDetailsData
+
     CollegeAuth,
     StudentAuth,
     mentorPersonalAndContactData,
