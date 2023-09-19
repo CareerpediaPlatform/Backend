@@ -7,7 +7,7 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'
 
-export async function signUp(user: ICollege) {
+export async function signUp(user: ICollege,transaction?: any) {
   logger.info(`${TAG}.saveUser()`);
   try {
     const hashedPassword = await hashPassword(user.password);
@@ -20,7 +20,7 @@ export async function signUp(user: ICollege) {
     values(:uid, :email, :password)`;
 
     await executeQuery(collegeInsertQuery, QueryTypes.INSERT, {
-      ...data,
+      ...data,transaction
     });
     return data;
 

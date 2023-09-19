@@ -4,7 +4,7 @@ import log from '../../logger'
 import nodeUtil from 'util'
 import {IServiceResponse,ServiceResponse} from '../../models'
 import { HttpStatusCodes } from "src/constants/status_codes";
-// import * as startupFilesService from '../services/file'
+
 
 
 import * as recruiterProfileServices from '../../services/recruiter/recruiter_profiles'
@@ -15,6 +15,8 @@ export async function recruiterProfilePostAndUpdate(req: any, res: Response, nex
       log.info(`${TAG}.recruiterProfilePostAndUpdate()`);
       log.debug(`${TAG}.recruiterProfilePostAndUpdate() Object = ${JSON.stringify(req.body)}`)
       const user = req.body;
+      console.log("******************controller")
+      console.log(user)
       let userID = req.params.userID
       const authResponse: IServiceResponse = await recruiterProfileServices.recruiterProfile({...user,userID})
       responseBuilder(authResponse, res, next, req)
@@ -70,8 +72,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
     try {
       log.info(`${TAG}.uploadCompanyLogoFile()`)
       log.debug(`LOGGED IN USER: ${nodeUtil.inspect(req.userSession)}`)
-     // const startupUid = req.params['startupUid']
-    //   const userSession = req.userSession
+
       log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file))
   
       const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadCompanyLogoFile(
@@ -82,6 +83,20 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadCompanyLogoFile() `, error)
+      next(error)
+    }
+  }
+
+
+  export async function getrecruiterCompanyLogo(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getrecruiterCompanyLogo()`);
+      log.debug(`${TAG}.getrecruiterCompanyLogo() Object = ${JSON.stringify(req.body)}`)
+      let userID = req.params.userID
+      const authResponse= await recruiterProfileServices.getRecruiterFile(userID)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getrecruiterCompanyLogo() `, error)
       next(error)
     }
   }

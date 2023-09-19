@@ -54,6 +54,7 @@ export async function recruiterProfilePost(user) {
   const uid=crypto.randomUUID()
   logger.info(`${TAG}.recruiterProfilePost()`);
   try {
+
     const basicInsertQuery = 
     `INSERT INTO RECRUITER_BASIC_DETAILS
     (USER_ID, UID, LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER, WEBSITE, LINKEDINPROFILE )
@@ -91,6 +92,8 @@ export async function recruiterProfilePost(user) {
 export async function recruiterBasicDetailsUpdate(user) {
   
   logger.info(`${TAG}.recruiterBasicDetailsUpdate()`);
+  console.log("888888888888888888888888888888888888888888888")
+  console.log(user)
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANYNAME = :companyName, FOUNDERNAME = :founderName, 
@@ -202,10 +205,10 @@ VALUES(:uid,:fileName,:originalFileName, :contentType, :s3Bucket, :filePath, :fi
     throw error
   }
 }
-export async function getRecruiterFile(userID){
+export async function getRecruiterFile(userID:any){
   logger.info(`${TAG}.getRecruiterFile() ==>`, userID);
   try{
-    const getQuery=`SELECT * FROM FILE_DETAILS WHERE USER_ID= userID`
+    const getQuery=`SELECT * FROM FILE_DETAILS WHERE USER_ID= :userID`
     const [filedetails] = await executeQuery(getQuery, QueryTypes.SELECT,{ userID})
  return filedetails
   }

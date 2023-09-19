@@ -23,4 +23,6 @@ const router = Router()
  router.route('/company-logo')
  .post(imageFileReader(FormParams.FILE_FIELD), emptyCheck, controller.uploadCompanyLogoFile)
 
+ router.route('/company-logo/:userID').get(controller.getrecruiterCompanyLogo)
+
  export default router

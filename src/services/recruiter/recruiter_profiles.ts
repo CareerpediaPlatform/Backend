@@ -10,7 +10,7 @@ import {  RecruiterProfileDetailsData } from "../../Database/mysql";
 
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
-// import { getFileUrl, getSanitizedFileName, saveFile } from '../helpers/s3_media';
+
 import { getFileUrl,getSanitizedFileName, saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 // import {  FileData } from '../Database/mysql'
@@ -22,6 +22,7 @@ export async function recruiterProfile(user) {
 
  
     log.info(`${TAG}.recruiterProfile() ==> `, user);
+   
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
@@ -41,6 +42,8 @@ export async function recruiterProfile(user) {
           serviceResponse.data = data
           return serviceResponse
         }
+        console.log("******************services")
+        console.log(user)
         const response= await RecruiterProfileDetailsData.recruiterProfilePost({...user});
         const data = {
           ...response
@@ -81,8 +84,7 @@ export async function getRecruiterProfile(userID) {
     return serviceResponse;
   }
   export async function deleteRecruiterProfile(userID){
-    console.log("SERvices**********************")
-    console.log(userID)
+    
     log.info(`${TAG}.deleteRecruiterProfile() ==> `, userID);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
@@ -151,4 +153,22 @@ export async function getRecruiterProfile(userID) {
   }
  
 
-  
+  export async function getRecruiterFile(userID){
+    log.info(`${TAG}.getRecruiterFile() ==> `, userID);
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try{
+      const CompanyLogodetails = await RecruiterProfileDetailsData.getRecruiterFile(userID)
+      if(CompanyLogodetails){
+        const data = {
+          CompanyLogodetails
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }
+    }
+    catch(error){
+      log.error(`ERROR occurred in ${TAG}.getRecruiterFile`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+
+  }
