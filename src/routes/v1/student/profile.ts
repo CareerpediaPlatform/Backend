@@ -17,5 +17,9 @@ const router = Router()
  .put(controller.updateWorkExperience);
  router.route('/work-experience/:id')
  .delete(controller.studentProfileExperienceDelete);
+ router.route('/profile')
+ .patch(controller.studentProfilePost);
+ router.route('/profile/:id')
+ .get(controller.getStudentProfile);
 
  export default router

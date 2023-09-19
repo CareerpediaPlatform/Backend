@@ -275,7 +275,8 @@ export async function  verifyOTP(userotp: any) {
 export async function checkEmailOrPhoneExist(info) {
   try {
     logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
-
+    // console.log("111111111111111111111111111111111111111111")
+    //   console.log(info)
     let query1: string;
     let query2: string;
     let queries: string[] = [];

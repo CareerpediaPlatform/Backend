@@ -14,10 +14,11 @@ export async function signUp(user: ICollege) {
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,
-      password: hashedPassword
+      password: hashedPassword,
+      status:"ACTIVE"
     };
-    let collegeInsertQuery = `insert into COLLEGE(UID, EMAIL, PASSWORD)
-    values(:uid, :email, :password)`;
+    let collegeInsertQuery = `insert into COLLEGE(UID, EMAIL, PASSWORD,status)
+    values(:uid, :email, :password, :status)`;
 
     await executeQuery(collegeInsertQuery, QueryTypes.INSERT, {
       ...data,
@@ -90,6 +91,29 @@ export async function changePassword(user:any): Promise<void> {
   }
 }
 
+export async function collegeUpdateStatus(user){
+  logger.info(`${TAG}.studentUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    
+    const updateQuery = `UPDATE COLLEGE
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [res]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(res)
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.studentUpdateStatus()`, error);
+    throw error;
+  }
+}
 
 
 

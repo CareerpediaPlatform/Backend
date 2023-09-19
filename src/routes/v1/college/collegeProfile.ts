@@ -17,5 +17,7 @@ const router = Router()
  .get(isAuthenticated,controller.getCollegeProfile);
  router.route('/profile/:userID')
  .delete(isAuthenticated,controller.collegeProfileDelete);
+ router.route('/profile/:userID')
+ .get(isAuthenticated,controller.collegeProfileDelete);
 
  export default router

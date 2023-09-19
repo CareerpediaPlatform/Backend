@@ -53,6 +53,18 @@ export const sqlConfig = {
     trustServerCertificate: true
   }
 }
+
+// for image
+export const AWS_S3 = {
+  ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
+  SECRET_ACCESS_KEY: process.env.AWS_SECRET_KEY,
+  BUCKET_NAME: process.env.AWS_BUCKET,
+  ACL: process.env.S3_ACL || 'public-read',
+  REGION: process.env.AWS_BUCKET_REGION,
+  SECURE_BUCKET_NAME: process.env.S3_SECURE_BUCKET_NAME
+};
+
+
   // checking required information in .env file
   export const checkEnv=async()=>{
     logger.info("env validation started")

@@ -24,8 +24,8 @@ const router = Router()
  router.route('/email-login')
      .post(validation.emailLogin,controller.signinUser);
 
-//  router.route('/google-signin')
-//      .post(validation.linkedInLogin,controller.signinUser);
+ router.route('/google-signin')
+     .post(validation.linkedInLogin,controller.signinUser);
 
  router.route('/number-login')
      .post(validation.numberLogin,controller.signinUser);
