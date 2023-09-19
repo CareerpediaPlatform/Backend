@@ -20,12 +20,12 @@ export async function signUp(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       password: hashedPassword,
-      phoneNumber:user.phoneNumber,
-      role:"student"
+      role:"student",
+      status:"Active"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_DETAILS(uid, first_name, last_name, email, password,phone_number,role)
-      VALUES (:uid, :firstName, :lastName, :email, :password, :phoneNumber, :role)
+      INSERT INTO STUDENT_DETAILS(id, uid, first_name, last_name, email, password,role,status)
+      VALUES (GenerateUniqueId('student_details'), :uid, :firstName, :lastName, :email, :password, :role, :status)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -50,11 +50,11 @@ export async function signupWithSocialAccount(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
-      phoneNumber:user.phoneNumber,
+      status:"Active"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH (uid, first_name, last_name, email, uniqId,phone_number)
-      VALUES (:uid, :firstName, :lastName, :email, :uuid, :phoneNumber)
+      INSERT INTO STUDENT_AUTH (id, uid, first_name, last_name, email, uniqId, status)
+      VALUES (:GenerateUniqueId('student_auth'), :uid, :firstName, :lastName, :email, :uuid, :status)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -82,6 +82,91 @@ try{
   throw error;
 }
 }
+export async function signupPhonenumber(user:any){
+try{
+  logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
+
+  let query = 'UPDATE STUDENT_DETAILS SET phone_number= :phoneNumber WHERE uid= :uid';
+  const response= await executeQuery(query, QueryTypes.UPDATE, {
+    ...user});
+  return response;
+}catch (error) {
+  logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
+  throw error;
+}
+}
+export async function signupPhonenumbers(user:any){
+try{
+  logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
+
+  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
+  const response= await executeQuery(query, QueryTypes.UPDATE, {
+    ...user});
+  return response;
+}catch (error) {
+  logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
+  throw error;
+}
+}
+// getAllStudentList
+
+
+export async function getAllStudentList(){
+  const getTable1=`SELECT 
+  id, uid, first_name, last_name, email, status
+FROM
+  STUDENT_DETAILS 
+UNION ALL SELECT 
+  id, uid, first_name, last_name, email,status
+FROM
+  STUDENT_AUTH;`
+
+    const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
+
+   return await {...res};
+}
+
+// update stauys active and deactive
+export async function findTable(uid){
+  console.log(uid)
+  const updateQuery = `SELECT 
+  CASE
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH WHERE uid = :uid) THEN 'STUDENT_AUTH'
+      ELSE 'STUDENT_DETAILS'
+  END AS table_name
+  `
+
+  const [res]=await executeQuery(updateQuery,QueryTypes.SELECT, {
+  uid:uid
+  });
+  console.log(res)
+  return res.tableName;
+}
+
+export async function studentUpdateStatus(user){
+  logger.info(`${TAG}.studentUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    let tableName=await findTable(user.uid)
+    
+    const updateQuery = `UPDATE ${tableName}
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [res]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(res)
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.studentUpdateStatus()`, error);
+    throw error;
+  }
+}
 
   // otp generator
 
@@ -92,7 +177,7 @@ try{
     const otp = await OTP();
     const info={
       student_id:user.id,
-      otp:otp,
+      otp:user.otp,
       phoneNumber:user.phoneNumber,
       type:user.type,
       accesstoken:user.accessToken
@@ -113,14 +198,65 @@ try{
   }
 }
 
-export async function  verifyOTP(userotp: any) {
+  export async function resendOTP(user){
+  logger.info(`${TAG}.resendOTP()`);
+  try{
+    const info={
+      otp:user.newOtp,
+      accesstoken:user.accessToken,
+      phoneNumber:user.phoneNumber,
+      type:user.type,
+    }
+    const updateQuery = `
+    UPDATE  OTP_AUTH
+    SET
+    otp=:otp,
+    access_token= :accesstoken,
+    type= :type
+        WHERE phone_number=:phoneNumber;
+  `;
+    const [res]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
+      ...info,
+    });
+    return info;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.resendOTP()`, error);
+    throw error;
+  }
+}
+
+export async function  deleteOTP(userotp: any) {
   try {
     const otp=userotp.otp
-    logger.info(`${TAG}.checkEmailOrPhoneExist()  ==>`, otp);
+    logger.info(`${TAG}.deleteOTP()  ==>`, otp);
 
-    let query = 'select * from OTP_AUTH where otp=:otp';
-    const [user] = await executeQuery(query, QueryTypes.SELECT,{
+    let query = 'DELETE FROM OTP_AUTH WHERE otp=:otp';
+    const [user] = await executeQuery(query, QueryTypes.DELETE,{
       otp
+    });
+    if(user){
+      return user;
+    }
+    else{
+      return false
+    }
+    // console.log("error")
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.deleteOTP()`, error);
+    throw error;
+  }
+}
+
+
+export async function  verifyOTP(userotp: any) {
+  try {
+    const phoneNumber=userotp.phoneNumber
+    logger.info(`${TAG}.verifyOTP()  ==>`, phoneNumber);
+
+    let query = 'select * from OTP_AUTH where phone_number= :phoneNumber';
+    const [user] = await executeQuery(query, QueryTypes.SELECT,{
+      ...userotp
     });
     if(user){
       return user;
@@ -139,7 +275,8 @@ export async function  verifyOTP(userotp: any) {
 export async function checkEmailOrPhoneExist(info) {
   try {
     logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
-
+    // console.log("111111111111111111111111111111111111111111")
+    //   console.log(info)
     let query1: string;
     let query2: string;
     let queries: string[] = [];
@@ -160,6 +297,10 @@ export async function checkEmailOrPhoneExist(info) {
     } else if (info.uid) {
       query1 = 'SELECT * FROM STUDENT_DETAILS WHERE uid = :uid';
       query2 = 'SELECT * FROM STUDENT_AUTH WHERE uid = :uid';
+      queries = [query1, query2];
+    }else if (info.id) {
+      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE id= :id';
+      query2 = 'SELECT * FROM STUDENT_AUTH WHERE id= :id';
       queries = [query1, query2];
     }
 

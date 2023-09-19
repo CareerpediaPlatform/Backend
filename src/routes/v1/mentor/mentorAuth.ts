@@ -21,6 +21,8 @@ const router = Router()
 
   router.route('/change-password')
  .post(isAuthenticated,controller.changePasswordController);
+
+ 
     
 
 export default router

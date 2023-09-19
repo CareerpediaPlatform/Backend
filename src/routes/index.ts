@@ -14,7 +14,6 @@ export default function initializeRoutes (app: Application): any {
   
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   app.use('/api/v1/', v1Routes)
-
   app.get('*', function (req, res) {
     res.status(404).send('what???')
   })

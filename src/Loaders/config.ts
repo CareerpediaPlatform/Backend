@@ -4,7 +4,6 @@ import AppError from '../models/lib/app_error';
 import logger from '../logger';
 import { resolve } from 'path'
 
-
 dotenv.config()
 export const AES_ENC_KEY = process.env.ASE_ENC_KEY ?? 'bf3c199c2470we477d907b1e0917c17c'
 export const PORT = process.env.PORT ?? 3307
@@ -21,8 +20,17 @@ export const OTP_EXPIRY_TIME = 600
 
 export const SWAGGER_DOC_PATH = process.env.SWAGGER_DOC_PATH ?? resolve('./careerpedia-doc.yml')
 
+
 //nodemailer
 export const SENDER_EMAIL_ID = process.env.SENDER_EMAIL_ID || '';
+
+//AWS Config
+
+export const AWS_BUCKET = process.env.AWS_BUCKET 
+export const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION 
+export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY 
+export const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY
+
 
 /*MySQL DB config*/
 export const MYSQL_DATABASE = {
@@ -50,6 +58,7 @@ export const sqlConfig = {
     trustServerCertificate: true
   }
 }
+
 // for image
 export const AWS_S3 = {
   ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
