@@ -13,19 +13,20 @@ export const emailLogin= async (req, res, next) => {
       'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
-    }),
+    })
   });
   await validate(schema, req, res, next);
 };
 
 export const numberLogin= async (req, res, next) => {
   const schema = Joi.object().keys({
-    phoneNumber: Joi.string().required().min(10).max(10).messages({
+    phoneNumber: Joi.string().min(10).max(10).messages({
       'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'phoneNumber'),
       'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'phoneNumber')
         .replace('$length', '10'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'phoneNumber')
     }),
+    
   });
   await validate(schema, req, res, next);
 };

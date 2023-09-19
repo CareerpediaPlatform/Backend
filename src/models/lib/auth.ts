@@ -46,6 +46,7 @@ export interface ISingin{
   password?:string
   uuid?:string
   phoneNumber?:string
+  status?:string
 }
 
 export class ISignin implements ISingin {
@@ -53,16 +54,19 @@ export class ISignin implements ISingin {
   public password?:string
   public uuid?:string
   public phoneNumber?:string
+  public status?:string
 
  
 
   constructor (
     phoneNumber:string,
     email?:string,
-    uuid?:string) {
+    uuid?:string,status?:string) {
     this.phoneNumber = phoneNumber
     this.uuid = uuid
     this.email = email
+    this.status=status
+
   }
 }
 
@@ -85,8 +89,6 @@ export class Otp implements userOTP {
   public type:string
   public accessToken:string
   public createdAt?:string
-
- 
 
   constructor (
     student_id:string,
