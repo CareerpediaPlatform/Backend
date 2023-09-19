@@ -45,3 +45,19 @@ export async function signupCollege (req: any, res: Response, next: NextFunction
       next(error);
     }
   }
+
+  
+export async function collegeUpdateStatus(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.collegeUpdateStatus()`);
+    log.debug(`${TAG}.collegeUpdateStatus() Object = ${JSON.stringify(req.body)}`)
+    
+    const {status,uid}= req.params;
+    const headerValue =req.headers.authorization.split(' ')[1]
+    const authResponse: IServiceResponse = await authService.collegeUpdateStatus({status,uid,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.collegeUpdateStatus() `, error)
+    next(error)
+  }
+}

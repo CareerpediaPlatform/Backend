@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken} from '../../helpers/authentication'
+import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
 import { ICollege } from "src/models/lib/auth";
 
@@ -57,6 +57,12 @@ export async function signupUser(user: ICollege) {
           serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
           serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
           return serviceResponse;
+        }
+        if(existedUser.status!="Active"){
+          serviceResponse.message = 'your account is freazed by careerpedia please contact careerpedia team !';
+          serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
+          serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+          return serviceResponse
         }
 
         const isPasswordValid = await comparePasswords(existedUser.password,user.password );
@@ -120,3 +126,34 @@ export async function changeUserPassword(user: any) {
   return serviceResponse;
 }
 
+
+
+ // give access remove accerss of a student by admin
+ export async function collegeUpdateStatus(user){
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try{
+    // finde student is valid or not
+    const decoded=await verifyAccessToken(user.headerValue)
+
+    if(decoded &&(user.status=="Active" ||user.status=="Deactive")){
+      if(decoded.role!="admin"){
+        serviceResponse.message = `UnAutharized Admin`
+        return serviceResponse
+      }
+      const student=await CollegeAuth.collegeUpdateStatus({...user})
+      const data={
+        student
+      }
+      serviceResponse.message = `college status changed to ${user.status} successfully `
+      serviceResponse.data = data
+      return serviceResponse
+    }else{
+      serviceResponse.message = `someThing went wrong in url`
+          return serviceResponse
+    }
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.collegeUpdateStatus`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return await serviceResponse
+}

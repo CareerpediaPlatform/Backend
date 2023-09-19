@@ -16,5 +16,4 @@ async function startApplication (): Promise<void> {
     process.exit(1)
   }
 }
-
 startApplication().catch((err) => log.error('ERROR occurred while starting Application.', err))
