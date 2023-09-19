@@ -4,21 +4,16 @@ import log from '../../logger'
 import {IServiceResponse, IUser, UserSession} from '../../models'
 import * as profileService from '../../services/student/profile'
 const TAG="controler.student.profile"
-import { uploadCompanyLogoFile } from 'src/services/imageUpload'
+// import { uploadCompanyLogoFile } from 'src/services/imageUpload'
 
 export async function studentProfilePost(req: any, res: Response, next: NextFunction): Promise<void> {
   try {
     log.info(`${TAG}.studentProfilePost()`);
     log.debug(`${TAG}.studentProfilePost() Object = ${JSON.stringify(req.body)}`)
-    const response:IServiceResponse= await uploadCompanyLogoFile(
-      req.files
-    ) 
-    console.log("333333333333333333333333333333333333333333")
-    console.log(req.files)
-    // const headerValue = req.headers.authorization.split(' ')[1];
-    // const user = req.body;
-    // const authResponse: IServiceResponse = await profileService.studentProfilePost({...user,headerValue})
-    responseBuilder(response, res, next, req)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    const authResponse: IServiceResponse = await profileService.studentProfilePost({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.studentProfilePost() `, error)
     next(error)
