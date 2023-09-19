@@ -134,19 +134,31 @@ export interface IMentor {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
+  type:string;
+  course:string;
+  status?:string;
 }
 
 export class Mentor implements IMentor {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
+  public type:string;
+  public course:string;
+  public status?:string;
   
-  constructor(email: string, password: string) {
+  
+  constructor(email: string,password : string ,type:string,course:string,status:string) {
     this.email = email;
     this.password = password;
+    this.type = type;
+    this.course = course;
+    this.status = status;
+    
   }
+
 }
 
 //recruiter

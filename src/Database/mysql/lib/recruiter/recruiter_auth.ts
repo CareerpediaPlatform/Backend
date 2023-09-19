@@ -18,7 +18,6 @@ export async function signUp(user: IRecruiter) {
     };
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD)
     values(:uid, :email, :password)`;
-
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
       ...data,
     });
