@@ -29,6 +29,8 @@ export function toCamelCase(object) {
                 }
                 camelCaseObject[camelCase(key)] = value;
             });
+            console.log("camelCaseObject");
+            console.log(camelCaseObject);
         return camelCaseObject;
     } catch (err) {
         logger.error('ERROR in toCamelCase()', err);

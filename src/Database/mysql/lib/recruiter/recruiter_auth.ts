@@ -7,7 +7,7 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'
 
-export async function signUp(user: IRecruiter) {
+export async function signUp(user: IRecruiter,transaction?: any) {
   logger.info(`${TAG}.saveUser()`);
   try {
     const hashedPassword = await hashPassword(user.password);
@@ -18,9 +18,8 @@ export async function signUp(user: IRecruiter) {
     };
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD)
     values(:uid, :email, :password)`;
-
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
-      ...data,
+      ...data,transaction
     });
     return data;
 
@@ -89,9 +88,21 @@ export async function changePassword(user:any): Promise<void> {
     throw error;
   }
 }
+export async function getUserId(uid:string) {
+  try {
+    
+    logger.info(`${TAG}.getUserId()  ==>`, uid);
+    console.log("uisjdfdfdkfldkf");
+console.log(uid)
+    let query = 'select USER_ID from RECRUITER where USER_ID=:uid';
+    const [recruiterId] = await executeQuery(query, QueryTypes.SELECT, {
+      uid
+    });
+    console.log(recruiterId)
+    return recruiterId;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserId`, error);
+    throw error;
+  }
+}
 
-
-
-
-
- 
