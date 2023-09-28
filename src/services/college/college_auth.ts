@@ -11,7 +11,6 @@ import { ICollege } from "src/models/lib/auth";
 
 const TAG = 'services.auth'
 
-
 export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
       
@@ -39,17 +38,13 @@ export async function signupUser(user: ICollege) {
     return serviceResponse;
   }
 
-
-  
   export async function loginUser(user: ICollege) {
     log.info(`${TAG}.loginUser() ==> `, user);
-
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     
     try {
         // Check if the user with the given email exists
         const existedUser = await checkEmailExist(user.email);
-        console.log(existedUser)
 
         //if email does not exist 
         if(!existedUser) {
@@ -58,13 +53,12 @@ export async function signupUser(user: ICollege) {
           serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
           return serviceResponse;
         }
-        if(existedUser.status!="Active"){
+        if(existedUser.status!="ACTIVE"){
           serviceResponse.message = 'your account is freazed by careerpedia please contact careerpedia team !';
           serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
           serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
           return serviceResponse
         }
-
         const isPasswordValid = await comparePasswords(existedUser.password,user.password );
             
         if (!isPasswordValid) {
@@ -91,8 +85,6 @@ export async function signupUser(user: ICollege) {
     
     return serviceResponse;
 }
-
-
 
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -126,16 +118,14 @@ export async function changeUserPassword(user: any) {
   return serviceResponse;
 }
 
-
-
- // give access remove accerss of a student by admin
+ // give access remove accerss of a college_admin by admin
  export async function collegeUpdateStatus(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try{
-    // finde student is valid or not
+    // finde admin is valid or not
     const decoded=await verifyAccessToken(user.headerValue)
 
-    if(decoded &&(user.status=="Active" ||user.status=="Deactive")){
+    if(decoded &&(user.status=="ACTIVE" ||user.status=="DEACTIVE")){
       if(decoded.role!="admin"){
         serviceResponse.message = `UnAutharized Admin`
         return serviceResponse

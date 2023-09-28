@@ -3,8 +3,6 @@ import { responseBuilder } from '../../helpers/response_builder'
 import log from '../../logger'
 import {IServiceResponse, IUser, UserSession} from '../../models'
 import * as authService from '../../services/student/auth'
-import {PathParams} from "../../constants/api_param_constants";
-// import {userDataMapping} from "../../helpers/data_mapping/user";
 import { ISingin } from 'src/models/lib/auth'
 const TAG = 'controler-student.auth'
 
@@ -12,9 +10,7 @@ export async function signupUser (req: any, res: Response, next: NextFunction): 
     try {
       log.info(`${TAG}.signupUser()`);
       log.debug(`${TAG}.signupUser() Object = ${JSON.stringify(req.body)}`)
-      // const user: IUser = userDataMapping(req.body);
       const user: IUser =req.body;
-      console.log(user)
       if(user.password){
         const authResponse: IServiceResponse = await authService.signupUser(user)
         responseBuilder(authResponse, res, next, req)
@@ -39,7 +35,7 @@ export async function signupPhonenumber (req: any, res: Response, next: NextFunc
         const authResponse: IServiceResponse = await authService.signupPhonenumber({...user,headerValue})
         responseBuilder(authResponse, res, next, req)
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupUser() `, error)
+      log.error(`ERROR occurred in ${TAG}.signupPhonenumber() `, error)
       next(error)
     }
   }
@@ -112,6 +108,7 @@ export async function resendOTP(req: any, res: Response, next: NextFunction):Pro
     next(error)
   }
 }
+
 export async function changePassword(req: any, res: Response, next: NextFunction):Promise<void>{
   try{
     log.info(`${TAG}.changePassword()`);
@@ -156,4 +153,6 @@ export async function setForgetPassword(req: any, res: Response, next: NextFunct
     next(error)
   }
 }
+
+
 

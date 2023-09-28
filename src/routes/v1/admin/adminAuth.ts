@@ -4,7 +4,6 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import * as validation from '../../../validations/auth'
-
 import * as statuscontroller from '../../../controller/admin/adminProfile'
 
 

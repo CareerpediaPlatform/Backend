@@ -4,6 +4,7 @@ import {getSingleStudentProfile} from "../../../controller/student/profile"
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
+import { isAuthenticated } from 'src/middlewares/authentication'
 
 passportConfiguration(passport)
 
@@ -11,12 +12,12 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/status/:status/:uid')
-     .patch(studentUpdateStatus);
+     .patch(isAuthenticated,studentUpdateStatus);
 
  router.route('/List')
-     .get(getAllStudentList);
+     .get(isAuthenticated,getAllStudentList);
 
  router.route('/:uid')
-     .get(getSingleStudentProfile);
+     .get(isAuthenticated,getSingleStudentProfile);
 
 export default router

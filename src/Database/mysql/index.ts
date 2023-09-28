@@ -15,6 +15,7 @@ import * as mentorEducationData from './lib/mentor/mentorEducational'
 import * as mentorWorkExperienceData from './lib/mentor/mentorWorkExperience'
 
 import * as StudentProfile from './lib/student/profile'
+// import * as testJoin from './lib/testjoin'
 
 
 
@@ -30,6 +31,6 @@ export{
     mentorEducationData,
     mentorWorkExperienceData,
     AdminProfile,
-    StudentProfile
+    StudentProfile,
 
 }

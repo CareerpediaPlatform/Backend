@@ -56,10 +56,10 @@ export async function studentProfileUpdate(user) {
     user_uid = :uid;
     `;
 
-    let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.INSERT, {
+    let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.UPDATE, {
       ...user.contactDetails,uid:user.uid});
 
-    let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.INSERT, {
+    let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
         ...user.basicDetails,uid:user.uid});
 
     return {profile,contact};
@@ -79,15 +79,19 @@ export async function checkProfilExist(uid) {
     const educationQuery = 'SELECT * FROM `EDUCATION_DETAILS` WHERE user_uid=:uid';
     const experienceQuery = 'SELECT * FROM `WORK_EXPERIENCE` WHERE user_uid=:uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
-    const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
-    const [education] = await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
-    const [experience] = await executeQuery(experienceQuery, QueryTypes.SELECT, {uid});
-    return {basic,education,contact,experience}; // Return null if no user is found
+    const [contact]= await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
+    const education= await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
+    const experience= await executeQuery(experienceQuery, QueryTypes.SELECT, {uid});
+    const data={
+      basic,contact,education: Object.values(education),experience:Object.values(experience)
+    }
+    return {...data}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
     throw error;
   }
 }
+
 export async function updateEducationDetails(user) {
     logger.info(`${TAG}.updateEducationDetails()`);
     try {
@@ -157,32 +161,6 @@ export async function updateWorkExperience(user) {
       throw error;
     }
   }
-
-  // export async function studentProfileDelete(user) {
-  //   logger.info(`${TAG}.studentProfileDelete()`);
-  //   try {
-  //     const response=[]
-  //     const deleteQueries = [
-  //       "DELETE FROM WORK_EXPERIENCE WHERE userID = :userID;",
-  //       "DELETE FROM  EDUCATION_DETAILS WHERE userID = :userID;",
-  //       // "DELETE FROM COLLEGE_DETAILS WHERE userID = :userID;",
-  //       // "DELETE FROM college WHERE user_ID = :userID;",
-  //     ];
-      
-  //     for (const query of deleteQueries) {
-  //       const res=await executeQuery(query, QueryTypes.DELETE, {
-  //         userID: user
-  //       });
-  //       response.push(res)
-  //     }
-      
-  //     return {message:"student deleted",response};
-  
-  //   } catch (error) {
-  //     logger.error(`ERROR occurred in ${TAG}.studentProfileDelete()`, error);
-  //     throw error;
-  //   }
-  // }
 
   export async function studentEducationDelete(id) {
     logger.info(`${TAG}.studentEducationDelete()`);
