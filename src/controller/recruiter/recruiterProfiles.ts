@@ -22,6 +22,8 @@ export async function recruiterProfilePostAndUpdate(req: any, res: Response, nex
     }
   }
 
+  
+
 export async function getrecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.getrecruiterProfile()`);
@@ -34,6 +36,9 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
+
+
   export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.deleterecruiterProfile()`);
