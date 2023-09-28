@@ -19,6 +19,7 @@ import * as StudentProfile from './lib/student/profile'
 
 
 import * as Courses from './lib/admin/courses'
+// import * as AdminProfile from './lib/admin/'
 
 
 
@@ -33,7 +34,7 @@ export{
     mentorPersonalAndContactData,
     mentorEducationData,
     mentorWorkExperienceData,
-    AdminProfile,
+    // AdminProfile,
     StudentProfile,
     Courses
 }

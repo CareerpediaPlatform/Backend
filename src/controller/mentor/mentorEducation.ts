@@ -25,18 +25,4 @@ export async function updateEducationDetail(req: any, res: Response, next: NextF
 }
 
 
-export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
-  try {
-    console.log("aaaaaaaaaaaaaaaaa")
-    log.info(`${TAG}.deleterecruiterProfile()`);
-    log.debug(`${TAG}.deleterecruiterProfile() Object = ${JSON.stringify(req.body)}`)
-    let uid = req.params.uid
-    console.log("controller****************")
-    console.log(uid)
-    const authResponse= await educationService.deleteEducationProfile(uid)
-    responseBuilder(authResponse, res, next, req)
-  } catch (error) {
-    log.error(`ERROR occurred in ${TAG}.deleterecruiterProfile() `, error)
-    next(error)
-  }
-} 
+ 

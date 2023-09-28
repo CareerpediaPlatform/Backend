@@ -101,31 +101,6 @@ export async function getMentorProfile(userId) {
     return serviceResponse;
   }
 
-
-export async function deleteRecruiterProfile(userId){
-    console.log("SERvices**********************")
-    console.log(userId)
-    log.info(`${TAG}.deleteRecruiterProfile() ==> `, userId);
-    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-    try{
-      const deleteProfile=await mentorWorkExperienceData.deleteRecruiter(userId)
-      if(deleteProfile){
-        serviceResponse.message="user deleted successfully"
-        return serviceResponse  
-      }
-      else{
-        serviceResponse.message="invalid user id"
-        return serviceResponse
-      }
-    }
-    catch(error){
-      log.error(`ERROR occurred in ${TAG}.deleteRecruiterProfile`, error);
-      serviceResponse.addServerError('Failed to create user due to technical difficulties');
-    }
-    return serviceResponse
-  }
-
-
 export async function getMentorList(userId) {
     log.info(`${TAG}.getMentorList() ==> `, userId);
       

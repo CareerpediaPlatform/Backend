@@ -34,18 +34,6 @@ export async function getCollegeProfile(req: any, res: Response, next: NextFunct
     }
   }
 
-export async function collegeProfileDelete(req: any, res: Response, next: NextFunction): Promise<void> {
-    try {
-      log.info(`${TAG}.collegeProfileDelete()`);
-      log.debug(`${TAG}.collegeProfileDelete() Object = ${JSON.stringify(req.body)}`)
-      let userID = req.params.userID
-      const authResponse= await collegeProfileServices.collegeProfileDelete(userID)
-      responseBuilder(authResponse, res, next, req)
-    } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.collegeProfileDelete() `, error)
-      next(error)
-    }
-  }
 
   export async function getCollegeSingleList(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
