@@ -2,7 +2,6 @@ import { StudentAuth, StudentProfile} from "src/Database/mysql";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import { verifyAccessToken } from "src/helpers/authentication";
 import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 
 const TAG="student.service.profile"
@@ -39,15 +38,14 @@ export async function studentProfilePost(user) {
       }
   
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupUser`, error);
+      log.error(`ERROR occurred in ${TAG}.studentProfilePost`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
   }
 
-
   export async function getStudentProfile(headerValue) {
-    log.info(`${TAG}.collegeProfile() ==> `, headerValue);
+    log.info(`${TAG}.getStudentProfile() ==> `, headerValue);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(headerValue)
@@ -56,7 +54,7 @@ export async function studentProfilePost(user) {
         const existedProfile=await StudentProfile.checkProfilExist(decoded.uid)
         if(existedProfile){
           const data = {
-            existedProfile
+            ...existedProfile
           }    
           serviceResponse.data = data
           return serviceResponse
@@ -67,14 +65,15 @@ export async function studentProfilePost(user) {
       }
     
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupUser`, error);
+      log.error(`ERROR occurred in ${TAG}.getStudentProfile`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
   }
 
   export async function getSingleStudentProfile(uid) {
-    log.info(`${TAG}.collegeProfile() ==> `, uid);
+    
+    log.info(`${TAG}.getSingleStudentProfile() ==> `, uid);
   
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
@@ -116,7 +115,6 @@ export async function updateEducationDetails(user) {
     }
     return serviceResponse;
   }
-
   
 export async function updateWorkExperience(user) {
     log.info(`${TAG}.updateWorkExperience() ==> `,user);  
@@ -142,8 +140,6 @@ export async function studentProfileEducationDelete(info) {
     try {
      
       let decoded=await verifyAccessToken(info.headerValue)
-      console.log("2222222222222222222222222222")
-      console.log(decoded.uid)
       const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
       if(isValid){
         const existedProfile=await StudentProfile.checkExistEducationAndExperience(info.id)

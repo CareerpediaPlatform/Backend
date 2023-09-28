@@ -4,7 +4,6 @@ import log from '../../logger'
 import {IServiceResponse, IUser, UserSession} from '../../models'
 import * as profileService from '../../services/student/profile'
 const TAG="controler.student.profile"
-// import { uploadCompanyLogoFile } from 'src/services/imageUpload'
 
 export async function studentProfilePost(req: any, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -48,7 +47,6 @@ export async function getSingleStudentProfile(req: any, res: Response, next: Nex
   }
 }
 
-
 export async function updateEducationDetails(req: any, res: Response, next: NextFunction):Promise<void>{
     try {
       log.info(`${TAG}.updateEducationDetails()`);
@@ -62,6 +60,7 @@ const Response: IServiceResponse = await profileService.updateEducationDetails({
       next(error)
     }
   }
+
 export async function updateWorkExperience(req: any, res: Response, next: NextFunction):Promise<void>{
     try {
       log.info(`${TAG}.updateWorkExperience()`);
@@ -104,21 +103,4 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
     }
   }
   
-  // export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
-  //   try {
-  //     log.info(`${TAG}.uploadCompanyLogoFile()`)
-  //     log.debug(`LOGGED IN USER: ${nodeUtil.inspect(req.userSession)}`)
-  //    // const startupUid = req.params['startupUid']
-  //   //   const userSession = req.userSession
-  //     log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file))
-  
-  //     const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadCompanyLogoFile(
-  //       req.file
-  //     )
-  
-  //     responseBuilder(serviceResponse, res, next, req)
-  //   } catch (error) {
-  //     log.error(`ERROR occurred in ${TAG}.uploadCompanyLogoFile() `, error)
-  //     next(error)
-  //   }
-  // }
+ 

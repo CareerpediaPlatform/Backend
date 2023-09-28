@@ -1,17 +1,20 @@
+import { any } from "joi";
 import { StudentAuth} from "src/Database/mysql";
+import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+import { checkEmailOrPhoneExist } from "src/Database/mysql/lib/student/auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import { OTP, generateAccessToken, generateOTPToken, verifyAccessToken, verifyOTPJWT } from "src/helpers/authentication";
 import { comparePasswords } from "src/helpers/encryption";
 import log from "src/logger";
 import { IUser } from "src/models";
 import { APIError } from "src/models/lib/api_error";
-import { ISingin } from "src/models/lib/auth";
+import { ISingin, MyObject } from "src/models/lib/auth";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { studentNotification, studentOtpEmail } from "src/utils/nodemail";
 
-const TAG = 'services.auth'
+const TAG = 'services.auth.student'
 export async function signupUser(user: IUser) {
     log.info(`${TAG}.signupUser() ==> `, user);
-  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let email=user.email
@@ -22,9 +25,16 @@ export async function signupUser(user: IUser) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      
-      //TODO send OTP to mobile/ email
-      const student = await StudentAuth.signUp({...user});
+      // getting all the students form both tables and sorting the array list
+      let list=await StudentAuth.getAllStudentList()
+      let listArray=Object.values(list)
+          function compareByAge(a, b) {
+            return a.id - b.id;
+          }
+           let sortedList=listArray.sort(compareByAge);
+           const lastElementId:MyObject = sortedList[sortedList.length - 1] // last element of sorted array
+
+      const student = await StudentAuth.signUp({...user,id:lastElementId.id+1});
       const findUser = await StudentAuth.checkEmailOrPhoneExist({email})    
       const accessToken = await generateAccessToken({uid:findUser.uid,number:true,id:findUser.id,type:"signup"}); 
       const data = {
@@ -62,7 +72,7 @@ try{
     }else{
       otpsave=await await StudentAuth.saveOTP({...decoded,accessToken:otpAccessToken,phoneNumber:user.phoneNumber,otp})
     }
-    const resendOtpToken=await generateAccessToken({uid:decoded.uid,otp:true,type:otpsave.type,phoneNumber:user.phoneNumber})
+    const resendOtpToken=await generateAccessToken({uid:decoded.uid,otp:true,type:otpsave.info.type,phoneNumber:user.phoneNumber})
     const data = {
       otpAccessToken,
       resendOtpToken,
@@ -81,12 +91,11 @@ return serviceResponse
 
   // signup with google and linked in
   export async function signupWithSocialAccount(user: IUser) {
-    log.info(`${TAG}.signupUser() ==> `, user);
+    log.info(`${TAG}.signupWithSocialAccount() ==> `, user);
   
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let email=user.email
-      // let phoneNumber=user.phoneNumber
       const existedUser = await StudentAuth.checkEmailOrPhoneExist({email});
       if(existedUser) {
         serviceResponse.message = 'Email or Mobile is already exist';
@@ -94,9 +103,16 @@ return serviceResponse
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      
+            // getting all the students form both tables and sorting the array list
+            let list=await StudentAuth.getAllStudentList()
+            let listArray=Object.values(list)
+                function compareByAge(a, b) {
+                  return a.id - b.id;
+                }
+                 let sortedList=listArray.sort(compareByAge);
+                 const lastElementId:MyObject = sortedList[sortedList.length - 1] // last element of sorted array
       //TODO send OTP to mobile/ email
-      const student = await StudentAuth.signupWithSocialAccount({...user});
+      const student = await StudentAuth.signupWithSocialAccount({...user,id:lastElementId.id+1});
       const findUser = await StudentAuth.checkEmailOrPhoneExist({email})      
       const accessToken = await generateAccessToken({uid:findUser.uid,otp:true,id:findUser.id,type:"signupgoogle"}); 
 
@@ -106,7 +122,7 @@ return serviceResponse
       }
       serviceResponse.data = data
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupUser`, error);
+      log.error(`ERROR occurred in ${TAG}.signupWithSocialAccount`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return await serviceResponse;
@@ -122,8 +138,9 @@ return serviceResponse
     // let uniqID=user.uniqID
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({email,phoneNumber});
     try{
+      let transaction=null
       if(existedUser){
-        if(existedUser.status!="Active"){
+        if(existedUser.status!="ACTIVE"){
           serviceResponse.message = 'your account is freazed by careerpedia please contact careerpedia team !';
           serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
           serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
@@ -169,16 +186,20 @@ return serviceResponse
          
         }
         if(user.phoneNumber){
+          transaction = await getTransaction()
           let otp=await OTP()
           let otpsave
           const otpAccessToken = await generateOTPToken({ ...existedUser });
           const otpexist=await StudentAuth.verifyOTP({phoneNumber:user.phoneNumber})
           if(otpexist){
-            otpsave=await StudentAuth.resendOTP({accessToken:otpAccessToken,newOtp:otp,type:"signin",phoneNumber:user.phoneNumber})
+            otpsave=await StudentAuth.resendOTP({accessToken:otpAccessToken,newOtp:otp,type:"signin",phoneNumber:user.phoneNumber,transaction})
           }else{
-            otpsave=await StudentAuth.saveOTP({...existedUser,accessToken:otpAccessToken,type:"signin",otp})
+            otpsave=await StudentAuth.saveOTP({...existedUser,accessToken:otpAccessToken,type:"signin",otp,transaction})
+            
           }
-          const resendOtpToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:otpsave.type,phoneNumber:user.phoneNumber})
+          const resendOtpToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
+          await transaction.commit()
+          await studentNotification({...otpsave.info,email:existedUser.email})
           const data = {
             // otpAccessToken,
             resendOtpToken,
@@ -208,7 +229,7 @@ catch (error) {
       // finde student is valid or not
       const decoded=await verifyAccessToken(user.headerValue)
   
-      if(decoded &&(user.status=="Active" ||user.status=="Deactive")){
+      if(decoded &&(user.status=="ACTIVE" ||user.status=="DEACTIVE")){
         if(decoded.role!="admin"){
           serviceResponse.message = `UnAutharized Admin`
           return serviceResponse
@@ -236,6 +257,7 @@ catch (error) {
     log.info(`${TAG}.verifyOTP() ==> `, otpInfo);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
+      let transaction=null
       const IsAutharaized=await verifyAccessToken(otpInfo.headerValue)
       if(IsAutharaized){
         const student = await StudentAuth.verifyOTP({phoneNumber:IsAutharaized.phoneNumber});
@@ -251,6 +273,8 @@ catch (error) {
             return serviceResponse
           }
           if(student.type==="signup"){
+            // transaction
+            
          const savenumber=await StudentAuth.signupPhonenumber({phoneNumber:student.phoneNumber,uid:IsAutharaized.uid})
          const token=await generateAccessToken({...IsAutharaized})
          const data = {
@@ -307,25 +331,30 @@ catch (error) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
       // finde student is valid or not
+      let transaction = await getTransaction()
       const res=await verifyAccessToken(user)
       const accessToken=await generateOTPToken({otp:user.otp})
+      const existedUser=await checkEmailOrPhoneExist({uid:res.uid})
       if(res){
         const otp = await OTP();
-        const student=await StudentAuth.resendOTP({...res,accessToken,newOtp:otp})
-        const otpAccessToken=await generateAccessToken({...otp})
+        const student=await StudentAuth.resendOTP({...res,accessToken,newOtp:otp},transaction)
+        // const otpAccessToken=await generateAccessToken({...otp})
         const data={
-          student
+          student:student.info
         }
         serviceResponse.message = "otp resend successfully !"
         serviceResponse.data = data
+        await transaction.commit()
+        await studentNotification({otp,type:(res.type+"resend"),email:existedUser.email})
         return serviceResponse
       }
     }catch (error) {
-      log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+      log.error(`ERROR occurred in ${TAG}.resendOTP`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return await serviceResponse
   }
+
   export async function changePassword(user){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
@@ -359,21 +388,23 @@ catch (error) {
   export async function forgetPassword(email){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
+      let transaction = await getTransaction()
       let otpsave
       let otp=await OTP()
       // checking user is valid or not 
       const isValid=await StudentAuth.checkEmailOrPhoneExist({email:email.email})
       if(isValid){
         const accessToken = await generateOTPToken({ ...isValid });    
-        // const saveOTP = await StudentAuth.saveOTP({...isValid,accessToken:accessToken,type:"forget-password",otp}); 
         const otpexist=await StudentAuth.verifyOTP({phoneNumber:isValid.phoneNumber})
         if(otpexist){
-          otpsave=await StudentAuth.resendOTP({accessToken:accessToken,newOtp:otp,type:"signup",phoneNumber:isValid.phoneNumber})
+          otpsave=await StudentAuth.resendOTP({accessToken:accessToken,newOtp:otp,type:"forget-password",phoneNumber:isValid.phoneNumber},transaction)
         }else{
-          otpsave=await StudentAuth.saveOTP({...isValid,accessToken:accessToken,type:"forget-password",otp});
+          otpsave=await StudentAuth.saveOTP({...isValid,accessToken:accessToken,type:"forget-password",otp},transaction);
         }
-        const resendOtpToken=await generateAccessToken({uid:isValid.uid,otp:true,type:otpsave.type,phoneNumber:isValid.phoneNumber})
-        serviceResponse.data={otpsave,resendOtpToken}
+        const resendOtpToken=await generateAccessToken({uid:isValid.uid,otp:true,type:otpsave.info.type,phoneNumber:isValid.phoneNumber})
+        serviceResponse.data={resendOtpToken,otp:otpsave.info.otp}
+        await transaction.commit()
+          await studentNotification({...otpsave.info,email:isValid.email})
       }
     }catch(error){
       log.error(`ERROR occurred in ${TAG}.forgetPassword`, error);
@@ -398,7 +429,7 @@ catch (error) {
       serviceResponse.data=response
       }
     }catch (error) {
-      log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+      log.error(`ERROR occurred in ${TAG}.setForgetPassword`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return await serviceResponse
@@ -422,10 +453,12 @@ export async function getAllStudentList(user){
         return await serviceResponse
       }
   }catch (error) {
-    log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+    log.error(`ERROR occurred in ${TAG}.getAllStudentList`, error);
     serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
 
 }
+
+
 
   

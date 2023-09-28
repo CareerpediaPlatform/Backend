@@ -6,18 +6,18 @@ import {isAuthenticated} from '../../../middlewares/authentication'
 
 
 
+
 passportConfiguration(passport)
 
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/profile/:userID')
+ router.route('/profile')
  .post(isAuthenticated,controller.collegeProfilePostAndUpdate);
- router.route('/profile/:userID')
+ router.route('/profile')
  .get(isAuthenticated,controller.getCollegeProfile);
- router.route('/profile/:userID')
- .delete(isAuthenticated,controller.collegeProfileDelete);
- router.route('/profile/:userID')
- .get(isAuthenticated,controller.collegeProfileDelete);
+ router.route('/college-list/:userID')
+ .get(isAuthenticated,controller.getCollegeSingleList);
 
  export default router
+

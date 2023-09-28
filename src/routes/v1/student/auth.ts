@@ -3,6 +3,7 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import * as validation from '../../../validations/auth'
+import { isAuthenticated } from 'src/middlewares/authentication'
 
 passportConfiguration(passport)
 
@@ -17,7 +18,7 @@ const router = Router()
      .post(validation.linkedInSignup,controller.signupUser);
 
  router.route('/verify-number')
-     .post(validation.numberLogin,controller.signupPhonenumber);
+     .post(isAuthenticated,validation.numberLogin,controller.signupPhonenumber);
 
      
     //  signin
@@ -32,16 +33,17 @@ const router = Router()
 
     //  others
  router.route('/verify-otp')
-     .post(controller.verifyOTP);
+     .post(isAuthenticated,controller.verifyOTP);
  router.route('/resend-otp')
-     .patch(controller.resendOTP);
+     .patch(isAuthenticated,controller.resendOTP);
 
  router.route('/forget-password')
      .post(controller.forgetPassword);
 
  router.route('/forget-password')
-     .patch(controller.setForgetPassword);
+     .patch(isAuthenticated,controller.setForgetPassword);
+     
      router.route('/change-password')
-     .patch(controller.changePassword);
+     .patch(validation.passwordValidation,controller.changePassword);
 
 export default router
