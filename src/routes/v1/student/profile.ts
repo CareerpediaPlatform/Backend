@@ -1,25 +1,25 @@
-// updateEducationDetails
 import * as controller from '../../../controller/student/profile'
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
+import { isAuthenticated } from 'src/middlewares/authentication'
 
 passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/education/:id')
- .put(controller.updateEducationDetails);
- router.route('/education/:id')
- .delete(controller.studentProfileEducationDelete);
+ router.route('/education/')
+ .put(isAuthenticated,controller.updateEducationDetails);
+ router.route('/education/')
+ .delete(isAuthenticated,controller.studentProfileEducationDelete);
 
- router.route('/work-experience/:id')
- .put(controller.updateWorkExperience);
- router.route('/work-experience/:id')
- .delete(controller.studentProfileExperienceDelete);
+ router.route('/work-experience/')
+ .put(isAuthenticated,controller.updateWorkExperience);
+ router.route('/work-experience/')
+ .delete(isAuthenticated,controller.studentProfileExperienceDelete);
  router.route('/profile')
- .patch(controller.studentProfilePost);
- router.route('/profile/:id')
- .get(controller.getStudentProfile);
+ .patch(isAuthenticated,controller.studentProfilePost);
+ router.route('/profile/')
+ .get(isAuthenticated,controller.getStudentProfile);
 
  export default router

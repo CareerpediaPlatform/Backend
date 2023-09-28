@@ -73,6 +73,7 @@ export async function getRecruiterProfile(userID) {
     }
     return serviceResponse;
   }
+
   export async function deleteRecruiterProfile(userID){
     
     log.info(`${TAG}.deleteRecruiterProfile() ==> `, userID);
@@ -143,14 +144,15 @@ export async function getRecruiterProfile(userID) {
   }
  
 
-  export async function getRecruiterFile(userID){
-    log.info(`${TAG}.getRecruiterFile() ==> `, userID);
+  export async function getRecruiterList(userID) {
+    log.info(`${TAG}.getMentorList() ==> `, userID);
+      
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-    try{
-      const CompanyLogodetails = await RecruiterProfileDetailsData.getRecruiterFile(userID)
-      if(CompanyLogodetails){
+    try {
+      const existedProfile=await RecruiterProfileDetailsData.getRecruiterList(userID)
+      if(existedProfile){
         const data = {
-          CompanyLogodetails
+          existedProfile
         }    
         serviceResponse.data = data
         return serviceResponse
@@ -162,6 +164,7 @@ export async function getRecruiterProfile(userID) {
     }
 
   }
+
   export async function updateCompanylogo(file:any,userID){
 
     log.info(`${TAG}.updateCompanylogo() ==> `, userID);
@@ -248,3 +251,10 @@ export async function getRecruiterProfile(userID) {
     return serviceResponse
   }
  
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+

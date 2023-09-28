@@ -15,17 +15,20 @@ export async function signUp(user: IUser) {
   try {
     const hashedPassword = await hashPassword(user.password);
     const data = {
+      id:user.id,
       uid: crypto.randomUUID(),
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       password: hashedPassword,
       role:"student",
-      status:"Active"
+      status:"ACTIVE"
     };
+    console.log("kkkkkkkkkkkkkkkkkk")
+    console.log(user)
     let userInsertQuery = `
       INSERT INTO STUDENT_DETAILS(id, uid, first_name, last_name, email, password,role,status)
-      VALUES (GenerateUniqueId('student_details'), :uid, :firstName, :lastName, :email, :password, :role, :status)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -34,27 +37,28 @@ export async function signUp(user: IUser) {
     return data;
 
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+    logger.error(`ERROR occurred in ${TAG}.signUp()`, error);
     throw error;
   }
 }
 
 // signup with email and linked in
 export async function signupWithSocialAccount(user: IUser) {
-  logger.info(`${TAG}.signUp()`);
+  logger.info(`${TAG}.signupWithSocialAccount()`);
   try {
     const hashedPassword = await hashPassword(user.uuid);
     const data = {
+      id:user.id,
       uid: crypto.randomUUID(),
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
-      status:"Active"
+      status:"ACTIVE"
     };
     let userInsertQuery = `
       INSERT INTO STUDENT_AUTH (id, uid, first_name, last_name, email, uniqId, status)
-      VALUES (:GenerateUniqueId('student_auth'), :uid, :firstName, :lastName, :email, :uuid, :status)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -63,7 +67,7 @@ export async function signupWithSocialAccount(user: IUser) {
     return data;
 
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+    logger.error(`ERROR occurred in ${TAG}.signupWithSocialAccount()`, error);
     throw error;
   }
 }
@@ -78,33 +82,35 @@ try{
     hashedPassword,...user});
   return response;
 }catch (error) {
-  logger.error(`ERROR occurred in ${TAG}.checkEmailOrPhoneExist()`, error);
+  logger.error(`ERROR occurred in ${TAG}.changePassword()`, error);
   throw error;
 }
 }
-export async function signupPhonenumber(user:any){
+
+export async function signupPhonenumber(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
 
   let query = 'UPDATE STUDENT_DETAILS SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
-  return response;
+  return {response,transaction};
 }catch (error) {
   logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
   throw error;
 }
 }
-export async function signupPhonenumbers(user:any){
+
+export async function signupPhonenumbers(user:any,transaction?:any){
 try{
-  logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
+  logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
   let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
-  return response;
+  return {response,transaction};
 }catch (error) {
-  logger.error(`ERROR occurred in ${TAG}.signupPhonenumber()`, error);
+  logger.error(`ERROR occurred in ${TAG}.signupPhonenumbers()`, error);
   throw error;
 }
 }
@@ -128,7 +134,7 @@ FROM
 
 // update stauys active and deactive
 export async function findTable(uid){
-  console.log(uid)
+
   const updateQuery = `SELECT 
   CASE
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH WHERE uid = :uid) THEN 'STUDENT_AUTH'
@@ -169,9 +175,7 @@ export async function studentUpdateStatus(user){
 }
 
   // otp generator
-
-
-  export async function saveOTP(user:userOTP){
+  export async function saveOTP(user:userOTP,transaction?:any){
   logger.info(`${TAG}.saveOTP()`);
   try{
     const otp = await OTP();
@@ -190,7 +194,7 @@ export async function studentUpdateStatus(user){
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
       ...info,
     });
-    return info;
+    return {info,transaction};
   }
   catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveOTP()`, error);
@@ -198,7 +202,7 @@ export async function studentUpdateStatus(user){
   }
 }
 
-  export async function resendOTP(user){
+  export async function resendOTP(user,transaction?:any){
   logger.info(`${TAG}.resendOTP()`);
   try{
     const info={
@@ -218,7 +222,7 @@ export async function studentUpdateStatus(user){
     const [res]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...info,
     });
-    return info;
+    return {info,transaction};
   }
   catch (error) {
     logger.error(`ERROR occurred in ${TAG}.resendOTP()`, error);
@@ -275,8 +279,6 @@ export async function  verifyOTP(userotp: any) {
 export async function checkEmailOrPhoneExist(info) {
   try {
     logger.info(`${TAG}.checkEmailOrPhoneExist() ==>`, info);
-    // console.log("111111111111111111111111111111111111111111")
-    //   console.log(info)
     let query1: string;
     let query2: string;
     let queries: string[] = [];

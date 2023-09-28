@@ -1,17 +1,28 @@
 import { string } from "joi"
 
+export interface MyObject {
+  id?: number;
+  uid?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  status?: string;
+}
+
 export interface IUser {
+  id:number
   uid: string
   firstName: string
   lastName: string
   email: string
   password?:string
-  role: string
+  role?: string
   uuid?:string
   accessToken?:string
 }
 
 export class User implements IUser {
+  public id: number
   public uid: string
   public firstName: string
   public lastName: string
@@ -22,6 +33,7 @@ export class User implements IUser {
   public accessToken?:string
 
   constructor ( 
+    id:number,
     firstName: string,
     lastName: string,
     email: string,
@@ -31,6 +43,7 @@ export class User implements IUser {
     accessToken?:string
                ) {
 
+    this.id = id
     this.firstName = firstName
     this.lastName = lastName
     this.email = email

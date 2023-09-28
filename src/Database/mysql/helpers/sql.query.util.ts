@@ -1,7 +1,8 @@
 import {sqlConnection} from "../../database";
 import log from '../../../logger/'
 import {toCamelCase} from "../../../utils/formatter";
-import { Transaction } from 'sequelize'
+import { Sequelize, Transaction } from 'sequelize';
+
 
 export async function executeQuery(query, type, replacements = {}, transaction = null): Promise<any> {
     try {

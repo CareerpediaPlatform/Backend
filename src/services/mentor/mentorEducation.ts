@@ -30,27 +30,3 @@ export async function updateEducation(user) {
 }
 
 
-export async function deleteEducationProfile(uid){
-  console.log("SERvices**********************")
-  console.log(uid)
-  log.info(`${TAG}.deleteRecruiterProfile() ==> `, uid);
-  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-  try{
-
-    
-    const deleteProfile=await mentorEducationData.deleteRecruiter(uid)
-    if(deleteProfile){
-      serviceResponse.message="user deleted successfully"
-      return serviceResponse  
-    }
-    else{
-      serviceResponse.message="invalid user id"
-      return serviceResponse
-    }
-  }
-  catch(error){
-    log.error(`ERROR occurred in ${TAG}.deleteRecruiterProfile`, error);
-    serviceResponse.addServerError('Failed to create user due to technical difficulties');
-  }
-  return serviceResponse
-}

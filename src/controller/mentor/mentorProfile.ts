@@ -35,23 +35,6 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
     }
   }
 
-
-export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
-    try {
-      console.log("aaaaaaaaaaaaaaaaa")
-      log.info(`${TAG}.deleterecruiterProfile()`);
-      log.debug(`${TAG}.deleterecruiterProfile() Object = ${JSON.stringify(req.body)}`)
-      let userID = req.params.userId
-      console.log("controller****************")
-      console.log(userID)
-      const authResponse= await profileService.deleteRecruiterProfile(userID)
-      responseBuilder(authResponse, res, next, req)
-    } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.deleterecruiterProfile() `, error)
-      next(error)
-    }
-  } 
-
 export async function getMentorSingleList(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.getMentorSingleList()`);
