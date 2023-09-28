@@ -18,6 +18,18 @@ export const emailLogin= async (req, res, next) => {
   await validate(schema, req, res, next);
 };
 
+export const passwordValidation= async (req, res, next) => {
+  const schema = Joi.object().keys({
+    newPassword: Joi.string().min(8).max(15).messages({
+      'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+      'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+        .replace('$length', '8'),
+      'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field','password')
+    })
+  });
+  await validate(schema, req, res, next);
+};
+
 export const numberLogin= async (req, res, next) => {
   const schema = Joi.object().keys({
     phoneNumber: Joi.string().min(10).max(10).messages({

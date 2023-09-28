@@ -8,7 +8,6 @@ import * as validation from '../../../validations/auth'
 
 
 
-
 passportConfiguration(passport)
 
 const router = Router()

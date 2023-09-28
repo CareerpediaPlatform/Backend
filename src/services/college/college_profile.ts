@@ -4,6 +4,7 @@ import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 import { IcollegeProfile } from "src/models/lib/profile";
 import * as collegeProfileLib from "../../Database/mysql/lib/college/college_profile"
+import { verifyAccessToken } from "src/helpers/authentication";
 const TAG = 'services.profile'
 
 
@@ -13,14 +14,16 @@ export async function collegeProfile(user) {
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      let userID=user.userID
-      const isValid=await collegeProfileLib.isValid(userID)
+      let decoded=await verifyAccessToken(user.headerValue)
+  
+      const isValid=await collegeProfileLib.isValid(decoded[0].uid)
+     
       if(isValid){
-        const existedProfile=await collegeProfileLib.checkExist(userID)
+        const existedProfile=await collegeProfileLib.checkExist(decoded[0].uid)
         if(existedProfile){
-          const postResponse= await collegeProfileLib.collegeProfileUpdate({...user.basicDetails,userID});
-          const contactDetails= await collegeProfileLib.collegeContactUpdate({...user.contactDetails,userID});
-          const collegeDetsils= await collegeProfileLib.collegeDetailUpdate({...user.collegeDetails,userID});
+          const postResponse= await collegeProfileLib.collegeProfileUpdate({...user.basicDetails,id:existedProfile.id});
+          const contactDetails= await collegeProfileLib.collegeContactUpdate({...user.contactDetails,id:existedProfile.id});
+          const collegeDetsils= await collegeProfileLib.collegeDetailUpdate({...user.collegeDetails,id:existedProfile.id});
           const data = {
             postResponse,
             contactDetails,
@@ -29,7 +32,7 @@ export async function collegeProfile(user) {
           serviceResponse.data = data
           return serviceResponse
         }
-        const response= await collegeProfileLib.collegeProfilePost({...user});
+        const response= await collegeProfileLib.collegeProfilePost({...user,uid:decoded[0].uid});
         const data = {
           ...response
         }    
@@ -49,14 +52,15 @@ export async function collegeProfile(user) {
   }
 
   
-export async function getCollegeProfile(userID) {
-    log.info(`${TAG}.collegeProfile() ==> `, userID);
+export async function getCollegeProfile(headerValue) {
+    log.info(`${TAG}.collegeProfile() ==> `, headerValue);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      const isValid=await collegeProfileLib.isValid(userID)
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await collegeProfileLib.isValid(decoded[0].uid)
       if(isValid){
-        const existedProfile=await collegeProfileLib.checkProfilExist(userID)
+        const existedProfile=await collegeProfileLib.checkProfilExist(decoded[0].uid)
         if(existedProfile){
           const data = {
             existedProfile
@@ -76,33 +80,7 @@ export async function getCollegeProfile(userID) {
     return serviceResponse;
   }
 
-export async function collegeProfileDelete(userID) {
-    log.info(`${TAG}.collegeProfileDelete() ==> `, userID);
-      
-    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-    try {
-      const isValid=await collegeProfileLib.isValid(userID)
-      if(isValid){
-        const existedProfile=await collegeProfileLib.checkProfilExist(userID)
-        if(existedProfile){
-          const response=await collegeProfileLib.collegeProfileDelete(userID)
-          const data = {
-            response
-          }    
-          serviceResponse.data = data
-          return serviceResponse
-        }
-      }else{
-        serviceResponse.message="invalid user id"
-        return serviceResponse
-      }
-    
-    } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.collegeProfileDelete`, error);
-      serviceResponse.addServerError('Failed to create user due to technical difficulties');
-    }
-    return serviceResponse;
-  }
+
 
 export async function getCollegeList(userID) {
     log.info(`${TAG}.getMentorList() ==> `, userID);
