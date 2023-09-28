@@ -11,7 +11,7 @@ import StudentAuth from "./student/index";
 const router = Router();
 
 
-router.use(`/admin`, AdminRoutes);   //ex: api/v1/admin/auth/signup 
+router.use(`/admin`, AdminRoutes);   //ex: api/v1/admin/auth/signup  
 router.use('/mentor', MentorRoutes); 
 router.use(`/recruiter`, RecruiterRoutes);
 router.use(`/college-admin`, CollegeRoutes);

@@ -37,7 +37,9 @@ export async function sendmail(user: any) {
             subject: user.subject,
             html: user.message,
         };
+
         console.log(SENDER_EMAIL_ID)
+
         const transporter = await createTransport();
         return await transporter.sendMail(mailOptions);
     } catch (error) {
@@ -71,6 +73,7 @@ export async function sendSignupEmail(user) {
         throw error;
     }
 }
+
 
 export async function studentOtpEmail(user) {
     try {
@@ -122,6 +125,7 @@ export async function sendRegistrationNotification(user) {
         throw error;
     }
 }
+
 
 export async function studentNotification(user) {
     try {

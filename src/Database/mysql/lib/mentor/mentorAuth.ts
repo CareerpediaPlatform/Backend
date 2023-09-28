@@ -9,7 +9,7 @@ const TAG = 'data_stores_mysql_lib_mentorAuth'
 
 
 
-export async function signUp(user: IMentor) {
+export async function signUp(user: IMentor,transcation?:any) {
   logger.info(`${TAG}.saveUser()`);
   try {
     // const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
@@ -29,7 +29,7 @@ export async function signUp(user: IMentor) {
     let mentorInsertQuery = `insert into MENTOR(UID, EMAIL, PASSWORD,TYPE,COURSE,STATUS)
     values(:uid, :email, :password,:type,:course,:status)`;
     await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
-      ...data,
+      ...data,transcation
     });
     return data;
   } catch (error) {
@@ -54,11 +54,9 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-  
-  export async function getMentorUid(uid: string) {
+  export async function getMentorUid(uid){
     try {
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
-  
       let query = 'select * from MENTOR where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid

@@ -17,4 +17,12 @@ const router = Router()
  .post(isAuthenticated,controller.collegeProfilePostAndUpdate);
  router.route('/profile')
  .get(isAuthenticated,controller.getCollegeProfile);
+ router.route('/profile/:userID')
+ .delete(isAuthenticated,controller.collegeProfileDelete);
+ router.route('/profile/:userID')
+ .get(isAuthenticated,controller.collegeProfileDelete);
+ router.route('/college-list/:userID')
+ .get(isAuthenticated,controller.getCollegeSingleList);
+
  export default router
+
