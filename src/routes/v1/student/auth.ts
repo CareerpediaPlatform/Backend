@@ -13,27 +13,35 @@ const router = Router()
  router.route('/form-signup')
      .post(validation.formSignup,controller.signupUser);
 
- router.route('/google-signup')
+ router.route('/gmail-signup')
      .post(validation.linkedInSignup,controller.signupUser);
 
+ router.route('/verify-number')
+     .post(validation.numberLogin,controller.signupPhonenumber);
+
+     
     //  signin
- router.route('/form-signin')
+ router.route('/email-login')
      .post(validation.emailLogin,controller.signinUser);
 
  router.route('/google-signin')
      .post(validation.linkedInLogin,controller.signinUser);
 
- router.route('/number-signin')
+ router.route('/number-login')
      .post(validation.numberLogin,controller.signinUser);
 
     //  others
- router.route('/otp')
+ router.route('/verify-otp')
      .post(controller.verifyOTP);
+ router.route('/resend-otp')
+     .patch(controller.resendOTP);
 
  router.route('/forget-password')
      .post(controller.forgetPassword);
 
  router.route('/forget-password')
      .patch(controller.setForgetPassword);
+     router.route('/change-password')
+     .patch(controller.changePassword);
 
 export default router

@@ -7,7 +7,7 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import {generateAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
-import { sendRegistrationNotification } from "../nodemail";
+import { sendRegistrationNotification } from "../../utils/nodemail";
 
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
 const TAG = 'services.auth'

@@ -1,24 +1,33 @@
 import logger from "src/logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-import { hashPassword } from "src/helpers/encryption";
+import { hashPassword , generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 import { IMentor } from "src/models/lib/auth";
 var crypto=require("crypto")
 
-const TAG = 'data_stores_mysql_lib_user'
+const TAG = 'data_stores_mysql_lib_mentorAuth'
+
+
 
 export async function signUp(user: IMentor,transaction?: any) {
   logger.info(`${TAG}.saveUser()`);
   try {
+    // const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
     const hashedPassword = await hashPassword(user.password);
+    // console.log(generatePassword)
+    // const hashedPassword = await hashPassword(generatePassword);
+    console.log(hashedPassword)
+   
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,
       password: hashedPassword,
-      oldPassword:hashedPassword
+      type:user.type,
+      course:user.course,
+      status:user.status
     };
-    let mentorInsertQuery = `insert into MENTOR(UID, EMAIL, PASSWORD)
-    values(:uid, :email, :password)`;
+    let mentorInsertQuery = `insert into MENTOR(UID, EMAIL, PASSWORD,TYPE,COURSE,STATUS)
+    values(:uid, :email, :password,:type,:course,:status)`;
     await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
       ...data,transaction
     });
@@ -37,6 +46,7 @@ export async function checkEmailExist(email: string) {
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         email
       });
+      
       return user;
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkEmailExist()`, error);
@@ -44,20 +54,22 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-  export async function checkUidExist(uid: string) {
+  
+  export async function getMentorUid(uid: string) {
     try {
-      logger.info(`${TAG}.checkUidExist() ==>`, uid);
-      let query = 'SELECT * FROM MENTOR WHERE UID = :uid'; 
-      const [user] = await executeQuery(query, QueryTypes.SELECT, {
+      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+  
+      let query = 'select * from MENTOR where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid
-      });  
-      return user;
+      });
+      return userId;
     } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.checkUidExist()`, error);
+      logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;
     }
   }
-
+  
   
 export async function login(user:IMentor) {
     try{
@@ -86,3 +98,19 @@ export async function changePassword(user:any): Promise<void> {
     throw error;
   }
 }
+
+export async function getUserId(uid: string) {
+  try {
+    logger.info(`${TAG}.getUserId()  ==>`, uid);
+
+    let query = `select USER_ID from MENTOR where USER_ID=:uid`;
+    const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+      uid
+    });
+    return userId;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserId()`, error);
+    throw error;
+  }
+}
+

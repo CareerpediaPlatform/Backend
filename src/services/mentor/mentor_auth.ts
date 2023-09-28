@@ -1,17 +1,16 @@
 import { MentorAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/mentor/mentor_auth";
+import { checkEmailExist,getMentorUid } from "src/Database/mysql/lib/mentor/mentorAuth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken ,verifyAccessToken} from '../../helpers/authentication'
+import {generateAccessToken,verifyAccessToken } from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IMentor} from "src/models/lib/auth";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { sendRegistrationNotification } from "../nodemail";
+import { sendRegistrationNotification } from "../../utils/nodemail";
 
 const TAG = 'services.auth'
-
 
 export async function signupUser(user: IMentor) {
     log.info(`${TAG}.signupUser() ==> `, user);
@@ -27,13 +26,15 @@ export async function signupUser(user: IMentor) {
       }
       transaction = await getTransaction()
       const mentor = await MentorAuth.signUp(user);
+
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...mentor  });
+   
+
       const mentor_uid = mentor.uid
+      const accessToken = await generateAccessToken({ ...mentor,mentor_uid });
       const data = {
-        accessToken,
-        mentor_uid        
+        accessToken       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -51,6 +52,7 @@ export async function signupUser(user: IMentor) {
     try {
         // Check if the user with the given email exists
         const existedUser = await checkEmailExist(user.email);
+        console.log(existedUser)
 
         //if email does not exist 
         if(!existedUser) {
@@ -68,15 +70,13 @@ export async function signupUser(user: IMentor) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const mentor_login = await MentorAuth.login(user)
-            const accessToken = await generateAccessToken({ ...mentor_login});
-            const mentor_uid = existedUser.uid;
-            
+          const mentor_uid = existedUser.uid;
+          const role = "mentor"
+    
+            const accessToken = await generateAccessToken({ ...mentor_login,role});
             const data = {
-                accessToken,
-                mentor_login,
-                mentor_uid
+                accessToken   
             };
-
             serviceResponse.data = data;
         }         
     } catch (error) {
@@ -92,17 +92,15 @@ export async function signupUser(user: IMentor) {
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    const existedUser = await checkUidExist(user.uid);
+    const existedUser = await getMentorUid(user.uid);
     console.log(existedUser)
     console.log(existedUser.password)
-    
     if (!existedUser) {
       serviceResponse.message = 'User not found'; 
       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
       serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
     } else {
       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
-
       if (isValid) {
         const response = await MentorAuth.changePassword({ password: user.newPassword, ...user });
         serviceResponse.message = "Password changed successfully";
@@ -120,10 +118,5 @@ export async function changeUserPassword(user: any) {
 
   return serviceResponse;
 }
-
-
-
-
-
 
 

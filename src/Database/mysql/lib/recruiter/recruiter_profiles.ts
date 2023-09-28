@@ -1,7 +1,8 @@
 import logger from "src/logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-var crypto=require("crypto")
+var crypto=require("crypto");
+import nodeUtil from 'util';
 const TAG = 'data_stores_mysql_lib_user-recruiterprofile';
 
 //get all profile details
@@ -97,7 +98,7 @@ export async function recruiterBasicDetailsUpdate(user) {
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANYNAME = :companyName, FOUNDERNAME = :founderName, 
-    EMAIL = :email, WEBSITE = :websiteUrl, LINKEDINPROFILE = :linkedInUrl WHERE USER_ID = :userID`;
+    EMAIL = :email, PHONENUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDINPROFILE = :linkedInUrl WHERE USER_ID = :userID`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
@@ -187,6 +188,7 @@ export async function deleteRecruiter(userID) {
 //*******************companylogo******************* */
 export async function saveFile(fileDetails: any): Promise<any> {
   logger.info(`${TAG}.saveFile()`)
+
   try {
     fileDetails['uid'] = crypto.randomUUID()
  
@@ -200,6 +202,7 @@ VALUES(:uid,:fileName,:originalFileName, :contentType, :s3Bucket, :filePath, :fi
       ...fileDetails
     })
     return { id: id, uid: fileDetails.uid }
+    
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
@@ -214,6 +217,51 @@ export async function getRecruiterFile(userID:any){
   }
   catch(error){
     logger.error(`ERROR occurred in ${TAG}.getRecruiterFile()`, error)
+    throw error
+  }
+}
+export async function updateCompanylogo(fileDetails:any, userID:any,):Promise<any>{
+  
+  logger.info(`${TAG}.updateCompanylogo() ==>`, userID,fileDetails);
+  console.log("ffffffffffffffffffffffffffffffffffffffff")
+  console.log(fileDetails)
+
+
+  try{
+    const updateQuery = `UPDATE FILE_DETAILS SET FILE_NAME=:fileName,ORIGINAL_FILE_NAME=:originalFileName,FILE_PATH=:filePath WHERE USER_ID= :userID`
+    const updatedLogoRecords = await executeQuery( updateQuery, QueryTypes.UPDATE, {
+      ...fileDetails,userID
+    })
+    logger.debug('updatedLogoRecords: '+ nodeUtil.inspect(updatedLogoRecords))
+    return updatedLogoRecords
+  }
+  catch(error){
+    logger.error(`ERROR occurred in ${TAG}.updateCompanylogo()`, error)
+    throw error
+  }
+}
+
+
+//*******************************VIDEO**************************** */
+
+export async function uploadVideoFile(fileDetails: any): Promise<any> {
+  logger.info(`${TAG}.uploadVideoFile()`)
+  console.log("44444444444444444444444444444444444444444")
+   console.log(fileDetails)
+
+  try {
+    fileDetails['uid'] = crypto.randomUUID()
+ 
+    fileDetails['metaData'] = JSON.stringify(fileDetails?.metaData || {})
+
+    const videoInsertQuery = `INSERT INTO VIDEO (UID,  VIDEO_URL)VALUES(:uid, :fileUrl)`
+
+    const [id] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
+      ...fileDetails
+    })
+    return { id: id, uid: fileDetails.uid }
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
   }
 }

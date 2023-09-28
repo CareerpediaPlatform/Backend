@@ -6,6 +6,9 @@ import {
   JWT_REFRESH_TOKEN_EXPIRY_TIME, OTP_EXPIRY_TIME
 } from '../Loaders/config'
 import logger from '../logger'
+import { IServiceResponse, ServiceResponse } from 'src/models/lib/service_response'
+import { APIError } from "src/models/lib/api_error";
+import { HttpStatusCodes } from 'src/constants/status_codes'
 const otpGenerator = require('otp-generator')
 
 
@@ -53,9 +56,21 @@ export async function generateOTPToken(payload: object, expiresIn = OTP_EXPIRY_T
 }
 
 export const verifyOTPJWT = async (token: string) => {
-  return jsonwebtoken.verify(token, JWT_ACCESS_TOKEN_SECRET);
+  
+  try{
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    const decoded=jsonwebtoken.verify(token, JWT_ACCESS_TOKEN_SECRET);
+    if(decoded){
+      return {...decoded}
+    }
+  }catch(error){
+    return null
+  }
+ 
+  return false
 };
 
 export const OTP=async() => {
-  return otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+  return otpGenerator.generate(6,{digits:true,alphabets:false,upperCase:false,specialChars:false });
 };
+

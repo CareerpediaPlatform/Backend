@@ -4,9 +4,6 @@ import log from '../../logger'
 import nodeUtil from 'util'
 import {IServiceResponse,ServiceResponse} from '../../models'
 import { HttpStatusCodes } from "src/constants/status_codes";
-
-
-
 import * as recruiterProfileServices from '../../services/recruiter/recruiter_profiles'
 const TAG = 'controler.recruiterProfile'
 
@@ -15,8 +12,7 @@ export async function recruiterProfilePostAndUpdate(req: any, res: Response, nex
       log.info(`${TAG}.recruiterProfilePostAndUpdate()`);
       log.debug(`${TAG}.recruiterProfilePostAndUpdate() Object = ${JSON.stringify(req.body)}`)
       const user = req.body;
-      console.log("******************controller")
-      console.log(user)
+
       let userID = req.params.userID
       const authResponse: IServiceResponse = await recruiterProfileServices.recruiterProfile({...user,userID})
       responseBuilder(authResponse, res, next, req)
@@ -43,8 +39,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       log.info(`${TAG}.deleterecruiterProfile()`);
       log.debug(`${TAG}.deleterecruiterProfile() Object = ${JSON.stringify(req.body)}`)
       let userID = req.params.userID
-      console.log("controller****************")
-      console.log(userID)
+    
       const authResponse= await recruiterProfileServices.deleteRecruiterProfile(userID)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
@@ -71,7 +66,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
   export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.uploadCompanyLogoFile()`)
-      log.debug(`LOGGED IN USER: ${nodeUtil.inspect(req.userSession)}`)
+      
 
       log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file))
   
@@ -100,3 +95,40 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+export async function updateCompanylogo(req: any, res: Response, next: NextFunction): Promise<void>{
+  try{
+    log.info(`${TAG}.updateCompanylogo()`)
+    let userID = req.params.userID
+ 
+    const serviceResponse: IServiceResponse = await recruiterProfileServices.updateCompanylogo(
+       
+      req.file,userID
+    )
+
+    responseBuilder(serviceResponse, res, next, req)
+  }catch(error){
+    log.error(`ERROR occurred in ${TAG}.updateCompanylogo() `, error)
+    next(error)
+  }
+}
+/***************************uploadvideo*******************/
+export async function uploadVideoFile(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.uploadVideoFile()`)
+    log.debug(`${TAG}.uploadVideoFile() Object = ${JSON.stringify(req.body)}`)
+    const {firstName} = req.body
+    console.log(firstName)
+
+    log.debug(`${TAG}.uploadVideoFile() req file:` + nodeUtil.inspect(req.file))
+
+    const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadVideoFile(
+     
+      req.file
+    )
+
+    responseBuilder(serviceResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.uploadVideoFile() `, error)
+    next(error)
+  }
+}

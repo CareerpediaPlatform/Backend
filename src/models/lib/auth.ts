@@ -6,7 +6,6 @@ export interface IUser {
   lastName: string
   email: string
   password?:string
-  phoneNumber: string
   role: string
   uuid?:string
   accessToken?:string
@@ -17,7 +16,6 @@ export class User implements IUser {
   public firstName: string
   public lastName: string
   public email: string
-  public phoneNumber: string
   public role: string
   public uuid?:string
    public password?:string
@@ -27,7 +25,6 @@ export class User implements IUser {
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string,
     role: string,
     password?:string,
     uuid?:string,
@@ -37,7 +34,6 @@ export class User implements IUser {
     this.firstName = firstName
     this.lastName = lastName
     this.email = email
-    this.phoneNumber = phoneNumber
     this.role = role
     this.accessToken = accessToken
     this.uuid = uuid
@@ -52,6 +48,7 @@ export interface ISingin{
   password?:string
   uuid?:string
   phoneNumber?:string
+  status?:string
 }
 
 export class ISignin implements ISingin {
@@ -59,16 +56,19 @@ export class ISignin implements ISingin {
   public password?:string
   public uuid?:string
   public phoneNumber?:string
+  public status?:string
 
  
 
   constructor (
     phoneNumber:string,
     email?:string,
-    uuid?:string) {
+    uuid?:string,status?:string) {
     this.phoneNumber = phoneNumber
     this.uuid = uuid
     this.email = email
+    this.status=status
+
   }
 }
 
@@ -91,8 +91,6 @@ export class Otp implements userOTP {
   public type:string
   public accessToken:string
   public createdAt?:string
-
- 
 
   constructor (
     student_id:string,
@@ -140,19 +138,31 @@ export interface IMentor {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
+  type:string;
+  course:string;
+  status?:string;
 }
 
 export class Mentor implements IMentor {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
+  public type:string;
+  public course:string;
+  public status?:string;
   
-  constructor(email: string, password: string) {
+  
+  constructor(email: string,password : string ,type:string,course:string,status:string) {
     this.email = email;
     this.password = password;
+    this.type = type;
+    this.course = course;
+    this.status = status;
+    
   }
+
 }
 
 //recruiter
@@ -219,3 +229,4 @@ export class College implements ICollege {
     this.password = password;
   }
 }
+
