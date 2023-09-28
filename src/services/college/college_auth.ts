@@ -17,6 +17,7 @@ export async function signupUser(user: ICollege) {
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
+      let transaction = null
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
         serviceResponse.message = 'Email is already exist';

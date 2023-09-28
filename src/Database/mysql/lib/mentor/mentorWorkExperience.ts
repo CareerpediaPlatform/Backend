@@ -60,6 +60,7 @@ export async function saveWorkExperienceDetails(user) {
                 ...data
               });
               response.push(res)
+              
         }else{
             const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
                 ...data,uid,userId:user.id
@@ -91,7 +92,7 @@ export async function saveWorkExperienceDetails(user) {
     }
   }
 
-//geting all data 
+//geting all data  
 
 export async function checkProfilExist(userId) {
     try {

@@ -182,3 +182,16 @@ export async function collegeProfileDelete(user) {
     throw error;
   }
 }
+
+
+export async function getCollegeList(userID) {
+  try {
+    logger.info(`${TAG}.checkProfileExist() ==>`, userID);
+    const personalQuery = 'SELECT logo,instituteName, founderName, email, phoneNumber, website FROM `COLLEGE_BASIC_DETAILS` WHERE userID= :userID';
+    const [basic] = await executeQuery(personalQuery, QueryTypes.SELECT, {userID});
+    return basic; 
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+    throw error;
+  }
+}

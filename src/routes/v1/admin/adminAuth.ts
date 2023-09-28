@@ -5,7 +5,7 @@ import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import * as validation from '../../../validations/auth'
 
-import * as statuscontroller from '../../../controller/admin/adminProfile'
+
 
 
 
@@ -20,7 +20,6 @@ const router = Router()
  router.route('/signup')
      .post(controller.signupUser);
 
-router.route('/activate/:userId')
-.put(statuscontroller.updateStatusRecruiter);     
+
 
 export default router

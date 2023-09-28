@@ -202,6 +202,8 @@ VALUES(:uid,:fileName,:originalFileName, :contentType, :s3Bucket, :filePath, :fi
     throw error
   }
 }
+
+
 export async function getRecruiterFile(userID){
   logger.info(`${TAG}.getRecruiterFile() ==>`, userID);
   try{
@@ -214,3 +216,30 @@ export async function getRecruiterFile(userID){
     throw error
   }
 }
+
+
+export async function getRecruiterList(userId) {
+    try {
+      logger.info(`${TAG}.getRecruiterList() ==>`, userId);
+  
+      const personalQuery = 'SELECT LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER FROM `RECRUITER_BASIC_DETAILS` WHERE USER_ID = :userID';
+      const wokrQuery = 'SELECT NUMBEROFEMPLOYEES FROM `RECRUITER_COMPANY_DETAILS` WHERE USER_ID = :userID';
+      const query = `SELECT
+            pd.LOGO,
+            pd.COMPANYNAME,
+            pd.FOUNDERNAME,
+            pd.EMAIL,
+            pd.PHONENUMBER,
+            we.NUMBEROFEMPLOYEES
+            FROM RECRUITER_BASIC_DETAILS pd
+            INNER JOIN RECRUITER_COMPANY_DETAILS we ON pd.USER_ID = we.USER_ID
+            WHERE pd.USER_ID = :userID`;
+      const [basic] = await executeQuery(personalQuery, QueryTypes.SELECT, {userId});
+      const [work] = await executeQuery(wokrQuery, QueryTypes.SELECT, {userId});
+      const [conactquery] = await executeQuery(query, QueryTypes.SELECT, {userId});
+      return conactquery; // Return null if no user is found
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.getRecruiterList()`, error);
+      throw error;
+    }
+  }

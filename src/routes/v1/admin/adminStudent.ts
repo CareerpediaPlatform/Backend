@@ -18,5 +18,6 @@ const router = Router()
 
  router.route('/:uid')
      .get(getSingleStudentProfile);
+     
 
 export default router

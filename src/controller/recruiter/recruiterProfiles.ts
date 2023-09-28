@@ -85,3 +85,16 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
+  export async function getRecruiterSingleList(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getRecruiterSingleList()`);
+      log.debug(`${TAG}.getRecruiterSingleList() Object = ${JSON.stringify(req.body)}`)
+      let userID = req.params.userID
+      const authResponse= await recruiterProfileServices.getRecruiterList(userID)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getRecruiterSingleList() `, error)
+      next(error)
+    }
+  }

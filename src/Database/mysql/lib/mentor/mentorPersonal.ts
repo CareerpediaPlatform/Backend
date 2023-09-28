@@ -3,6 +3,7 @@ import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
 var crypto=require("crypto")
 
+
 const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
 export async function savePersonalAndContactDetails(
@@ -13,7 +14,10 @@ export async function savePersonalAndContactDetails(
     try {
         mentorPersonalData["uid"] = crypto.randomUUID();
       mentorPersonalData["mentorUserId"] = userId;
-  
+      
+   // Handle image upload
+  //  const profilePic = await upload.single('avatar');
+
       let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
                                    (USER_ID, UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
                                     CITY, DISTRICT, STATE, PINCODE, COUNTRY)
@@ -22,7 +26,7 @@ export async function savePersonalAndContactDetails(
   
       console.log(`mentor personal data in data store`, mentorPersonalData);
       await executeQuery(personalDetailQuery, QueryTypes.INSERT, {
-        ...mentorPersonalData,
+        ...mentorPersonalData
       });
       return mentorPersonalData.uid;
     } catch (error) {

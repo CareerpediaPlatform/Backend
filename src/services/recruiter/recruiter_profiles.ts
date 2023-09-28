@@ -151,4 +151,22 @@ export async function getRecruiterProfile(userID) {
   }
  
 
-  
+  export async function getRecruiterList(userID) {
+    log.info(`${TAG}.getMentorList() ==> `, userID);
+      
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      const existedProfile=await RecruiterProfileDetailsData.getRecruiterList(userID)
+      if(existedProfile){
+        const data = {
+          existedProfile
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }

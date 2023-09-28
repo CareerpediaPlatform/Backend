@@ -34,13 +34,14 @@ export async function signupMentor (req: any, res: Response, next: NextFunction)
     } 
   }
 
-
   export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.changePasswordController()`);
       log.debug(`${TAG}.changePasswordController() Object = ${JSON.stringify(req.body)}`);
       const passwords: any = req.body;
-      const response: IServiceResponse = await authService.changeUserPassword({ ...passwords });
+      console.log(passwords)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const response: IServiceResponse = await authService.changePassword({ ...passwords,headerValue });
       responseBuilder(response, res, next, req);
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.changePasswordController()`, error);

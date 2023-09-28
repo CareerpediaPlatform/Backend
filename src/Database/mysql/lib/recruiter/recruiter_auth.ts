@@ -106,3 +106,18 @@ console.log(uid)
   }
 }
 
+
+// //remove access recuriter -active or deactive
+
+export async function updateStatusRecruiterActive(user) {
+  logger.info(`${TAG}.updateStatusRecruiter()`);
+  try {
+    let statusUpdateQuery = `UPDATE RECRUITER SET STATUS = true WHERE USER_ID= ?`;
+    await executeQuery(statusUpdateQuery, QueryTypes.UPDATE, [user]);
+    return {...user};
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateStatusRecruiter()`, error);
+    throw error;
+  }
+}
+
