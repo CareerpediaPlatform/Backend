@@ -39,7 +39,6 @@ export async function sendmail(user: any) {
         };
 
         console.log(SENDER_EMAIL_ID)
-
         const transporter = await createTransport();
         return await transporter.sendMail(mailOptions);
     } catch (error) {
@@ -73,7 +72,6 @@ export async function sendSignupEmail(user) {
         throw error;
     }
 }
-
 
 export async function studentOtpEmail(user) {
     try {
@@ -151,3 +149,4 @@ export async function studentNotification(user) {
         throw error;
     }
 }
+

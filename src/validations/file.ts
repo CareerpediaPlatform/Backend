@@ -9,3 +9,14 @@ export async function emptyCheck(req: any, res: any, next): Promise<any> {
     next()
   }
 }
+export async function emptyChecks(req: any, res: any, next): Promise<any> {
+ 
+  if (!req.files || req.files.length === 0) {
+    res.status(HttpStatusCodes.BAD_REQUEST).send({ errors: 'No video files uploaded.' });
+  } else {
+    // req.files.forEach((file) => {
+    //   console.log('File uploaded:', file.path);
+    // });
+    next();
+  }
+}
