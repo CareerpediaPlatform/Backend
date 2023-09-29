@@ -8,13 +8,11 @@ const TAG="student.service.profile"
 
 export async function studentProfilePost(user) {
   console.log(user)
-    log.info(`${TAG}.studentProfilePost() ==> `, user);
-      
+    log.info(`${TAG}.studentProfilePost() ==> `, user); 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
       const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
-   
       if(isValid){
         const existedProfile=await StudentProfile.checkExist(decoded.uid)
         if(existedProfile){
@@ -187,6 +185,34 @@ export async function studentProfileExperienceDelete(info) {
     
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.studentProfileExperienceDelete`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+export async function uploadResume(info) {
+    log.info(`${TAG}.uploadResume() ==> `, info);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      let response;
+      let decoded=await verifyAccessToken(info.headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      if(isValid){
+        const existed=await StudentProfile.checkResume(decoded.uid)
+        if(existed){
+          response=await StudentProfile.updateResume({})
+        }
+      }else{
+        response=await StudentProfile.uploadResume({})
+      }
+      const data = {
+        response
+      }    
+      serviceResponse.data = data
+      return serviceResponse
+    
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.uploadResume`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
