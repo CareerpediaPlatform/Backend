@@ -13,13 +13,15 @@ import * as RecruiterProfileDetailsData from './lib/recruiter/recruiter_profiles
 import * as mentorPersonalAndContactData from './lib/mentor/mentorPersonal'
 import * as mentorEducationData from './lib/mentor/mentorEducational'
 import * as mentorWorkExperienceData from './lib/mentor/mentorWorkExperience'
-
 import * as StudentProfile from './lib/student/profile'
-// import * as testJoin from './lib/testjoin'
+
+import * as coursedata from './lib/admin/course'
+import * as attachment from './lib/student/assignment'
+
 
 
 import * as Courses from './lib/admin/courses'
-
+// import * as AdminProfile from './lib/admin/'
 
 
 
@@ -34,6 +36,9 @@ export{
     mentorEducationData,
     mentorWorkExperienceData,
     AdminProfile,
+    StudentProfile,
+    coursedata,
+    attachment
     StudentProfile,
     Courses
 }

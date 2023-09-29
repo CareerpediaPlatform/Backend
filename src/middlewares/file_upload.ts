@@ -60,11 +60,11 @@ export const fileReader = function (fieldName: string): any {
   }
 }
 export const imageFileReader = function (fieldName: string): any {
-  logger.debug(`${TAG}.imageFileReader(): start: ` + fieldName)
+  // logger.debug(`${TAG}.imageFileReader(): start: ` + fieldName)
   return function (req: any, res, next): any {
     uploadProfileImage.single(fieldName)(req, res, function (err) {
       if (!err) {
-        // Everything went fine.
+       
         next()
       } else if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.

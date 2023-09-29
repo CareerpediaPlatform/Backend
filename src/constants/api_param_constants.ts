@@ -11,5 +11,7 @@ export const QueryParams = {
   SORT_ORDER: 'sortOrder'
 }
 export const FormParams = {
-  FILE_FIELD: 'file'
+  FILE_FIELD: 'file',
+  MAX_COUNT: 3
+  // VIDEO_FIELD: 'video'
 }

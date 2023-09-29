@@ -8,7 +8,6 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_mentorAuth'
 
 
-
 export async function signUp(user: IMentor,transcation?:any) {
   logger.info(`${TAG}.saveUser()`);
   try {
@@ -29,7 +28,8 @@ export async function signUp(user: IMentor,transcation?:any) {
     let mentorInsertQuery = `insert into MENTOR(UID, EMAIL, PASSWORD,TYPE,COURSE,STATUS)
     values(:uid, :email, :password,:type,:course,:status)`;
     await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
-      ...data,transcation
+
+      ...data,transaction
     });
     return data;
   } catch (error) {

@@ -81,7 +81,6 @@ export async function getCollegeProfile(headerValue) {
   }
 
 
-
 export async function getCollegeList(userID) {
     log.info(`${TAG}.getMentorList() ==> `, userID);
       

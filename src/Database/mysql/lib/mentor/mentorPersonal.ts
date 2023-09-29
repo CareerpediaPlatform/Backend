@@ -95,7 +95,6 @@ export async function isValid(userId) {
 export async function getMentorList(userId) {
     try {
       logger.info(`${TAG}.checkProfileExist() ==>`, userId);
-  
       const personalQuery = 'SELECT PROFILE_PIC,FIRST_NAME,LAST_NAME,EMAIL,MOBILE_NUMBER FROM `MENTOR_PERSONAL_DETAILS` WHERE USER_ID= :userId';
       const wokrQuery = 'SELECT YEAR_OF_EXPERIENCE FROM `MENTOR_WORK_EXPERIENCE` WHERE USER_ID= :userId';
       const query = `SELECT
@@ -107,12 +106,10 @@ export async function getMentorList(userId) {
             FROM MENTOR_PERSONAL_DETAILS pd
             INNER JOIN MENTOR_WORK_EXPERIENCE we ON pd.USER_ID = we.USER_ID
             WHERE pd.USER_ID = :userId`;
-      // SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS name FROM MENTOR_PERSONAL_DETAILS
       const [basic] = await executeQuery(personalQuery, QueryTypes.SELECT, {userId});
       const [work] = await executeQuery(wokrQuery, QueryTypes.SELECT, {userId});
       const [conactquery] = await executeQuery(query, QueryTypes.SELECT, {userId});
-      // const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {userId});
-      return conactquery; // Return null if no user is found
+      return conactquery; 
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;
