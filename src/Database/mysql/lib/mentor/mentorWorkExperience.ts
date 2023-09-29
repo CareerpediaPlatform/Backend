@@ -6,39 +6,6 @@ var crypto = require("crypto");
 const TAG = "data_stores_mysql_lib_mentor_work_experience";
 
 
-// export async function saveWorkExperienceDetails(mentorWorkExperienceData: any, userId: number) {
-//     logger.info(`${TAG}.saveUser()`)
-//     try {
-//       let workDetails = [];
-//       const mentorWorkExperienceData = []
-//       mentorWorkExperienceData.forEach((workData:any) => {
-//         workData['uid'] = crypto.randomUUID();
-//         workDetails.push(
-          
-//               userId,
-//               workData.uid,
-//               workData.occupation,
-//               workData.job_role,
-//               workData.start_date,
-//               workData.end_date 
-//         );
-//       });
-//       console.log("assssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    
-//       const educationDetailsQuery = `INSERT INTO  MENTOR_WORK_EXPERIENCE
-//       (USER_ID, UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE)
-//        values(:userId, :uid,:occupation ,:job_role, :start_date,:end_date)`;
-
-//       await executeQuery(educationDetailsQuery, QueryTypes.INSERT, [workDetails]);
-//       return mentorWorkExperienceData;
-  
-//     } catch (error) {
-//       logger.error(`ERROR occurred in ${TAG}.saveUser()`, error)
-//       throw error;
-//     }
-//   }
-
-
 export async function saveWorkExperienceDetails(user) {
     logger.info(`${TAG}.saveWorkExperienceDetails()`);
     console.log(user)
@@ -53,13 +20,13 @@ export async function saveWorkExperienceDetails(user) {
 
       for (const data of user.data) {
         let uid=crypto.randomUUID()
-        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
                 ...data
               });
               response.push(res)
+              
         }else{
             const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
                 ...data,uid,userId:user.id
@@ -91,7 +58,7 @@ export async function saveWorkExperienceDetails(user) {
     }
   }
 
-//geting all data 
+//geting all data  
 
 export async function checkProfilExist(userId) {
     try {
@@ -100,12 +67,10 @@ export async function checkProfilExist(userId) {
       const basicQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE USER_ID= :userId';
       const educationQuery = 'SELECT * FROM MENTOR_EDUCATION_DETAILS WHERE USER_ID=:userId';
       const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE USER_ID=:userId';
-      
-
       const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {userId});
       const [work] = await executeQuery(workQuery, QueryTypes.SELECT, {userId});
       const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {userId});
-      return {basic,eduaction,work}; // Return null if no user is found
+      return {basic,eduaction,work}; 
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;
@@ -128,31 +93,29 @@ export async function checkExist(userId) {
   }
 
 
+  // export async function deleteWorkExperience(uid) {
+  //   try {
+  //     logger.info(`${TAG}.deleteRecruiter() ==>`, uid);
+  //     console.log(" **************************llib*************")
+  //     console.log(uid)
+  //     const response=[]
+  //     const deleteQueries = [
+  //       'DELETE FROM MENTOR_PERSONAL_DETAILS WHERE UID = :uid',
+  //     ];
+  //     for (const query of deleteQueries) {
+  //       const res=await executeQuery(query, QueryTypes.DELETE, {
+  //         uid
+  //       });
+  //       response.push(res)
+  //     }
+  //     return {message:"recruiter deleted",response}; 
+  //   } catch (error) {
+  //     logger.error(`ERROR occurred in ${TAG}.deleteRecruiter()`, error);
+  //     throw error;
+  //   }
+  // }
 
-export async function deleteRecruiter(userId) {
-    try {
-      logger.info(`${TAG}.deleteRecruiter() ==>`, userId);
-      console.log(" **************************llib*************")
-      console.log(userId)
-      const response=[]
-      const deleteQueries = [
-        'DELETE FROM MENTOR_PERSONAL_DETAILS WHERE USER_ID = :userId',
-        'DELETE FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID = :userId',
-        'DELETE FROM MENTOR WHERE USER_ID = :userId'
-  
-      ];
-      for (const query of deleteQueries) {
-        const res=await executeQuery(query, QueryTypes.DELETE, {
-          userId
-        });
-        response.push(res)
-      }
-      return {message:"recruiter deleted",response}; 
-    } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.deleteRecruiter()`, error);
-      throw error;
-    }
-  }
+
 
 
 

@@ -81,4 +81,22 @@ export async function getCollegeProfile(headerValue) {
   }
 
 
-
+export async function getCollegeList(userID) {
+    log.info(`${TAG}.getMentorList() ==> `, userID);
+      
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      const existedProfile=await collegeProfileLib.isValid(userID)
+      if(existedProfile){
+        const data = {
+          existedProfile
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCollegeList`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }

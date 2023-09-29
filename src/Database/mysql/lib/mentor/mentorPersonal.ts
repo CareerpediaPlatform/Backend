@@ -3,6 +3,7 @@ import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
 var crypto=require("crypto")
 
+
 const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
 export async function savePersonalAndContactDetails(
@@ -13,7 +14,10 @@ export async function savePersonalAndContactDetails(
     try {
         mentorPersonalData["uid"] = crypto.randomUUID();
       mentorPersonalData["mentorUserId"] = userId;
-  
+      
+   // Handle image upload
+  //  const profilePic = await upload.single('avatar');
+
       let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
                                    (USER_ID, UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
                                     CITY, DISTRICT, STATE, PINCODE, COUNTRY)
@@ -22,7 +26,7 @@ export async function savePersonalAndContactDetails(
   
       console.log(`mentor personal data in data store`, mentorPersonalData);
       await executeQuery(personalDetailQuery, QueryTypes.INSERT, {
-        ...mentorPersonalData,
+        ...mentorPersonalData
       });
       return mentorPersonalData.uid;
     } catch (error) {
@@ -91,7 +95,6 @@ export async function isValid(userId) {
 export async function getMentorList(userId) {
     try {
       logger.info(`${TAG}.checkProfileExist() ==>`, userId);
-  
       const personalQuery = 'SELECT PROFILE_PIC,FIRST_NAME,LAST_NAME,EMAIL,MOBILE_NUMBER FROM `MENTOR_PERSONAL_DETAILS` WHERE USER_ID= :userId';
       const wokrQuery = 'SELECT YEAR_OF_EXPERIENCE FROM `MENTOR_WORK_EXPERIENCE` WHERE USER_ID= :userId';
       const query = `SELECT
@@ -103,12 +106,10 @@ export async function getMentorList(userId) {
             FROM MENTOR_PERSONAL_DETAILS pd
             INNER JOIN MENTOR_WORK_EXPERIENCE we ON pd.USER_ID = we.USER_ID
             WHERE pd.USER_ID = :userId`;
-      // SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS name FROM MENTOR_PERSONAL_DETAILS
       const [basic] = await executeQuery(personalQuery, QueryTypes.SELECT, {userId});
       const [work] = await executeQuery(wokrQuery, QueryTypes.SELECT, {userId});
       const [conactquery] = await executeQuery(query, QueryTypes.SELECT, {userId});
-      // const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {userId});
-      return conactquery; // Return null if no user is found
+      return conactquery; 
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;

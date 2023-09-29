@@ -42,7 +42,7 @@ export async function saveEducationDetails(user) {
   }
 
 
-  export async function deleteRecruiter(uid) {
+  export async function deleteEducationDetails(uid) {
     try {
       logger.info(`${TAG}.deleteRecruiter() ==>`, uid);
       console.log(" **************************llib*************")

@@ -3,8 +3,7 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import {isAuthenticated} from '../../../middlewares/authentication'
-import { imageFileReader } from 'src/middlewares/file_upload'
-import { FormParams } from 'src/constants/api_param_constants'
+
 
 
 
@@ -17,4 +16,8 @@ const router = Router()
  .post(isAuthenticated,controller.collegeProfilePostAndUpdate);
  router.route('/profile')
  .get(isAuthenticated,controller.getCollegeProfile);
+ router.route('/college-list/:userID')
+ .get(isAuthenticated,controller.getCollegeSingleList);
+
  export default router
+

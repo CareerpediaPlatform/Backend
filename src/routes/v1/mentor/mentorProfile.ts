@@ -5,7 +5,7 @@ import * as educationController from '../../../controller/mentor/mentorEducation
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-
+import {isAuthenticated} from '../../../middlewares/authentication'
 
 
 passportConfiguration(passport)
@@ -15,31 +15,24 @@ const router = Router()
 
  router
  .route("/personal-details/:mentorUid")
- .post(profileController.PersonalAndDetails);
-
+ .post(isAuthenticated ,profileController.PersonalAndDetails);
 
  router
  .route("/education-details/:id")
- .put(educationController.updateEducationDetail);
-
+ .put(isAuthenticated ,educationController.updateEducationDetail);
 
  router
  .route("/work-details/:id")
- .put(workController.updateWorkExperience);
+ .put(isAuthenticated ,workController.updateWorkExperience);
 
  //mentor all profile details 
 
- router.route('/details/:userId')
- .get(profileController.getrecruiterProfile);
-
- router.route('/details/:userId')
- .delete(profileController.deleterecruiterProfile);
-
- router.route('/Educationdetails/:uid')
- .delete(educationController.deleterecruiterProfile);
-
+ router.route('/mentor-details/:userId')
+ .get(isAuthenticated ,profileController.getrecruiterProfile);
+ 
+ //single mentorlist  profile details 
  router.route('/mentor-list/:userId')
- .get(profileController.getMentorSingleList);
+ .get(isAuthenticated,profileController.getMentorSingleList);
 
 
 export default router

@@ -7,15 +7,16 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
 import { ICollege } from "src/models/lib/auth";
-
-
+import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+import { sendRegistrationNotification } from "../../utils/nodemail";
 const TAG = 'services.auth'
 
 export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
-      
+    let transaction = null
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
+      let transaction = null
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
         serviceResponse.message = 'Email is already exist';
@@ -23,7 +24,10 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      transaction = await getTransaction()
       const college_admin = await CollegeAuth.signUp(user);
+      await transaction.commit() 
+      sendRegistrationNotification(user)
       const accessToken = await generateAccessToken({ ...college_admin   });
       const college_uid = college_admin.uid
       const data = {

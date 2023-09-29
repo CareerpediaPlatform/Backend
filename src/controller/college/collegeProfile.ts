@@ -34,3 +34,17 @@ export async function getCollegeProfile(req: any, res: Response, next: NextFunct
     }
   }
 
+
+  export async function getCollegeSingleList(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getCollegeSingleList()`);
+      log.debug(`${TAG}.getCollegeSingleList() Object = ${JSON.stringify(req.body)}`)
+      let userID = req.params.userID
+      const authResponse= await collegeProfileServices.getCollegeList(userID)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCollegeSingleList() `, error)
+      next(error)
+    }
+  }
+
