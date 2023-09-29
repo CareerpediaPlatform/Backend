@@ -29,7 +29,7 @@ export async function signUp(user: IMentor,transaction?:any) {
     values(:uid, :email, :password,:type,:course,:status)`;
     await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
 
-      ...data,transaction
+      ...data,transcation
     });
     return data;
   } catch (error) {

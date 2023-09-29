@@ -223,3 +223,41 @@ export async function updateWorkExperience(user) {
       throw error;
     }
   }
+
+  export async function uploadResume(uid) {
+    try {
+      logger.info(`${TAG}.uploadResume() ==>`, uid);
+      const query = `INSERT INTO student_resume (user_uid,source, doc_id) VALUES(:uid,:source, :doc_id)`
+      const resume= await executeQuery(query, QueryTypes.INSERT, {uid});
+      return resume// Return null if no user is found
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.uploadResume()`, error);
+      throw error;
+    }
+  }
+
+  export async function updateResume(uid) {
+    try {
+      logger.info(`${TAG}.updateResume() ==>`, uid);
+      const query = `UPDATE student_resume SET source=:source, doc_id=:doc_id WHERE user_id=uid`
+      const resume= await executeQuery(query, QueryTypes.UPDATE, {uid});
+      return resume// Return null if no user is found
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.updateResume()`, error);
+      throw error;
+    }
+  }
+
+  export async function checkResume(uid) {
+    try {
+      logger.info(`${TAG}.checkResume() ==>`, uid);
+      const query = `SELECT * From student_resume WHERE user_uid=uid`
+      const resume= await executeQuery(query, QueryTypes.SELECT, {uid});
+      return resume
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.checkResume()`, error);
+      throw error;
+    }
+  }
+
+  
