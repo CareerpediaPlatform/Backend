@@ -18,6 +18,7 @@ import * as attachment from './lib/student/assignment'
 
 
 // import * as AdminProfile from './lib/admin/'
+import * as adminLms from './lib/admin/admin_lms'
 
 
 
@@ -32,6 +33,7 @@ export{
     mentorEducationData,
     mentorWorkExperienceData,
     StudentProfile,
+    coursedata,
     attachment,
-
+    Courses,adminLms
 }

@@ -2,7 +2,7 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import * as lmsLib from "../../Database/mysql/lib/admin/admin_lms"
+import * as lmsLib from "../../Database/mysql/lib/student/lms"
 
 const TAG = 'services.lms.student'
 export async function getCourseOverview(courseId){

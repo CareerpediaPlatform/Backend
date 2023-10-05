@@ -29,10 +29,11 @@ export async function signupUser(user: IMentor) {
       const mentor = await MentorAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...mentor });
-      const data = {
+const accessToken = await generateAccessToken({ ...mentor });
+        const data = {
         accessToken       
-      }    
+      } 
+      
       serviceResponse.data = data
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.signupUser`, error);

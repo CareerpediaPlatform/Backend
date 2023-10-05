@@ -4,6 +4,7 @@ import { QueryTypes, UUID } from "sequelize";
 
 const TAG="student.database-lib.profile"
 
+// creating new student with form data with
 export async function studentProfilePost(user) {
   // const uid=crypto.randomUUID()
   logger.info(`${TAG}.studentProfilePost()`);

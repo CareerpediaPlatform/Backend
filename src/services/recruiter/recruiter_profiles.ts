@@ -266,5 +266,4 @@ export async function getRecruiterProfile(headerValue) {
     }
     return serviceResponse
   }
- 
 

@@ -7,7 +7,10 @@ import { DIRECTORIES } from "src/constants/file_constants";
 
 import { saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
+
 import { verifyAccessToken } from "src/helpers/authentication";
+
+import { getMyCourse } from "src/Database/mysql/lib/admin/admin_lms";
 const TAG = 'assignment.service'
 
 export async function uploadAssignment(files:any,headerValue: any, partId: any): Promise<IServiceResponse> {
@@ -180,4 +183,60 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
     }
   
   }
- 
+
+  export async function postThreadreply(reply:any, threadId:any, uid:any) {
+    log.info(`${TAG}.postThreadreply() ==> `,reply,threadId,uid);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+    
+      const response = await attachment.postThreadreply(reply,threadId,uid)
+      const data = {
+        ...response,
+      }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.postThreadreply`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+  export async function getAllThreadsCourse(courseId) {
+    log.info(`${TAG}.getAllThreadsCourse() ==> `,courseId);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      const exist = await getMyCourse(courseId)
+      if(exist.length>0){
+        const response = await attachment.getAllThreadsCourse(courseId)
+        const data = {
+          ...response,
+        }
+        serviceResponse.data = data
+      }else{
+        serviceResponse.message="course does not exist"
+      }
+   
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsCourse`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+  export async function getAllThreadsPart(partId) {
+    log.info(`${TAG}.getAllThreadsPart() ==> `,partId);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+    
+      const response = await attachment.getAllThreadsPart(partId)
+      const data = {
+        ...response,
+      }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsPart`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
