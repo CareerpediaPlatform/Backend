@@ -33,7 +33,6 @@ export{
     mentorEducationData,
     mentorWorkExperienceData,
     StudentProfile,
-    coursedata,
     attachment,
-    Courses,adminLms
+    adminLms
 }
