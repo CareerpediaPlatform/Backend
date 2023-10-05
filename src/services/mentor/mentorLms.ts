@@ -25,6 +25,8 @@ export async function getAllAssignments(partId: any){
     }
   
   }
+
+
   export async function giveRemark(remark: any,assignmentId: any,headerValue: any){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
@@ -62,6 +64,8 @@ export async function getAllAssignments(partId: any){
     }
   
   }
+
+
   export async function postThreadreply(reply:any, threadId:any, headerValue:any, partId: any) {
     log.info(`${TAG}.postThreadreply() ==> `,reply,threadId,headerValue);  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -87,4 +91,29 @@ export async function getAllAssignments(partId: any){
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
+  }
+
+  export async function getSingleRemark(remarkId: any,headerValue: any){
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try{
+      let response;
+      let decoded=await verifyAccessToken(headerValue)
+      console.log(decoded)
+      const uid=decoded.mentor_uid
+      const mentorValid = await MentorAuth.getMentorUid(uid)
+      if(mentorValid){
+        response= await mentorlms.getSingleRemark(uid,remarkId)
+      }
+        
+        const data={
+          response
+        }
+          serviceResponse.data=data
+          return  serviceResponse
+        
+    }catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getSingleRemark`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+  
   }

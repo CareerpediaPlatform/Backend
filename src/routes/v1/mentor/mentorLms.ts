@@ -13,7 +13,8 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/assignment/:partId').get(controller.getAllSAssignments);
- router.route('/assignment-remark/:assignmentId').patch(controller.giveRemark)
- router.route('/reply-thread/:partId/:threadID').post(controller.postThreadreply)
+ router.route('/assignment-remark/:assignmentId').patch(controller.giveRemark);
+ router.route('/reply-thread/:partId/:threadID').post(controller.postThreadreply);
+ router.route('/assignment/remarks/:remark_id').get(controller.getSingleRemark);
  
 export default router

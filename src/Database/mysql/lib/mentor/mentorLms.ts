@@ -66,3 +66,21 @@ export async function getAllAssignments(partId: any, ){
       throw error;
     }
   }
+
+  export async function getSingleRemark(uid: any,remarkId: any){
+    console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+    console.log(remarkId)
+    try {
+      logger.info(`${TAG}.getSingleRemark() ==>`,remarkId,uid);
+      const checkQuery = 'SELECT * FROM ASSIGNMENT WHERE MENTOR_ID= :uid AND REMARKS= :remarkId';
+      const getAllAssignments= await executeQuery(checkQuery, QueryTypes.SELECT,{
+      remarkId:remarkId.remark_id,uid
+      });
+    
+      return getAllAssignments
+    
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.getSingleRemark()`, error);
+      throw error;
+    }
+  }

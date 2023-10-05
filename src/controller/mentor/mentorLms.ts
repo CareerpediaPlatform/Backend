@@ -53,3 +53,18 @@ export async function getAllSAssignments(req: any, res: Response, next: NextFunc
     }
   }
 
+
+  export async function getSingleRemark(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getSingleRemark()`);
+      log.debug(`${TAG}.getSingleRemark() Object = ${JSON.stringify(req.body)}`)
+      const headerValue =req.headers.authorization.split(' ')[1]
+      const remarkId=req.params
+      const Response: IServiceResponse = await lmsService.getSingleRemark(remarkId,headerValue)
+
+      responseBuilder(Response, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getSingleRemark() `, error)
+      next(error)
+    }
+  }
