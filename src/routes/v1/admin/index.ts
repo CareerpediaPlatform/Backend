@@ -4,11 +4,10 @@ import AdminAuth from "./adminAuth";
 import adminStudent from "./adminStudent";
 import adminCollege from "./adminCollege";
 
-import course from "./course"
 
 import adminLms from "./adminLms"
 import updaterecruiter from "./adminRecruiter";
-import lms from "./courses";
+
 
 
 const router = Router();
@@ -16,12 +15,9 @@ const router = Router();
 router.use(APIPath.ROOT_AUTH, AdminAuth);
 router.use("/student", adminStudent);
 router.use("/college", adminCollege);
-
-router.use("/",course)
-
 router.use("/course", adminLms);
 router.use("/recuiter", updaterecruiter); //api/v1/admin/recuiter/status/:status/:uid
-router.use("/course", lms) //api/v1/admin/course/catogery
+
 
 
 

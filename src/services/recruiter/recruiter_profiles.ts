@@ -2,12 +2,13 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {  RecruiterProfileDetailsData } from "../../Database/mysql";
+import {  RecruiterAuth, RecruiterProfileDetailsData } from "../../Database/mysql";
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
 
 import { getFileUrl,getSanitizedFileName, saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
+import { verifyAccessToken } from "src/helpers/authentication";
 
 
 const TAG = 'services.profile'
@@ -15,16 +16,19 @@ const TAG = 'services.profile'
 
 export async function recruiterProfile(user) {
     log.info(`${TAG}.recruiterProfile() ==> `, user);  
+    console.log("666666666666666666666666666666666666666666666")
+    console.log(user)
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      let userID=user.userID
-      const isValid=await RecruiterProfileDetailsData.isValid(userID)
+      let decoded=await verifyAccessToken(user.headerValue)
+        const uid=decoded[0].uid
+      const isValid=await RecruiterAuth.checkUidExist(uid)
       if(isValid){
-        const existedProfile=await RecruiterProfileDetailsData.checkExist(userID)
+        const existedProfile=await RecruiterProfileDetailsData.checkExist(uid)
         if(existedProfile){
-          const basicDetails= await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({...user.Profile,userID});
-          const contactDetails= await RecruiterProfileDetailsData.recruiterContactUpdate({...user.Contact,userID});
-          const companyDetsils= await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({...user.Company,userID});
+          const basicDetails= await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({...user.Profile,uid});
+          const contactDetails= await RecruiterProfileDetailsData.recruiterContactUpdate({...user.Contact,uid});
+          const companyDetsils= await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({...user.Company,uid});
           const data = {
             basicDetails,
             contactDetails,
@@ -34,7 +38,7 @@ export async function recruiterProfile(user) {
           return serviceResponse
         }
       
-        const response= await RecruiterProfileDetailsData.recruiterProfilePost({...user});
+        const response= await RecruiterProfileDetailsData.recruiterProfilePost({...user,uid});
         const data = {
           ...response
         }    
@@ -42,7 +46,7 @@ export async function recruiterProfile(user) {
         return serviceResponse
       }
       else{
-        serviceResponse.message="invalid user id"
+        serviceResponse.message="invalid user uid"
         return serviceResponse
       }
   
@@ -54,12 +58,16 @@ export async function recruiterProfile(user) {
   }
 
   
-export async function getRecruiterProfile(userID) {
-    log.info(`${TAG}.getRecruiterProfile() ==> `, userID);
+export async function getRecruiterProfile(headerValue) {
+    log.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      const existedProfile=await RecruiterProfileDetailsData.checkProfilExist(userID)
+      let decoded=await verifyAccessToken(headerValue)
+      const uid=decoded[0].uid
+    const isValid=await RecruiterAuth.checkUidExist(uid)
+    if(isValid){
+      const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
       if(existedProfile){
         const data = {
           existedProfile
@@ -67,6 +75,11 @@ export async function getRecruiterProfile(userID) {
         serviceResponse.data = data
         return serviceResponse
       }
+      else{
+        serviceResponse.message="invalid user uid"
+        return serviceResponse
+      }
+    }
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
@@ -115,16 +128,19 @@ export async function getRecruiterProfile(userID) {
       log.debug(
         ` ${TAG}.uploadCompanyLogoFile 'fileS3 URL: ' ` + getFileUrl(data.savedFileKey, AWS_S3.BUCKET_NAME)
       )
+  
       const fileDetails = {
-        fileName: data?.savedFileName,
+        fileName: data[0]?.savedFileName,
         originalFileName: file?.originalname,
         contentType: file?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data?.savedFileKey,
-        fileUrl: data?.savedLocation,
+        filePath: data[0]?.savedFileKey,
+        fileUrl: data[0]?.savedLocation,
         isPublic: true,
         metaData: null
       }
+      console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+      console.log(fileDetails)
   
       const fileSavedResp = await RecruiterProfileDetailsData.saveFile(fileDetails)
       // log.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + nodeUtil.inspect(fileSavedResp))
@@ -145,7 +161,7 @@ export async function getRecruiterProfile(userID) {
  
 
   export async function getRecruiterList(userID) {
-    log.info(`${TAG}.getMentorList() ==> `, userID);
+    log.info(`${TAG}.getRecruiterList() ==> `, userID);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
@@ -250,4 +266,4 @@ export async function getRecruiterProfile(userID) {
     }
     return serviceResponse
   }
- 
+

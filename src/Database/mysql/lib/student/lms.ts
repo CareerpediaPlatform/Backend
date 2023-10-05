@@ -94,6 +94,7 @@ export async function  getCourses(courseType) {
       }
     }
 
+
     export async function  getMyCourses(list) {
       // let id=courseId
         try {
@@ -163,3 +164,4 @@ export async function  getCourses(courseType) {
         }
     
  
+

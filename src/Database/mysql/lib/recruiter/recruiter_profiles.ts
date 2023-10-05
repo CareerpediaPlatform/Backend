@@ -6,16 +6,16 @@ import nodeUtil from 'util';
 const TAG = 'data_stores_mysql_lib_user-recruiterprofile';
 
 //get all profile details
-export async function checkProfilExist(userID) {
+export async function getRecruiterProfile(uid: any) {
   try {
-    logger.info(`${TAG}.checkProfileExist() ==>`, userID);
+    logger.info(`${TAG}.checkProfileExist() ==>`, uid);
 
-    const basicQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE USER_ID= :userID';
-    const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE USER_ID=:userID';
-    const contactQuery = 'SELECT * FROM `RECRUITER_CONTACT_DETAILS` WHERE USER_ID=:userID';
-    const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {userID});
-    const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {userID});
-    const [company] = await executeQuery(companyQuery, QueryTypes.SELECT, {userID});
+    const basicQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE UID= :uid';
+    const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE UID= :uid';
+    const contactQuery = 'SELECT * FROM `RECRUITER_CONTACT_DETAILS` WHERE UID= :uid';
+    const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid:uid});
+    const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
+    const [company] = await executeQuery(companyQuery, QueryTypes.SELECT, {uid:uid});
     return {basic,contact,company}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -24,12 +24,12 @@ export async function checkProfilExist(userID) {
 }
 
 // check uesrId in recruiter basic details
-export async function checkExist(userID) {
+export async function checkExist(uid: any) {
 
   try {
-    logger.info(`${TAG}.checkExist() ==>`, userID);
-    const checkQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE USER_ID=:userID';
-    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {userID});
+    logger.info(`${TAG}.checkExist() ==>`, uid);
+    const checkQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE UID=:uid';
+    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {uid});
     return basic// Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -37,11 +37,11 @@ export async function checkExist(userID) {
   }
 }
 //check userId in recruiter 
-export async function isValid(userID) {
+export async function isValid(uid) {
   try {
-    logger.info(`${TAG}.checkProfilExist() ==>`, userID);
-    const Query = 'SELECT * FROM `RECRUITER` WHERE USER_ID=:userID';
-    const [contact] = await executeQuery(Query, QueryTypes.SELECT, {userID});
+    logger.info(`${TAG}.checkProfilExist() ==>`, uid);
+    const Query = 'SELECT * FROM `RECRUITER` WHERE UID=:uid';
+    const [contact] = await executeQuery(Query, QueryTypes.SELECT, {uid});
     return contact// Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -49,37 +49,35 @@ export async function isValid(userID) {
   }
 }
 // post recruiter all profile data
-export async function recruiterProfilePost(user) {
+export async function recruiterProfilePost(user: any) {
   console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrruuuuuuuuuuuuuuuuuuuuuuuuuuurrrrrrrrrrrr")
   console.log(user)
-  const uid=crypto.randomUUID()
+  const uid=user.uid
   logger.info(`${TAG}.recruiterProfilePost()`);
   try {
 
     const basicInsertQuery = 
     `INSERT INTO RECRUITER_BASIC_DETAILS
-    (USER_ID, UID, LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER, WEBSITE, LINKEDINPROFILE )
-      values(:userID, :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
+    ( UID, LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER, WEBSITE, LINKEDINPROFILE )
+      values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
 
       const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
-      (USER_ID, UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
-        values(:userID, :uid, :address, :city, :district, 
+      ( UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
+        values( :uid, :address, :city, :district, 
           :state, :pincode, :country)`;
 
     const companyInsertQuery = 
     `INSERT INTO RECRUITER_COMPANY_DETAILS
-    (USER_ID, UID, ESTABLISHEDYEAR, NUMBEROFEMPLOYEES, DEPARTMENTS, STARTYEAR, ANNUALREVENUE)
-      values(:userID, :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
+    ( UID, ESTABLISHEDYEAR, NUMBEROFEMPLOYEES, DEPARTMENTS, STARTYEAR, ANNUALREVENUE)
+      values( :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
 
    
      let [basic]=await executeQuery(basicInsertQuery, QueryTypes.INSERT, {
-            ...user.Profile,userID:user.userID,uid});
+            ...user.Profile,uid});
      let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
-                ...user.Contact,userID:user.userID,uid});
-
-             
+                ...user.Contact,uid});         
     let [company]=await executeQuery(companyInsertQuery, QueryTypes.INSERT, {
-      ...user.Company,userID:user.userID,uid});
+      ...user.Company,uid});
 
 
     return {basic,contact,company};
@@ -90,15 +88,14 @@ export async function recruiterProfilePost(user) {
   }
 }
 //update basic details
-export async function recruiterBasicDetailsUpdate(user) {
+export async function recruiterBasicDetailsUpdate(user: any) {
   
   logger.info(`${TAG}.recruiterBasicDetailsUpdate()`);
-  console.log("888888888888888888888888888888888888888888888")
-  console.log(user)
+
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANYNAME = :companyName, FOUNDERNAME = :founderName, 
-    EMAIL = :email, PHONENUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDINPROFILE = :linkedInUrl WHERE USER_ID = :userID`;
+    EMAIL = :email, PHONENUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDINPROFILE = :linkedInUrl WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
@@ -111,13 +108,13 @@ export async function recruiterBasicDetailsUpdate(user) {
   }
 }
 // update contact details
-export async function recruiterContactUpdate(user) {
+export async function recruiterContactUpdate(user: any) {
   logger.info(`${TAG}.recruiterContactUpdate()`);
   try {
     const updateQuery =`UPDATE RECRUITER_CONTACT_DETAILS SET
     ADDRESS = :address, CITY = :city, 
     DISRICT = :district, STATE = :state, 
-    PINCODE = :pincode, COUNTRY = :country WHERE USER_ID = :userID`;
+    PINCODE = :pincode, COUNTRY = :country WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
@@ -130,12 +127,12 @@ export async function recruiterContactUpdate(user) {
   }
 }
 //update company details
-export async function recruitercompanyDetailUpdate(user) {
+export async function recruitercompanyDetailUpdate(user: any) {
   logger.info(`${TAG}.recruitercompanyDetailUpdate()`);
   try {
     const updateQuery = `UPDATE RECRUITER_COMPANY_DETAILS SET
     ESTABLISHEDYEAR = :establishedyear, NUMBEROFEMPLOYEES = :numberofemployees, DEPARTMENTS = :departments, 
-    STARTYEAR = :startyear, ANNUALREVENUE = :annualrevenue WHERE USER_ID = :userID`;
+    STARTYEAR = :startyear, ANNUALREVENUE = :annualrevenue WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
