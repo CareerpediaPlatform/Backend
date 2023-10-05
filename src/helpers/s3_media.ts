@@ -28,14 +28,19 @@ const TAG = 'helpers.s3_media'
 //   }
   export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
     log.info(`${TAG}.saveFile()`);
+    console.log(file)
     try {
-      if (file == null || !Array.isArray(file)) {
-        throw new Error('File is empty or not an array');
-      }
+      // if (file == null || !Array.isArray(file)) {
+      //   throw new Error('File is empty or not an array');
+      // }
   
       const savedFilesData = [];
-  
-      for (const individualFile of file) {
+      const fileList = Array.isArray(file) ? file : [file];
+      for (const individualFile of fileList) {
+        if (individualFile == null) {
+          console.error('File is empty or null');
+          continue;  
+        }
         const originalname = individualFile.originalname;
         const uniqueIdentifier = uuidv4(); // Generate a unique identifier for each file
         const filePath = path.join(folderName, uniqueIdentifier + '-' + originalname);
@@ -52,9 +57,7 @@ const TAG = 'helpers.s3_media'
   
         savedFilesData.push(savedFileData);
       }
-      console.log("11111111111111111111111111111111111111111111111")
-      console.log(savedFilesData)
-
+   
   
       return savedFilesData;
     } catch (e) {
@@ -81,13 +84,11 @@ const TAG = 'helpers.s3_media'
       data.savedFileKey = filePath
       data.savedFileName = fileName
       data.savedLocation = getFileUrl(filePath, bucketName)
-   
-      console.log(data)
       return data
      
-    } catch (e) {
-      log.error(`ERROR occurred in ${TAG}.saveFileBuffer()`, e)
-      throw e
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.saveFileBuffer()`, error)
+      throw error
     }
   }
   

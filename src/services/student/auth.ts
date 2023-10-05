@@ -33,8 +33,9 @@ export async function signupUser(user: IUser) {
           }
            let sortedList=listArray.sort(compareByAge);
            const lastElementId:MyObject = sortedList[sortedList.length - 1] // last element of sorted array
-
-      const student = await StudentAuth.signUp({...user,id:lastElementId.id+1});
+           console.log("kkkkkkkkkkkkkkkkkk")
+           console.log(lastElementId)
+      const student = await StudentAuth.signUp({...user,id:lastElementId?lastElementId.id+1:1});
       const findUser = await StudentAuth.checkEmailOrPhoneExist({email})    
       const accessToken = await generateAccessToken({uid:findUser.uid,number:true,id:findUser.id,type:"signup"}); 
       const data = {

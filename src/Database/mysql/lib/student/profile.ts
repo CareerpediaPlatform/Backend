@@ -224,11 +224,14 @@ export async function updateWorkExperience(user) {
     }
   }
 
-  export async function uploadResume(uid) {
+  export async function uploadResume(source: any,uid: any) {
+    console.log("********SDFASDFA************")
+    console.log(source,uid)
+    
     try {
-      logger.info(`${TAG}.uploadResume() ==>`, uid);
-      const query = `INSERT INTO student_resume (user_uid,source, doc_id) VALUES(:uid,:source, :doc_id)`
-      const resume= await executeQuery(query, QueryTypes.INSERT, {uid});
+      logger.info(`${TAG}.uploadResume() ==>`, source,uid);
+      const query = `INSERT INTO STUDENT_RESUME (USER_UID,SOURCE_URL ) VALUES(:uid,:file)`
+      const resume= await executeQuery(query, QueryTypes.INSERT, {file:source.fileUrl,uid});
       return resume// Return null if no user is found
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.uploadResume()`, error);
@@ -236,11 +239,15 @@ export async function updateWorkExperience(user) {
     }
   }
 
-  export async function updateResume(uid) {
+  export async function updateResume(source,uid) {
+    console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    console.log(uid)
+    console.log(source.fileUrl)
+    
     try {
-      logger.info(`${TAG}.updateResume() ==>`, uid);
-      const query = `UPDATE student_resume SET source=:source, doc_id=:doc_id WHERE user_id=uid`
-      const resume= await executeQuery(query, QueryTypes.UPDATE, {uid});
+      logger.info(`${TAG}.updateResume() ==>`, source,uid);
+      const query = `UPDATE STUDENT_RESUME SET SOURCE_URL= :file  WHERE USER_UID= :uid`
+      const resume= await executeQuery(query, QueryTypes.UPDATE, {file:source.fileUrl,uid});
       return resume// Return null if no user is found
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.updateResume()`, error);
@@ -248,16 +255,28 @@ export async function updateWorkExperience(user) {
     }
   }
 
-  export async function checkResume(uid) {
+  export async function checkResume(uid:any) {
+    
     try {
       logger.info(`${TAG}.checkResume() ==>`, uid);
-      const query = `SELECT * From student_resume WHERE user_uid=uid`
-      const resume= await executeQuery(query, QueryTypes.SELECT, {uid});
+ 
+      const query = `SELECT * From STUDENT_RESUME WHERE USER_UID= :uid`
+      const resume= await executeQuery(query, QueryTypes.SELECT, {uid:uid});
       return resume
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkResume()`, error);
       throw error;
     }
   }
-
+export async function getStudentResume(uid:any){
+  try{
+    logger.info(`${TAG}.getStudentResume() ==>`,uid);
+    const query = `SELECT * FROM STUDENT_RESUME WHERE USER_UID= :uid`
+    const resume= await executeQuery(query, QueryTypes.SELECT,{uid:uid});
+    return resume
+  } catch(error){
+    logger.error(`ERROR occurred in ${TAG}.getStudentResume()`,error);
+    throw error;
+  }
+}
   

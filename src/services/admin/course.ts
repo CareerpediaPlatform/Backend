@@ -6,7 +6,7 @@ import { coursedata } from "../../Database/mysql"
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
 
-import { getFileUrl, getVideoDuration, saveFile } from "src/helpers/s3_media";
+import {  saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 const TAG = 'course.service'
 

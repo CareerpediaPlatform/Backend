@@ -1,26 +1,27 @@
 import logger from "src/logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-var crypto=require("crypto");
 
 const TAG = 'data_stores_mysql_lib_student_assignment';
 
 
 
-export async function uploadAssignment(fileDetails:any): Promise<any> {
+export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Promise<any> {
     logger.info(`${TAG}.uploadAssignment()`)
     try {
-  
+  console.log("****************************")
+  console.log(partId)
     const data = {
-        uid: crypto.randomUUID(),
+          uid: uid,
         assignment: fileDetails.fileUrl,
-        filePath:fileDetails.filePath,
+        filePath: fileDetails.filePath,
+        partId: partId.partId 
       };
       console.log(data)
-      const InsertQuery = `INSERT INTO ASSIGNMENT (UID,  ASSIGNMENT)
-      VALUES(:uid, :assignment)`
+      const InsertQuery = `INSERT INTO ASSIGNMENT (UID,  ASSIGNMENT, PART_ID)
+      VALUES(:uid, :assignment, :partId)`
   
-      const [assignmentdata] = await executeQuery(InsertQuery, QueryTypes.INSERT, {
+      const assignmentdata = await executeQuery(InsertQuery, QueryTypes.INSERT, {
         ...data
       })
       return assignmentdata
@@ -29,12 +30,12 @@ export async function uploadAssignment(fileDetails:any): Promise<any> {
       throw error
     }
   }
-  export async function getAllAssignments(user){
+  export async function getAllAssignments(partId: any,uid: any){
     try {
-      logger.info(`${TAG}.getAllAssignments() ==>`,user);
-      const checkQuery = 'SELECT * FROM ASSIGNMENT';
+      logger.info(`${TAG}.getAllAssignments() ==>`,uid);
+      const checkQuery = 'SELECT * FROM ASSIGNMENT WHERE UID= :uid and PART_ID= :partId';
       const getAllAssignments= await executeQuery(checkQuery, QueryTypes.SELECT,{
-        user
+        uid,partId:partId.partId
       });
     
       return getAllAssignments
@@ -45,12 +46,12 @@ export async function uploadAssignment(fileDetails:any): Promise<any> {
     }
   }
 
-  export async function uploadNote(student: any): Promise<any> {
+  export async function uploadNote(student: any,uid:any): Promise<any> {
     logger.info(`${TAG}.uploadNote()`)
     try {
   
     const data = {
-        uid: crypto.randomUUID(),
+        uid: uid,
         note:student.note
       };
       console.log(data)
@@ -66,13 +67,13 @@ export async function uploadAssignment(fileDetails:any): Promise<any> {
       throw error
     }
   }
-  export async function getAllNotes(user){
+  export async function getAllNotes(uid: any){
     try {
-      logger.info(`${TAG}.getAllNotes() ==>`,user);
+      logger.info(`${TAG}.getAllNotes() ==>`,uid);
    
-      const checkQuery = 'SELECT * FROM NOTE';
+      const checkQuery = 'SELECT * FROM NOTE WHERE UID= :uid';
       const getAllNotes= await executeQuery(checkQuery, QueryTypes.SELECT,{
-        user
+        uid
       });
     
       return getAllNotes
@@ -83,20 +84,19 @@ export async function uploadAssignment(fileDetails:any): Promise<any> {
     }
   }
 
-  export async function uploadThread(thread: any,): Promise<any> {
+  export async function uploadThread(thread: any,uid:any, partId: any): Promise<any> {
     logger.info(`${TAG}.uploadThread()`)
     try {
   
     const data = {
-        uid: crypto.randomUUID(),
+        uid: uid,
         title: thread.title,
-        description: thread.description
+        description: thread.description,
+        partId: partId.partId
       };
       console.log(data)
-      const InsertQuery = `INSERT INTO THREAD (UID,  TITLE, DESCRIPTION)
-      VALUES(:uid, :title, :description)`
-
-  
+      const InsertQuery = `INSERT INTO STUDENT_THREAD (UID,  TITLE, DESCRIPTION, PART_ID)
+      VALUES(:uid, :title, :description, :partId)`
       const [threaddata] = await executeQuery(InsertQuery, QueryTypes.INSERT, {
         ...data
       })
@@ -106,63 +106,22 @@ export async function uploadAssignment(fileDetails:any): Promise<any> {
       throw error
     }
   }
- //************************* Get All Threads based student uid************ */
-  export async function getAllThreads(threadId,uid){
+ //************************* Get Single ThreadId student uid************ */
+  export async function getSingleThread(partId: any,threadId: any,uid: any){
 
     try {
-      logger.info(`${TAG}.getAllThreads() ==>`,threadId,uid);
-    
-    
-      const query = `SELECT 
-      CONCAT(sp.firstName, ' ', sp.lastName) AS NAME, 
-      th.title, 
-      th.description, 
-      th.posted_at, 
-      'replies', 
-      (
-          SELECT JSON_ARRAYAGG(
-              JSON_OBJECT('reply', tr.reply)
-          ) 
-          FROM STUDENT_PERSONAL_DETAILS sp 
-          INNER JOIN THREAD th ON sp.user_uid = th.Uid 
-          LEFT JOIN thread_reply tr ON th.THREAD_ID = tr.THREAD_ID AND sp.user_uid = tr.Uid 
-          WHERE sp.user_uid = :uid
-      ) AS replies
-  FROM 
-      STUDENT_PERSONAL_DETAILS sp 
-  INNER JOIN 
-      THREAD th ON sp.user_uid = th.Uid 
-  WHERE 
-      sp.user_uid = :uid;
-  `
-      const Thread = await executeQuery(query,QueryTypes.SELECT,{ THREAD_ID:threadId.threadID,uid:uid.uid})
+      logger.info(`${TAG}.getSingleThread() ==>`,partId,threadId,uid);
+      const query = `SELECT st.TITLE,st.DESCRIPTION,(
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT( 'reply', tr.REPLY  )
+        ) FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID)AS replay FROM student_thread st WHERE ST.UID= :uid AND ST.THREAD_ID= :THREAD_ID AND PART_ID= :partId`
+      const Thread = await executeQuery(query,QueryTypes.SELECT,{ partId:partId.partId,THREAD_ID:threadId.threadID,uid})
       return Thread
     
     } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.getAllThreads()`, error);
+      logger.error(`ERROR occurred in ${TAG}.getSingleThread()`, error);
       throw error;
     }
   }
 
-  export async function postThreadreply(reply:any,threadId:any,uid: any) {
-    logger.info(`${TAG}.posthtreadreply()`);
-
-    try {
-        const response=[]
-      const insertQuery =`INSERT INTO thread_reply (THREAD_ID,Uid,REPLY, REPLYTO) 
-      VALUES (:threadId, :uid, :reply, :replyto)`
   
-      for (const data of reply) {
-   
-            const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
-                ...data,uid:uid.uid,threadId:threadId.threadID
-              });
-              response.push(res)    
-      } 
-      return {...response};
-  
-    } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.posthtreadreply()`, error);
-      throw error;
-    }
-  }

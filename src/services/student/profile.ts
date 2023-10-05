@@ -1,6 +1,9 @@
 import { StudentAuth, StudentProfile} from "src/Database/mysql";
+import { AWS_S3 } from "src/Loaders/config";
+import { DIRECTORIES } from "src/constants/file_constants";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import { verifyAccessToken } from "src/helpers/authentication";
+import { saveFile } from "src/helpers/s3_media";
 import log from "src/logger";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 
@@ -190,26 +193,72 @@ export async function studentProfileExperienceDelete(info) {
     return serviceResponse;
   }
 
-export async function uploadResume(info) {
-    log.info(`${TAG}.uploadResume() ==> `, info);  
+export async function uploadResume(file: any,headerValue: any) {
+    log.info(`${TAG}.uploadResume() ==> `, file,headerValue);  
+  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      let response;
-      let decoded=await verifyAccessToken(info.headerValue)
-      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
-      if(isValid){
-        const existed=await StudentProfile.checkResume(decoded.uid)
-        if(existed){
-          response=await StudentProfile.updateResume({})
-        }
-      }else{
-        response=await StudentProfile.uploadResume({})
+      const fileDirectory = DIRECTORIES.LMS_VIDEOS
+      const data = await saveFile(file, fileDirectory, AWS_S3.BUCKET_NAME)
+      const fileDetails = {
+        fileName: data[0]?.savedFileName,
+        s3Bucket: AWS_S3.BUCKET_NAME,
+        filePath: data[0]?.savedFileKey,
+        fileUrl: data[0]?.savedLocation,
+        isPublic: true,
+        metaData: null,
+      
       }
-      const data = {
-        response
+      let response: any;
+      let decoded=await verifyAccessToken(headerValue)
+      const uid=decoded.uid
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      
+      if(isValid){   
+        const existed=await StudentProfile.checkResume(uid)   
+        console.log("existed") 
+        console.log(existed) 
+        if(existed.length>0){
+          response=await StudentProfile.updateResume(fileDetails,uid)
+        }
+      else{
+        response=await StudentProfile.uploadResume(fileDetails,uid)
+      }
+      }
+      const datas = {
+        resume: fileDetails.fileUrl,
+        uid
       }    
-      serviceResponse.data = data
-      return serviceResponse
+      serviceResponse.data = datas
+      serviceResponse.message="file uploaded successfully"
+      return response
+    
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.uploadResume`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+  export async function getStudentResume(headerValue: any) {
+    log.info(`${TAG}.getStudentResume() ==> `, headerValue);  
+  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      
+      let response: any;
+      let decoded=await verifyAccessToken(headerValue)
+      const uid=decoded.uid
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      
+      if(isValid){   
+        const existed=await StudentProfile.checkResume(uid)   
+       if(existed){
+         response = await StudentProfile.getStudentResume(uid)
+       }
+      }
+    
+
+      return response
     
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadResume`, error);

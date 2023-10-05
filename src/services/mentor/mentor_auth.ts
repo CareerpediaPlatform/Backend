@@ -14,7 +14,7 @@ const TAG = 'services.auth'
 
 export async function signupUser(user: IMentor) {
     log.info(`${TAG}.signupUser() ==> `, user);
-    let transaction = null 
+
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let transaction = null

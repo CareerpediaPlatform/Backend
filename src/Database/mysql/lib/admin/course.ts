@@ -43,7 +43,7 @@ export async function uploadCourse(fileDetails:any, imageDetails:any,course:any,
   }
 
   export async function checkCourseIdExist(courseUID: any){
-    console.log(courseUID)
+  
     try {
       logger.info(`${TAG}.checkCourseIdExist() ==>`, courseUID);
       const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';

@@ -21,8 +21,6 @@ VALUES (:course_id,:thumbnail,:title, :description, :mentor, :lesson, :exercises
       ...user,coursetype,course_id:course_id});
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     return course;
-
-
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.coursesPost()`, error);
     throw error;
