@@ -117,3 +117,33 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       next(error)
     }
   }
+
+  
+  export async function getAllThreadsCourse(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getAllThreadsCourse()`)
+      log.debug(`${TAG}.getAllThreadsCourse() Object = ${JSON.stringify(req.body)}`)
+      const {courseId} = req.params
+      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsCourse(courseId)
+  
+      responseBuilder(serviceResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsCourse() `, error)
+      next(error)
+    }
+  }
+
+
+  export async function getAllThreadsPart(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getAllThreadsPart()`)
+      log.debug(`${TAG}.getAllThreadsPart() Object = ${JSON.stringify(req.body)}`)
+      const {partId} = req.params
+      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsPart(partId)
+  
+      responseBuilder(serviceResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsPart() `, error)
+      next(error)
+    }
+  }

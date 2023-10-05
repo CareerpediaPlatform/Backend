@@ -89,7 +89,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       log.info(`${TAG}.getrecruiterCompanyLogo()`);
       log.debug(`${TAG}.getrecruiterCompanyLogo() Object = ${JSON.stringify(req.body)}`)
       let userID = req.params.userID
-      const authResponse= await recruiterProfileServices.getRecruiterFile(userID)
+      const authResponse= await recruiterProfileServices.getRecruiterProfile(userID)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getrecruiterCompanyLogo() `, error)

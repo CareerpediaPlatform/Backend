@@ -21,6 +21,8 @@ const router = Router()
  router.route('/part/thread').post(controller.uploadThread);
  router.route('/part/thread/:threadID/:uid').get(controller.getAllThreads);
  router.route('/mentor/reply-thread/:threadID/:uid').post(controller.postThreadreply)
+ router.route('/thread/part/:partId').get(controller.getAllThreadsPart)
+ router.route('/thread/course/:courseId').get(controller.getAllThreadsCourse)
 
 
 export default router
