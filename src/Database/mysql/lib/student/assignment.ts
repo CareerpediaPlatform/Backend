@@ -10,15 +10,12 @@ const TAG = 'data_stores_mysql_lib_student_assignment';
 export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Promise<any> {
     logger.info(`${TAG}.uploadAssignment()`)
     try {
-  console.log("****************************")
-  console.log(partId)
     const data = {
           uid: uid,
         assignment: fileDetails.fileUrl,
         filePath: fileDetails.filePath,
         partId: partId.partId 
       };
-      console.log(data)
       const InsertQuery = `INSERT INTO ASSIGNMENT (UID,  ASSIGNMENT, PART_ID)
       VALUES(:uid, :assignment, :partId)`
   

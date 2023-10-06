@@ -5,7 +5,9 @@ import { s3ConnectionLoader } from '../Loaders/s3_config';
 import * as nodeUtil from 'util';
 import { AWS_S3 } from '../Loaders/config'
 import ffmpeg from 'fluent-ffmpeg';
+
 import { v4 as uuidv4 } from 'uuid';
+
 
 const TAG = 'helpers.s3_media'
 // export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
@@ -30,10 +32,6 @@ const TAG = 'helpers.s3_media'
     log.info(`${TAG}.saveFile()`);
     console.log(file)
     try {
-      // if (file == null || !Array.isArray(file)) {
-      //   throw new Error('File is empty or not an array');
-      // }
-  
       const savedFilesData = [];
       const fileList = Array.isArray(file) ? file : [file];
       for (const individualFile of fileList) {
@@ -43,7 +41,7 @@ const TAG = 'helpers.s3_media'
         }
         const originalname = individualFile.originalname;
         const uniqueIdentifier = uuidv4(); // Generate a unique identifier for each file
-        const filePath = path.join(folderName, uniqueIdentifier + '-' + originalname);
+        const filePath = path.join( uniqueIdentifier + '-' + originalname);
         console.log('Original Name:', filePath);
         const fileName = getSanitizedFileName(originalname);
   
@@ -119,3 +117,5 @@ export async function getVideoDuration(videoPath: any): Promise<number> {
     });
   });
 }
+
+

@@ -5,7 +5,6 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import {  RecruiterAuth, RecruiterProfileDetailsData } from "../../Database/mysql";
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
-
 import { getFileUrl,getSanitizedFileName, saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 import { verifyAccessToken } from "src/helpers/authentication";
@@ -16,8 +15,6 @@ const TAG = 'services.profile'
 
 export async function recruiterProfile(user) {
     log.info(`${TAG}.recruiterProfile() ==> `, user);  
-    console.log("666666666666666666666666666666666666666666666")
-    console.log(user)
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
@@ -47,6 +44,8 @@ export async function recruiterProfile(user) {
       }
       else{
         serviceResponse.message="invalid user uid"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
   
@@ -77,6 +76,8 @@ export async function getRecruiterProfile(headerValue) {
       }
       else{
         serviceResponse.message="invalid user uid"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
     }
@@ -101,6 +102,8 @@ export async function getRecruiterProfile(headerValue) {
       }
       else{
         serviceResponse.message="invalid user id"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
     }
@@ -113,42 +116,33 @@ export async function getRecruiterProfile(headerValue) {
 
 
   //****************companylogo********************/
-  export async function uploadCompanyLogoFile(
-
-    file: any
-   
-  ): Promise<IServiceResponse> {
+  export async function uploadCompanyLogoFile(files: any[] ): Promise<IServiceResponse> {
     log.info(`${TAG}.uploadCompanyLogoFile() `)
    
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false)
     try {
       const fileDirectory = DIRECTORIES.COMPANY_LOGO
-      const data = await saveFile(file, fileDirectory, AWS_S3.BUCKET_NAME)
+      const data = await saveFile(files, fileDirectory, AWS_S3.BUCKET_NAME)
       log.debug(` ${TAG}.uploadCompanyLogoFile 's3 response:'` + nodeUtil.inspect(data))
       log.debug(
         ` ${TAG}.uploadCompanyLogoFile 'fileS3 URL: ' ` + getFileUrl(data.savedFileKey, AWS_S3.BUCKET_NAME)
       )
-  
       const fileDetails = {
         fileName: data[0]?.savedFileName,
-        originalFileName: file?.originalname,
-        contentType: file?.mimetype,
+        originalFileName: files[0]?.originalname,
+        contentType: files[0]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
         filePath: data[0]?.savedFileKey,
         fileUrl: data[0]?.savedLocation,
         isPublic: true,
         metaData: null
       }
-      console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-      console.log(fileDetails)
-  
       const fileSavedResp = await RecruiterProfileDetailsData.saveFile(fileDetails)
-      // log.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + nodeUtil.inspect(fileSavedResp))
-  
-      serviceResponse.message = `successfully uploaded ${file.originalname}`
+      serviceResponse.message = `successfully uploaded ${files[0].originalname}`
       serviceResponse.data = {
         uid: fileSavedResp?.uid,
         fileName: fileDetails.fileName,
+        fileUrl: fileDetails.fileUrl,
         originalFileName: fileDetails.originalFileName,
         contentType: fileDetails.contentType
       }

@@ -73,13 +73,10 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
   export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.uploadCompanyLogoFile()`)
-      
+      log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file));
 
-      log.debug(`${TAG}.uploadCompanyLogoFile() req file:` + nodeUtil.inspect(req.file))
-  
-      const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadCompanyLogoFile(
-       
-        req.file
+      const serviceResponse: IServiceResponse = await recruiterProfileServices.uploadCompanyLogoFile( 
+        req.files
       )
   
       responseBuilder(serviceResponse, res, next, req)
