@@ -24,8 +24,6 @@ export async function signUp(user: IUser) {
       role:"student",
       status:"ACTIVE"
     };
-    console.log("kkkkkkkkkkkkkkkkkk")
-    console.log(user)
     let userInsertQuery = `
       INSERT INTO STUDENT_DETAILS(id, uid, first_name, last_name, email, password,role,status)
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
@@ -128,7 +126,8 @@ FROM
   STUDENT_AUTH;`
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
-
+console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+console.log(res)
    return await {...res};
 }
 

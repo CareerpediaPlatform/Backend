@@ -1,15 +1,19 @@
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import { attachment } from "../../Database/mysql"
+import { StudentAuth, attachment } from "../../Database/mysql"
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
 
 import { saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
+
+import { verifyAccessToken } from "src/helpers/authentication";
+
+import { getMyCourse } from "src/Database/mysql/lib/admin/admin_lms";
 const TAG = 'assignment.service'
 
-export async function uploadAssignment(files:any): Promise<IServiceResponse> {
+export async function uploadAssignment(files:any,headerValue: any, partId: any): Promise<IServiceResponse> {
     log.info(`${TAG}.uploadAssignment()`)
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false)
@@ -28,11 +32,16 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
       
       }
       console.log(fileDetails)
-      
-      const fileSavedResp = await attachment.uploadAssignment(fileDetails)
-     
-      log.debug(` ${TAG}.uploadAssignment 'fileSavedResp response:'` + nodeUtil.inspect(fileSavedResp))
-  
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+        const response = await attachment.uploadAssignment(fileDetails,uid,partId)
+      }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
       // serviceResponse.message = `successfully uploaded ${file.originalname}`
       serviceResponse.data = {
         assignment: fileDetails.fileUrl,
@@ -44,10 +53,16 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
     return serviceResponse
   }
 
-  export async function getAllAssignments(user){
+  export async function getAllAssignments(partId: any,headerValue: any){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
-          const response=await attachment.getAllAssignments(user)
+      let response;
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+           response=await attachment.getAllAssignments(partId,uid)
+      }
           const data={
             response
           }
@@ -61,16 +76,23 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
   
   }
 
-  export async function uploadNotes(note: any): Promise<IServiceResponse> {
+  export async function uploadNotes(note: any,headerValue): Promise<IServiceResponse> {
     log.info(`${TAG}.uploadNotes() `)
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false)
     try {
-      const note_Id = await attachment.uploadNote(note)
-      serviceResponse.data = {  
-        note_Id,
-        note,
+      let response:any;
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+         response = await attachment.uploadNote(note,uid)
       }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
+      serviceResponse.data = { response, note}
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadNotes`, error)
       serviceResponse.addServerError('Failed to upload file due to technical difficulties')
@@ -78,10 +100,21 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
     return serviceResponse
   }
 
-  export async function getAllNotes(user){
+  export async function getAllNotes(headerValue){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
-          const response=await attachment.getAllNotes(user)
+      let response:any;
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+         response=await attachment.getAllNotes(uid)
+      }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
+          
           const data={
             response
           }
@@ -95,15 +128,25 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
   
   }
 
-  export async function uploadThread(thread: any): Promise<IServiceResponse> {
+  export async function uploadThread(thread: any,headerValue: any, partId: any): Promise<IServiceResponse> {
     log.info(`${TAG}.uploadThread() `)
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false)
     try {
-      const thread_Id = await attachment.uploadThread(thread)
+      let response:any;
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+        response = await attachment.uploadThread(thread,uid,partId)
+      }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
+      
       serviceResponse.data = {  
-        thread_Id,
-        thread
+        response,thread
       }
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadThread`, error)
@@ -113,10 +156,21 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
   }
 
 
-  export async function getAllThreads(threadId,uid){
+  export async function getSingleThread(partId,threadId,headerValue){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
-          const response=await attachment.getAllThreads(threadId,uid)
+      let response:any;
+      let decoded=await verifyAccessToken(headerValue)
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+      const uid=decoded.uid
+      if(isValid){
+         response=await attachment.getSingleThread(partId,threadId,uid)
+      }
+      else{
+        serviceResponse.message="invalid user id"
+        return serviceResponse
+      }
+        
           const data={
             response
           }
@@ -129,6 +183,7 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
     }
   
   }
+
   export async function postThreadreply(reply:any, threadId:any, uid:any) {
     log.info(`${TAG}.postThreadreply() ==> `,reply,threadId,uid);  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -145,3 +200,43 @@ export async function uploadAssignment(files:any): Promise<IServiceResponse> {
     }
     return serviceResponse;
   }
+
+  export async function getAllThreadsCourse(courseId) {
+    log.info(`${TAG}.getAllThreadsCourse() ==> `,courseId);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      const exist = await getMyCourse(courseId)
+      if(exist.length>0){
+        const response = await attachment.getAllThreadsCourse(courseId)
+        const data = {
+          ...response,
+        }
+        serviceResponse.data = data
+      }else{
+        serviceResponse.message="course does not exist"
+      }
+   
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsCourse`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+  export async function getAllThreadsPart(partId) {
+    log.info(`${TAG}.getAllThreadsPart() ==> `,partId);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+    
+      const response = await attachment.getAllThreadsPart(partId)
+      const data = {
+        ...response,
+      }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getAllThreadsPart`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+

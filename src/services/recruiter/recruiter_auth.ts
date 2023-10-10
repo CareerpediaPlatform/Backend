@@ -76,7 +76,8 @@ export async function signupUser(user: IRecruiter) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const recruiter_login = await RecruiterAuth.login(user)
-            const accessToken = await generateAccessToken({ ...recruiter_login});
+
+            const accessToken = await generateAccessToken({ ...recruiter_login,uid:existedUser.uid});
             const recruiter_uid = existedUser.uid;
             
             const data = {

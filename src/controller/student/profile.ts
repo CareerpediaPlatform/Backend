@@ -102,5 +102,34 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
       next(error)
     }
   }
-  
+  export async function uploadResume(req: any, res: Response, next: NextFunction):Promise<void>{
+    try {
+      log.info(`${TAG}.uploadResume()`);
+      log.debug(`${TAG}.uploadResume() Object = ${JSON.stringify(req.body)}`)
+      const file = req.files
+
+      console.log(file)
+      const headerValue = req.headers.authorization.split(' ')[1];
+const Response: IServiceResponse = await profileService.uploadResume(file,headerValue)
+      responseBuilder(Response, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.uploadResum() `, error)
+      next(error)
+    }
+  }
+
+  export async function getStudentResume(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getStudentResume()`);
+      log.debug(`${TAG}.getStudentResume() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+
+      const authResponse: IServiceResponse = await profileService.getStudentResume(headerValue)
+
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getStudentResume() `, error)
+      next(error)
+    }
+  }
  

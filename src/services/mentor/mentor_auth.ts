@@ -14,7 +14,6 @@ const TAG = 'services.auth'
 
 export async function signupUser(user: IMentor) {
     log.info(`${TAG}.signupUser() ==> `, user);
-  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let transaction = null
@@ -29,10 +28,12 @@ export async function signupUser(user: IMentor) {
       const mentor = await MentorAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...mentor });
-      const data = {
+
+const accessToken = await generateAccessToken({ ...mentor });
+        const data = {
         accessToken       
-      }    
+      } 
+      
       serviceResponse.data = data
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.signupUser`, error);
