@@ -251,10 +251,4 @@ export async function getRecruiterProfile(userID) {
     return serviceResponse
   }
  
-    } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
-      serviceResponse.addServerError('Failed to create user due to technical difficulties');
-    }
-    return serviceResponse;
-  }
-
+ 

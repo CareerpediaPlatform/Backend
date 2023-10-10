@@ -12,6 +12,7 @@ import {isAuthenticated} from '../../../middlewares/authentication'
 
 passportConfiguration(passport)
 
+
 const router = Router()
  router.use(passport.initialize())
 

@@ -53,4 +53,19 @@ const router = Router()
  router.route('/exercise/:module_id/:exercise_id')
  .delete(isAuthenticated,controller.deleteModulesExercise);
 
+ router.route('/part/:part_id')
+ .patch(isAuthenticated,controller.updateCoursePartPost);
+
+ router.route('/module/:module_id')
+ .patch(isAuthenticated,controller.updateCourseModulePost);
+
+ router.route('/lesson/:lesson_id')
+ .patch(isAuthenticated,controller.updateModuleLesson);
+
+ router.route('/test/:test_id')
+ .patch(isAuthenticated,controller.updateModuleTest);
+
+ router.route('/exercise/:exercise_id')
+ .patch(isAuthenticated,controller.updateModuleExercise);
+
 export default router

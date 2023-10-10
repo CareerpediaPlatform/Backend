@@ -16,10 +16,10 @@ const router = Router()
      .post(controller.loginMentor);
 
  router.route('/signup')
- .post(isAuthenticated,controller.signupMentor);
+ .post(controller.signupMentor);
 
   router.route('/change-password')
- .post(isAuthenticated,controller.changePasswordController);
+ .post(controller.changePasswordController);
 
  
 export default router

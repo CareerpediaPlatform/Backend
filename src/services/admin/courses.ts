@@ -333,3 +333,132 @@ export async function deleteModulesExercise(module_id,exercise_id) {
     }
     return serviceResponse;
   }
+
+export async function updateCoursePartPost(user,part_id) {
+
+    log.info(`${TAG}.updateCoursePartPost() ==> `,user);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(part_id)
+      const getPartUid = await Courses.getPart(part_id);
+      console.log(getPartUid);
+      if (!getPartUid) {
+        serviceResponse.message = "Invalid course part UID";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+      const response = await Courses.updateCoursePartPost(user,part_id)
+      const data = {
+        ...response
+            }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.updateCoursePartPost`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+export async function updateCourseModulePost(user,module_id) {
+
+    log.info(`${TAG}.updateCourseModulePost() ==> `,user);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(module_id)
+      const getModuleUid = await Courses.getModule(module_id);
+      console.log(getModuleUid);
+      if (!getModuleUid) {
+        serviceResponse.message = "Invalid course module UID";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+      const response = await Courses.updateModulesPost(user,module_id)
+      const data = {
+        ...response
+            }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.updateCourseModulePost`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+export async function updateLessonPost(user,lesson_id) {
+    log.info(`${TAG}.updateLessonPost() ==> `,user);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(lesson_id)
+      const getLessonUid = await Courses.getLessonPost(lesson_id);
+      console.log(getLessonUid);
+      if (!getLessonUid) {
+        serviceResponse.message = "Invalid  module lesson UID";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+      const response = await Courses.updateModulesPost(user,lesson_id)
+      const data = {
+        ...response
+            }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.updateLessonPost`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+export async function updateTestPost(user,test_id) {
+
+    log.info(`${TAG}.updateTestPost() ==> `,user);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(test_id)
+      const getTestUid = await Courses.getTestPost(test_id);
+      console.log(getTestUid);
+      if (!getTestUid) {
+        serviceResponse.message = "Invalid  module test UID";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+      const response = await Courses.updateTestPost(user,test_id)
+      const data = {
+        ...response
+            }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.updateTestPost`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+export async function updateExercisePost(user,test_id) {
+
+    log.info(`${TAG}.updateLessonPost() ==> `,user);  
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(test_id)
+      const getTestUid = await Courses.getTestPost(test_id);
+      console.log(getTestUid);
+      if (!getTestUid) {
+        serviceResponse.message = "Invalid  module test UID";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+      const response = await Courses.updateTestPost(user,test_id)
+      const data = {
+        ...response
+            }
+      serviceResponse.data = data
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.updateLessonPost`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }

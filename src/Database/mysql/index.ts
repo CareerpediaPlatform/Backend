@@ -35,10 +35,8 @@ export{
     mentorPersonalAndContactData,
     mentorEducationData,
     mentorWorkExperienceData,
-    AdminProfile,
     StudentProfile,
     coursedata,
-    attachment
-    StudentProfile,
+    attachment,
     Courses
 }

@@ -34,6 +34,8 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
+  
   export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.deleterecruiterProfile()`);
@@ -63,6 +65,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
   export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.uploadCompanyLogoFile()`)
@@ -89,13 +92,14 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       log.info(`${TAG}.getrecruiterCompanyLogo()`);
       log.debug(`${TAG}.getrecruiterCompanyLogo() Object = ${JSON.stringify(req.body)}`)
       let userID = req.params.userID
-      const authResponse= await recruiterProfileServices.getRecruiterFile(userID)
+      const authResponse= await recruiterProfileServices.getRecruiterProfile(userID)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getrecruiterCompanyLogo() `, error)
       next(error)
     }
   }
+
 export async function updateCompanylogo(req: any, res: Response, next: NextFunction): Promise<void>{
   try{
     log.info(`${TAG}.updateCompanylogo()`)
@@ -112,6 +116,8 @@ export async function updateCompanylogo(req: any, res: Response, next: NextFunct
     next(error)
   }
 }
+
+
 /***************************uploadvideo*******************/
 export async function uploadVideoFile(req: any, res: Response, next: NextFunction): Promise<void> {
   try {

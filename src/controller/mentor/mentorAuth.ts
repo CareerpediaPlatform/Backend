@@ -13,6 +13,7 @@ export async function signupMentor (req: any, res: Response, next: NextFunction)
       log.info(`${TAG}.signupMentor()`);
       log.debug(`${TAG}.signupMentor() Object = ${JSON.stringify(req.body)}`)
       const user: IMentor = mentorDataMapping(req.body);
+      console.log(user)
       const authResponse: IServiceResponse = await authService.signupUser(user)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {

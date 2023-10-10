@@ -80,7 +80,7 @@ GROUP BY
     }
   }
 
-  export async function  getCourses(courseType) {
+export async function  getCourses(courseType) {
     // let id=courseId
       try {
         logger.info(`${TAG}.getCourses()  ==>`);
@@ -94,7 +94,7 @@ GROUP BY
       }
     }
 
-  export async function  getPartDetail() {
+export async function  getPartDetail() {
     // let id=courseId
       try {
         logger.info(`${TAG}.getPartDetail()  ==>`);
@@ -148,7 +148,7 @@ GROUP BY
       }
     }
 
-  export async function  getMyCourses(list) {
+export async function  getMyCourses(list) {
     // let id=courseId
       try {
         logger.info(`${TAG}.getMyCourses()  ==>`);
@@ -162,7 +162,7 @@ GROUP BY
       }
     }
 
-  export async function  getAllCourses() {
+export async function  getAllCourses() {
       try {
         logger.info(`${TAG}.getAllCourses()  ==>`);
         const userIDs = [2];

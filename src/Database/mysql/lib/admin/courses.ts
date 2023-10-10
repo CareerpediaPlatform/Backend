@@ -10,19 +10,13 @@ export async function coursesPost(user,coursetype) {
   const course_id=crypto.randomUUID()
   logger.info(`${TAG}.coursesPost()`);
   try {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     console.log(user)
     console.log(coursetype)
     console.log(course_id)
-    const courseInsertQuery = `INSERT INTO courses(course_id, thumbnail, title, description, mentor, lesson, exercises, test, price, discountPrice,video,type) 
-VALUES (:course_id,:thumbnail,:title, :description, :mentor, :lesson, :exercises, :test, :price, :discountPrice,:video,:type)`;
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    const courseInsertQuery = `INSERT INTO courses(course_id, thumbnail, title, description, mentor, lesson, exercises, test, price, discountPrice,video,type) VALUES (:course_id,:thumbnail,:title, :description, :mentor, :lesson, :exercises, :test, :price, :discountPrice,:video,:type)`;
     let [course]=await executeQuery(courseInsertQuery, QueryTypes.INSERT, {
       ...user,coursetype,course_id:course_id});
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     return course;
-
-
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.coursesPost()`, error);
     throw error;
@@ -43,14 +37,15 @@ export async function checkCoureUid(course_id) {
     throw error;
   }
 }
+
 export async function coursePartPost(user) {
   const part_id=crypto.randomUUID()
   logger.info(`${TAG}.coursePartPost()`);
   try {
     const coursePartInsertQuery = `
     INSERT INTO courses_parts 
-    (course_id,part_id,partTitle, description) 
-    VALUES (:course_id, :part_id, :partTitle, :description)`;
+    (course_id,part_id,partTitle, description,lessons,duration,exercises,tests) 
+    VALUES (:course_id, :part_id, :partTitle, :description,lessons,duration,exercises,tests)`;
 
     let [coursePart]=await executeQuery(coursePartInsertQuery, QueryTypes.INSERT, {
         ...user,part_id:part_id});
@@ -67,10 +62,10 @@ export async function getPart(part_id) {
     logger.info(`${TAG}.getPart()  ==>`, part_id);
 
     let query ="select * from courses_parts where part_id = :part_id";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [coursePartDetails] = await executeQuery(query, QueryTypes.SELECT, {
       part_id
     });
-    return personalDetails;
+    return coursePartDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.getPart()`,
@@ -322,6 +317,90 @@ export async function deleteExercisePost(exercise_id) {
       `ERROR occurred in ${TAG}.deleteExercisePost()`,
       error
     );
+    throw error;
+  }
+}
+
+//UPDATE QUERY
+
+export async function updateCoursePartPost(user,part_id) {
+  logger.info(`${TAG}.updateCoursePartPost()`);
+  try {
+    
+    let updateCoursePartPostQuery = `UPDATE courses_parts SET
+    partTitle= :partTitle, description = :description, lessons = :lessons, duration = :duration, exercises =:exercises, tests = :tests WHERE part_id = :part_id`;
+  const updateCoursePartPosts= await executeQuery(
+      updateCoursePartPostQuery,
+      QueryTypes.UPDATE,{...user,part_id:part_id});
+    
+    return updateCoursePartPosts;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateCoursePartPost()`, error);
+    throw error;
+  }
+
+}
+
+export async function updateModulesPost(user,module_id) {
+  logger.info(`${TAG}.updateModulesPost()`);
+  try {
+    let updateModulesPostQuery = `UPDATE modules SET
+    module_name= :module_name, description = :description, lesson = :lesson, test = :test, exercises =:exercises, hours = :hours WHERE module_id = :module_id`;
+  const updateModulesPort= await executeQuery(
+    updateModulesPostQuery,
+      QueryTypes.UPDATE,{...user,module_id}
+    );
+    return updateModulesPort;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateModulesPost()`, error);
+    throw error;
+  }
+}
+
+export async function updateLessonPost(user,lesson_id) {
+  logger.info(`${TAG}.updateLessonPost()`);
+  try {
+    let updateLessonPostQuery = `UPDATE lesson SET
+    LESSON_NAME= :lesson_name, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_ID = :lesson_id`;
+  const updateLessonPost= await executeQuery(
+    updateLessonPostQuery,
+      QueryTypes.UPDATE,{...user,lesson_id}
+    );
+    return updateLessonPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);
+    throw error;
+  }
+}
+
+export async function updateTestPost(user,test_id) {
+  logger.info(`${TAG}.updateTestPost()`);
+  try {
+    let updateTestPostQuery = `UPDATE test SET
+    TEST_TYPE= :test_type, MARKS = :marks, POINTS = :points, TEST_NAME = :test_name WHERE TEST_ID = :test_id`;
+  const updateTestPost= await executeQuery(
+    updateTestPostQuery,
+      QueryTypes.UPDATE,{...user,test_id}
+    );
+    return updateTestPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateTestPost()`, error);
+    throw error;
+  }
+}
+
+export async function updateExercisesPost(user,exercise_id) {
+  logger.info(`${TAG}.updateExercisesPost()`);
+  try {
+    let updateExercisesPostQuery = `UPDATE exercise SET
+    QUESTION_NAME= :question_name, MARKS = :marks, QUESTION_TYPE = :question_type, points = :points WHERE EXERCISE_ID = :exercise_id`;
+  const updateExercisesPost= await executeQuery(
+    updateExercisesPostQuery,
+      QueryTypes.UPDATE,{...user,exercise_id}
+    );
+    return updateExercisesPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateExercisesPost()`, error);
     throw error;
   }
 }

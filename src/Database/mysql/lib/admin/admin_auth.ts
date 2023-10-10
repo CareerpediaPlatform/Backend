@@ -17,7 +17,7 @@ export async function signUp(user: IAdmin) {
       email: user.email,
       password: hashedPassword
     };
-    let AadminInsertQuery = `insert into ADMIN(UID, EMAIL, PASSWORD)
+    let AadminInsertQuery = `insert into admin(UID, EMAIL, PASSWORD)
     values(:uid, :email, :password)`;
 
     await executeQuery(AadminInsertQuery, QueryTypes.INSERT, {
@@ -36,7 +36,7 @@ export async function checkEmailExist(email: string) {
     try {
       logger.info(`${TAG}.checkEmailExist()  ==>`, email);
   
-      let query = 'select * from ADMIN where EMAIL=:email ';
+      let query = 'select * from admin where EMAIL=:email ';
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         email
       });
@@ -52,7 +52,7 @@ export async function checkEmailExist(email: string) {
       logger.info(`${TAG}.saveUser()`, user.email);
   
       // Check if the user with the given email exists
-      let query = "select * from ADMIN where EMAIL=:email ";
+      let query = "select * from admin where EMAIL=:email ";
       const adminloginQuery = await executeQuery(query, QueryTypes.SELECT, {
         email: user.email,
       });
@@ -62,4 +62,7 @@ export async function checkEmailExist(email: string) {
       throw error;
     }
   }
+  
+
+
   
