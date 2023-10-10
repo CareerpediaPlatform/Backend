@@ -16,11 +16,11 @@ const router = Router()
      .post(controller.loginRecruiter);
 
  router.route('/signup')
- .post(isAuthenticated,controller.signupRecruiter);
+ .post(controller.signupRecruiter);
 
  
  router.route('/change-password')
- .post(isAuthenticated,controller.changePasswordController);
+ .post(controller.changePasswordController);
     
 
 export default router

@@ -16,13 +16,12 @@ const TAG = 'services.profile'
 
 export async function recruiterProfile(user) {
     log.info(`${TAG}.recruiterProfile() ==> `, user);  
-    console.log("666666666666666666666666666666666666666666666")
     console.log(user)
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
         const uid=decoded[0].uid
-      const isValid=await RecruiterAuth.checkUidExist(uid)
+      const isValid=await RecruiterAuth.getRecruiterUid(uid)
       if(isValid){
         const existedProfile=await RecruiterProfileDetailsData.checkExist(uid)
         if(existedProfile){
@@ -57,7 +56,6 @@ export async function recruiterProfile(user) {
     return serviceResponse;
   }
 
-  
 export async function getRecruiterProfile(headerValue) {
     log.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
       
@@ -65,7 +63,7 @@ export async function getRecruiterProfile(headerValue) {
     try {
       let decoded=await verifyAccessToken(headerValue)
       const uid=decoded[0].uid
-    const isValid=await RecruiterAuth.checkUidExist(uid)
+    const isValid=await RecruiterAuth.getRecruiterUid(uid)
     if(isValid){
       const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
       if(existedProfile){

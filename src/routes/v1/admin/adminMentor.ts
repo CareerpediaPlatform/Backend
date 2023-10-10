@@ -9,7 +9,7 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/status/:status/:uid')
-     .patch(controller.recruiterUpdateStatus);
+     .patch(controller.mentorUpdateStatus);
 
 
 export default router
