@@ -13,5 +13,4 @@ export const QueryParams = {
 export const FormParams = {
   FILE_FIELD: 'file',
   MAX_COUNT: 3
-  // VIDEO_FIELD: 'video'
 }

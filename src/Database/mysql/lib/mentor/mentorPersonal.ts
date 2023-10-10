@@ -14,9 +14,6 @@ export async function savePersonalAndContactDetails(
     try {
         mentorPersonalData["uid"] = crypto.randomUUID();
       mentorPersonalData["mentorUserId"] = userId;
-      
-   // Handle image upload
-  //  const profilePic = await upload.single('avatar');
 
       let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
                                    (USER_ID, UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
@@ -75,7 +72,6 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
       throw error;
     }
   }
-
 
 export async function isValid(userId) {
     console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj")

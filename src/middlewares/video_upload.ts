@@ -59,6 +59,8 @@ const upload = multer({
 //     });
 //   };
 // };
+
+
 export const videoFileReader = function (fieldName: string,maxCount:number): any {
   
   return function (req: any, res, next): any {
@@ -86,3 +88,21 @@ export const videoFileReader = function (fieldName: string,maxCount:number): any
     });
   };
 };
+
+
+// Function to parse form data with nested keys
+export function parseFormData(formData: Record<string, string>): Record<string, any> {
+  const result: Record<string, any> = {};
+
+  for (const key in formData) {
+    const [section, field] = key.split('[');
+    if (!result[section]) {
+      result[section] = {};
+    }
+
+    const fieldName = field.replace(']', '');
+    result[section][fieldName] = formData[key];
+  }
+
+  return result;
+}

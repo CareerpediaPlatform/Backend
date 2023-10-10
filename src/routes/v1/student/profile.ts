@@ -3,6 +3,9 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import { isAuthenticated } from 'src/middlewares/authentication'
+import { videoFileReader } from 'src/middlewares/video_upload'
+import { FormParams } from 'src/constants/api_param_constants'
+import { emptyChecks } from 'src/validations/file'
 
 passportConfiguration(passport)
 const router = Router()
@@ -21,5 +24,7 @@ const router = Router()
  .patch(isAuthenticated,controller.studentProfilePost);
  router.route('/profile/')
  .get(isAuthenticated,controller.getStudentProfile);
+ router.route('/resume').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadResume);
+ router.route('/resume').get(controller.getStudentResume);
 
  export default router
