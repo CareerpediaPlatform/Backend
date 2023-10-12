@@ -38,9 +38,6 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
-
-
-
   export async function deleterecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.deleterecruiterProfile()`);
@@ -70,6 +67,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
   export async function uploadCompanyLogoFile (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.uploadCompanyLogoFile()`)
@@ -100,6 +98,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       next(error)
     }
   }
+
 export async function updateCompanylogo(req: any, res: Response, next: NextFunction): Promise<void>{
   try{
     log.info(`${TAG}.updateCompanylogo()`)
@@ -116,6 +115,8 @@ export async function updateCompanylogo(req: any, res: Response, next: NextFunct
     next(error)
   }
 }
+
+
 /***************************uploadvideo*******************/
 export async function uploadVideoFile(req: any, res: Response, next: NextFunction): Promise<void> {
   try {

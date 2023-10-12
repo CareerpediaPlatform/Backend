@@ -8,34 +8,91 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_mentorAuth'
 
 
-export async function signUp(user: IMentor,transaction?:any) {
-  logger.info(`${TAG}.saveUser()`);
+// export async function signUp(user: IMentor,transaction?:any) {
+//   logger.info(`${TAG}.saveUser()`);
+//   try {
+//     // const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
+//     const hashedPassword = await hashPassword(user.password);
+//     // console.log(generatePassword)
+//     // const hashedPassword = await hashPassword(generatePassword);
+//     console.log(hashedPassword)
+//     const data = {
+//       uid: crypto.randomUUID(),
+//       email: user.email,
+//       password: hashedPassword,
+//       type:user.type,
+//       course:user.course,
+//       status:user.status
+//     };
+//     const query = 'SELECT course_id FROM courses_parts WHERE partTitle = :partTitle';
+//     const mentorQuery = await executeQuery(query, [data.course], (error, results) => {
+//       if (error) {
+//         console.error('Error finding course_id:', error);
+//     }else{
+//       if (results.length > 0) {
+//         data.course = results[0].course;}
+//         let mentorInsertQuery = `insert into MENTOR(course_id,UID, EMAIL, PASSWORD,TYPE,COURSE,STATUS)
+//         values(:course_id,:uid, :email, :password,:type,:course,:status)`;
+//         await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
+//           ...data,transaction
+//         });
+//         return data;
+
+//     }
+//     })
+
+  
+//   } catch (error) {
+//     logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+//     throw error;
+//   }
+// }
+
+
+export async function signUp(user: IMentor, transaction?: any) {
+  const TAG = 'MentorService'; 
+  logger.info(`${TAG}.signUp()`);
   try {
-    console.log("**************************************")
-    console.log(user)
-    // const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
+    // Hash the user's password
     const hashedPassword = await hashPassword(user.password);
-    // console.log(generatePassword)
-    // const hashedPassword = await hashPassword(generatePassword);
-    console.log(hashedPassword)
-   
-    const data = {
+    // Find the course_id based on the provided course name
+    const courseQuery = `SELECT course_id FROM courses_parts WHERE partTitle= :partTitle`;
+    const selectedCourseType = user.course;
+    console.log(selectedCourseType)
+  
+    const courseResult = await executeQuery(courseQuery, { partTitle : selectedCourseType });
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    
+    if (courseResult.length === 0) {
+      throw new Error('Course not found'); // Handle course not found error
+    }
+
+    const course_id = courseResult[0].course_id;
+
+    // Prepare mentor data for insertion
+    const mentorData = {
+      course_id: course_id, // Associate mentor with the course using course_id
       uid: crypto.randomUUID(),
       email: user.email,
       password: hashedPassword,
-      type:user.type,
+      type: user.type,
       course:user.course,
-      status:user.status
+      status: user.status
     };
-    let mentorInsertQuery = `insert into MENTOR(UID, EMAIL, PASSWORD,TYPE,COURSE,STATUS)
-    values(:uid, :email, :password,:type,:course,:status)`;
-    await executeQuery(mentorInsertQuery, QueryTypes.INSERT, {
 
-      ...data,transaction
+    // Insert mentor data into the "MENTOR" table
+    const mentorInsertQuery = `
+    INSERT INTO MENTOR (course_id, UID, EMAIL, PASSWORD, TYPE, COURSE, STATUS)
+    VALUES (:course_id, :uid, :email, :password, :type, :course, :status)
+  `;
+
+    await executeQuery(mentorInsertQuery, mentorData, QueryTypes.INSERT, {
+      transaction
     });
-    return data;
+
+    return mentorData;
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.saveUser()`, error);
+    logger.error(`ERROR occurred in ${TAG}.signUp()`, error);
     throw error;
   }
 }
@@ -61,7 +118,7 @@ export async function checkEmailExist(email: string) {
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
       let query = 'select * from MENTOR where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid
+        uid:uid.uid
       });
       return userId;
     } catch (error) {
@@ -114,3 +171,26 @@ export async function getUserId(uid: string) {
   }
 }
 
+export async function mentorUpdateStatus(user){
+  logger.info(`${TAG}.mentorUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    
+    const updateQuery = `UPDATE MENTOR
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [res]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(res)
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.mentorUpdateStatus()`, error);
+    throw error;
+  }
+}

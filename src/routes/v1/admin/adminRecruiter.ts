@@ -8,9 +8,8 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/status/:status/:userID')
+ router.route('/status/:status/:uid')
      .patch(controller.recruiterUpdateStatus);
-
 
 
 export default router

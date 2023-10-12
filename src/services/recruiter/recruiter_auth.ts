@@ -1,18 +1,20 @@
 import { RecruiterAuth } from "src/Database/mysql";
-import { checkEmailExist ,checkUidExist} from "src/Database/mysql/lib/recruiter/recruiter_auth";
+import { checkEmailExist} from "src/Database/mysql/lib/recruiter/recruiter_auth";
 import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
+
+import {generateAccessToken,verifyAccessToken } from '../../helpers/authentication'
+
+
+
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
 import { sendRegistrationNotification } from "../../utils/nodemail";
 
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
 const TAG = 'services.auth'
-
-
 
 export async function signupUser(user: IRecruiter) {
     log.info(`${TAG}.signupUser() ==> `, user);
@@ -31,13 +33,13 @@ export async function signupUser(user: IRecruiter) {
       const recruiter = await RecruiterAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...recruiter  });
-      
-      const recruiter_uid = recruiter.uid
-      const recruiter_email = recruiter.email
+      const uid = recruiter.uid
+      const email = recruiter.email
+      const accessToken = await generateAccessToken({ uid,email});  
       const data = {
-        accessToken,
-        recruiter_email
+
+        accessToken
+
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -47,9 +49,7 @@ export async function signupUser(user: IRecruiter) {
     return serviceResponse;
   }
 
-
-  
-  export async function loginUser(user: IRecruiter) {
+export async function loginUser(user: IRecruiter) {
     log.info(`${TAG}.loginUser() ==> `, user);
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -79,9 +79,9 @@ export async function signupUser(user: IRecruiter) {
             const email = existedUser.email
             const accessToken = await generateAccessToken({ uid,email})
             const data = {
-                accessToken,
-                email,
-                uid
+
+                accessToken
+
             };
 
             serviceResponse.data = data;
@@ -97,11 +97,13 @@ export async function signupUser(user: IRecruiter) {
 export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try{
-    // finde student is valid or not
+
+    // finde recruiter is valid or not
     const uid=await verifyAccessToken(user.headerValue)
-    const mentor=await RecruiterAuth.getRECRUITERUid({uid:uid.uid})
-    if(mentor){
-      const IsValid=await comparePasswords(mentor.password,user.oldPassword)
+    const recruiter=await RecruiterAuth.getRecruiterUid({uid:uid.uid})
+    if(recruiter){
+      const IsValid=await comparePasswords(recruiter.password,user.oldPassword)
+
       if(IsValid){
     const response=await RecruiterAuth.changePassword({password:user.newPassword,uid:uid.uid})
     console.log("response")
@@ -121,5 +123,3 @@ export async function changePassword(user){
   }
   return await serviceResponse
 }
-
-

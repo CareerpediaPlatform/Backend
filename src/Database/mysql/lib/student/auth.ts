@@ -20,13 +20,19 @@ export async function signUp(user: IUser) {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      phoneNumber:user.phoneNumber,
       password: hashedPassword,
       role:"student",
       status:"ACTIVE"
     };
     let userInsertQuery = `
+
+      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
+      VALUES (:uid, :firstName, :lastName, :email,:phoneNumber, :password, :role, :status)
+
       INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
+
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {

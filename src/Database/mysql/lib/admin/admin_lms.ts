@@ -80,7 +80,7 @@ GROUP BY
     }
   }
 
-  export async function  getCourses(courseType) {
+export async function  getCourses(courseType) {
     // let id=courseId
       try {
         logger.info(`${TAG}.getCourses()  ==>`);
@@ -94,7 +94,7 @@ GROUP BY
       }
     }
 
-  export async function  getPartDetail() {
+export async function  getPartDetail() {
     // let id=courseId
       try {
         logger.info(`${TAG}.getPartDetail()  ==>`);
@@ -175,7 +175,7 @@ GROUP BY
       }
     }
 
-  export async function  getAllCourses() {
+export async function  getAllCourses() {
       try {
         logger.info(`${TAG}.getAllCourses()  ==>`);
         const userIDs = [2];
@@ -400,7 +400,6 @@ export async function modulesPost(user) {
     throw error;
   }
 }
-
 export async function checkPartUid(part_id) {
   try {
     logger.info(`${TAG}.checkPartUid()  ==>`, part_id);
@@ -626,6 +625,39 @@ export async function deleteExercisePost(exercise_id) {
   }
 }
 
+//UPDATE QUERY
+
+export async function updateCoursePartPost(user,part_id) {
+  logger.info(`${TAG}.updateCoursePartPost()`);
+  try {
+    
+    let updateCoursePartPostQuery = `UPDATE courses_parts SET
+    partTitle= :partTitle, description = :description, lessons = :lessons, duration = :duration, exercises =:exercises, tests = :tests WHERE part_id = :part_id`;
+  const updateCoursePartPosts= await executeQuery(
+      updateCoursePartPostQuery,
+      QueryTypes.UPDATE,{...user,part_id:part_id});
+    
+    return updateCoursePartPosts;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateCoursePartPost()`, error);
+    throw error;
+  }
+
+}
+
+export async function updateModulesPost(user,module_id) {
+  logger.info(`${TAG}.updateModulesPost()`);
+  try {
+    let updateModulesPostQuery = `UPDATE modules SET
+    module_name= :module_name, description = :description, lesson = :lesson, test = :test, exercises =:exercises, hours = :hours WHERE module_id = :module_id`;
+  const updateModulesPort= await executeQuery(
+    updateModulesPostQuery,
+      QueryTypes.UPDATE,{...user,module_id}
+    );
+    return updateModulesPort;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateModulesPost()`, error);
+
 export async function checkLearnId(learnId: any){
   try {
     logger.info(`${TAG}.checkLearnId()  ==>`, learnId);
@@ -638,9 +670,41 @@ export async function checkLearnId(learnId: any){
     return learnID;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkLearnId()`, error); 
+
     throw error;
   }
 }
+
+
+export async function updateLessonPost(user,lesson_id) {
+  logger.info(`${TAG}.updateLessonPost()`);
+  try {
+    let updateLessonPostQuery = `UPDATE lesson SET
+    LESSON_NAME= :lesson_name, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_ID = :lesson_id`;
+  const updateLessonPost= await executeQuery(
+    updateLessonPostQuery,
+      QueryTypes.UPDATE,{...user,lesson_id}
+    );
+    return updateLessonPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);
+    throw error;
+  }
+}
+
+export async function updateTestPost(user,test_id) {
+  logger.info(`${TAG}.updateTestPost()`);
+  try {
+    let updateTestPostQuery = `UPDATE test SET
+    TEST_TYPE= :test_type, MARKS = :marks, POINTS = :points, TEST_NAME = :test_name WHERE TEST_ID = :test_id`;
+  const updateTestPost= await executeQuery(
+    updateTestPostQuery,
+      QueryTypes.UPDATE,{...user,test_id}
+    );
+    return updateTestPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateTestPost()`, error);
+  }}
 
 export async function deleteLearnId(learnId) {
   try {
@@ -656,8 +720,25 @@ export async function deleteLearnId(learnId) {
       `ERROR occurred in ${TAG}.deleteLearnId()`,
       error
     );
+
     throw error;
   }
 }
 
+
+export async function updateExercisesPost(user,exercise_id) {
+  logger.info(`${TAG}.updateExercisesPost()`);
+  try {
+    let updateExercisesPostQuery = `UPDATE exercise SET
+    QUESTION_NAME= :question_name, MARKS = :marks, QUESTION_TYPE = :question_type, points = :points WHERE EXERCISE_ID = :exercise_id`;
+  const updateExercisesPost= await executeQuery(
+    updateExercisesPostQuery,
+      QueryTypes.UPDATE,{...user,exercise_id}
+    );
+    return updateExercisesPost;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateExercisesPost()`, error);
+    throw error;
+  }
+}
 

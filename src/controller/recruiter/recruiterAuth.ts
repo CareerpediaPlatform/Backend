@@ -33,6 +33,7 @@ export async function signupRecruiter (req: any, res: Response, next: NextFuncti
     } 
   }
 
+
   export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.changePasswordController()`);

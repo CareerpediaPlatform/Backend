@@ -14,7 +14,6 @@ const TAG = 'services.auth'
 
 export async function signupUser(user: IMentor) {
     log.info(`${TAG}.signupUser() ==> `, user);
-
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let transaction = null
@@ -29,6 +28,7 @@ export async function signupUser(user: IMentor) {
       const mentor = await MentorAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
+
 const accessToken = await generateAccessToken({ ...mentor });
         const data = {
         accessToken       
@@ -69,9 +69,7 @@ export async function loginUser(user: IMentor) {
         } else {
           const mentor_login = await MentorAuth.login(user)
           const mentor_uid = existedUser.uid;
-          const role = "mentor"
-    
-            const accessToken = await generateAccessToken({ mentor_uid,role});
+            const accessToken = await generateAccessToken({ ...mentor_login,mentor_uid});
             const data = {
                 accessToken   
             };
@@ -85,39 +83,6 @@ export async function loginUser(user: IMentor) {
     return serviceResponse;
 }
 
-
-
-// export async function changeUserPassword(user: any) {
-//   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-//   try {
-//     const uid=await verifyAccessToken(user.headerValue)
-//     console.log(uid)
-//     const existedUser = await getMentorUid({uid:uid.uid});
-//     console.log(existedUser)
-//     console.log(existedUser.password)
-//     if (!existedUser) {
-//       serviceResponse.message = 'User not found'; 
-//       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-//       serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-//     } else {
-//       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
-//       if (isValid) {
-//         const response = await MentorAuth.changePassword({ password: user.newPassword, ...user });
-//         serviceResponse.message = "Password changed successfully";
-//         serviceResponse.data = response;
-//       } else {
-//         serviceResponse.message = 'Old password is wrong';
-//         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-//         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-//       }
-//     }
-//   } catch (error) {
-//     log.error(`ERROR occurred in ${TAG}.changeUserPassword`, error);
-//     serviceResponse.addServerError('Failed to change password due to technical difficulties');
-//   }
-
-//   return serviceResponse;
-// }
 
 export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);

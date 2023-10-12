@@ -63,6 +63,21 @@ router.route('/course/:coursetype')
  router.route('/exercise/:module_id/:exercise_id')
  .delete(isAuthenticated,controller.deleteModulesExercise);
 
+ router.route('/part/:part_id')
+ .patch(isAuthenticated,controller.updateCoursePartPost);
+
+ router.route('/module/:module_id')
+ .patch(isAuthenticated,controller.updateCourseModulePost);
+
+ router.route('/lesson/:lesson_id')
+ .patch(isAuthenticated,controller.updateModuleLesson);
+
+ router.route('/test/:test_id')
+ .patch(isAuthenticated,controller.updateModuleTest);
+
+ router.route('/exercise/:exercise_id')
+ .patch(isAuthenticated,controller.updateModuleExercise);
+
 //  course//
 router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
  router.route('/course-overview/:uid').get(controller.getuploadCourse);

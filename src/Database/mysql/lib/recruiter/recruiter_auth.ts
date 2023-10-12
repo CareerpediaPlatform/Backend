@@ -17,8 +17,13 @@ export async function signUp(user: IRecruiter,transaction?: any) {
       password: hashedPassword,
       status:"ACTIVE"
     };
+
+    let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
+    values(:uid, :email, :password,:status)`;
+
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD, STATUS)
     values(:uid, :email, :password, :status)`;
+
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
       ...data,transaction
     });
@@ -46,17 +51,26 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-
-  export async function checkUidExist(uid: string) {
+export async function getRecruiterUid(uid){
     try {
+
+      console.log(uid)
+      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      let query = 'select * from RECRUITER where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid:uid.uid
+      });
+      return userId;
+
       logger.info(`${TAG}.checkUidExist() ==>`, uid);
       let query = 'SELECT * FROM RECRUITER WHERE UID = :uid'; 
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid
       });  
       return user;
+
     } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.checkUidExist()`, error);
+      logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;
     }
   }
@@ -125,14 +139,25 @@ console.log(uid)
 
 // //remove access recuriter -active or deactive
 
-export async function updateStatusRecruiterActive(user) {
-  logger.info(`${TAG}.updateStatusRecruiter()`);
-  try {
-    let statusUpdateQuery = `UPDATE RECRUITER SET STATUS = true WHERE USER_ID= ?`;
-    await executeQuery(statusUpdateQuery, QueryTypes.UPDATE, [user]);
-    return {...user};
-  } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.updateStatusRecruiter()`, error);
+export async function recruiterUpdateStatus(user){
+  logger.info(`${TAG}.recruiterUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    const updateQuery = `UPDATE RECRUITER
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [response]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(response)
+    return response;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.recruiterUpdateStatus()`, error);
     throw error;
   }
 }
