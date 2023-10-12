@@ -10,49 +10,55 @@ export interface MyObject {
 }
 
 export interface IUser {
-  id:number
-  uid: string
-  firstName: string
-  lastName: string
-  email: string
-  password?:string
-  role?: string
-  uuid?:string
-  accessToken?:string
+  id: number;
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password?: string;
+  phoneNumber: string;
+  role?: string;
+  uuid?: string;
+  accessToken?: string;
 }
 
 export class User implements IUser {
-  public id: number
-  public uid: string
-  public firstName: string
-  public lastName: string
-  public email: string
-  public role: string
-  public uuid?:string
-   public password?:string
-  public accessToken?:string
+  public id: number;
+  public uid: string;
+  public firstName: string;
+  public lastName: string;
+  public email: string;
+  public password?: string;
+  public phoneNumber: string;
+  public role?: string;
+  public uuid?: string;
+  public accessToken?: string;
 
-  constructor ( 
-    id:number,
+  constructor(
+    id: number,
+    uid: string,
     firstName: string,
     lastName: string,
     email: string,
-    role: string,
-    password?:string,
-    uuid?:string,
-    accessToken?:string
-               ) {
-
-    this.id = id
-    this.firstName = firstName
-    this.lastName = lastName
-    this.email = email
-    this.role = role
-    this.accessToken = accessToken
-    this.uuid = uuid
-    this.password=password
+    phoneNumber: string,
+    role?: string,
+    uuid?: string,
+    accessToken?: string,
+    password?: string
+  ) {
+    this.id = id;
+    this.uid = uid;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+    this.phoneNumber = phoneNumber;
+    this.role = role;
+    this.accessToken = accessToken;
+    this.uuid = uuid;
   }
 }
+
 
 
 // signim

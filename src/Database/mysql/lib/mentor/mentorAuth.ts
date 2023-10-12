@@ -118,7 +118,7 @@ export async function checkEmailExist(email: string) {
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
       let query = 'select * from MENTOR where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid
+        uid:uid.uid
       });
       return userId;
     } catch (error) {
