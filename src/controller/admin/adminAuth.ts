@@ -7,7 +7,7 @@ import { AdminDataMapping } from 'src/helpers/data_mapping/auth'
 
 
 
-const TAG = 'services.auth'
+const TAG = 'services.auth.admin'
 
 export async function signupUser (req: any, res: Response, next: NextFunction): Promise<void> {
     try {

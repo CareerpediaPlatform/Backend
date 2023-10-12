@@ -4,19 +4,19 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken} from '../../helpers/authentication'
+import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
 import { ICollege } from "src/models/lib/auth";
-
-
+import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+import { sendRegistrationNotification } from "../../utils/nodemail";
 const TAG = 'services.auth'
-
 
 export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
-      
+    let transaction = null
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
+      let transaction = null
       const existedUser = await checkEmailExist(user.email);
       if(existedUser) {
         serviceResponse.message = 'Email is already exist';
@@ -24,7 +24,10 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      transaction = await getTransaction()
       const college_admin = await CollegeAuth.signUp(user);
+      await transaction.commit() 
+      sendRegistrationNotification(user)
       const accessToken = await generateAccessToken({ ...college_admin   });
       const college_uid = college_admin.uid
       const data = {
@@ -39,17 +42,13 @@ export async function signupUser(user: ICollege) {
     return serviceResponse;
   }
 
-
-  
   export async function loginUser(user: ICollege) {
     log.info(`${TAG}.loginUser() ==> `, user);
-
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     
     try {
         // Check if the user with the given email exists
         const existedUser = await checkEmailExist(user.email);
-        console.log(existedUser)
 
         //if email does not exist 
         if(!existedUser) {
@@ -58,7 +57,12 @@ export async function signupUser(user: ICollege) {
           serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
           return serviceResponse;
         }
-
+        if(existedUser.status!="ACTIVE"){
+          serviceResponse.message = 'your account is freazed by careerpedia please contact careerpedia team !';
+          serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
+          serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+          return serviceResponse
+        }
         const isPasswordValid = await comparePasswords(existedUser.password,user.password );
             
         if (!isPasswordValid) {
@@ -85,8 +89,6 @@ export async function signupUser(user: ICollege) {
     
     return serviceResponse;
 }
-
-
 
 export async function changeUserPassword(user: any) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -120,3 +122,32 @@ export async function changeUserPassword(user: any) {
   return serviceResponse;
 }
 
+ // give access remove accerss of a college_admin by admin
+ export async function collegeUpdateStatus(user){
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try{
+    // finde admin is valid or not
+    const decoded=await verifyAccessToken(user.headerValue)
+
+    if(decoded &&(user.status=="ACTIVE" ||user.status=="DEACTIVE")){
+      if(decoded.role!="admin"){
+        serviceResponse.message = `UnAutharized Admin`
+        return serviceResponse
+      }
+      const student=await CollegeAuth.collegeUpdateStatus({...user})
+      const data={
+        student
+      }
+      serviceResponse.message = `college status changed to ${user.status} successfully `
+      serviceResponse.data = data
+      return serviceResponse
+    }else{
+      serviceResponse.message = `someThing went wrong in url`
+          return serviceResponse
+    }
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.collegeUpdateStatus`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return await serviceResponse
+}

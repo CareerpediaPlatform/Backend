@@ -7,20 +7,20 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'
 
-export async function signUp(user: IRecruiter) {
+export async function signUp(user: IRecruiter,transaction?: any) {
   logger.info(`${TAG}.saveUser()`);
   try {
     const hashedPassword = await hashPassword(user.password);
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,
-      password: hashedPassword
+      password: hashedPassword,
+      status:user.status
     };
-    let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD)
-    values(:uid, :email, :password)`;
-
+    let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
+    values(:uid, :email, :password,:status)`;
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
-      ...data,
+      ...data,transaction
     });
     return data;
 
@@ -46,17 +46,17 @@ export async function checkEmailExist(email: string) {
     }
   }
 
-
-  export async function checkUidExist(uid: string) {
+export async function getRecruiterUid(uid){
     try {
-      logger.info(`${TAG}.checkUidExist() ==>`, uid);
-      let query = 'SELECT * FROM RECRUITER WHERE UID = :uid'; 
-      const [user] = await executeQuery(query, QueryTypes.SELECT, {
-        uid
-      });  
-      return user;
+      console.log(uid)
+      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      let query = 'select * from RECRUITER where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid:uid.uid
+      });
+      return userId;
     } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.checkUidExist()`, error);
+      logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;
     }
   }
@@ -89,9 +89,47 @@ export async function changePassword(user:any): Promise<void> {
     throw error;
   }
 }
+export async function getUserId(uid:string) {
+  try {
+    
+    logger.info(`${TAG}.getUserId()  ==>`, uid);
+    console.log("uisjdfdfdkfldkf");
+console.log(uid)
+    let query = 'select USER_ID from RECRUITER where USER_ID=:uid';
+    const [recruiterId] = await executeQuery(query, QueryTypes.SELECT, {
+      uid
+    });
+    console.log(recruiterId)
+    return recruiterId;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserId`, error);
+    throw error;
+  }
+}
 
 
+// //remove access recuriter -active or deactive
 
+export async function recruiterUpdateStatus(user){
+  logger.info(`${TAG}.recruiterUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    const updateQuery = `UPDATE RECRUITER
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [response]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(response)
+    return response;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.recruiterUpdateStatus()`, error);
+    throw error;
+  }
+}
 
-
- 

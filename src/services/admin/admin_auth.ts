@@ -62,10 +62,9 @@ export async function loginAdmin(user:IAdmin) {
         return serviceResponse;
       }else{
       const Admin = await AdminAuth.login(user);
-      const accessToken = await generateAccessToken({...Admin})
+      const accessToken = await generateAccessToken({uid:Admin[0].uid,role:"admin"})
       const data = { 
       accessToken,
-      Admin,
       user_id
         }
         serviceResponse.data = data
