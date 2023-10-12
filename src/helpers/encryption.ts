@@ -21,6 +21,29 @@ export async function comparehashPasswords(hashedPassword, hashedOldPassword) {
   }
 }
 
-export async function decryptString (encrypted: string): Promise<string> {
-  return CryptoJS.AES.decrypt(encrypted, AES_ENC_KEY, {}).toString(CryptoJS.enc.Utf8)
+export function generatePasswordWithPrefixAndLength(length: number, prefix: string): string {
+  const prefixLength = prefix.length;
+
+  if (prefixLength >= length) {
+    throw new Error("Total password length is too short for the given prefix.");
+  }
+
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
+  const remainingLength = length - prefixLength;
+
+  let password = prefix;
+
+  for (let i = 0; i < remainingLength; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset.charAt(randomIndex);
+  }
+
+  return password;
 }
+
+
+
+
+
+
+

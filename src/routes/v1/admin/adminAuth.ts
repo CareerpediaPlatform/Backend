@@ -7,6 +7,7 @@ import * as validation from '../../../validations/auth'
 
 
 
+
 passportConfiguration(passport)
 
 const router = Router()
@@ -17,5 +18,7 @@ const router = Router()
 
  router.route('/signup')
      .post(controller.signupUser);
+
+
 
 export default router

@@ -28,6 +28,9 @@ export function mentorDataMapping (payload: any): IMentor {
       return new Mentor(
         payload.email,
         payload.password,
+        payload.type,
+        payload.course,
+        payload.status
 
       )
     }
@@ -46,7 +49,8 @@ export function recruiterDataMapping (payload: any): IRecruiter {
       return new Recruiter(
         payload.email,
         payload.password,
-
+        payload.status
+      
       )
     }
     return payload

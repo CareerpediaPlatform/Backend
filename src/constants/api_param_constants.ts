@@ -10,3 +10,7 @@ export const QueryParams = {
   SORT_BY: 'sortBy',
   SORT_ORDER: 'sortOrder'
 }
+export const FormParams = {
+  FILE_FIELD: 'file',
+  MAX_COUNT: 3
+}
