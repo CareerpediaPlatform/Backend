@@ -9,12 +9,13 @@ import studentLms from "../student/lms"
 
 const router = Router()
 
-router.use(`${ROOT_AUTH}`, AuthRoutes)
-router.use('/', UserRoutes)
-router.use('/profile', profileRoutes)
-router.use('/',assignmentRoutes)
+router.use(`${ROOT_AUTH}`, AuthRoutes);
+router.use('/', UserRoutes);
+router.use('/profile', profileRoutes);
+router.use('/',assignmentRoutes);
 
-router.use('/course', studentLms)
+router.use('/course', studentLms);
+
 
 
 export default router;

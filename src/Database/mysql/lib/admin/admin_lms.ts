@@ -249,9 +249,12 @@ export async function checkCourseIdExist(courseUID: any){
 export async function getuploadCourse(courseUID){
   try {
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID=:courseUID';
+    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';
+    const getQuery = 'SELECT * FROM `WHATYOULEARN` WHERE UID= :courseUID'
+    const query= ''
     const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
-    return basicCourse
+    const [basicCourseLearn] = await executeQuery(getQuery, QueryTypes.SELECT, {courseUID});
+    return {basicCourse,basicCourseLearn}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
     throw error;

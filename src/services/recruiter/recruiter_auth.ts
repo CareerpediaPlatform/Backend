@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {generateAccessToken} from '../../helpers/authentication'
+import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
 import { sendRegistrationNotification } from "../../utils/nodemail";
@@ -37,7 +37,6 @@ export async function signupUser(user: IRecruiter) {
       const recruiter_email = recruiter.email
       const data = {
         accessToken,
-        recruiter_uid ,    
         recruiter_email
       }    
       serviceResponse.data = data
@@ -76,14 +75,13 @@ export async function signupUser(user: IRecruiter) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const recruiter_login = await RecruiterAuth.login(user)
-
-            const accessToken = await generateAccessToken({ ...recruiter_login,uid:existedUser.uid});
-            const recruiter_uid = existedUser.uid;
-            
+          const uid = existedUser.uid;
+            const email = existedUser.email
+            const accessToken = await generateAccessToken({ uid,email})
             const data = {
                 accessToken,
-                recruiter_login,
-                recruiter_uid
+                email,
+                uid
             };
 
             serviceResponse.data = data;
@@ -96,37 +94,32 @@ export async function signupUser(user: IRecruiter) {
     return serviceResponse;
 }
 
-
-export async function changeUserPassword(user: any) {
+export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-  try { 
-    const existedUser = await checkUidExist(user.uid);
-    console.log(existedUser)
-    console.log(existedUser.password)
-
-    if (!existedUser) {
-      serviceResponse.message = 'User not found'; 
-      serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-      serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-    } else {
-      const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
-
-      if (isValid) {
-        const response = await RecruiterAuth.changePassword({ password: user.newPassword, ...user });
-        serviceResponse.message = "Password changed successfully";
-        serviceResponse.data = response;
-      } else {
-        serviceResponse.message = 'Old password is wrong';
+  try{
+    // finde student is valid or not
+    const uid=await verifyAccessToken(user.headerValue)
+    const mentor=await RecruiterAuth.getRECRUITERUid({uid:uid.uid})
+    if(mentor){
+      const IsValid=await comparePasswords(mentor.password,user.oldPassword)
+      if(IsValid){
+    const response=await RecruiterAuth.changePassword({password:user.newPassword,uid:uid.uid})
+    console.log("response")
+    console.log(response)
+    serviceResponse.message="password changed successfully"
+    serviceResponse.data=response
+      }
+      else{
+        serviceResponse.message = 'old password is wrong';
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
     }
-  } catch (error) {
-    log.error(`ERROR occurred in ${TAG}.changeUserPassword`, error);
-    serviceResponse.addServerError('Failed to change password due to technical difficulties');
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
-
-  return serviceResponse;
+  return await serviceResponse
 }
 
 

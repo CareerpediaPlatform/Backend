@@ -63,7 +63,9 @@ export async function getRecruiterProfile(headerValue) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(headerValue)
-      const uid=decoded[0].uid
+      console.log(decoded)
+      const uid=decoded.uid
+      console.log(uid)
     const isValid=await RecruiterAuth.checkUidExist(uid)
     if(isValid){
       const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
@@ -137,6 +139,7 @@ export async function getRecruiterProfile(headerValue) {
         isPublic: true,
         metaData: null
       }
+  
       const fileSavedResp = await RecruiterProfileDetailsData.saveFile(fileDetails)
       serviceResponse.message = `successfully uploaded ${files[0].originalname}`
       serviceResponse.data = {
