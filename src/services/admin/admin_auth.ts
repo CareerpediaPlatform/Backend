@@ -53,7 +53,7 @@ export async function loginAdmin(user:IAdmin) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-  //comaparing password
+  //comparing password
       const isPasswordValid = await comparePasswords(existedUser.password ,user.password);
       if(!isPasswordValid ){
         serviceResponse.message = 'password is does not match';

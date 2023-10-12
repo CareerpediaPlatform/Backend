@@ -21,7 +21,7 @@ export const sqlConnection = async () => {
       logging: false,
     });
     await connection.authenticate()
-    console.log("db conncted")
+    console.log("db connected")
     return connection;
   } catch (error) {
     throw error;
