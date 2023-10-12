@@ -47,4 +47,5 @@ export async function signupRecruiter (req: any, res: Response, next: NextFuncti
       log.error(`ERROR occurred in ${TAG}.changePasswordController()`, error);
       next(error);
     }
+
   }

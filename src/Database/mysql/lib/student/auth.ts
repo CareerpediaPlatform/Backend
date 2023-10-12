@@ -26,8 +26,13 @@ export async function signUp(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
+
       INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
       VALUES (:uid, :firstName, :lastName, :email,:phoneNumber, :password, :role, :status)
+
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
+
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -285,24 +290,24 @@ export async function checkEmailOrPhoneExist(info) {
     let user;
 
     if (info.email && info.phoneNumber) {
-      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE email = :email OR phone_number = :phoneNumber';
-      query2 = 'SELECT * FROM STUDENT_AUTH WHERE email = :email OR phone_number = :phoneNumber';
+      query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE email = :email OR phone_number = :phoneNumber';
+      query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE email = :email OR phone_number = :phoneNumber';
       queries = [query1, query2];
     } else if (info.email) {
-      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE email = :email';
-      query2 = 'SELECT * FROM STUDENT_AUTH WHERE email = :email';
+      query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE email = :email';
+      query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE email = :email';
       queries = [query1, query2];
     } else if (info.phoneNumber) {
-      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE phone_number = :phoneNumber';
-      query2 = 'SELECT * FROM STUDENT_AUTH WHERE phone_number = :phoneNumber';
+      query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE phone_number = :phoneNumber';
+      query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE phone_number = :phoneNumber';
       queries = [query1, query2];
     } else if (info.uid) {
-      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE uid = :uid';
-      query2 = 'SELECT * FROM STUDENT_AUTH WHERE uid = :uid';
+      query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE uid = :uid';
+      query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE uid = :uid';
       queries = [query1, query2];
     }else if (info.id) {
-      query1 = 'SELECT * FROM STUDENT_DETAILS WHERE id= :id';
-      query2 = 'SELECT * FROM STUDENT_AUTH WHERE id= :id';
+      query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE id= :id';
+      query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE id= :id';
       queries = [query1, query2];
     }
 
