@@ -28,11 +28,11 @@ export async function signupUser(user: ICollege) {
       const college_admin = await CollegeAuth.signUp(user);
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...college_admin   });
-      const college_uid = college_admin.uid
+      const uid = college_admin.uid
+      const email = college_admin.email
+      const accessToken = await generateAccessToken({uid,email  });
       const data = {
-        accessToken,
-        college_uid        
+        accessToken
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -71,13 +71,11 @@ export async function signupUser(user: ICollege) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const college_login = await CollegeAuth.login(user)
-            const accessToken = await generateAccessToken({ ...college_login});
-            const college_uid = existedUser.uid;
-            
+          const uid = existedUser.uid;
+          const email = existedUser.uid;
+          const accessToken = await generateAccessToken({ uid,email});
             const data = {
                 accessToken,
-                college_login,
-                college_uid
             };
 
             serviceResponse.data = data;
@@ -90,36 +88,33 @@ export async function signupUser(user: ICollege) {
     return serviceResponse;
 }
 
-export async function changeUserPassword(user: any) {
-  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-  try {
-    const existedUser = await checkUidExist(user.uid);
-    console.log(existedUser)
-    console.log(existedUser.password)
-    
-    if (!existedUser) {
-      serviceResponse.message = 'User not found'; 
-      serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-      serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-    } else {
-      const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
 
-      if (isValid) {
-        const response = await CollegeAuth.changePassword({ password: user.newPassword, ...user });
-        serviceResponse.message = "Password changed successfully";
-        serviceResponse.data = response;
-      } else {
-        serviceResponse.message = 'Old password is wrong';
+export async function changePassword(user){
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try{
+    // finde student is valid or not
+    const uid=await verifyAccessToken(user.headerValue)
+    const mentor=await CollegeAuth.getCollegeAdminUid({uid:uid.uid})
+    if(mentor){
+      const IsValid=await comparePasswords(mentor.password,user.oldPassword)
+      if(IsValid){
+    const response=await CollegeAuth.changePassword({password:user.newPassword,uid:uid.uid})
+    console.log("response")
+    console.log(response)
+    serviceResponse.message="password changed successfully"
+    serviceResponse.data=response
+      }
+      else{
+        serviceResponse.message = 'old password is wrong';
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
     }
-  } catch (error) {
-    log.error(`ERROR occurred in ${TAG}.changeUserPassword`, error);
-    serviceResponse.addServerError('Failed to change password due to technical difficulties');
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
-
-  return serviceResponse;
+  return await serviceResponse
 }
 
  // give access remove accerss of a college_admin by admin

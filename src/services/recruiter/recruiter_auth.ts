@@ -29,14 +29,11 @@ export async function signupUser(user: IRecruiter) {
       const recruiter = await RecruiterAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
-      const accessToken = await generateAccessToken({ ...recruiter  });
-      
-      const recruiter_uid = recruiter.uid
-      const recruiter_email = recruiter.email
+      const uid = recruiter.uid
+      const email = recruiter.email
+      const accessToken = await generateAccessToken({ uid,email});  
       const data = {
-        accessToken,
-        recruiter_uid ,    
-        recruiter_email
+        accessToken
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -72,14 +69,11 @@ export async function loginUser(user: IRecruiter) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const recruiter_login = await RecruiterAuth.login(user)
-
-            const accessToken = await generateAccessToken({ ...recruiter_login,uid:existedUser.uid});
-            const recruiter_uid = existedUser.uid;
-            
+          const uid = existedUser.uid;
+            const email = existedUser.email
+            const accessToken = await generateAccessToken({ uid,email})
             const data = {
-                accessToken,
-                recruiter_login,
-                recruiter_uid
+                accessToken
             };
 
             serviceResponse.data = data;
