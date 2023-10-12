@@ -15,7 +15,7 @@ export async function signUp(user: IRecruiter,transaction?: any) {
       uid: crypto.randomUUID(),
       email: user.email,
       password: hashedPassword,
-      status:user.status
+      status:"ACTIVE"
     };
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
     values(:uid, :email, :password,:status)`;
