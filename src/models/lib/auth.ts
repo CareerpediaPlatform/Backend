@@ -16,7 +16,6 @@ export interface IUser {
   lastName: string;
   email: string;
   password?: string;
-  phoneNumber: string;
   role?: string;
   uuid?: string;
   accessToken?: string;
@@ -29,7 +28,6 @@ export class User implements IUser {
   public lastName: string;
   public email: string;
   public password?: string;
-  public phoneNumber: string;
   public role?: string;
   public uuid?: string;
   public accessToken?: string;
@@ -40,7 +38,6 @@ export class User implements IUser {
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string,
     role?: string,
     uuid?: string,
     accessToken?: string,
@@ -52,7 +49,6 @@ export class User implements IUser {
     this.lastName = lastName;
     this.email = email;
     this.password = password;
-    this.phoneNumber = phoneNumber;
     this.role = role;
     this.accessToken = accessToken;
     this.uuid = uuid;

@@ -96,10 +96,8 @@ export async function changePassword(user){
       const IsValid=await comparePasswords(recruiter.password,user.oldPassword)
       if(IsValid){
     const response=await RecruiterAuth.changePassword({password:user.newPassword,uid:uid.uid})
-    console.log("response")
-    console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';

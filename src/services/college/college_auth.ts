@@ -13,7 +13,6 @@ const TAG = 'services.auth'
 
 export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
-    let transaction = null
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let transaction = null
@@ -99,10 +98,8 @@ export async function changePassword(user){
       const IsValid=await comparePasswords(mentor.password,user.oldPassword)
       if(IsValid){
     const response=await CollegeAuth.changePassword({password:user.newPassword,uid:uid.uid})
-    console.log("response")
-    console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';
