@@ -44,6 +44,6 @@ const router = Router()
      .patch(isAuthenticated,controller.setForgetPassword);
      
      router.route('/change-password')
-     .patch(validation.passwordValidation,controller.changePassword);
+     .patch(isAuthenticated,validation.passwordValidation,controller.changePassword);
 
 export default router
