@@ -88,42 +88,35 @@ export async function recruiterProfile(user) {
 
 export async function getRecruiterProfile(headerValue) {
   log.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
-
-    if(isValid){
-      const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
-      if(existedProfile){
-  const serviceResponse: IServiceResponse = new ServiceResponse(
-    HttpStatusCodes.CREATED,
-    "",
-    false
-  );
+   
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    let decoded = await verifyAccessToken(headerValue);
+    let decoded=await verifyAccessToken(headerValue)
 
-    const uid = decoded.uid;
-    const isValid = await RecruiterAuth.getRecruiterUid(uid);
-    if (isValid) {
-      const existedProfile =
-        await RecruiterProfileDetailsData.getRecruiterProfile(uid);
-      if (existedProfile) {
 
-        const data = {
-          existedProfile,
-        };
-        serviceResponse.data = data;
-        return serviceResponse;
-      } else {
-        serviceResponse.message = "invalid user uid";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
+      const uid=decoded.uid
+  const isValid=await RecruiterAuth.getRecruiterUid(uid)
+
+
+  if(isValid){
+    const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
+    if(existedProfile){
+      const data = {
+        existedProfile
+      }    
+      serviceResponse.data = data
+      return serviceResponse
     }
+    else{
+      serviceResponse.message="invalid user uid"
+      serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      return serviceResponse
+    }
+  }
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
-    serviceResponse.addServerError(
-      "Failed to create user due to technical difficulties"
-    );
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
   return serviceResponse;
 }
