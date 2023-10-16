@@ -55,14 +55,14 @@ export async function signUp(user: IMentor, transaction?: any) {
   try {
     // Hash the user's password
     const hashedPassword = await hashPassword(user.password);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     // Find the course_id based on the provided course name
-    const courseQuery = 'SELECT course_id FROM courses_parts WHERE partTitle = :partTitle';
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    const courseQuery = `SELECT course_id FROM courses_parts WHERE partTitle= :partTitle`;
     const selectedCourseType = user.course;
     console.log(selectedCourseType)
-    const courseResult = await executeQuery(courseQuery, { replacements: [selectedCourseType], type: QueryTypes.SELECT });
+  
+    const courseResult = await executeQuery(courseQuery, { partTitle : selectedCourseType });
     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    
     if (courseResult.length === 0) {
       throw new Error('Course not found'); // Handle course not found error
     }
@@ -118,7 +118,7 @@ export async function checkEmailExist(email: string) {
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
       let query = 'select * from MENTOR where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid
+        uid:uid.uid
       });
       return userId;
     } catch (error) {
@@ -171,3 +171,26 @@ export async function getUserId(uid: string) {
   }
 }
 
+export async function mentorUpdateStatus(user){
+  logger.info(`${TAG}.mentorUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    
+    const updateQuery = `UPDATE MENTOR
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [res]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(res)
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.mentorUpdateStatus()`, error);
+    throw error;
+  }
+}

@@ -38,7 +38,8 @@ export async function signupCollege (req: any, res: Response, next: NextFunction
       log.info(`${TAG}.changePasswordController()`);
       log.debug(`${TAG}.changePasswordController() Object = ${JSON.stringify(req.body)}`);
       const passwords: any = req.body;
-      const response: IServiceResponse = await authService.changeUserPassword({ ...passwords });
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const response: IServiceResponse = await authService.changePassword({ ...passwords,headerValue });
       responseBuilder(response, res, next, req);
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.changePasswordController()`, error);

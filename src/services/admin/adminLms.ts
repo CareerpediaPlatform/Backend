@@ -6,7 +6,7 @@ import {adminLms} from "../../Database/mysql"
 
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
-import { getFileUrl, getVideoDuration, saveFile } from "src/helpers/s3_media";
+import {  saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 
 const TAG = 'services.lms.admin'
@@ -53,51 +53,39 @@ export async function getCourses(coursetype){
 
   // course//
   export async function uploadCourse(files: any[],course:any,type: any): Promise<IServiceResponse> {
-    log.info(`${TAG}.uploadVideoFile() `)
+    log.info(`${TAG}.uploadCourse() `)
 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false)
     try {
       const fileDirectory = DIRECTORIES.LMS_VIDEOS
       const data = await saveFile(files, fileDirectory, AWS_S3.BUCKET_NAME)
-   
-      const file = files[0];
-      const data1 = data[0]
       const fileDetails = {
-        fileName: data1?.savedFileName,
-        originalFileName: file?.originalname,
-        contentType: file?.mimetype,
+        fileName: data[0]?.savedFileName,
+        originalFileName: files[0]?.originalname,
+        contentType: files[0]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data1?.savedFileKey,
-        fileUrl: data1?.savedLocation,
+        filePath: data[0]?.savedFileKey,
+        fileUrl: data[0]?.savedLocation,
         isPublic: true,
         metaData: null,
       
       }
-      const image = files[1];
-      const data2 = data[1]
+   
       const imageDetails = {
-        fileName: data2?.savedFileName,
-        originalFileName: image?.originalname,
-        contentType:image?.mimetype,
+        fileName: data[1]?.savedFileName,
+        originalFileName: files[1]?.originalname,
+        contentType:files[1]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data2?.savedFileKey,
-        fileUrl: data2?.savedLocation,
+        filePath: data[1]?.savedFileKey,
+        fileUrl: data[1]?.savedLocation,
         isPublic: true,
         metaData: null,
-      
       }
-    
-    console.log(imageDetails)
-      
       const fileSavedResp = await adminLms.uploadCourse(fileDetails,imageDetails,course,type)
-     
-      log.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + nodeUtil.inspect(fileSavedResp))
+    
         serviceResponse.data = {
        
         uid: course.uid,
-        // fileName: fileDetails.fileName,
-        // originalFileName: fileDetails.originalFileName,
-        // contentType: fileDetails.contentType,
         thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
         title: course.title,
@@ -108,8 +96,10 @@ export async function getCourses(coursetype){
         test: course.test,
         price: course.price,
         discountprice: course.discountprice,
-        type:type
+        type:type,
+        learn: course.learn
       }
+
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadCourse`, error)
       serviceResponse.addServerError('Failed to upload file due to technical difficulties')
@@ -118,7 +108,7 @@ export async function getCourses(coursetype){
   }
 
 export async function getuploadCourse(courseUID) {
-    log.info(`${TAG}.getRecruiterProfile() ==> `, courseUID);
+    log.info(`${TAG}.getuploadCourse() ==> `, courseUID);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
@@ -132,10 +122,12 @@ export async function getuploadCourse(courseUID) {
         return serviceResponse
       }
       else{
-        serviceResponse.message= "Invalid UId"
+        serviceResponse.message= "Invalid COURSE UId"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       }
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
+      log.error(`ERROR occurred in ${TAG}.getuploadCourse`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
@@ -148,28 +140,25 @@ export async function getuploadCourse(courseUID) {
     try {
       const fileDirectory = DIRECTORIES.LMS_VIDEOS
       const data = await saveFile(files, fileDirectory, AWS_S3.BUCKET_NAME)
-      const file = files[0];
-      const data1 = data[0]
       const fileDetails = {
-        fileName: data1?.savedFileName,
-        originalFileName: file?.originalname,
-        contentType: file?.mimetype,
+        fileName: data[0]?.savedFileName,
+        originalFileName: files[0]?.originalname,
+        contentType: files[0]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data1?.savedFileKey,
-        fileUrl: data1?.savedLocation,
+        filePath: data[0]?.savedFileKey,
+        fileUrl: data[0].savedLocation,
         isPublic: true,
         metaData: null,
       
       }
-      const image = files[1];
-      const data2 = data[1]
+     
       const imageDetails = {
-        fileName: data2?.savedFileName,
-        originalFileName: image?.originalname,
-        contentType:image?.mimetype,
+        fileName: data[1]?.savedFileName,
+        originalFileName: files[1].originalname,
+        contentType:files[1].mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data2?.savedFileKey,
-        fileUrl: data2?.savedLocation,
+        filePath: data[1]?.savedFileKey,
+        fileUrl: data[1]?.savedLocation,
         isPublic: true,
         metaData: null,
       
@@ -186,6 +175,8 @@ export async function getuploadCourse(courseUID) {
       }
       else{
         serviceResponse.message= "Invalid courseId"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       }
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.updateuploadCourse`, error);
@@ -205,7 +196,9 @@ export async function getuploadCourse(courseUID) {
         return serviceResponse
       }
       else{
-        serviceResponse.message= "Invalid UId"
+        serviceResponse.message= "Invalid COURSE UId"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       }
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
@@ -541,6 +534,7 @@ export async function deleteModulesExercise(module_id,exercise_id) {
     return serviceResponse;
   }
 
+
   
 export async function updateCoursePartPost(user,part_id) {
 
@@ -670,3 +664,39 @@ export async function updateExercisePost(user,test_id) {
   }
   return serviceResponse;
 }
+
+
+  export async function deleteSingleLearn(learnId) {
+    log.info(`${TAG}.deleteModulesExercise() ==> `, learnId);
+      
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+    
+      const getLearnid = await adminLms.checkLearnId(learnId);
+    
+      if (getLearnid) {
+        const learnID = await adminLms.deleteLearnId(learnId)
+      }
+      else{
+        serviceResponse.message = "Invalid course-overview LearnId";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+      }
+       
+      serviceResponse.message = "course-overview learn deleted"
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.deleteLearnId`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+
+
+
+
+
+
+
+
