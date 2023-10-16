@@ -26,15 +26,7 @@ export async function signUp(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-<<<<<<< HEAD
       INSERT INTO STUDENT_AUTH_FORM (id, uid, first_name, last_name, email, password,role,status)
-=======
-
-      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
-      VALUES (:uid, :firstName, :lastName, :email,:phoneNumber, :password, :role, :status)
-
-      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
->>>>>>> 6bb42644f957280edce03fda765724b8857ea190
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
 
     `;
@@ -146,13 +138,8 @@ export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
-<<<<<<< HEAD
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
-      ELSE 'STUDENT_AUTH_GMAIL'
-=======
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
       ELSE 'STUDENT_AUTH_FORM'
->>>>>>> 6bb42644f957280edce03fda765724b8857ea190
   END AS table_name
   `
 
