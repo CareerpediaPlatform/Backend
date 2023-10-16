@@ -34,6 +34,7 @@ export async function paymentPay (req: any, res: Response, next: NextFunction): 
       next(error)
     }
   }
+  
 
 export async function paymentVerify (req: any, res: Response, next: NextFunction): Promise<void> {
     try {
