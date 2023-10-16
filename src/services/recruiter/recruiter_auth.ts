@@ -4,16 +4,12 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-
 import {generateAccessToken,verifyAccessToken } from '../../helpers/authentication'
-
-
-
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
 import { sendRegistrationNotification } from "../../utils/nodemail";
-
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+
 const TAG = 'services.auth'
 
 export async function signupUser(user: IRecruiter) {
@@ -106,10 +102,8 @@ export async function changePassword(user){
 
       if(IsValid){
     const response=await RecruiterAuth.changePassword({password:user.newPassword,uid:uid.uid})
-    console.log("response")
-    console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';

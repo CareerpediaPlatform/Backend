@@ -48,8 +48,7 @@ export function recruiterDataMapping (payload: any): IRecruiter {
     if (payload != null && payload !== undefined) {
       return new Recruiter(
         payload.email,
-        payload.password,
-        payload.status
+        payload.password
       
       )
     }

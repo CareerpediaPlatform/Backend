@@ -58,6 +58,7 @@ export async function getRecruiterUid(uid){
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid.uid
       });
+
       return userId;
 
     } catch (error) {

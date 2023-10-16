@@ -4,8 +4,6 @@ import {  PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3ConnectionLoader } from '../Loaders/s3_config';
 import * as nodeUtil from 'util';
 import { AWS_S3 } from '../Loaders/config'
-
-import { getVideoDurationInSeconds } from 'get-video-duration';
 import { resolve } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -84,9 +82,9 @@ const TAG = 'helpers.s3_media'
       data.savedFileKey = filePath
       data.savedFileName = fileName
       data.savedLocation = getFileUrl(filePath, bucketName)
-      const duration = await getVideoDurations( data.savedFileKey);
-        console.log("****************************************")
-        console.log(duration)
+      // const duration = await getVideoDurations( data.savedFileKey);
+      //   console.log("****************************************")
+      //   console.log(duration)
       return data
      
     } catch (error) {
@@ -110,18 +108,3 @@ const TAG = 'helpers.s3_media'
     return Math.floor(Date.now()) + '-' + (fileName || '')
   }
   
-
-
-export async function getVideoDurations(filePath: any): Promise<void> {
-  try {
-    const absolutePath = resolve(filePath);
-    const duration: number | undefined = await getVideoDurationInSeconds(absolutePath);
-    if (duration !== undefined) {
-      console.log(duration);
-    } else {
-      console.log('Unable to determine video duration.');
-    }
-  } catch (error) {
-    console.error('Error fetching video duration:', error);
-  }
-}
