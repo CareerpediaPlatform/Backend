@@ -20,7 +20,7 @@ export async function signupCollege (req: any, res: Response, next: NextFunction
     }
   }
 
-  export async function loginCollege(req: any, res: Response, next: NextFunction): Promise<void>{
+export async function loginCollege(req: any, res: Response, next: NextFunction): Promise<void>{
     try{
       log.info(`${TAG}.loginCollege()`);
       log.debug(`${TAG}.loginCollege() Object = ${JSON.stringify(req.body)}`)
@@ -33,7 +33,7 @@ export async function signupCollege (req: any, res: Response, next: NextFunction
     } 
   }
 
-  export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
+export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.changePasswordController()`);
       log.debug(`${TAG}.changePasswordController() Object = ${JSON.stringify(req.body)}`);
@@ -46,7 +46,6 @@ export async function signupCollege (req: any, res: Response, next: NextFunction
       next(error);
     }
   }
-
   
 export async function collegeUpdateStatus(req: any, res: Response, next: NextFunction): Promise<void> {
   try {

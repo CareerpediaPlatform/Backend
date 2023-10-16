@@ -89,6 +89,9 @@ export async function recruiterProfile(user) {
 export async function getRecruiterProfile(headerValue) {
   log.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
 
+    if(isValid){
+      const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
+      if(existedProfile){
   const serviceResponse: IServiceResponse = new ServiceResponse(
     HttpStatusCodes.CREATED,
     "",
@@ -103,6 +106,7 @@ export async function getRecruiterProfile(headerValue) {
       const existedProfile =
         await RecruiterProfileDetailsData.getRecruiterProfile(uid);
       if (existedProfile) {
+
         const data = {
           existedProfile,
         };

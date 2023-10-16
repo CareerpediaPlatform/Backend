@@ -21,6 +21,7 @@ export async function signUp(user: IRecruiter,transaction?: any) {
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
     values(:uid, :email, :password,:status)`;
 
+
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
       ...data,transaction
     });
@@ -57,7 +58,8 @@ export async function getRecruiterUid(uid){
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid.uid
       });
-      return userId
+
+      return userId;
 
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
@@ -112,7 +114,7 @@ export async function getUserId(uid:string) {
   try {
     
     logger.info(`${TAG}.getUserId()  ==>`, uid);
-    console.log("uisjdfdfdkfldkf");
+    // console.log("uisjdfdfdkfldkf");
 console.log(uid)
     let query = 'select USER_ID from RECRUITER where USER_ID=:uid';
     const [recruiterId] = await executeQuery(query, QueryTypes.SELECT, {
