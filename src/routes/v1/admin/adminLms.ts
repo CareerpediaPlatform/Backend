@@ -14,8 +14,8 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
-router.route('/course-overview/:courseId')
-.get(isAuthenticated,controller.getCourseOverview);
+// router.route('/course-overview/:courseId')
+// .get(isAuthenticated,controller.getCourseOverview);
 
 router.route('/course-list')
 .get(isAuthenticated,controller.getCourses);
@@ -79,8 +79,12 @@ router.route('/course/:coursetype')
  .patch(isAuthenticated,controller.updateModuleExercise);
 
 //  course//
-router.route('/course/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
- router.route('/course/course-overview/:uid').get(controller.getuploadCourse);
- router.route('/course/course-overview/:uid').patch(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.updateuploadCourse)
- router.route('/course/course-overview/:uid').delete(controller.deleteuploadCourse);
+router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
+ router.route('/course-overview/:uid').get(controller.getuploadCourse);
+ router.route('/course-overview/:uid').patch(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.updateuploadCourse)
+ router.route('/course-overview/:uid').delete(controller.deleteuploadCourse);
+ router.route('/learn/:id').delete(controller.deleteSingleLearn)
+
+ 
+
 export default router;

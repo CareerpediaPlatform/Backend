@@ -20,13 +20,23 @@ export async function signUp(user: IUser) {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      phoneNumber:user.phoneNumber,
       password: hashedPassword,
       role:"student",
       status:"ACTIVE"
     };
     let userInsertQuery = `
+<<<<<<< HEAD
       INSERT INTO STUDENT_AUTH_FORM (id, uid, first_name, last_name, email, password,role,status)
+=======
+
+      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
+      VALUES (:uid, :firstName, :lastName, :email,:phoneNumber, :password, :role, :status)
+
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
+>>>>>>> 6bb42644f957280edce03fda765724b8857ea190
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
+
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -103,7 +113,7 @@ export async function signupPhonenumbers(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_AUTH_GMAIL SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -119,11 +129,19 @@ export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status
 FROM
+<<<<<<< HEAD
 STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
   STUDENT_AUTH_GMAIL;`
+=======
+STUDENT_AUTH_FORM 
+UNION ALL SELECT 
+  id, uid, first_name, last_name, email,status
+FROM
+STUDENT_AUTH_GMAIL;`
+>>>>>>> 6bb42644f957280edce03fda765724b8857ea190
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -136,8 +154,13 @@ export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
+<<<<<<< HEAD
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
       ELSE 'STUDENT_AUTH_GMAIL'
+=======
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
+      ELSE 'STUDENT_AUTH_FORM'
+>>>>>>> 6bb42644f957280edce03fda765724b8857ea190
   END AS table_name
   `
 

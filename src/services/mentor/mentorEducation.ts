@@ -4,7 +4,7 @@ import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 import {  mentorPersonalAndContactData,mentorWorkExperienceData } from "src/Database/mysql";
-
+import { verifyAccessToken } from "src/helpers/authentication";
 
 const TAG = 'services.mentor_Education'
 
@@ -14,10 +14,10 @@ export async function updateEducation(user) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
 
-    console.log("dgycdgscsdcsdcsdcdscsdc")
     console.log(user)
-    
-    const response = await mentorEducationData.saveEducationDetails({...user})
+    let decoded=await verifyAccessToken(user.headerValue)
+    const uid=decoded[0].uid  
+    const response = await mentorEducationData.saveEducationDetails({...user,uid})
     const data = {
       ...response
           }
