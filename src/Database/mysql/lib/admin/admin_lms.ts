@@ -657,6 +657,10 @@ export async function updateModulesPost(user,module_id) {
     return updateModulesPort;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateModulesPost()`, error);
+    throw error;
+  }
+}
+
 
 export async function checkLearnId(learnId: any){
   try {
@@ -741,4 +745,3 @@ export async function updateExercisesPost(user,exercise_id) {
     throw error;
   }
 }
-

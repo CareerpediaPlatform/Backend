@@ -129,19 +129,11 @@ export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-<<<<<<< HEAD
 STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
   STUDENT_AUTH_GMAIL;`
-=======
-STUDENT_AUTH_FORM 
-UNION ALL SELECT 
-  id, uid, first_name, last_name, email,status
-FROM
-STUDENT_AUTH_GMAIL;`
->>>>>>> 6bb42644f957280edce03fda765724b8857ea190
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
