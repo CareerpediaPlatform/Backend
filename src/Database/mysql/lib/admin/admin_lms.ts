@@ -1,7 +1,7 @@
 import logger from "src/logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-
+var crypto=require("crypto") 
 const TAG = 'data_stores_mysql_lib_user_lms'
 
 export async function  getCourseOverview(courseId) {
@@ -149,7 +149,7 @@ export async function  getPartDetail() {
     }
 
     // student
-  export async function  getMyCourses(list) {
+export async function  getMyCourses(list) {
     // let id=courseId
       try {
         logger.info(`${TAG}.getMyCourses()  ==>`);
@@ -206,18 +206,27 @@ export async function uploadCourse(fileDetails:any, imageDetails:any,course:any,
       price: course.price,
       discountprice: course.discountprice,
       filePath:fileDetails.filePath,
- 
+      learn: course.learn
     };
     console.log(data)
-
-
+    console.log(data.uid)
     const videoInsertQuery = `INSERT INTO COURSE (UID,  THUMBNAIL, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNTPRICE, Type )
     VALUES(:uid, :thumbnail, :video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`
+    const response=[]
+    
+    const learnQuery = `INSERT INTO  WHATYOULEARN
+    ( UID,LEARN)
+     values( :uid,:learn )`;
+     let array=JSON.parse(course.learn)
+     for( const singleData of array){
 
+      const res=await executeQuery( learnQuery, QueryTypes.INSERT,{ learn:singleData,uid:data.uid})
+      response.push(res)
+     }
     const [coursedata] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
       ...data,...type
     })
-    return coursedata
+    return {response,coursedata}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
@@ -240,9 +249,12 @@ export async function checkCourseIdExist(courseUID: any){
 export async function getuploadCourse(courseUID){
   try {
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID=:courseUID';
+    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';
+    const getQuery = 'SELECT * FROM `WHATYOULEARN` WHERE UID= :courseUID'
+    const query= ''
     const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
-    return basicCourse
+    const [basicCourseLearn] = await executeQuery(getQuery, QueryTypes.SELECT, {courseUID});
+    return {basicCourse,basicCourseLearn}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
     throw error;
@@ -263,6 +275,7 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
       test: course.test,
       price: course.price,
       discountprice: course.discountprice,
+      learn: course.learn
     }
     console.log(course)
 
@@ -270,7 +283,16 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
     const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE UID=:courseUID`;
 
     const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
-    return basicCourse
+    const response=[]
+    
+    const learnQuery = `UPDATE WHATYOULEARN SET LEARN= :learn WHERE UID= :courseUID`;
+     let array=JSON.parse(course.learn)
+     for( const singleData of array){
+
+      const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUID})
+      response.push(res)
+     }
+    return {basicCourse,response}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
     throw error;
@@ -322,6 +344,7 @@ export async function checkCoureUid(course_id) {
     throw error;
   }
 }
+
 export async function coursePartPost(user) {
   const part_id=crypto.randomUUID()
   logger.info(`${TAG}.coursePartPost()`);
@@ -378,6 +401,7 @@ export async function modulesPost(user) {
     throw error;
   }
 }
+
 export async function checkPartUid(part_id) {
   try {
     logger.info(`${TAG}.checkPartUid()  ==>`, part_id);
@@ -639,6 +663,24 @@ export async function updateModulesPost(user,module_id) {
   }
 }
 
+export async function checkLearnId(learnId: any){
+  try {
+    logger.info(`${TAG}.checkLearnId()  ==>`, learnId);
+
+    let query = 'select * from whatyoulearn where ID= :learnId';
+    const [learnID] = await executeQuery(query, QueryTypes.SELECT, {
+      learnId:learnId.id
+    });
+    console.log("learn_id",[learnID])
+    return learnID;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.checkLearnId()`, error); 
+
+    throw error;
+  }
+}
+
+
 export async function updateLessonPost(user,lesson_id) {
   logger.info(`${TAG}.updateLessonPost()`);
   try {
@@ -667,9 +709,27 @@ export async function updateTestPost(user,test_id) {
     return updateTestPost;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateTestPost()`, error);
+  }}
+
+export async function deleteLearnId(learnId) {
+  try {
+    logger.info(`${TAG}.deleteLearnId()  ==>`,learnId);
+    console.log(learnId)
+    let query = "DELETE FROM whatyoulearn WHERE ID = :Id";
+    const [learnDetails] = await executeQuery(query, QueryTypes.DELETE, {
+      Id: learnId.id
+    });
+    return learnDetails;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.deleteLearnId()`,
+      error
+    );
+
     throw error;
   }
 }
+
 
 export async function updateExercisesPost(user,exercise_id) {
   logger.info(`${TAG}.updateExercisesPost()`);
@@ -686,3 +746,4 @@ export async function updateExercisesPost(user,exercise_id) {
     throw error;
   }
 }
+

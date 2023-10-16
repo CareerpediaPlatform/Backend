@@ -326,6 +326,7 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     }
   }
 
+
   
 export async function updateCoursePartPost(req: any, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -406,3 +407,24 @@ export async function updateModuleExercise(req: any, res: Response, next: NextFu
     next(error)
   }
 }
+
+
+  export async function deleteSingleLearn(req: any,res: Response, next: NextFunction): Promise<void>{
+    try{
+      log.info(`${TAG}.deleteSingleLearn()`);
+      log.debug(`${TAG}.deleteSingleLearn() Object = ${JSON.stringify(req.body)}`)
+      let learnId = req.params;
+      const authResponse= await adminlmsServices.deleteSingleLearn(learnId)
+      responseBuilder(authResponse, res, next, req)
+    }
+    catch (error) {
+      log.error(`ERROR occurred in ${TAG}.deleteSingleLearn() `, error)
+      next(error)
+    }
+  }
+
+
+
+  
+
+

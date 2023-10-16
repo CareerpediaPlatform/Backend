@@ -17,8 +17,10 @@ export async function signUp(user: IRecruiter,transaction?: any) {
       password: hashedPassword,
       status:"ACTIVE"
     };
+
     let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
     values(:uid, :email, :password,:status)`;
+
     await executeQuery(recruiterInsertQuery, QueryTypes.INSERT, {
       ...data,transaction
     });
@@ -48,15 +50,32 @@ export async function checkEmailExist(email: string) {
 
 export async function getRecruiterUid(uid){
     try {
+
       console.log(uid)
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid.uid
       });
-      return userId;
+      return userId
+
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
+      throw error;
+    }
+  }
+
+  
+  export async function getRECRUITERUid(uid){
+    try {
+      logger.info(`${TAG}.getRECRUITERUid()  ==>`, uid);
+      let query = 'select * from RECRUITER where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid:uid.uid
+      });
+      return userId;
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.getRECRUITERUid()`, error); 
       throw error;
     }
   }

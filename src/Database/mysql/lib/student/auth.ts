@@ -25,10 +25,9 @@ export async function signUp(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL,PASSWORD,ROLE,STATUS)
-      VALUES (:uid, :firstName, :lastName, :email, :password, :role, :status)
+      INSERT INTO STUDENT_AUTH_FORM (id, uid, first_name, last_name, email, password,role,status)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
     `;
-
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
       ...data,
     });
@@ -55,7 +54,7 @@ export async function signupWithSocialAccount(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
+      INSERT INTO STUDENT_AUTH (id, uid, first_name, last_name, email, uniqId, status)
       VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
     `;
 
@@ -75,7 +74,7 @@ export async function changePassword(user:any){
 try{
   logger.info(`${TAG}.changePassword()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_AUTH_FORM SET password= :hashedPassword WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_DETAILS SET password= :hashedPassword WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     hashedPassword,...user});
   return response;
@@ -89,7 +88,7 @@ export async function signupPhonenumber(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_AUTH_FORM SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_DETAILS SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -103,7 +102,7 @@ export async function signupPhonenumbers(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_AUTH_GMAIL SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -119,11 +118,11 @@ export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-STUDENT_AUTH_FORM 
+  STUDENT_DETAILS 
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
-STUDENT_AUTH_GMAIL;`
+  STUDENT_AUTH;`
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -136,8 +135,8 @@ export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
-      ELSE 'STUDENT_AUTH_FORM'
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH WHERE uid = :uid) THEN 'STUDENT_AUTH'
+      ELSE 'STUDENT_DETAILS'
   END AS table_name
   `
 
@@ -267,7 +266,6 @@ export async function  verifyOTP(userotp: any) {
     else{
       return false
     }
-    // console.log("error")
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.verifyOTP()`, error);
     throw error;
@@ -297,7 +295,6 @@ export async function checkEmailOrPhoneExist(info) {
       queries = [query1, query2];
     } else if (info.uid) {
       query1 = 'SELECT * FROM STUDENT_AUTH_FORM WHERE uid = :uid';
-      
       query2 = 'SELECT * FROM STUDENT_AUTH_GMAIL WHERE uid = :uid';
       queries = [query1, query2];
     }else if (info.id) {
