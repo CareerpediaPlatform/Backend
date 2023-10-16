@@ -24,7 +24,7 @@ const router = Router()
  .patch(isAuthenticated,controller.studentProfilePost);
  router.route('/profile/')
  .get(isAuthenticated,controller.getStudentProfile);
- router.route('/resume').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadResume);
- router.route('/resume').get(controller.getStudentResume);
+ router.route('/resume').post(isAuthenticated,videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadResume);
+ router.route('/resume').get(isAuthenticated,controller.getStudentResume);
 
  export default router

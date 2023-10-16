@@ -25,7 +25,7 @@ export async function signUp(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_FORM (id, uid, first_name, last_name, email, password,role,status)
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
     `;
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -118,11 +118,13 @@ export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-  STUDENT_DETAILS 
+STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
-  STUDENT_AUTH;`
+  STUDENT_AUTH_GMAIL;`
+
+
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -130,13 +132,14 @@ console.log(res)
    return await {...res};
 }
 
-// update stauys active and deactive
+// update status active and deactive
 export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH WHERE uid = :uid) THEN 'STUDENT_AUTH'
-      ELSE 'STUDENT_DETAILS'
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
+      ELSE 'STUDENT_AUTH_GMAIL'
+
   END AS table_name
   `
 
