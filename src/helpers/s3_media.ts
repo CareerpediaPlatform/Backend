@@ -4,8 +4,9 @@ import {  PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3ConnectionLoader } from '../Loaders/s3_config';
 import * as nodeUtil from 'util';
 import { AWS_S3 } from '../Loaders/config'
-import ffmpeg from 'fluent-ffmpeg';
+import { resolve } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+
 
 const TAG = 'helpers.s3_media'
 // export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
@@ -29,11 +30,9 @@ const TAG = 'helpers.s3_media'
   export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
     log.info(`${TAG}.saveFile()`);
     console.log(file)
+   
     try {
-      // if (file == null || !Array.isArray(file)) {
-      //   throw new Error('File is empty or not an array');
-      // }
-  
+
       const savedFilesData = [];
       const fileList = Array.isArray(file) ? file : [file];
       for (const individualFile of fileList) {
@@ -43,10 +42,9 @@ const TAG = 'helpers.s3_media'
         }
         const originalname = individualFile.originalname;
         const uniqueIdentifier = uuidv4(); // Generate a unique identifier for each file
-        const filePath = path.join(folderName, uniqueIdentifier + '-' + originalname);
+        const filePath = path.join( folderName,uniqueIdentifier + '-' + originalname);
         console.log('Original Name:', filePath);
         const fileName = getSanitizedFileName(originalname);
-  
         const savedFileData = await saveFileBuffer(
           individualFile.buffer,
           filePath,
@@ -56,6 +54,8 @@ const TAG = 'helpers.s3_media'
         );
   
         savedFilesData.push(savedFileData);
+      
+     
       }
    
   
@@ -77,13 +77,14 @@ const TAG = 'helpers.s3_media'
       const command = new PutObjectCommand(params)
       const s3Connection = s3ConnectionLoader()
       const data = await s3Connection.send(command)
-     
-      // const duration = await getVideoDuration(videoPath);
-      // console.log(duration)
+    
       log.debug(`${TAG}.saveFileBuffer() s3 upload response::` + nodeUtil.inspect(data))
       data.savedFileKey = filePath
       data.savedFileName = fileName
       data.savedLocation = getFileUrl(filePath, bucketName)
+      // const duration = await getVideoDurations( data.savedFileKey);
+      //   console.log("****************************************")
+      //   console.log(duration)
       return data
      
     } catch (error) {
@@ -107,15 +108,3 @@ const TAG = 'helpers.s3_media'
     return Math.floor(Date.now()) + '-' + (fileName || '')
   }
   
-export async function getVideoDuration(videoPath: any): Promise<number> {
-  return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(videoPath, (err, metadata) => {
-      if (err) {
-        reject(err);
-      } else {
-        const duration = metadata.format.duration; // Duration in seconds
-        resolve(duration);
-      }
-    });
-  });
-}

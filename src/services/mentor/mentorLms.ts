@@ -3,7 +3,7 @@ import log from "src/logger";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
 import * as mentorlms from "../../Database/mysql/lib/mentor/mentorLms";
 import { verifyAccessToken } from "src/helpers/authentication";
-import { MentorAuth } from "src/Database/mysql";
+import { MentorAuth, StudentAuth } from "src/Database/mysql";
 
 const TAG = 'services.mentor_LMS';
 
@@ -72,16 +72,15 @@ export async function getAllAssignments(partId: any){
     try {
       let response;
       let decoded=await verifyAccessToken(headerValue)
-      console.log(decoded)
-      const uid=decoded.mentor_uid
-      const mentorValid = await MentorAuth.getMentorUid(uid)
-      if(mentorValid){
+      const uid=decoded.uid //change will change mentor_uid
+      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid}) || await MentorAuth.getMentorUid(uid) 
+      if(isValid){
       response = await mentorlms.postThreadreply(reply,threadId,uid,partId)
       }
       else{
         serviceResponse.message="Invalid USER ID"
       }
-       
+  
       const data = {
         ...response,
       }

@@ -11,6 +11,7 @@ import nodeUtil from 'util';
 import { verifyAccessToken } from "src/helpers/authentication";
 
 import { getMyCourse } from "src/Database/mysql/lib/admin/admin_lms";
+import { APIError } from "src/models";
 const TAG = 'assignment.service'
 
 export async function uploadAssignment(files:any,headerValue: any, partId: any): Promise<IServiceResponse> {
@@ -40,6 +41,8 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
       }
       else{
         serviceResponse.message="invalid user id"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
       // serviceResponse.message = `successfully uploaded ${file.originalname}`
@@ -62,6 +65,11 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
       const uid=decoded.uid
       if(isValid){
            response=await attachment.getAllAssignments(partId,uid)
+      }
+      else{
+        serviceResponse.message="Invalid User Id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       }
           const data={
             response
@@ -89,7 +97,9 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
          response = await attachment.uploadNote(note,uid)
       }
       else{
-        serviceResponse.message="invalid user id"
+        serviceResponse.message="invalid user id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
       serviceResponse.data = { response, note}
@@ -111,7 +121,9 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
          response=await attachment.getAllNotes(uid)
       }
       else{
-        serviceResponse.message="invalid user id"
+        serviceResponse.message="Invalid user Id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
           
@@ -141,7 +153,9 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
         response = await attachment.uploadThread(thread,uid,partId)
       }
       else{
-        serviceResponse.message="invalid user id"
+        serviceResponse.message="Invalid user Id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
       
@@ -167,7 +181,9 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
          response=await attachment.getSingleThread(partId,threadId,uid)
       }
       else{
-        serviceResponse.message="invalid user id"
+        serviceResponse.message="Invalid user Id"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
         
@@ -214,6 +230,8 @@ export async function uploadAssignment(files:any,headerValue: any, partId: any):
         serviceResponse.data = data
       }else{
         serviceResponse.message="course does not exist"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       }
    
     } catch (error) {

@@ -8,8 +8,8 @@ import {generateAccessToken,verifyAccessToken } from '../../helpers/authenticati
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
 import { sendRegistrationNotification } from "../../utils/nodemail";
-
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+
 const TAG = 'services.auth'
 
 export async function signupUser(user: IRecruiter) {
@@ -33,7 +33,9 @@ export async function signupUser(user: IRecruiter) {
       const email = recruiter.email
       const accessToken = await generateAccessToken({ uid,email});  
       const data = {
+
         accessToken
+
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -73,7 +75,9 @@ export async function loginUser(user: IRecruiter) {
             const email = existedUser.email
             const accessToken = await generateAccessToken({ uid,email})
             const data = {
+
                 accessToken
+
             };
 
             serviceResponse.data = data;
@@ -89,17 +93,17 @@ export async function loginUser(user: IRecruiter) {
 export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try{
+
     // finde recruiter is valid or not
     const uid=await verifyAccessToken(user.headerValue)
     const recruiter=await RecruiterAuth.getRecruiterUid({uid:uid.uid})
     if(recruiter){
       const IsValid=await comparePasswords(recruiter.password,user.oldPassword)
+
       if(IsValid){
     const response=await RecruiterAuth.changePassword({password:user.newPassword,uid:uid.uid})
-    console.log("response")
-    console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';
