@@ -1,17 +1,19 @@
 import swaggerJsdoc from'swagger-jsdoc';
+import routes from '../routes/v1/admin/adminAuth'
 
 
-const options = {
+const options: swaggerJsdoc.Options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'My REST API',
+      title: 'CAREERPEDIA API',
       version: '1.0.0',
     },
   },
-  apis: ['../routes/index.ts'], // Replace with the path to your API code
+  apis: ['../routes/v1/admin/adminAuth'], // Replace with the path to your API code
 };
 
-const specs = swaggerJsdoc(options);
+// Generate the Swagger specification
+const swaggerSpecification = swaggerJsdoc(options);
 
-module.exports = specs;
+export { swaggerSpecification };

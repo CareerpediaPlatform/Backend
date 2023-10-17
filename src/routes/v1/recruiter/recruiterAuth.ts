@@ -20,7 +20,7 @@ const router = Router()
 
  
  router.route('/change-password')
- .post(controller.changePasswordController);
+ .patch(controller.changePasswordController);
     
 
 export default router

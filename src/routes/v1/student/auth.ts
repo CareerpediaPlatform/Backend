@@ -20,7 +20,7 @@ const router = Router()
  router.route('/verify-number')
      .post(isAuthenticated,validation.numberLogin,controller.signupPhonenumber);
 
-     
+    
     //  signin
  router.route('/email-login')
      .post(validation.emailLogin,controller.signinUser);

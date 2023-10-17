@@ -59,5 +59,5 @@ router.route('/forget-password')
 router.route('/forget-password')
     .patch(authentication_1.isAuthenticated, controller.setForgetPassword);
 router.route('/change-password')
-    .patch(validation.passwordValidation, controller.changePassword);
+    .patch(authentication_1.isAuthenticated, validation.passwordValidation, controller.changePassword);
 exports.default = router;

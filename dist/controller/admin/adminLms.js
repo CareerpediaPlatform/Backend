@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateModuleExercise = exports.updateModuleTest = exports.updateModuleLesson = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesson = exports.getModulesLesson = exports.courseExercisePost = exports.coursetestPost = exports.courseLessonPost = exports.getCourseModule = exports.courseModulesPost = exports.getCourseParts = exports.coursePartPost = exports.coursePost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
+exports.deleteSingleLearn = exports.updateModuleExercise = exports.updateModuleTest = exports.updateModuleLesson = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesson = exports.getModulesLesson = exports.courseExercisePost = exports.coursetestPost = exports.courseLessonPost = exports.getCourseModule = exports.courseModulesPost = exports.getCourseParts = exports.coursePartPost = exports.coursePost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const adminlmsServices = __importStar(require("../../services/admin/adminLms"));
@@ -505,3 +505,19 @@ function updateModuleExercise(req, res, next) {
     });
 }
 exports.updateModuleExercise = updateModuleExercise;
+function deleteSingleLearn(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.deleteSingleLearn()`);
+            logger_1.default.debug(`${TAG}.deleteSingleLearn() Object = ${JSON.stringify(req.body)}`);
+            let learnId = req.params;
+            const authResponse = yield adminlmsServices.deleteSingleLearn(learnId);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteSingleLearn() `, error);
+            next(error);
+        }
+    });
+}
+exports.deleteSingleLearn = deleteSingleLearn;

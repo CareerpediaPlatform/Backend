@@ -29,7 +29,7 @@ function signUp(user) {
                 email: user.email,
                 password: hashedPassword
             };
-            let AadminInsertQuery = `insert into admin(UID, EMAIL, PASSWORD)
+            let AadminInsertQuery = `insert into ADMIN(UID, EMAIL, PASSWORD)
     values(:uid, :email, :password)`;
             yield (0, sql_query_util_1.executeQuery)(AadminInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -45,7 +45,7 @@ function checkEmailExist(email) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkEmailExist()  ==>`, email);
-            let query = 'select * from admin where EMAIL=:email ';
+            let query = 'select * from ADMIN where EMAIL=:email ';
             const [user] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 email
             });
@@ -63,7 +63,7 @@ function login(user) {
         try {
             logger_1.default.info(`${TAG}.saveUser()`, user.email);
             // Check if the user with the given email exists
-            let query = "select * from admin where EMAIL=:email ";
+            let query = "select * from ADMIN where EMAIL=:email ";
             const adminloginQuery = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 email: user.email,
             });

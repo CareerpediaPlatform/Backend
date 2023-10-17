@@ -7,8 +7,9 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import {generateAccessToken,verifyAccessToken } from '../../helpers/authentication'
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IRecruiter } from "src/models/lib/auth";
-import { sendRegistrationNotification } from "../../utils/nodemail";
+import { sendRegistrationNotifications } from "../../utils/nodemail";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 
 const TAG = 'services.auth'
 
@@ -25,10 +26,11 @@ export async function signupUser(user: IRecruiter) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Recruiter");
       transaction = await getTransaction()
-      const recruiter = await RecruiterAuth.signUp(user,transaction);
+      const recruiter = await RecruiterAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
-      sendRegistrationNotification(user)
+      sendRegistrationNotifications(user,generatePassword)
       const uid = recruiter.uid
       const email = recruiter.email
       const accessToken = await generateAccessToken({ uid,email});  
@@ -75,9 +77,7 @@ export async function loginUser(user: IRecruiter) {
             const email = existedUser.email
             const accessToken = await generateAccessToken({ uid,email})
             const data = {
-
                 accessToken
-
             };
 
             serviceResponse.data = data;
