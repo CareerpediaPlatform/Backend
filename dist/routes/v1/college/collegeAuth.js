@@ -40,5 +40,5 @@ router.route(APIPaths.LOGIN)
 router.route('/signup')
     .post(authentication_1.isAuthenticated, controller.signupCollege);
 router.route('/change-password')
-    .post(authentication_1.isAuthenticated, controller.changePasswordController);
+    .patch(authentication_1.isAuthenticated, controller.changePasswordController);
 exports.default = router;

@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateExercisesPost = exports.updateTestPost = exports.updateLessonPost = exports.updateModulesPost = exports.updateCoursePartPost = exports.deleteExercisePost = exports.getExercisePost = exports.exercisesPost = exports.deleteTestPost = exports.getTestPost = exports.testPost = exports.deleteLessonPost = exports.getLessonPost = exports.checkModuleUid = exports.lessonPost = exports.getModule = exports.checkPartUid = exports.modulesPost = exports.getPart = exports.coursePartPost = exports.checkCoureUid = exports.coursesPost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.checkCourseIdExist = exports.uploadCourse = exports.getAllCourses = exports.getMyCourse = exports.getMyCourses = exports.getPartDetail = exports.getCourses = exports.getCourseOverview = void 0;
+exports.updateExercisesPost = exports.deleteLearnId = exports.updateTestPost = exports.updateLessonPost = exports.checkLearnId = exports.updateModulesPost = exports.updateCoursePartPost = exports.deleteExercisePost = exports.getExercisePost = exports.exercisesPost = exports.deleteTestPost = exports.getTestPost = exports.testPost = exports.deleteLessonPost = exports.getLessonPost = exports.checkModuleUid = exports.lessonPost = exports.getModule = exports.checkPartUid = exports.modulesPost = exports.getPart = exports.coursePartPost = exports.checkCoureUid = exports.coursesPost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.checkCourseIdExist = exports.uploadCourse = exports.getAllCourses = exports.getMyCourse = exports.getMyCourses = exports.getPartDetail = exports.getCourses = exports.getCourseOverview = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
+var crypto = require("crypto");
 const TAG = 'data_stores_mysql_lib_user_lms';
 function getCourseOverview(courseId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -235,12 +236,23 @@ function uploadCourse(fileDetails, imageDetails, course, type) {
                 price: course.price,
                 discountprice: course.discountprice,
                 filePath: fileDetails.filePath,
+                learn: course.learn
             };
             console.log(data);
+            console.log(data.uid);
             const videoInsertQuery = `INSERT INTO COURSE (UID,  THUMBNAIL, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNTPRICE, Type )
     VALUES(:uid, :thumbnail, :video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`;
+            const response = [];
+            const learnQuery = `INSERT INTO  WHATYOULEARN
+    ( UID,LEARN)
+     values( :uid,:learn )`;
+            let array = JSON.parse(course.learn);
+            for (const singleData of array) {
+                const res = yield (0, sql_query_util_1.executeQuery)(learnQuery, sequelize_1.QueryTypes.INSERT, { learn: singleData, uid: data.uid });
+                response.push(res);
+            }
             const [coursedata] = yield (0, sql_query_util_1.executeQuery)(videoInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), type));
-            return coursedata;
+            return { response, coursedata };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.saveFile()`, error);
@@ -269,9 +281,12 @@ function getuploadCourse(courseUID) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.getuploadCourse() ==>`, courseUID);
-            const checkQuery = 'SELECT * FROM `COURSE` WHERE UID=:courseUID';
+            const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';
+            const getQuery = 'SELECT * FROM `WHATYOULEARN` WHERE UID= :courseUID';
+            const query = '';
             const [basicCourse] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { courseUID });
-            return basicCourse;
+            const [basicCourseLearn] = yield (0, sql_query_util_1.executeQuery)(getQuery, sequelize_1.QueryTypes.SELECT, { courseUID });
+            return { basicCourse, basicCourseLearn };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -295,12 +310,20 @@ function updateuploadCourse(fileDetails, imageDetails, courseUID, course) {
                 test: course.test,
                 price: course.price,
                 discountprice: course.discountprice,
+                learn: course.learn
             };
             console.log(course);
             console.log(data);
             const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE UID=:courseUID`;
             const [basicCourse] = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, data), { courseUID }));
-            return basicCourse;
+            const response = [];
+            const learnQuery = `UPDATE WHATYOULEARN SET LEARN= :learn WHERE UID= :courseUID`;
+            let array = JSON.parse(course.learn);
+            for (const singleData of array) {
+                const res = yield (0, sql_query_util_1.executeQuery)(learnQuery, sequelize_1.QueryTypes.UPDATE, { learn: singleData, courseUID });
+                response.push(res);
+            }
+            return { basicCourse, response };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
@@ -667,6 +690,24 @@ function updateModulesPost(user, module_id) {
     });
 }
 exports.updateModulesPost = updateModulesPost;
+function checkLearnId(learnId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.checkLearnId()  ==>`, learnId);
+            let query = 'select * from whatyoulearn where ID= :learnId';
+            const [learnID] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
+                learnId: learnId.id
+            });
+            console.log("learn_id", [learnID]);
+            return learnID;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkLearnId()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkLearnId = checkLearnId;
 function updateLessonPost(user, lesson_id) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateLessonPost()`);
@@ -694,11 +735,28 @@ function updateTestPost(user, test_id) {
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateTestPost()`, error);
-            throw error;
         }
     });
 }
 exports.updateTestPost = updateTestPost;
+function deleteLearnId(learnId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.deleteLearnId()  ==>`, learnId);
+            console.log(learnId);
+            let query = "DELETE FROM whatyoulearn WHERE ID = :Id";
+            const [learnDetails] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.DELETE, {
+                Id: learnId.id
+            });
+            return learnDetails;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteLearnId()`, error);
+            throw error;
+        }
+    });
+}
+exports.deleteLearnId = deleteLearnId;
 function updateExercisesPost(user, exercise_id) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateExercisesPost()`);

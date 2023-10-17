@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collegeUpdateStatus = exports.changePassword = exports.login = exports.checkUidExist = exports.checkEmailExist = exports.signUp = void 0;
+exports.collegeUpdateStatus = exports.changePassword = exports.login = exports.getCollegeAdminUid = exports.checkUidExist = exports.checkEmailExist = exports.signUp = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -30,7 +30,7 @@ function signUp(user, transaction) {
                 password: hashedPassword,
                 status: "ACTIVE"
             };
-            let collegeInsertQuery = `insert into COLLEGE(UID, EMAIL, PASSWORD,status)
+            let collegeInsertQuery = `insert into COLLEGE_ADMIN(UID, EMAIL, PASSWORD,STATUS)
     values(:uid, :email, :password, :status)`;
             yield (0, sql_query_util_1.executeQuery)(collegeInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { transaction }));
             return data;
@@ -46,7 +46,7 @@ function checkEmailExist(email) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkEmailExist()  ==>`, email);
-            let query = 'select * from COLLEGE where EMAIL=:email ';
+            let query = 'select * from COLLEGE_ADMIN where EMAIL=:email ';
             const [user] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 email
             });
@@ -63,7 +63,7 @@ function checkUidExist(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkUidExist() ==>`, uid);
-            let query = 'SELECT * FROM COLLEGE WHERE UID = :uid';
+            let query = 'SELECT * FROM COLLEGE_ADMIN WHERE UID = :uid';
             const [user] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 uid
             });
@@ -76,11 +76,29 @@ function checkUidExist(uid) {
     });
 }
 exports.checkUidExist = checkUidExist;
+function getCollegeAdminUid(uid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log(uid);
+            logger_1.default.info(`${TAG}.getCollegeAdminUid()  ==>`, uid);
+            let query = 'select * from COLLEGE_ADMIN where UID=:uid';
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
+                uid: uid.uid
+            });
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getCollegeAdminUid()`, error);
+            throw error;
+        }
+    });
+}
+exports.getCollegeAdminUid = getCollegeAdminUid;
 function login(user) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.saveUser()`);
-            let query = 'SELECT * FROM COLLEGE WHERE EMAIL=:email';
+            let query = 'SELECT * FROM COLLEGE_ADMIN WHERE EMAIL=:email';
             const collgeloginQuery = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 email: user.email
             });
@@ -98,7 +116,7 @@ function changePassword(user) {
         try {
             let hashedPassword = yield (0, encryption_1.hashPassword)(user.password);
             // Update the mentor's password in the database
-            const query = `UPDATE COLLEGE SET PASSWORD = :hashedPassword WHERE UID = :uid`;
+            const query = `UPDATE COLLEGE_ADMIN SET PASSWORD = :hashedPassword WHERE UID = :uid`;
             const collegeChangePassword = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.UPDATE, Object.assign({ hashedPassword }, user));
             return collegeChangePassword;
         }
@@ -117,7 +135,7 @@ function collegeUpdateStatus(user) {
                 uid: user.uid,
                 status: user.status,
             };
-            const updateQuery = `UPDATE COLLEGE
+            const updateQuery = `UPDATE COLLEGE_ADMIN
     SET status = :status
     WHERE uid = :uid;
     `;

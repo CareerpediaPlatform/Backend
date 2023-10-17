@@ -116,7 +116,7 @@ function uploadCompanyLogoFile(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.uploadCompanyLogoFile()`);
             logger_1.default.debug(`${TAG}.uploadCompanyLogoFile() req file:` + util_1.default.inspect(req.file));
-            const serviceResponse = yield recruiterProfileServices.uploadCompanyLogoFile(req.file);
+            const serviceResponse = yield recruiterProfileServices.uploadCompanyLogoFile(req.files);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateExercisePost = exports.updateTestPost = exports.updateLessonPost = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesspon = exports.getModulesLesspon = exports.exerciseUser = exports.testUser = exports.lessonUser = exports.getCourseModules = exports.courseModulesUser = exports.getCoursePart = exports.coursePartUser = exports.courseUser = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
+exports.deleteSingleLearn = exports.updateExercisePost = exports.updateTestPost = exports.updateLessonPost = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesspon = exports.getModulesLesspon = exports.exerciseUser = exports.testUser = exports.lessonUser = exports.getCourseModules = exports.courseModulesUser = exports.getCoursePart = exports.coursePartUser = exports.courseUser = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
 const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
 const api_error_1 = require("src/models/lib/api_error");
@@ -21,7 +21,6 @@ const mysql_1 = require("../../Database/mysql");
 const config_1 = require("../../Loaders/config");
 const file_constants_1 = require("src/constants/file_constants");
 const s3_media_1 = require("src/helpers/s3_media");
-const util_1 = __importDefault(require("util"));
 const TAG = 'services.lms.admin';
 function getCourseOverview(courseId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -67,44 +66,36 @@ function getCourses(coursetype) {
 exports.getCourses = getCourses;
 // course//
 function uploadCourse(files, course, type) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.uploadVideoFile() `);
+        logger_1.default.info(`${TAG}.uploadCourse() `);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.LMS_VIDEOS;
             const data = yield (0, s3_media_1.saveFile)(files, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
-            const file = files[0];
-            const data1 = data[0];
             const fileDetails = {
-                fileName: data1 === null || data1 === void 0 ? void 0 : data1.savedFileName,
-                originalFileName: file === null || file === void 0 ? void 0 : file.originalname,
-                contentType: file === null || file === void 0 ? void 0 : file.mimetype,
+                fileName: (_a = data[0]) === null || _a === void 0 ? void 0 : _a.savedFileName,
+                originalFileName: (_b = files[0]) === null || _b === void 0 ? void 0 : _b.originalname,
+                contentType: (_c = files[0]) === null || _c === void 0 ? void 0 : _c.mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: data1 === null || data1 === void 0 ? void 0 : data1.savedFileKey,
-                fileUrl: data1 === null || data1 === void 0 ? void 0 : data1.savedLocation,
+                filePath: (_d = data[0]) === null || _d === void 0 ? void 0 : _d.savedFileKey,
+                fileUrl: (_e = data[0]) === null || _e === void 0 ? void 0 : _e.savedLocation,
                 isPublic: true,
                 metaData: null,
             };
-            const image = files[1];
-            const data2 = data[1];
             const imageDetails = {
-                fileName: data2 === null || data2 === void 0 ? void 0 : data2.savedFileName,
-                originalFileName: image === null || image === void 0 ? void 0 : image.originalname,
-                contentType: image === null || image === void 0 ? void 0 : image.mimetype,
+                fileName: (_f = data[1]) === null || _f === void 0 ? void 0 : _f.savedFileName,
+                originalFileName: (_g = files[1]) === null || _g === void 0 ? void 0 : _g.originalname,
+                contentType: (_h = files[1]) === null || _h === void 0 ? void 0 : _h.mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: data2 === null || data2 === void 0 ? void 0 : data2.savedFileKey,
-                fileUrl: data2 === null || data2 === void 0 ? void 0 : data2.savedLocation,
+                filePath: (_j = data[1]) === null || _j === void 0 ? void 0 : _j.savedFileKey,
+                fileUrl: (_k = data[1]) === null || _k === void 0 ? void 0 : _k.savedLocation,
                 isPublic: true,
                 metaData: null,
             };
-            console.log(imageDetails);
             const fileSavedResp = yield mysql_1.adminLms.uploadCourse(fileDetails, imageDetails, course, type);
-            logger_1.default.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + util_1.default.inspect(fileSavedResp));
             serviceResponse.data = {
                 uid: course.uid,
-                // fileName: fileDetails.fileName,
-                // originalFileName: fileDetails.originalFileName,
-                // contentType: fileDetails.contentType,
                 thumbnail: imageDetails.fileUrl,
                 video: fileDetails.fileUrl,
                 title: course.title,
@@ -115,7 +106,8 @@ function uploadCourse(files, course, type) {
                 test: course.test,
                 price: course.price,
                 discountprice: course.discountprice,
-                type: type
+                type: type,
+                learn: course.learn
             };
         }
         catch (error) {
@@ -128,7 +120,7 @@ function uploadCourse(files, course, type) {
 exports.uploadCourse = uploadCourse;
 function getuploadCourse(courseUID) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getRecruiterProfile() ==> `, courseUID);
+        logger_1.default.info(`${TAG}.getuploadCourse() ==> `, courseUID);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUID);
@@ -141,11 +133,13 @@ function getuploadCourse(courseUID) {
                 return serviceResponse;
             }
             else {
-                serviceResponse.message = "Invalid UId";
+                serviceResponse.message = "Invalid COURSE UId";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
             }
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.getuploadCourse`, error);
             serviceResponse.addServerError('Failed to create user due to technical difficulties');
         }
         return serviceResponse;
@@ -153,33 +147,30 @@ function getuploadCourse(courseUID) {
 }
 exports.getuploadCourse = getuploadCourse;
 function updateuploadCourse(courseUID, files, course) {
+    var _a, _b, _c, _d, _e, _f, _g;
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateuploadCourse() ==> `, courseUID);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.LMS_VIDEOS;
             const data = yield (0, s3_media_1.saveFile)(files, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
-            const file = files[0];
-            const data1 = data[0];
             const fileDetails = {
-                fileName: data1 === null || data1 === void 0 ? void 0 : data1.savedFileName,
-                originalFileName: file === null || file === void 0 ? void 0 : file.originalname,
-                contentType: file === null || file === void 0 ? void 0 : file.mimetype,
+                fileName: (_a = data[0]) === null || _a === void 0 ? void 0 : _a.savedFileName,
+                originalFileName: (_b = files[0]) === null || _b === void 0 ? void 0 : _b.originalname,
+                contentType: (_c = files[0]) === null || _c === void 0 ? void 0 : _c.mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: data1 === null || data1 === void 0 ? void 0 : data1.savedFileKey,
-                fileUrl: data1 === null || data1 === void 0 ? void 0 : data1.savedLocation,
+                filePath: (_d = data[0]) === null || _d === void 0 ? void 0 : _d.savedFileKey,
+                fileUrl: data[0].savedLocation,
                 isPublic: true,
                 metaData: null,
             };
-            const image = files[1];
-            const data2 = data[1];
             const imageDetails = {
-                fileName: data2 === null || data2 === void 0 ? void 0 : data2.savedFileName,
-                originalFileName: image === null || image === void 0 ? void 0 : image.originalname,
-                contentType: image === null || image === void 0 ? void 0 : image.mimetype,
+                fileName: (_e = data[1]) === null || _e === void 0 ? void 0 : _e.savedFileName,
+                originalFileName: files[1].originalname,
+                contentType: files[1].mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: data2 === null || data2 === void 0 ? void 0 : data2.savedFileKey,
-                fileUrl: data2 === null || data2 === void 0 ? void 0 : data2.savedLocation,
+                filePath: (_f = data[1]) === null || _f === void 0 ? void 0 : _f.savedFileKey,
+                fileUrl: (_g = data[1]) === null || _g === void 0 ? void 0 : _g.savedLocation,
                 isPublic: true,
                 metaData: null,
             };
@@ -194,6 +185,8 @@ function updateuploadCourse(courseUID, files, course) {
             }
             else {
                 serviceResponse.message = "Invalid courseId";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
             }
         }
         catch (error) {
@@ -215,7 +208,9 @@ function deleteuploadCourse(courseUID) {
                 return serviceResponse;
             }
             else {
-                serviceResponse.message = "Invalid UId";
+                serviceResponse.message = "Invalid COURSE UId";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
             }
         }
         catch (error) {
@@ -704,3 +699,28 @@ function updateExercisePost(user, test_id) {
     });
 }
 exports.updateExercisePost = updateExercisePost;
+function deleteSingleLearn(learnId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.deleteModulesExercise() ==> `, learnId);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            const getLearnid = yield mysql_1.adminLms.checkLearnId(learnId);
+            if (getLearnid) {
+                const learnID = yield mysql_1.adminLms.deleteLearnId(learnId);
+            }
+            else {
+                serviceResponse.message = "Invalid course-overview LearnId";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
+                return serviceResponse;
+            }
+            serviceResponse.message = "course-overview learn deleted";
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteLearnId`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+    });
+}
+exports.deleteSingleLearn = deleteSingleLearn;

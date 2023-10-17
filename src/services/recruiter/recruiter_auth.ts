@@ -75,9 +75,7 @@ export async function loginUser(user: IRecruiter) {
             const email = existedUser.email
             const accessToken = await generateAccessToken({ uid,email})
             const data = {
-
                 accessToken
-
             };
 
             serviceResponse.data = data;

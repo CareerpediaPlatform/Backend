@@ -28,12 +28,12 @@ export async function signupUser(user: IMentor) {
       const mentor = await MentorAuth.signUp(user,transaction);
       await transaction.commit() 
       sendRegistrationNotification(user)
-
-const accessToken = await generateAccessToken({ ...mentor });
+      const uid = existedUser.uid
+      const email = existedUser.email
+const accessToken = await generateAccessToken({ uid,email });
         const data = {
         accessToken       
-      } 
-      
+      }      
       serviceResponse.data = data
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.signupUser`, error);
@@ -68,8 +68,9 @@ export async function loginUser(user: IMentor) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const mentor_login = await MentorAuth.login(user)
-          const mentor_uid = existedUser.uid;
-            const accessToken = await generateAccessToken({ ...mentor_login,mentor_uid});
+          const uid = existedUser.uid;
+          const email = existedUser.email;
+            const accessToken = await generateAccessToken({uid,email});
             const data = {
                 accessToken   
             };

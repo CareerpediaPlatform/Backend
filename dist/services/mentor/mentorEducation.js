@@ -17,15 +17,17 @@ const mysql_1 = require("src/Database/mysql");
 const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
 const service_response_1 = require("src/models/lib/service_response");
+const authentication_1 = require("src/helpers/authentication");
 const TAG = 'services.mentor_Education';
 function updateEducation(user) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateEducation() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log("dgycdgscsdcsdcsdcdscsdc");
             console.log(user);
-            const response = yield mysql_1.mentorEducationData.saveEducationDetails(Object.assign({}, user));
+            let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
+            const uid = decoded[0].uid;
+            const response = yield mysql_1.mentorEducationData.saveEducationDetails(Object.assign(Object.assign({}, user), { uid }));
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }

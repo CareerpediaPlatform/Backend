@@ -49,6 +49,6 @@ router.route('/profile')
     .patch(authentication_1.isAuthenticated, controller.studentProfilePost);
 router.route('/profile/')
     .get(authentication_1.isAuthenticated, controller.getStudentProfile);
-router.route('/resume').post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 1), file_1.emptyChecks, controller.uploadResume);
-router.route('/resume').get(controller.getStudentResume);
+router.route('/resume').post(authentication_1.isAuthenticated, (0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 1), file_1.emptyChecks, controller.uploadResume);
+router.route('/resume').get(authentication_1.isAuthenticated, controller.getStudentResume);
 exports.default = router;

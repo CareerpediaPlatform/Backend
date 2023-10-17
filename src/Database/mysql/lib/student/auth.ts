@@ -54,7 +54,7 @@ export async function signupWithSocialAccount(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH (id, uid, first_name, last_name, email, uniqId, status)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
       VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
     `;
 
@@ -74,7 +74,7 @@ export async function changePassword(user:any){
 try{
   logger.info(`${TAG}.changePassword()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_DETAILS SET password= :hashedPassword WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_AUTH_FORM SET password= :hashedPassword WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     hashedPassword,...user});
   return response;
@@ -88,7 +88,7 @@ export async function signupPhonenumber(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumber()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_DETAILS SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_AUTH_FORM SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -102,7 +102,7 @@ export async function signupPhonenumbers(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_AUTH_GMAIL SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -176,7 +176,7 @@ export async function studentUpdateStatus(user){
 }
 
   // otp generator
-  export async function saveOTP(user:userOTP,transaction?:any){
+export async function saveOTP(user:userOTP,transaction?:any){
   logger.info(`${TAG}.saveOTP()`);
   try{
     const otp = await OTP();
@@ -203,7 +203,7 @@ export async function studentUpdateStatus(user){
   }
 }
 
-  export async function resendOTP(user,transaction?:any){
+export async function resendOTP(user,transaction?:any){
   logger.info(`${TAG}.resendOTP()`);
   try{
     const info={
