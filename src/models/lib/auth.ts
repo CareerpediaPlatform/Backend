@@ -185,7 +185,7 @@ export interface IRecruiter {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
   status?:string
 }
 
@@ -193,7 +193,7 @@ export class Recruiter implements IRecruiter {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
   public status?:string;
 
 
@@ -211,14 +211,14 @@ export interface ICollege {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 export class College implements ICollege {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
 
   constructor(email: string, password: string) {
     this.email = email;

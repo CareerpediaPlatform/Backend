@@ -1,6 +1,7 @@
 import * as nodeMailer from 'nodemailer';
 import logger from '../logger';
 
+
 import { SENDER_EMAIL_ID } from 'src/Loaders/config';
 let transport;
 
@@ -27,7 +28,6 @@ export async function createTransport() {
 }
 
 export async function sendmail(user: any) {
-    console.log("fffddddddddddddddddddddddddddddf")
     const email=user.email
     console.log(email)
     try {
@@ -47,10 +47,12 @@ export async function sendmail(user: any) {
     }
 }
 
+// const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
 
 export async function sendSignupEmail(user) {
    
     try {
+        
      
         user.message = `<p>Hi 
         <p style=fontSize:20px ; color:blue>Email:<b>${user.email},</b></p>
@@ -73,6 +75,31 @@ export async function sendSignupEmail(user) {
     }
 }
 
+export async function sendSignupEmails(user,generatePassword) {
+   
+    try {
+        
+     
+        user.message = `<p>Hi 
+        <p style=fontSize:20px ; color:blue>Email:<b>${user.email},</b></p>
+        <br>
+        <p style=fontSize:20px; color:blue>Password:<b>${generatePassword}</b></p>
+        <p>Thanks for signing up with carrierpadia.</p>
+     
+        <br>
+        <br>
+        <h4>Best Regards</h4>
+        <p>Team  Carrierpedia</p>`;
+      
+        user.subject = 'Welcome';
+        await sendmail(user);
+        return;
+    } catch (error) {
+        logger.error('Error occurred in sendSignupEmail');
+        logger.error(error);
+        throw error;
+    }
+}
 export async function studentOtpEmail(user) {
     try {
      
@@ -124,6 +151,30 @@ export async function sendRegistrationNotification(user) {
     }
 }
 
+export async function sendRegistrationNotifications(user,generatePassword) {
+    try {
+       
+        let emailFailed = '';
+        
+        if (user.email) {
+          
+            try {
+           
+                await sendSignupEmails(user,generatePassword);
+            } catch (error) {
+                logger.error(error);
+                emailFailed = 'Failed to signup.';
+                logger.error(error);
+            }
+        }
+        return {
+            emailFailed,
+        };
+    } catch (error) {
+        logger.error(error);
+        throw error;
+    }
+}
 
 export async function studentNotification(user) {
     try {

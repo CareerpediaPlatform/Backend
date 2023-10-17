@@ -8,7 +8,8 @@ import {generateAccessToken,verifyAccessToken } from '../../helpers/authenticati
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IMentor} from "src/models/lib/auth";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { sendRegistrationNotification } from "../../utils/nodemail";
+import { sendRegistrationNotifications } from "../../utils/nodemail";
+import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 
 const TAG = 'services.auth'
 
@@ -24,13 +25,13 @@ export async function signupUser(user: IMentor) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
       transaction = await getTransaction()
-      const mentor = await MentorAuth.signUp(user,transaction);
+      const mentor = await MentorAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
-      sendRegistrationNotification(user)
-      const uid = existedUser.uid
-      const email = existedUser.email
-const accessToken = await generateAccessToken({ uid,email });
+      console.log(user)
+      sendRegistrationNotifications(user,generatePassword)
+const accessToken = await generateAccessToken({ mentor });
         const data = {
         accessToken       
       }      

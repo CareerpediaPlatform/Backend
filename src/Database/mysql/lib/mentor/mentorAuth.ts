@@ -8,14 +8,11 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_mentorAuth'
 
 
-export async function signUp(user: IMentor,transaction?:any) {
+export async function signUp(user: IMentor,generatePassword:any,transaction?:any) {
   logger.info(`${TAG}.saveUser()`);
   try {
-    // const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
-    const hashedPassword = await hashPassword(user.password);
-    // console.log(generatePassword)
-    // const hashedPassword = await hashPassword(generatePassword);
-    console.log(hashedPassword)
+    console.log(generatePassword)
+    const hashedPassword = await hashPassword(generatePassword);
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,
