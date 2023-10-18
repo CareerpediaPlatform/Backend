@@ -54,6 +54,8 @@ export async function signupPhonenumber(user) {
     log.info(`${TAG}.signupPhonenumber() ==> `, user);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
 try{
+  // let transaction = await getTransaction()
+  // let transaction = await getTransaction()
   const decoded=await verifyAccessToken(user.headerValue)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
@@ -73,13 +75,20 @@ try{
       otpsave=await await StudentAuth.saveOTP({...decoded,accessToken:otpAccessToken,phoneNumber:user.phoneNumber,otp})
     }
     const resendOtpToken=await generateAccessToken({uid:decoded.uid,otp:true,type:otpsave.info.type,phoneNumber:user.phoneNumber})
+ 
+    // await transaction.commit()
+    // await studentNotification({otp,type:"lllllll",email:existedUser.email})
     const data = {
-      otpAccessToken,
-      resendOtpToken,
-      otpsave
+      accessToken:resendOtpToken,
+      otp:otpsave.info.otp,
+      type:"otp"
     }
     serviceResponse.data = data
+    // await transaction.commit()
+    // await studentNotification({otp:otpsave.info.otp,type:otpsave.info.type,email:existedUser.email})
   }
+
+ 
 return serviceResponse
 
 }catch(error){

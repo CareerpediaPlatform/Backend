@@ -20,17 +20,15 @@ export async function signUp(user: IUser) {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phoneNumber:user.phoneNumber,
       password: hashedPassword,
       role:"student",
-      status:"ACTIVE"
+      status:"ACTIVE",
+      terms_and_condition:user.terms_and_condition
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_FORM (id, uid, first_name, last_name, email, password,role,status)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
-
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status,terms_and_condition)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status, :terms_and_condition)
     `;
-
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
       ...data,
     });
@@ -54,11 +52,13 @@ export async function signupWithSocialAccount(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
+      role:user.role,
+      terms_and_condition:user.terms_and_condition,
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,terms_and_condition)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -105,7 +105,7 @@ export async function signupPhonenumbers(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_AUTH_GMAIL SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -127,6 +127,8 @@ UNION ALL SELECT
 FROM
   STUDENT_AUTH_GMAIL;`
 
+
+
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 console.log(res)
@@ -138,8 +140,9 @@ export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
-      ELSE 'STUDENT_AUTH_FORM'
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
+      ELSE 'STUDENT_AUTH_GMAIL'
+
   END AS table_name
   `
 

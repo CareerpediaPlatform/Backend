@@ -97,7 +97,7 @@ export async function changePassword(user){
     console.log("response")
     console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';
