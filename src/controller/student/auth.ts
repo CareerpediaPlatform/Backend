@@ -30,7 +30,7 @@ export async function signupPhonenumber (req: any, res: Response, next: NextFunc
       log.debug(`${TAG}.signupPhonenumber() Object = ${JSON.stringify(req.body)}`)
       const user: IUser =req.body;
       console.log("first")
-      console.log(user)
+      console.log(req.headers.authorization)
       const headerValue=req.headers.authorization.split(' ')[1]
         const authResponse: IServiceResponse = await authService.signupPhonenumber({...user,headerValue})
         responseBuilder(authResponse, res, next, req)

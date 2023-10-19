@@ -70,7 +70,16 @@ export const verifyOTPJWT = async (token: string) => {
   return false
 };
 
+// export const OTP=async() => {
+//   // return otpGenerator.generate(6,{digits:true,alphabets:false,upperCase:false,specialChars:false });
+//   return otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+// };
+
 export const OTP=async() => {
-  return otpGenerator.generate(6,{digits:true,alphabets:false,upperCase:false,specialChars:false });
+  const min = 100000; // Minimum 6-digit number
+  const max = 999999; // Maximum 6-digit number
+  const numericOTP = Math.floor(Math.random() * (max - min + 1)) + min;
+  return numericOTP.toString(); 
+  // return otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
 };
 

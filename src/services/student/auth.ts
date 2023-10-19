@@ -54,6 +54,8 @@ export async function signupPhonenumber(user) {
     log.info(`${TAG}.signupPhonenumber() ==> `, user);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
 try{
+  // let transaction = await getTransaction()
+  // let transaction = await getTransaction()
   const decoded=await verifyAccessToken(user.headerValue)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
@@ -73,13 +75,20 @@ try{
       otpsave=await await StudentAuth.saveOTP({...decoded,accessToken:otpAccessToken,phoneNumber:user.phoneNumber,otp})
     }
     const resendOtpToken=await generateAccessToken({uid:decoded.uid,otp:true,type:otpsave.info.type,phoneNumber:user.phoneNumber})
+ 
+    // await transaction.commit()
+    // await studentNotification({otp,type:"lllllll",email:existedUser.email})
     const data = {
-      otpAccessToken,
-      resendOtpToken,
-      otpsave
+      accessToken:resendOtpToken,
+      otp:otpsave.info.otp,
+      type:"otp"
     }
     serviceResponse.data = data
+    // await transaction.commit()
+    // await studentNotification({otp:otpsave.info.otp,type:otpsave.info.type,email:existedUser.email})
   }
+
+ 
 return serviceResponse
 
 }catch(error){
@@ -262,6 +271,7 @@ catch (error) {
       if(IsAutharaized){
         const student = await StudentAuth.verifyOTP({phoneNumber:IsAutharaized.phoneNumber});
         if(student.otp!=otpInfo.otp){
+          serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
           serviceResponse.message = "wrong-otp"
           return serviceResponse
         }
@@ -402,9 +412,14 @@ catch (error) {
           otpsave=await StudentAuth.saveOTP({...isValid,accessToken:accessToken,type:"forget-password",otp},transaction);
         }
         const resendOtpToken=await generateAccessToken({uid:isValid.uid,otp:true,type:otpsave.info.type,phoneNumber:isValid.phoneNumber})
-        serviceResponse.data={resendOtpToken,otp:otpsave.info.otp}
+        serviceResponse.data={accessToken:resendOtpToken,otp:otpsave.info.otp,type:"otp"}
         await transaction.commit()
           await studentNotification({...otpsave.info,email:isValid.email})
+      }
+      else{
+        serviceResponse.message = 'invalid email !';
+        serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
+        serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
     }catch(error){
       log.error(`ERROR occurred in ${TAG}.forgetPassword`, error);
@@ -416,15 +431,13 @@ catch (error) {
   export async function setForgetPassword({newPassword,headerValue}){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
-      console.log(headerValue)
       // finde student is valid or not
       const uid=await verifyAccessToken(headerValue)
       
       const student=await StudentAuth.checkEmailOrPhoneExist({uid:uid.uid})
       if(student){
       const response=await StudentAuth.changePassword({password:newPassword,uid:uid.uid})
-      console.log("response")
-      console.log(response)
+
       serviceResponse.message="password changed successfully"
       serviceResponse.data=response
       }

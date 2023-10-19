@@ -19,6 +19,7 @@ export interface IUser {
   role?: string;
   uuid?: string;
   accessToken?: string;
+  terms_and_condition?:string
 }
 
 export class User implements IUser {
