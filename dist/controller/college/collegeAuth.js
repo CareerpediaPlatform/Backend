@@ -79,7 +79,8 @@ function changePasswordController(req, res, next) {
             logger_1.default.info(`${TAG}.changePasswordController()`);
             logger_1.default.debug(`${TAG}.changePasswordController() Object = ${JSON.stringify(req.body)}`);
             const passwords = req.body;
-            const response = yield authService.changeUserPassword(Object.assign({}, passwords));
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const response = yield authService.changePassword(Object.assign(Object.assign({}, passwords), { headerValue }));
             (0, response_builder_1.responseBuilder)(response, res, next, req);
         }
         catch (error) {

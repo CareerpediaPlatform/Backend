@@ -105,7 +105,7 @@ export async function signupPhonenumbers(user:any,transaction?:any){
 try{
   logger.info(`${TAG}.signupPhonenumbers()  ==>`,user);
 
-  let query = 'UPDATE STUDENT_Auth SET phone_number= :phoneNumber WHERE uid= :uid';
+  let query = 'UPDATE STUDENT_AUTH_GMAIL SET phone_number= :phoneNumber WHERE uid= :uid';
   const response= await executeQuery(query, QueryTypes.UPDATE, {
     ...user});
   return {response,transaction};
@@ -115,7 +115,6 @@ try{
 }
 }
 // getAllStudentList
-
 
 export async function getAllStudentList(){
   const getTable1=`SELECT 
@@ -179,7 +178,7 @@ export async function studentUpdateStatus(user){
 }
 
   // otp generator
-  export async function saveOTP(user:userOTP,transaction?:any){
+export async function saveOTP(user:userOTP,transaction?:any){
   logger.info(`${TAG}.saveOTP()`);
   try{
     const otp = await OTP();
@@ -206,7 +205,7 @@ export async function studentUpdateStatus(user){
   }
 }
 
-  export async function resendOTP(user,transaction?:any){
+export async function resendOTP(user,transaction?:any){
   logger.info(`${TAG}.resendOTP()`);
   try{
     const info={

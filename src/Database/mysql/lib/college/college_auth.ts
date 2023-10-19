@@ -8,10 +8,10 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_user'
 
 
-export async function signUp(user: ICollege,transaction?:any) {
+export async function signUp(user: ICollege,generatePassword:any,transaction?:any) {
   logger.info(`${TAG}.saveUser()`);
   try {
-    const hashedPassword = await hashPassword(user.password);
+    const hashedPassword = await hashPassword(generatePassword);
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,

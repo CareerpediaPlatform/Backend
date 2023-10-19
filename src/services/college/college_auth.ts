@@ -8,7 +8,8 @@ import {generateAccessToken, verifyAccessToken} from '../../helpers/authenticati
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
 import { ICollege } from "src/models/lib/auth";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { sendRegistrationNotification } from "../../utils/nodemail";
+import { sendRegistrationNotifications } from "../../utils/nodemail";
+import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 const TAG = 'services.auth'
 
 export async function signupUser(user: ICollege) {
@@ -23,10 +24,11 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-College");
       transaction = await getTransaction()
-      const college_admin = await CollegeAuth.signUp(user);
+      const college_admin = await CollegeAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
-      sendRegistrationNotification(user)
+      sendRegistrationNotifications(user,generatePassword)
       const uid = college_admin.uid
       const email = college_admin.email
       const accessToken = await generateAccessToken({uid,email  });

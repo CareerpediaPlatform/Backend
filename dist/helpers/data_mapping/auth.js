@@ -41,7 +41,7 @@ function recruiterDataMapping(payload) {
     logger_1.default.info('helpers.data_mapping.recruiter.recruiterDataMapping()');
     try {
         if (payload != null && payload !== undefined) {
-            return new models_1.Recruiter(payload.email, payload.password, payload.status);
+            return new models_1.Recruiter(payload.email, payload.password);
         }
         return payload;
     }

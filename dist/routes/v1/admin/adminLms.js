@@ -37,8 +37,8 @@ const file_1 = require("src/validations/file");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
-router.route('/course-overview/:courseId')
-    .get(authentication_1.isAuthenticated, controller.getCourseOverview);
+// router.route('/course-overview/:courseId')
+// .get(isAuthenticated,controller.getCourseOverview);
 router.route('/course-list')
     .get(authentication_1.isAuthenticated, controller.getCourses);
 // courses//
@@ -81,8 +81,9 @@ router.route('/test/:test_id')
 router.route('/exercise/:exercise_id')
     .patch(authentication_1.isAuthenticated, controller.updateModuleExercise);
 //  course//
-router.route('/course/course-overview/:type').post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 2), file_1.emptyChecks, controller.uploadCourse);
-router.route('/course/course-overview/:uid').get(controller.getuploadCourse);
-router.route('/course/course-overview/:uid').patch((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 2), file_1.emptyChecks, controller.updateuploadCourse);
-router.route('/course/course-overview/:uid').delete(controller.deleteuploadCourse);
+router.route('/course-overview/:type').post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 2), file_1.emptyChecks, controller.uploadCourse);
+router.route('/course-overview/:uid').get(controller.getuploadCourse);
+router.route('/course-overview/:uid').patch((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 2), file_1.emptyChecks, controller.updateuploadCourse);
+router.route('/course-overview/:uid').delete(controller.deleteuploadCourse);
+router.route('/learn/:id').delete(controller.deleteSingleLearn);
 exports.default = router;

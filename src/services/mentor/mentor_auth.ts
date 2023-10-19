@@ -8,7 +8,8 @@ import {generateAccessToken,verifyAccessToken } from '../../helpers/authenticati
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";
 import { IMentor} from "src/models/lib/auth";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { sendRegistrationNotification } from "../../utils/nodemail";
+import { sendRegistrationNotifications } from "../../utils/nodemail";
+import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 
 const TAG = 'services.auth'
 
@@ -24,16 +25,16 @@ export async function signupUser(user: IMentor) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
       transaction = await getTransaction()
-      const mentor = await MentorAuth.signUp(user,transaction);
+      const mentor = await MentorAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
-      sendRegistrationNotification(user)
-
-const accessToken = await generateAccessToken({ ...mentor });
+      console.log(user)
+      sendRegistrationNotifications(user,generatePassword)
+const accessToken = await generateAccessToken({ mentor });
         const data = {
         accessToken       
-      } 
-      
+      }      
       serviceResponse.data = data
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.signupUser`, error);
@@ -68,8 +69,9 @@ export async function loginUser(user: IMentor) {
             serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         } else {
           const mentor_login = await MentorAuth.login(user)
-          const mentor_uid = existedUser.uid;
-            const accessToken = await generateAccessToken({ ...mentor_login,mentor_uid});
+          const uid = existedUser.uid;
+          const email = existedUser.email;
+            const accessToken = await generateAccessToken({uid,email});
             const data = {
                 accessToken   
             };
@@ -87,7 +89,7 @@ export async function loginUser(user: IMentor) {
 export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try{
-    // finde student is valid or not
+    // finde mentor is valid or not
     const uid=await verifyAccessToken(user.headerValue)
     const mentor=await MentorAuth.getMentorUid({uid:uid.uid})
     if(mentor){

@@ -45,7 +45,7 @@ router.route('/details')
 router.route('/details/:userID')
     .delete(authentication_1.isAuthenticated, controller.deleterecruiterProfile);
 router.route('/company-logo')
-    .post(authentication_1.isAuthenticated, (0, file_upload_1.imageFileReader)(api_param_constants_1.FormParams.FILE_FIELD), file_1.emptyCheck, controller.uploadCompanyLogoFile);
+    .post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 1), file_1.emptyChecks, controller.uploadCompanyLogoFile);
 router.route('/recruiter-list/:userID')
     .get(authentication_1.isAuthenticated, controller.getRecruiterSingleList);
 router.route('/company-logo/:userID')
@@ -53,5 +53,5 @@ router.route('/company-logo/:userID')
 router.route('/company-logo/:userID')
     .post((0, file_upload_1.imageFileReader)(api_param_constants_1.FormParams.FILE_FIELD), file_1.emptyCheck, controller.updateCompanylogo);
 router.route('/video')
-    .post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 1), file_1.emptyCheck, controller.uploadVideoFile);
+    .post((0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 2), file_1.emptyChecks, controller.uploadVideoFile);
 exports.default = router;

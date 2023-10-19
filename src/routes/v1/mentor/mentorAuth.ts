@@ -18,7 +18,7 @@ const router = Router()
  .post(controller.signupMentor);
 
   router.route('/change-password')
- .post(controller.changePasswordController);
+ .patch(controller.changePasswordController);
 
  
 export default router

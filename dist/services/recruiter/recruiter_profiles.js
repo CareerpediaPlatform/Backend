@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadVideoFile = exports.updateCompanylogo = exports.getRecruiterList = exports.uploadCompanyLogoFile = exports.deleteRecruiterProfile = exports.getRecruiterProfile = exports.recruiterProfile = void 0;
 const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
+const api_error_1 = require("src/models/lib/api_error");
 const service_response_1 = require("src/models/lib/service_response");
 const mysql_1 = require("../../Database/mysql");
 const config_1 = require("../../Loaders/config");
@@ -22,12 +23,12 @@ const file_constants_1 = require("src/constants/file_constants");
 const s3_media_1 = require("src/helpers/s3_media");
 const util_1 = __importDefault(require("util"));
 const authentication_1 = require("src/helpers/authentication");
-const TAG = 'services.profile';
+const TAG = "services.profile";
 function recruiterProfile(user) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.recruiterProfile() ==> `, user);
         console.log(user);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
             const uid = decoded[0].uid;
@@ -41,7 +42,7 @@ function recruiterProfile(user) {
                     const data = {
                         basicDetails,
                         contactDetails,
-                        companyDetsils
+                        companyDetsils,
                     };
                     serviceResponse.data = data;
                     return serviceResponse;
@@ -53,12 +54,14 @@ function recruiterProfile(user) {
             }
             else {
                 serviceResponse.message = "invalid user uid";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.recruiterProfile`, error);
-            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+            serviceResponse.addServerError("Failed to create user due to technical difficulties");
         }
         return serviceResponse;
     });
@@ -70,7 +73,7 @@ function getRecruiterProfile(headerValue) {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
-            const uid = decoded[0].uid;
+            const uid = decoded.uid;
             const isValid = yield mysql_1.RecruiterAuth.getRecruiterUid(uid);
             if (isValid) {
                 const existedProfile = yield mysql_1.RecruiterProfileDetailsData.getRecruiterProfile(uid);
@@ -83,6 +86,8 @@ function getRecruiterProfile(headerValue) {
                 }
                 else {
                     serviceResponse.message = "invalid user uid";
+                    serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                    serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                     return serviceResponse;
                 }
             }
@@ -98,7 +103,7 @@ exports.getRecruiterProfile = getRecruiterProfile;
 function deleteRecruiterProfile(userID) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.deleteRecruiterProfile() ==> `, userID);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             const deleteProfile = yield mysql_1.RecruiterProfileDetailsData.deleteRecruiter(userID);
             if (deleteProfile) {
@@ -107,53 +112,54 @@ function deleteRecruiterProfile(userID) {
             }
             else {
                 serviceResponse.message = "invalid user id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.deleteRecruiterProfile`, error);
-            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+            serviceResponse.addServerError("Failed to create user due to technical difficulties");
         }
         return serviceResponse;
     });
 }
 exports.deleteRecruiterProfile = deleteRecruiterProfile;
 //****************companylogo********************/
-function uploadCompanyLogoFile(file) {
-    var _a, _b, _c;
+function uploadCompanyLogoFile(files) {
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadCompanyLogoFile() `);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.COMPANY_LOGO;
-            const data = yield (0, s3_media_1.saveFile)(file, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
+            const data = yield (0, s3_media_1.saveFile)(files, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
             logger_1.default.debug(` ${TAG}.uploadCompanyLogoFile 's3 response:'` + util_1.default.inspect(data));
-            logger_1.default.debug(` ${TAG}.uploadCompanyLogoFile 'fileS3 URL: ' ` + (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
+            logger_1.default.debug(` ${TAG}.uploadCompanyLogoFile 'fileS3 URL: ' ` +
+                (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
             const fileDetails = {
                 fileName: (_a = data[0]) === null || _a === void 0 ? void 0 : _a.savedFileName,
-                originalFileName: file === null || file === void 0 ? void 0 : file.originalname,
-                contentType: file === null || file === void 0 ? void 0 : file.mimetype,
+                originalFileName: (_b = files[0]) === null || _b === void 0 ? void 0 : _b.originalname,
+                contentType: (_c = files[0]) === null || _c === void 0 ? void 0 : _c.mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: (_b = data[0]) === null || _b === void 0 ? void 0 : _b.savedFileKey,
-                fileUrl: (_c = data[0]) === null || _c === void 0 ? void 0 : _c.savedLocation,
+                filePath: (_d = data[0]) === null || _d === void 0 ? void 0 : _d.savedFileKey,
+                fileUrl: (_e = data[0]) === null || _e === void 0 ? void 0 : _e.savedLocation,
                 isPublic: true,
-                metaData: null
+                metaData: null,
             };
-            console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-            console.log(fileDetails);
             const fileSavedResp = yield mysql_1.RecruiterProfileDetailsData.saveFile(fileDetails);
-            // log.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + nodeUtil.inspect(fileSavedResp))
-            serviceResponse.message = `successfully uploaded ${file.originalname}`;
+            serviceResponse.message = `successfully uploaded ${files[0].originalname}`;
             serviceResponse.data = {
                 uid: fileSavedResp === null || fileSavedResp === void 0 ? void 0 : fileSavedResp.uid,
                 fileName: fileDetails.fileName,
+                fileUrl: fileDetails.fileUrl,
                 originalFileName: fileDetails.originalFileName,
-                contentType: fileDetails.contentType
+                contentType: fileDetails.contentType,
             };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.uploadCompanyLogoFile`, error);
-            serviceResponse.addServerError('Failed to upload file due to technical difficulties');
+            serviceResponse.addServerError("Failed to upload file due to technical difficulties");
         }
         return serviceResponse;
     });
@@ -162,12 +168,12 @@ exports.uploadCompanyLogoFile = uploadCompanyLogoFile;
 function getRecruiterList(userID) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.getRecruiterList() ==> `, userID);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             const existedProfile = yield mysql_1.RecruiterProfileDetailsData.getRecruiterList(userID);
             if (existedProfile) {
                 const data = {
-                    existedProfile
+                    existedProfile,
                 };
                 serviceResponse.data = data;
                 return serviceResponse;
@@ -175,7 +181,7 @@ function getRecruiterList(userID) {
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getRecruiterFile`, error);
-            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+            serviceResponse.addServerError("Failed to create user due to technical difficulties");
         }
     });
 }
@@ -183,12 +189,13 @@ exports.getRecruiterList = getRecruiterList;
 function updateCompanylogo(file, userID) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateCompanylogo() ==> `, userID);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.COMPANY_LOGO;
             const data = yield (0, s3_media_1.saveFile)(file, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
             logger_1.default.debug(` ${TAG}.updateCompanylogo 's3 response:'` + util_1.default.inspect(data));
-            logger_1.default.debug(` ${TAG}.updateCompanylogo 'fileS3 URL: ' ` + (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
+            logger_1.default.debug(` ${TAG}.updateCompanylogo 'fileS3 URL: ' ` +
+                (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
             const fileDetails = {
                 fileName: data === null || data === void 0 ? void 0 : data.savedFileName,
                 originalFileName: file.originalname,
@@ -197,7 +204,7 @@ function updateCompanylogo(file, userID) {
                 filePath: data === null || data === void 0 ? void 0 : data.savedFileKey,
                 fileUrl: data === null || data === void 0 ? void 0 : data.savedLocation,
                 isPublic: true,
-                metaData: null
+                metaData: null,
             };
             console.log(fileDetails.originalFileName);
             const updateImage = yield mysql_1.RecruiterProfileDetailsData.updateCompanylogo(fileDetails, userID);
@@ -205,13 +212,13 @@ function updateCompanylogo(file, userID) {
             serviceResponse.data = {
                 fileName: fileDetails.fileName,
                 originalFileName: fileDetails.originalFileName,
-                contentType: fileDetails.contentType
+                contentType: fileDetails.contentType,
             };
             return serviceResponse;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateCompanylogo`, error);
-            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+            serviceResponse.addServerError("Failed to create user due to technical difficulties");
         }
         return serviceResponse;
     });
@@ -223,12 +230,13 @@ function uploadVideoFile(file) {
         logger_1.default.info(`${TAG}.uploadVideoFile() `);
         console.log("33333333333333333333333333333");
         console.log(file);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.LMS_VIDEOS;
             const data = yield (0, s3_media_1.saveFile)(file, fileDirectory, config_1.AWS_S3.BUCKET_NAME);
             logger_1.default.debug(` ${TAG}.uploadVideoFile 's3 response:'` + util_1.default.inspect(data));
-            logger_1.default.debug(` ${TAG}.uploadVideoFile 'fileS3 URL: ' ` + (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
+            logger_1.default.debug(` ${TAG}.uploadVideoFile 'fileS3 URL: ' ` +
+                (0, s3_media_1.getFileUrl)(data.savedFileKey, config_1.AWS_S3.BUCKET_NAME));
             const fileDetails = {
                 fileName: data === null || data === void 0 ? void 0 : data.savedFileName,
                 originalFileName: file === null || file === void 0 ? void 0 : file.originalname,
@@ -237,21 +245,22 @@ function uploadVideoFile(file) {
                 filePath: data === null || data === void 0 ? void 0 : data.savedFileKey,
                 fileUrl: data === null || data === void 0 ? void 0 : data.savedLocation,
                 isPublic: true,
-                metaData: null
+                metaData: null,
             };
             const fileSavedResp = yield mysql_1.RecruiterProfileDetailsData.uploadVideoFile(fileDetails);
-            logger_1.default.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` + util_1.default.inspect(fileSavedResp));
+            logger_1.default.debug(` ${TAG}.uploadCompanyInfoFile 'fileSavedResp response:'` +
+                util_1.default.inspect(fileSavedResp));
             serviceResponse.message = `successfully uploaded ${file.originalname}`;
             serviceResponse.data = {
                 uid: fileSavedResp === null || fileSavedResp === void 0 ? void 0 : fileSavedResp.uid,
                 fileName: fileDetails.fileName,
                 originalFileName: fileDetails.originalFileName,
-                contentType: fileDetails.contentType
+                contentType: fileDetails.contentType,
             };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.uploadCompanyLogoFile`, error);
-            serviceResponse.addServerError('Failed to upload file due to technical difficulties');
+            serviceResponse.addServerError("Failed to upload file due to technical difficulties");
         }
         return serviceResponse;
     });

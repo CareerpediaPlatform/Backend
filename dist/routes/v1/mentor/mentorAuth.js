@@ -39,5 +39,5 @@ router.route(APIPaths.LOGIN)
 router.route('/signup')
     .post(controller.signupMentor);
 router.route('/change-password')
-    .post(controller.changePasswordController);
+    .patch(controller.changePasswordController);
 exports.default = router;

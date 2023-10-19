@@ -22,6 +22,7 @@ const file_constants_1 = require("src/constants/file_constants");
 const s3_media_1 = require("src/helpers/s3_media");
 const authentication_1 = require("src/helpers/authentication");
 const admin_lms_1 = require("src/Database/mysql/lib/admin/admin_lms");
+const models_1 = require("src/models");
 const TAG = 'assignment.service';
 function uploadAssignment(files, headerValue, partId) {
     var _a, _b, _c, _d, _e;
@@ -50,6 +51,8 @@ function uploadAssignment(files, headerValue, partId) {
             }
             else {
                 serviceResponse.message = "invalid user id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
             // serviceResponse.message = `successfully uploaded ${file.originalname}`
@@ -75,6 +78,11 @@ function getAllAssignments(partId, headerValue) {
             const uid = decoded.uid;
             if (isValid) {
                 response = yield mysql_1.attachment.getAllAssignments(partId, uid);
+            }
+            else {
+                serviceResponse.message = "Invalid User Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
             }
             const data = {
                 response
@@ -103,6 +111,8 @@ function uploadNotes(note, headerValue) {
             }
             else {
                 serviceResponse.message = "invalid user id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
             serviceResponse.data = { response, note };
@@ -127,7 +137,9 @@ function getAllNotes(headerValue) {
                 response = yield mysql_1.attachment.getAllNotes(uid);
             }
             else {
-                serviceResponse.message = "invalid user id";
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
             const data = {
@@ -156,7 +168,9 @@ function uploadThread(thread, headerValue, partId) {
                 response = yield mysql_1.attachment.uploadThread(thread, uid, partId);
             }
             else {
-                serviceResponse.message = "invalid user id";
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
             serviceResponse.data = {
@@ -183,7 +197,9 @@ function getSingleThread(partId, threadId, headerValue) {
                 response = yield mysql_1.attachment.getSingleThread(partId, threadId, uid);
             }
             else {
-                serviceResponse.message = "invalid user id";
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
             const data = {
@@ -229,6 +245,8 @@ function getAllThreadsCourse(courseId) {
             }
             else {
                 serviceResponse.message = "course does not exist";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
             }
         }
         catch (error) {
