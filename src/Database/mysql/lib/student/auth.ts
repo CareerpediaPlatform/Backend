@@ -26,7 +26,7 @@ export async function signUp(user: IUser) {
       terms_and_condition:user.terms_and_condition
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status,terms_and_condition)
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status,TERM_AND_CONDITIONS)
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status, :terms_and_condition)
     `;
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -57,7 +57,7 @@ export async function signupWithSocialAccount(user: IUser) {
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,terms_and_condition)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
       VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
     `;
 
