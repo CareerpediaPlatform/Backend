@@ -89,7 +89,7 @@ export async function loginUser(user: IMentor) {
 export async function changePassword(user){
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try{
-    // finde student is valid or not
+    // finde mentor is valid or not
     const uid=await verifyAccessToken(user.headerValue)
     const mentor=await MentorAuth.getMentorUid({uid:uid.uid})
     if(mentor){

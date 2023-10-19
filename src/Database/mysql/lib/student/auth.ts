@@ -113,7 +113,6 @@ try{
 }
 // getAllStudentList
 
-
 export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status

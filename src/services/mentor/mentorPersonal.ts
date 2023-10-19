@@ -3,6 +3,7 @@ import { HttpStatusCodes } from "src/constants/status_codes";
 import log from "src/logger";
 import { APIError } from "src/models/lib/api_error";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { verifyAccessToken } from "src/helpers/authentication";
 
 
 
@@ -10,10 +11,10 @@ const TAG = 'services.mentor_PersonalAndContactDetails'
 
 
 export async function savePersonalAndContactDetails(
-    menPersonalData: any,
-    mentorUid: string
+    user: any,
+  
   ) {
-    log.info(`${TAG}.savePersonalAndContactDetails() ==> `, menPersonalData);
+    log.info(`${TAG}.savePersonalAndContactDetails() ==> `, user);
   
     const serviceResponse: IServiceResponse = new ServiceResponse(
       HttpStatusCodes.CREATED,
@@ -21,13 +22,15 @@ export async function savePersonalAndContactDetails(
       false
     );
     try {
-      console.log(mentorUid);
-      console.log(menPersonalData);
+      let decoded = await verifyAccessToken(user.headerValue);
+      const uid = decoded[0].uid;
+      console.log(user);
       
       console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-      const mentorUserId = await mentorPersonalAndContactData.isValid(mentorUid);
-      console.log(mentorUserId);
-      if (!mentorUserId) {
+      const mentorUserId = await mentorPersonalAndContactData.isValid(uid);
+      const mentor = await mentorPersonalAndContactData.isValids(uid)
+      console.log(mentor);
+      if (!mentor) {
         serviceResponse.message = "Invalid mentor ID";
         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
         serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
@@ -39,19 +42,19 @@ export async function savePersonalAndContactDetails(
             mentorUserId.userId
         );
       if (existingPersonalDetails) {
-        existingPersonalDetails.profile_pic = menPersonalData.profile_pic;
-        existingPersonalDetails.first_name = menPersonalData.first_name;
-        existingPersonalDetails.last_name = menPersonalData.last_name;
-        existingPersonalDetails.email = menPersonalData.email;
-        existingPersonalDetails.mobile_number = menPersonalData.mobile_number;
-        existingPersonalDetails.date_of_birth = menPersonalData.date_of_birth;
-        existingPersonalDetails.linkedin_profile =menPersonalData.linkedin_profile;
-        existingPersonalDetails.address = menPersonalData.address;
-        existingPersonalDetails.city = menPersonalData.city;
-        existingPersonalDetails.district = menPersonalData.district;
-        existingPersonalDetails.state = menPersonalData.state;
-        existingPersonalDetails.pincode = menPersonalData.pincode;
-        existingPersonalDetails.country = menPersonalData.country;
+        existingPersonalDetails.profile_pic = user.profile_pic;
+        existingPersonalDetails.first_name = user.first_name;
+        existingPersonalDetails.last_name = user.last_name;
+        existingPersonalDetails.email = user.email;
+        existingPersonalDetails.mobile_number = user.mobile_number;
+        existingPersonalDetails.date_of_birth = user.date_of_birth;
+        existingPersonalDetails.linkedin_profile =user.linkedin_profile;
+        existingPersonalDetails.address = user.address;
+        existingPersonalDetails.city = user.city;
+        existingPersonalDetails.district = user.district;
+        existingPersonalDetails.state = user.state;
+        existingPersonalDetails.pincode = user.pincode;
+        existingPersonalDetails.country = user.country;
   
         const updatedPersonalDataResponse =
           await mentorPersonalAndContactData.updatePersonalAndContactDetails(
@@ -64,10 +67,10 @@ export async function savePersonalAndContactDetails(
       } else {
         const personalDataResponse =
           await mentorPersonalAndContactData.savePersonalAndContactDetails(
-            menPersonalData,
+            user,
             mentorUserId.userId
           );
-          menPersonalData.data = {
+          user.data = {
           mentorPersonaDetailsUid: personalDataResponse,
         };
       }
