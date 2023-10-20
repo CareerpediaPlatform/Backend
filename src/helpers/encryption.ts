@@ -27,7 +27,6 @@ export function generatePasswordWithPrefixAndLength(length: number, prefix: stri
   if (prefixLength >= length) {
     throw new Error("Total password length is too short for the given prefix.");
   }
-
   const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
   const remainingLength = length - prefixLength;
 
