@@ -206,13 +206,14 @@ return serviceResponse
             otpsave=await StudentAuth.saveOTP({...existedUser,accessToken:otpAccessToken,type:"signin",otp,transaction})
             
           }
-          const resendOtpToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
+          const accessToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
           await transaction.commit()
           await studentNotification({...otpsave.info,email:existedUser.email})
           const data = {
             // otpAccessToken,
-            resendOtpToken,
-            otpsave
+            accessToken,
+            otp:otpsave.info.otp,
+            type:"otp"
           }
           serviceResponse.data = data
         }``

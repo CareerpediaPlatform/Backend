@@ -10,9 +10,9 @@ export async function studentProfilePost(user) {
   logger.info(`${TAG}.studentProfilePost()`);
   try {
     const profileInsertQuery = `
-   INSERT INTO student_personal_details (user_uid,firstName, lastName, email, dob, phoneNumber, linkedInProfile, profilePic, resume)
+   INSERT INTO student_personal_details (user_uid,firstName, lastName, email, dob, phoneNumber, linkedInProfile, profilePic, resume,GENDER)
     VALUES
-  (:uid,:firstName, :lastName, :email, :dob, :phoneNumber, :linkedInProfile, :profilePic, :resume)`;
+  (:uid,:firstName, :lastName, :email, :dob, :phoneNumber, :linkedInProfile, :profilePic, :resume, :gender)`;
 
     const contactInsertQuery = `
     INSERT INTO CONTACT_DETAILS 
@@ -40,7 +40,8 @@ export async function studentProfileUpdate(user) {
     SET firstName = :firstName,lastName = :lastName, email = :email,dob = :dob,phoneNumber = :phoneNumber,
       linkedInProfile = :linkedInProfile,
       profilePic = :profilePic,
-      resume = :resume
+      resume = :resume,
+      GENDER = :gender
     WHERE
     user_uid = :uid;
     `;
