@@ -20,7 +20,7 @@ const router = Router()
  .put(isAuthenticated,controller.updateWorkExperience);
  router.route('/work-experience/')
  .delete(isAuthenticated,controller.studentProfileExperienceDelete);
- router.route('/profile')
+ router.route('/personal-contact')
  .patch(isAuthenticated,controller.studentProfilePost);
  router.route('/profile/')
  .get(isAuthenticated,controller.getStudentProfile);
