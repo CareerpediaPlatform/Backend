@@ -54,9 +54,9 @@ export async function signupPhonenumber(user) {
     log.info(`${TAG}.signupPhonenumber() ==> `, user);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
 try{
-  // let transaction = await getTransaction()
-  // let transaction = await getTransaction()
+
   const decoded=await verifyAccessToken(user.headerValue)
+  console.log(user)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
     if(existedUser) {

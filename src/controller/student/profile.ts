@@ -80,6 +80,8 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
       log.info(`${TAG}.studentProfileEducationDelete()`);
       log.debug(`${TAG}.studentProfileEducationDelete() Object = ${JSON.stringify(req.body)}`)
       const info:any=req.body;
+      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+      console.log(info)
       const headerValue = req.headers.authorization.split(' ')[1];
       const Response: IServiceResponse = await profileService.studentProfileEducationDelete({...info,headerValue})
       responseBuilder(Response, res, next, req)
