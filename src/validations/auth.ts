@@ -59,10 +59,7 @@ export const linkedInSignup= async (req, res, next) => {
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
     uuid: Joi.string().required(),
-    role: Joi.string().required(),
     terms_and_condition:Joi.boolean().required()
-
-
   });
   await validate(schema, req, res, next);
 };
@@ -78,7 +75,6 @@ export const formSignup= async (req, res, next) => {
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
     }),
-    role: Joi.string().required(),
     terms_and_condition:Joi.boolean().required()
 
   });

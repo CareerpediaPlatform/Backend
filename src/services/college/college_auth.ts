@@ -24,7 +24,7 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const generatePassword = await generatePasswordWithPrefixAndLength(20, "Careerpedia-College");
+      const generatePassword = await generatePasswordWithPrefixAndLength(15, "Careerpedia");
       transaction = await getTransaction()
       const college_admin = await CollegeAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
