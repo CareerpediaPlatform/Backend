@@ -1,4 +1,3 @@
-import { any } from "joi";
 import { StudentAuth} from "src/Database/mysql";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
 import { checkEmailOrPhoneExist } from "src/Database/mysql/lib/student/auth";
@@ -162,7 +161,6 @@ return serviceResponse
               if(compare){
                 const uid=existedUser.uid
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
-                console.log(accessToken)
                 const data = {
                   accessToken,
                   signin:true
@@ -176,7 +174,7 @@ return serviceResponse
               }
             }
             else{
-              let compare=await comparePasswords(existedUser.uniqId,user.uuid)
+              let compare=await comparePasswords(existedUser.uniqid,user.uuid)
               if(compare){
                 // const uid=existedUser.uid
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
@@ -206,13 +204,14 @@ return serviceResponse
             otpsave=await StudentAuth.saveOTP({...existedUser,accessToken:otpAccessToken,type:"signin",otp,transaction})
             
           }
-          const resendOtpToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
+          const accessToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
           await transaction.commit()
           await studentNotification({...otpsave.info,email:existedUser.email})
           const data = {
             // otpAccessToken,
-            resendOtpToken,
-            otpsave
+            accessToken,
+            otp:otpsave.info.otp,
+            type:"otp"
           }
           serviceResponse.data = data
         }``
@@ -309,12 +308,22 @@ catch (error) {
           }
           const user=await StudentAuth.checkEmailOrPhoneExist({phoneNumber:student.phoneNumber})
         const token=await generateAccessToken({uid:user.uid,type:type})
+        if(type=="signin"){
+          const data = {
+            token,
+            signin:true
+          }
+          serviceResponse.message = "otp validated"
+          serviceResponse.data = data
+        }else{
           const data = {
             token,
             type
           }
           serviceResponse.message = "otp validated"
           serviceResponse.data = data
+        }
+       
         }
         else{
           serviceResponse.message = 'invalid otp or wrong otp';
@@ -376,8 +385,6 @@ catch (error) {
         if(IsValid){
       
       const response=await StudentAuth.changePassword({password:user.newPassword,uid:uid.uid})
-      console.log("response")
-      console.log(response)
       serviceResponse.message="password changed successfully"
       serviceResponse.data=response
         }

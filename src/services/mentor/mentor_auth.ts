@@ -25,7 +25,7 @@ export async function signupUser(user: IMentor) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
+      const generatePassword = await generatePasswordWithPrefixAndLength(14, "Careerpedia");
       transaction = await getTransaction()
       const mentor = await MentorAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 

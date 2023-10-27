@@ -51,13 +51,12 @@ export async function signupWithSocialAccount(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
-      role:user.role,
       terms_and_condition:user.terms_and_condition,
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,TERM_AND_CONDITIONS)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:terms_and_condition)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {

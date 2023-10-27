@@ -26,7 +26,7 @@ export async function signupUser(user: IRecruiter) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Recruiter");
+      const generatePassword = await generatePasswordWithPrefixAndLength(14, "Careerpedia");
       transaction = await getTransaction()
       const recruiter = await RecruiterAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
