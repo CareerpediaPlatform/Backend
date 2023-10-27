@@ -8,6 +8,6 @@ import * as bodyParser from 'body-parser';
 const router = Router();
 
 router.use(APIPath.ROOT_AUTH, RecruiterAuth);
-router.use('/',RecruiterProfile);
+router.use('/profile',RecruiterProfile);
 
 export default router;

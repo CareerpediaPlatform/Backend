@@ -50,7 +50,6 @@ export async function isValid(uid) {
 }
 // post recruiter all profile data
 export async function recruiterProfilePost(user: any) {
-  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrruuuuuuuuuuuuuuuuuuuuuuuuuuurrrrrrrrrrrr")
   console.log(user)
   const uid=user.uid
   logger.info(`${TAG}.recruiterProfilePost()`);
@@ -58,7 +57,7 @@ export async function recruiterProfilePost(user: any) {
 
     const basicInsertQuery = 
     `INSERT INTO RECRUITER_BASIC_DETAILS
-    ( UID, LOGO, COMPANYNAME, FOUNDERNAME, EMAIL, PHONENUMBER, WEBSITE, LINKEDINPROFILE )
+    ( UID, LOGO, COMPANY_NAME, FOUNDER_NAME, EMAIL, PHONE_NUMBER, WEBSITE, LINKEDIN_PROFILE )
       values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
 
       const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
@@ -68,7 +67,7 @@ export async function recruiterProfilePost(user: any) {
 
     const companyInsertQuery = 
     `INSERT INTO RECRUITER_COMPANY_DETAILS
-    ( UID, ESTABLISHEDYEAR, NUMBEROFEMPLOYEES, DEPARTMENTS, STARTYEAR, ANNUALREVENUE)
+    ( UID, ESTABLISHED_YEAR, NUMBER_OF_EMPLOYEES, DEPARTMENTS, START_YEAR, ANNUAL_REVENUE)
       values( :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
 
    
@@ -87,15 +86,16 @@ export async function recruiterProfilePost(user: any) {
     throw error;
   }
 }
+
 //update basic details
 export async function recruiterBasicDetailsUpdate(user: any) {
-  
+
   logger.info(`${TAG}.recruiterBasicDetailsUpdate()`);
 
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
-    LOGO = :logo, COMPANYNAME = :companyName, FOUNDERNAME = :founderName, 
-    EMAIL = :email, PHONENUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDINPROFILE = :linkedInUrl WHERE UID = :uid`;
+    LOGO = :logo, COMPANY_NAME = :companyName, FOUNDER_NAME = :founderName, 
+    EMAIL = :email, PHONE_NUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDIN_PROFILE = :linkedInUrl WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
@@ -131,8 +131,8 @@ export async function recruitercompanyDetailUpdate(user: any) {
   logger.info(`${TAG}.recruitercompanyDetailUpdate()`);
   try {
     const updateQuery = `UPDATE RECRUITER_COMPANY_DETAILS SET
-    ESTABLISHEDYEAR = :establishedyear, NUMBEROFEMPLOYEES = :numberofemployees, DEPARTMENTS = :departments, 
-    STARTYEAR = :startyear, ANNUALREVENUE = :annualrevenue WHERE UID = :uid`;
+    ESTABLISHED_YEAR = :establishedyear, NUMBER_OF_EMPLOYEES = :numberofemployees, DEPARTMENTS = :departments, 
+    START_YEAR = :startyear, ANNUAL_REVENUE = :annualrevenue WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,

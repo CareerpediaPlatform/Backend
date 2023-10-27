@@ -78,7 +78,6 @@ export const formSignup= async (req, res, next) => {
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
     }),
-    role: Joi.string().required(),
     terms_and_condition:Joi.boolean().required()
 
   });

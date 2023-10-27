@@ -32,12 +32,12 @@ function signUp(user) {
                 lastName: user.lastName,
                 email: user.email,
                 password: hashedPassword,
-                role: "student",
-                status: "ACTIVE"
+                status: "ACTIVE",
+                terms_and_condition: user.terms_and_condition
             };
             let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -62,11 +62,13 @@ function signupWithSocialAccount(user) {
                 lastName: user.lastName,
                 email: user.email,
                 uuid: hashedPassword,
+                role: user.role,
+                terms_and_condition: user.terms_and_condition,
                 status: "ACTIVE"
             };
             let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;

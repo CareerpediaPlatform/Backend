@@ -33,7 +33,9 @@ export async function recruiterProfile(user) {
   );
   try {
     let decoded = await verifyAccessToken(user.headerValue);
-    const uid = decoded[0].uid;
+    console.log("11111111111111111111111",decoded)
+    const uid = decoded.uid;
+    console.log("222222222222222222",uid)
     const isValid = await RecruiterAuth.getRecruiterUid(uid);
     if (isValid) {
       const existedProfile = await RecruiterProfileDetailsData.checkExist(uid);

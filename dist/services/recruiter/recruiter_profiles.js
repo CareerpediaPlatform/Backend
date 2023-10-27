@@ -31,7 +31,9 @@ function recruiterProfile(user) {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
-            const uid = decoded[0].uid;
+            console.log("11111111111111111111111", decoded);
+            const uid = decoded.uid;
+            console.log("222222222222222222", uid);
             const isValid = yield mysql_1.RecruiterAuth.getRecruiterUid(uid);
             if (isValid) {
                 const existedProfile = yield mysql_1.RecruiterProfileDetailsData.checkExist(uid);

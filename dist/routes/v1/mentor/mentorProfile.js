@@ -37,7 +37,7 @@ const authentication_1 = require("../../../middlewares/authentication");
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router
-    .route("/personal-details/:mentorUid")
+    .route("/personal-details")
     .post(authentication_1.isAuthenticated, profileController.PersonalAndDetails);
 router
     .route("/education-details/:id")

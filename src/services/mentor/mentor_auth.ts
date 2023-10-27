@@ -33,7 +33,7 @@ export async function signupUser(user: IMentor) {
       sendRegistrationNotifications(user,generatePassword)
 const accessToken = await generateAccessToken({ mentor });
         const data = {
-        accessToken       
+        accessToken,type:"mentor-signup"      
       }      
       serviceResponse.data = data
     } catch (error) {
@@ -109,6 +109,37 @@ export async function changePassword(user){
     }
   }catch (error) {
     log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return await serviceResponse
+}
+
+
+//  access or remove accerss of a mentor by admin
+
+export async function mentorUpdateStatus(user){
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try{
+      // find admin is valid or not
+    const decoded=await verifyAccessToken(user.headerValue)
+    if(decoded &&(user.status=="ACTIVE" ||user.status=="DEACTIVE")){
+      if(decoded.role!="admin"){
+        serviceResponse.message = `UnAutharized Admin`
+        return serviceResponse
+      }
+      const recruiter=await MentorAuth.mentorUpdateStatus({...user})
+      const data={
+        recruiter
+      }
+      serviceResponse.message = `recruiter status changed to ${user.status} successfully `
+      serviceResponse.data = data
+      return serviceResponse
+    }else{
+      serviceResponse.message = `something went wrong in url`
+          return serviceResponse
+    }
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorUpdateStatus`, error);
     serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
   return await serviceResponse

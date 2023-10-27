@@ -37,8 +37,6 @@ const file_1 = require("src/validations/file");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
-// router.route('/course-overview/:courseId')
-// .get(isAuthenticated,controller.getCourseOverview);
 router.route('/course-list')
     .get(authentication_1.isAuthenticated, controller.getCourses);
 // courses//

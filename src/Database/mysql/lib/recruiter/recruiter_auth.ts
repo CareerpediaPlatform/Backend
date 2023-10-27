@@ -51,13 +51,14 @@ export async function checkEmailExist(email: string) {
   }
 
 export async function getRecruiterUid(uid){
+  console.log("333333333333333",uid)
     try {
 
       console.log(uid)
-      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      logger.info(`${TAG}.getRecruiterUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid:uid.uid
+        uid
       });
 
       return userId;

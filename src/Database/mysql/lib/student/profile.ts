@@ -82,12 +82,14 @@ export async function checkProfilExist(uid) {
     const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
     const educationQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
     const experienceQuery = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE UID=:uid';
+    const resumeQuery = 'SELECT * FROM `STUDENT_RESUME` WHERE UID=:uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
     const [contact]= await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
     const education= await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
     const experience= await executeQuery(experienceQuery, QueryTypes.SELECT, {uid});
+    const resume= await executeQuery(resumeQuery, QueryTypes.SELECT, {uid});
     const data={
-      basic,contact,education: Object.values(education),experience:Object.values(experience)
+      basic,contact,education: Object.values(education),experience:Object.values(experience),resume
     }
     return {...data}; // Return null if no user is found
   } catch (error) {
