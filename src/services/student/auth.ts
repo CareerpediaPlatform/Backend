@@ -38,6 +38,7 @@ export async function signupUser(user: IUser) {
       const accessToken = await generateAccessToken({uid:findUser.uid,number:true,id:findUser.id,type:"signup"}); 
       const data = {
         accessToken,
+        
         type:"signup"
       }
       serviceResponse.data = data
@@ -479,6 +480,28 @@ export async function getAllStudentList(user){
 
 }
 
-
-
+export async function getStudentSignin(headerValue) {
+  log.info(`${TAG}.getStudentProfile() ==> `, headerValue);
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try {
+    let decoded=await verifyAccessToken(headerValue)
+    const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+    if(isValid){
+      const existedProfile=await StudentAuth.getUserform(decoded.uid)
+      console.log(existedProfile)
+      if(existedProfile){
+        serviceResponse.data = existedProfile
+        return serviceResponse
+      }
+    }else{
+      serviceResponse.message="invalid user id"
+      return serviceResponse
+    }
+  
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.getStudentProfile`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return serviceResponse;
+}
   
