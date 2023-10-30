@@ -60,9 +60,7 @@ export async function getRecruiterUid(uid){
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid
       });
-
       return userId;
-
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;
