@@ -84,6 +84,7 @@ function loginUser(user) {
                 const uid = existedUser.uid;
                 const email = existedUser.email;
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
+
                 const data = {
                     accessToken
                 };

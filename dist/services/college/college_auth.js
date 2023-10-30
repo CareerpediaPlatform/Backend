@@ -43,7 +43,9 @@ function signupUser(user) {
             transaction = yield (0, sql_query_util_1.getTransaction)();
             const college_admin = yield mysql_1.CollegeAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
+
             (0, nodemail_1.sendRegistrationNotifications)(user, generatePassword);
+
             const uid = college_admin.uid;
             const email = college_admin.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
@@ -115,9 +117,10 @@ function changePassword(user) {
             if (mentor) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(mentor.password, user.oldPassword);
                 if (IsValid) {
-                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });
+                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });        
                     serviceResponse.message = "password changed successfully";
-                    // serviceResponse.data=response
+                    serviceResponse.data = response;
+
                 }
                 else {
                     serviceResponse.message = 'old password is wrong';

@@ -31,13 +31,16 @@ function signUp(user) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                phoneNumber: user.phoneNumber,
                 password: hashedPassword,
                 status: "ACTIVE",
                 terms_and_condition: user.terms_and_condition
             };
             let userInsertQuery = `
+
       INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
       VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
+
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -67,8 +70,10 @@ function signupWithSocialAccount(user) {
                 status: "ACTIVE"
             };
             let userInsertQuery = `
+
       INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
       VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
+
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -132,11 +137,14 @@ function getAllStudentList() {
         const getTable1 = `SELECT 
   id, uid, first_name, last_name, email, status
 FROM
+
 STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
   STUDENT_AUTH_GMAIL;`;
+
+
         const res = yield (0, sql_query_util_1.executeQuery)(getTable1, sequelize_1.QueryTypes.SELECT, {});
         console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         console.log(res);
@@ -149,8 +157,13 @@ function findTable(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         const updateQuery = `SELECT 
   CASE
+
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
       ELSE 'STUDENT_AUTH_GMAIL'
+
+
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
+      ELSE 'STUDENT_AUTH_FORM'
 
   END AS table_name
   `;

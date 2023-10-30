@@ -94,20 +94,23 @@ export async function getRecruiterProfile(headerValue) {
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
     let decoded=await verifyAccessToken(headerValue)
-
-
-      const uid=decoded.uid
-  const isValid=await RecruiterAuth.getRecruiterUid(uid)
-
-
-  if(isValid){
-    const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
-    if(existedProfile){
-      const data = {
-        existedProfile
-      }    
-      serviceResponse.data = data
-      return serviceResponse
+    const uid=decoded.uid
+    const isValid=await RecruiterAuth.getRecruiterUid(uid)
+    if(isValid){
+      const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
+      if(existedProfile){
+        const data = {
+          existedProfile
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }
+      else{
+        serviceResponse.message="invalid user uid"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse
+      }
     }
     else{
       serviceResponse.message="invalid user uid"

@@ -47,7 +47,9 @@ function signupUser(user) {
             const email = recruiter.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
+
                 accessToken, type: "Recruiter-signup"
+
             };
             serviceResponse.data = data;
         }
