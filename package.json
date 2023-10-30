@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "buildts": "tsc --project tsconfig.json",
-
     "copyconfig": "copy src\\config dist\\ && copy ..\\careerpedia-doc.yml dist\\",
-
-    "copyconfig": "cp -r config dist/ && cp -r beej-doc.yml dist/",
-
     "build": "npm run buildts && npm run copyconfig",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/index.ts",

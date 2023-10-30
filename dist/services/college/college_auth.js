@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collegeUpdateStatus = exports.changeUserPassword = exports.loginUser = exports.signupUser = void 0;
+exports.collegeUpdateStatus = exports.changePassword = exports.loginUser = exports.signupUser = void 0;
 const mysql_1 = require("src/Database/mysql");
 const college_auth_1 = require("src/Database/mysql/lib/college/college_auth");
 const status_codes_1 = require("src/constants/status_codes");
@@ -43,11 +43,11 @@ function signupUser(user) {
             const college_admin = yield mysql_1.CollegeAuth.signUp(user);
             yield transaction.commit();
             (0, nodemail_1.sendRegistrationNotification)(user);
-            const accessToken = yield (0, authentication_1.generateAccessToken)(Object.assign({}, college_admin));
-            const college_uid = college_admin.uid;
+            const uid = college_admin.uid;
+            const email = college_admin.email;
+            const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-                accessToken,
-                college_uid
+                accessToken
             };
             serviceResponse.data = data;
         }
@@ -87,12 +87,11 @@ function loginUser(user) {
             }
             else {
                 const college_login = yield mysql_1.CollegeAuth.login(user);
-                const accessToken = yield (0, authentication_1.generateAccessToken)(Object.assign({}, college_login));
-                const college_uid = existedUser.uid;
+                const uid = existedUser.uid;
+                const email = existedUser.uid;
+                const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
                 const data = {
                     accessToken,
-                    college_login,
-                    college_uid
                 };
                 serviceResponse.data = data;
             }
@@ -105,40 +104,37 @@ function loginUser(user) {
     });
 }
 exports.loginUser = loginUser;
-function changeUserPassword(user) {
+function changePassword(user) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const existedUser = yield (0, college_auth_1.checkUidExist)(user.uid);
-            console.log(existedUser);
-            console.log(existedUser.password);
-            if (!existedUser) {
-                serviceResponse.message = 'User not found';
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.NOT_FOUND;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
-            }
-            else {
-                const isValid = yield (0, encryption_1.comparehashPasswords)(existedUser.password, user.oldPassword);
-                if (isValid) {
-                    const response = yield mysql_1.CollegeAuth.changePassword(Object.assign({ password: user.newPassword }, user));
-                    serviceResponse.message = "Password changed successfully";
+            // finde student is valid or not
+            const uid = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
+            const mentor = yield mysql_1.CollegeAuth.getCollegeAdminUid({ uid: uid.uid });
+            if (mentor) {
+                const IsValid = yield (0, encryption_1.comparePasswords)(mentor.password, user.oldPassword);
+                if (IsValid) {
+                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });
+                    console.log("response");
+                    console.log(response);
+                    serviceResponse.message = "password changed successfully";
                     serviceResponse.data = response;
                 }
                 else {
-                    serviceResponse.message = 'Old password is wrong';
+                    serviceResponse.message = 'old password is wrong';
                     serviceResponse.statusCode = status_codes_1.HttpStatusCodes.NOT_FOUND;
                     serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 }
             }
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.changeUserPassword`, error);
-            serviceResponse.addServerError('Failed to change password due to technical difficulties');
+            logger_1.default.error(`ERROR occurred in ${TAG}.changePassword`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
         }
-        return serviceResponse;
+        return yield serviceResponse;
     });
 }
-exports.changeUserPassword = changeUserPassword;
+exports.changePassword = changePassword;
 // give access remove accerss of a college_admin by admin
 function collegeUpdateStatus(user) {
     return __awaiter(this, void 0, void 0, function* () {

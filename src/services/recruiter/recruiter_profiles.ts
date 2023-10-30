@@ -68,11 +68,6 @@ export async function getRecruiterProfile(headerValue) {
 
         const uid=decoded.uid
     const isValid=await RecruiterAuth.getRecruiterUid(uid)
-
-   
-      console.log(uid)
-    const isValid=await RecruiterAuth.checkUidExist(uid)
-
     if(isValid){
       const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
       if(existedProfile){

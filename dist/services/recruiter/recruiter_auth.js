@@ -41,13 +41,11 @@ function signupUser(user) {
             const recruiter = yield mysql_1.RecruiterAuth.signUp(user, transaction);
             yield transaction.commit();
             (0, nodemail_1.sendRegistrationNotification)(user);
-            const accessToken = yield (0, authentication_1.generateAccessToken)(Object.assign({}, recruiter));
-            const recruiter_uid = recruiter.uid;
-            const recruiter_email = recruiter.email;
+            const uid = recruiter.uid;
+            const email = recruiter.email;
+            const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-                accessToken,
-                recruiter_uid,
-                recruiter_email
+                accessToken
             };
             serviceResponse.data = data;
         }
@@ -82,12 +80,11 @@ function loginUser(user) {
             }
             else {
                 const recruiter_login = yield mysql_1.RecruiterAuth.login(user);
-                const accessToken = yield (0, authentication_1.generateAccessToken)(Object.assign(Object.assign({}, recruiter_login), { uid: existedUser.uid }));
-                const recruiter_uid = existedUser.uid;
+                const uid = existedUser.uid;
+                const email = existedUser.email;
+                const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
                 const data = {
-                    accessToken,
-                    recruiter_login,
-                    recruiter_uid
+                    accessToken
                 };
                 serviceResponse.data = data;
             }

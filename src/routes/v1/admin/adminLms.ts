@@ -79,7 +79,7 @@ router.route('/course/:coursetype')
  .patch(isAuthenticated,controller.updateModuleExercise);
 
 //  course//
-router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
+ router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
  router.route('/course-overview/:uid').get(controller.getuploadCourse);
  router.route('/course-overview/:uid').patch(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.updateuploadCourse)
  router.route('/course-overview/:uid').delete(controller.deleteuploadCourse);

@@ -105,10 +105,9 @@ function postThreadreply(reply, threadId, headerValue, partId) {
         try {
             let response;
             let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
-            console.log(decoded);
-            const uid = decoded.mentor_uid;
-            const mentorValid = yield mysql_1.MentorAuth.getMentorUid(uid);
-            if (mentorValid) {
+            const uid = decoded.uid; //change will change mentor_uid
+            const isValid = (yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid })) || (yield mysql_1.MentorAuth.getMentorUid(uid));
+            if (isValid) {
                 response = yield mentorlms.postThreadreply(reply, threadId, uid, partId);
             }
             else {

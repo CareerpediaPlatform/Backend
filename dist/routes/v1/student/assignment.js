@@ -42,7 +42,7 @@ router.route('/course/notes').post(controller.uploadNote);
 router.route('/course/notes').get(controller.getAllNotes);
 router.route('/part/thread/:partId').post(controller.uploadThread);
 router.route('/part/thread/:partId/:threadID').get(controller.getSingleThread);
-router.route('/part/thread').post(controller.uploadThread);
+//  router.route('/part/thread').post(controller.uploadThread);
 //  router.route('/part/thread/:threadID/:uid').get(controller.getAllThreads);
 //  router.route('/mentor/reply-thread/:threadID/:uid').post(controller.postThreadreply)
 router.route('/thread/part/:partId').get(controller.getAllThreadsPart);

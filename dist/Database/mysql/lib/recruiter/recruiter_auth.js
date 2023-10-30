@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recruiterUpdateStatus = exports.getUserId = exports.changePassword = exports.login = exports.getRecruiterUid = exports.checkEmailExist = exports.signUp = void 0;
+exports.recruiterUpdateStatus = exports.getUserId = exports.changePassword = exports.login = exports.getRECRUITERUid = exports.getRecruiterUid = exports.checkEmailExist = exports.signUp = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -28,7 +28,7 @@ function signUp(user, transaction) {
                 uid: crypto.randomUUID(),
                 email: user.email,
                 password: hashedPassword,
-                status: user.status
+                status: "ACTIVE"
             };
             let recruiterInsertQuery = `insert into RECRUITER(UID, EMAIL, PASSWORD,STATUS)
     values(:uid, :email, :password,:status)`;
@@ -77,6 +77,23 @@ function getRecruiterUid(uid) {
     });
 }
 exports.getRecruiterUid = getRecruiterUid;
+function getRECRUITERUid(uid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.getRECRUITERUid()  ==>`, uid);
+            let query = 'select * from RECRUITER where UID=:uid';
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
+                uid: uid.uid
+            });
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getRECRUITERUid()`, error);
+            throw error;
+        }
+    });
+}
+exports.getRECRUITERUid = getRECRUITERUid;
 function login(user) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

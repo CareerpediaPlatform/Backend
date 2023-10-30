@@ -79,8 +79,7 @@ function loginUser(user) {
             else {
                 const mentor_login = yield mysql_1.MentorAuth.login(user);
                 const mentor_uid = existedUser.uid;
-                const role = "mentor";
-                const accessToken = yield (0, authentication_1.generateAccessToken)({ mentor_uid, role });
+                const accessToken = yield (0, authentication_1.generateAccessToken)(Object.assign(Object.assign({}, mentor_login), { mentor_uid }));
                 const data = {
                     accessToken
                 };
@@ -95,36 +94,6 @@ function loginUser(user) {
     });
 }
 exports.loginUser = loginUser;
-// export async function changeUserPassword(user: any) {
-//   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-//   try {
-//     const uid=await verifyAccessToken(user.headerValue)
-//     console.log(uid)
-//     const existedUser = await getMentorUid({uid:uid.uid});
-//     console.log(existedUser)
-//     console.log(existedUser.password)
-//     if (!existedUser) {
-//       serviceResponse.message = 'User not found'; 
-//       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-//       serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-//     } else {
-//       const isValid = await comparehashPasswords(existedUser.password, user.oldPassword);
-//       if (isValid) {
-//         const response = await MentorAuth.changePassword({ password: user.newPassword, ...user });
-//         serviceResponse.message = "Password changed successfully";
-//         serviceResponse.data = response;
-//       } else {
-//         serviceResponse.message = 'Old password is wrong';
-//         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-//         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
-//       }
-//     }
-//   } catch (error) {
-//     log.error(`ERROR occurred in ${TAG}.changeUserPassword`, error);
-//     serviceResponse.addServerError('Failed to change password due to technical difficulties');
-//   }
-//   return serviceResponse;
-// }
 function changePassword(user) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
