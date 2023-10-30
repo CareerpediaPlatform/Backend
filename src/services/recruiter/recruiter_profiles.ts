@@ -106,6 +106,7 @@ export async function getRecruiterProfile(headerValue) {
       }    
       serviceResponse.data = data
       return serviceResponse
+
     }
     else{
       serviceResponse.message="invalid user uid"

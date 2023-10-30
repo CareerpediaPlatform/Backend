@@ -60,6 +60,7 @@ export async function getRecruiterUid(uid){
         uid:uid.uid
       });
 
+
       return userId;
 
     } catch (error) {
