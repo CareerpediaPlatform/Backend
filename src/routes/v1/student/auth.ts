@@ -46,4 +46,6 @@ const router = Router()
      router.route('/change-password')
      .patch(isAuthenticated,validation.passwordValidation,controller.changePassword);
 
+     router.route('/get-signIn')
+     .get(isAuthenticated,controller.getStudentSignin);
 export default router

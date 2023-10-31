@@ -155,4 +155,16 @@ export async function setForgetPassword(req: any, res: Response, next: NextFunct
 }
 
 
-
+export async function getStudentSignin(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.getStudentSignin()`);
+    log.debug(`${TAG}.getStudentSignin() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    console.log(headerValue)
+    const authResponse= await authService.getStudentSignin(headerValue)
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.getStudentSignin() `, error)
+    next(error)
+  }
+}

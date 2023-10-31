@@ -319,3 +319,33 @@ export async function checkEmailOrPhoneExist(info) {
     throw error;
   }
 }
+
+
+export async function getUserform(uid) {
+  logger.info(`${TAG}.getUserform()`);
+  try {
+  
+    let userGetQuery = `SELECT * FROM STUDENT_AUTH_FORM WHERE UID = :uid`;
+    let getUser =await executeQuery(userGetQuery, QueryTypes.INSERT, {uid});
+    return getUser;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserform()`, error);
+    throw error;
+  }
+}
+
+// get signin with email and linked in
+export async function getUserEmail(uid) {
+  logger.info(`${TAG}.getUserEmail()`);
+  try {
+  
+    let userGetQuery = `SELECT * FROM STUDENT_AUTH_GMAIL WHERE UID = :uid'`;
+    let getUserEmail = await executeQuery(userGetQuery, QueryTypes.INSERT, {uid});
+    return getUserEmail;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserEmail()`, error);
+    throw error;
+  }
+}
