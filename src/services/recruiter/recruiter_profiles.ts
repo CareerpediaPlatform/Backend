@@ -26,35 +26,22 @@ export async function recruiterProfile(user) {
 
   console.log(user);
 
-  const serviceResponse: IServiceResponse = new ServiceResponse(
-    HttpStatusCodes.CREATED,
-    "",
-    false
-  );
-  try {
-    let decoded = await verifyAccessToken(user.headerValue);
-    console.log("11111111111111111111111",decoded)
-    const uid = decoded.uid;
-    console.log("222222222222222222",uid)
-    const isValid = await RecruiterAuth.getRecruiterUid(uid);
-    if (isValid) {
-      const existedProfile = await RecruiterProfileDetailsData.checkExist(uid);
-      if (existedProfile) {
-        const basicDetails =
-          await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({
-            ...user.Profile,
-            uid,
-          });
-        const contactDetails =
-          await RecruiterProfileDetailsData.recruiterContactUpdate({
-            ...user.Contact,
-            uid,
-          });
-        const companyDetsils =
-          await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({
-            ...user.Company,
-            uid,
-          });
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      let decoded=await verifyAccessToken(user.headerValue)
+        const uid=decoded.uid
+        console.log(uid)
+      const isValid=await RecruiterAuth.getRecruiterUid(uid)
+      console.log(isValid)
+      if(isValid){
+        const existedProfile=await RecruiterProfileDetailsData.checkExist(uid)
+        if(existedProfile){
+          const basicDetails= await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({...user.Profile,uid});
+          const contactDetails= await RecruiterProfileDetailsData.recruiterContactUpdate({...user.Contact,uid});
+          const companyDetsils= await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({...user.Company,uid});
+         
+      
+        const response= await RecruiterProfileDetailsData.recruiterProfilePost({...user,uid});
         const data = {
           basicDetails,
           contactDetails,
@@ -112,14 +99,9 @@ export async function getRecruiterProfile(headerValue) {
         return serviceResponse
       }
     }
-    else{
-      serviceResponse.message="invalid user uid"
-      serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-      serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-      return serviceResponse
-    }
+   
   }
-  } catch (error) {
+   catch (error) {
     log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
     serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
