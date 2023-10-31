@@ -52,15 +52,12 @@ export async function getRecruiterUid(uid){
     try {
 
       console.log(uid)
-      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      logger.info(`${TAG}.getRecruiterUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid:uid.uid
+        uid
       });
       return userId;
-
-      
-
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;

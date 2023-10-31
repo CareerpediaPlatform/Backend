@@ -21,8 +21,10 @@ export async function recruiterProfile(user) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
-        const uid=decoded[0].uid
+        const uid=decoded.uid
+        console.log(uid)
       const isValid=await RecruiterAuth.getRecruiterUid(uid)
+      console.log(isValid)
       if(isValid){
         const existedProfile=await RecruiterProfileDetailsData.checkExist(uid)
         if(existedProfile){
