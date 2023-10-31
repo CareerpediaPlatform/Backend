@@ -25,7 +25,6 @@ export async function recruiterProfile(user) {
   log.info(`${TAG}.recruiterProfile() ==> `, user);
 
   console.log(user);
-
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
@@ -90,7 +89,7 @@ export async function getRecruiterProfile(headerValue) {
           existedProfile
         }    
         serviceResponse.data = data
-        return serviceResponse
+        return data
       }
       else{
         serviceResponse.message="invalid user uid"
