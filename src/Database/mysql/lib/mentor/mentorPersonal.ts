@@ -12,11 +12,10 @@ export async function savePersonalAndContactDetails(
   ) {
     logger.info(`${TAG}.savePersonalAndContactDetails()`);
     try {
-        mentorPersonalData["uid"] = crypto.randomUUID();
+      
       mentorPersonalData["mentorUserId"] = userId;
-
       let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
-                                   (USER_ID, UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
+                                   (USER_ID,UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
                                     CITY, DISTRICT, STATE, PINCODE, COUNTRY)
                                    values(:mentorUserId,:uid,:profile_pic ,:first_name, :last_name, :email, :mobile_number, :date_of_birth, :linkedin_profile, 
                                           :address, :city, :district, :state, :pincode, :country)`;
@@ -73,17 +72,32 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
     }
   }
 
-export async function isValid(userId) {
+export async function isValid(uid) {
     console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj")
-    console.log(userId)
+    console.log(uid)
     try {
-      logger.info(`${TAG}.checkProfilExist() ==>`, userId);
+      logger.info(`${TAG}.isValid() ==>`, uid);
       console.log("1234567890")
-      const contactQuery = 'SELECT * FROM `MENTOR` WHERE USER_ID=:userId';
-      const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {userId:userId});
+      const contactQuery = 'SELECT USER_ID FROM `MENTOR` WHERE UID=:uid';
+      const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
       return contact// Return null if no user is found
     } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+      logger.error(`ERROR occurred in ${TAG}.isValid()`, error);
+      throw error;
+    }
+  }
+
+  export async function isValids(uid) {
+    console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj")
+    console.log(uid)
+    try {
+      logger.info(`${TAG}.isValid() ==>`, uid);
+      console.log("1234567890")
+      const contactQuery = 'SELECT * FROM `MENTOR` WHERE UID=:uid';
+      const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
+      return contact// Return null if no user is found
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.isValid()`, error);
       throw error;
     }
   }

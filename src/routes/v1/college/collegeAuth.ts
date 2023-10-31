@@ -13,14 +13,14 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route(APIPaths.LOGIN)
-     .post(controller.loginCollege);
+     .post(validation.SignIn,controller.loginCollege);
 
  router.route('/signup')
  .post(isAuthenticated,controller.signupCollege);
 
  
  router.route('/change-password')
- .post(isAuthenticated,controller.changePasswordController);
+ .patch(isAuthenticated,validation.passwordValidation,controller.changePasswordController);
     
 
 export default router

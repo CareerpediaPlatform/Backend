@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.College = exports.Recruiter = exports.Mentor = exports.Admin = exports.Otp = exports.ISignin = exports.User = void 0;
 class User {
+
     constructor(id, uid, firstName, lastName, email, phoneNumber, role, uuid, accessToken, password) {
+
         this.id = id;
         this.uid = uid;
         this.firstName = firstName;

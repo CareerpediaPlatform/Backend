@@ -8,12 +8,12 @@ import {generateAccessToken, verifyAccessToken} from '../../helpers/authenticati
 import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
 import { ICollege } from "src/models/lib/auth";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { sendRegistrationNotification } from "../../utils/nodemail";
+import { sendRegistrationNotifications } from "../../utils/nodemail";
+import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
 const TAG = 'services.auth'
 
 export async function signupUser(user: ICollege) {
     log.info(`${TAG}.signupUser() ==> `, user);
-    let transaction = null
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let transaction = null
@@ -24,15 +24,16 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
+      const generatePassword = await generatePasswordWithPrefixAndLength(15, "Careerpedia");
       transaction = await getTransaction()
-      const college_admin = await CollegeAuth.signUp(user);
+      const college_admin = await CollegeAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
-      sendRegistrationNotification(user)
+      sendRegistrationNotifications(user,generatePassword)
       const uid = college_admin.uid
       const email = college_admin.email
       const accessToken = await generateAccessToken({uid,email  });
       const data = {
-        accessToken
+        accessToken,type:"college-signup"
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -99,10 +100,8 @@ export async function changePassword(user){
       const IsValid=await comparePasswords(mentor.password,user.oldPassword)
       if(IsValid){
     const response=await CollegeAuth.changePassword({password:user.newPassword,uid:uid.uid})
-    console.log("response")
-    console.log(response)
     serviceResponse.message="password changed successfully"
-    serviceResponse.data=response
+    // serviceResponse.data=response
       }
       else{
         serviceResponse.message = 'old password is wrong';

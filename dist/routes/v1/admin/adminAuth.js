@@ -31,11 +31,12 @@ const controller = __importStar(require("../../../controller/admin/adminAuth"));
 const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
+const validation = __importStar(require("../../../validations/auth"));
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(controller.adminLogin);
+    .post(validation.adminSignIn, controller.adminLogin);
 router.route('/signup')
-    .post(controller.signupUser);
+    .post(validation.adminSignIn, controller.signupUser);
 exports.default = router;

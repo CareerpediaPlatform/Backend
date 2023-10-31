@@ -11,9 +11,10 @@ export async function PersonalAndDetails (req: any, res: Response, next: NextFun
     try {
       log.info(`${TAG}.PersonalAndDetails()`);
       log.debug(`${TAG}.PersonalAndDetails() Object = ${JSON.stringify(req.body)}`)
-      const mentorPersonalData = req.body;
-      const {mentorUid}= req.params
-      const authResponse: IServiceResponse = await profileService.savePersonalAndContactDetails(mentorPersonalData, mentorUid)
+      const user = req.body;
+      // const {mentorUid}= req.params
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const authResponse: IServiceResponse = await profileService.savePersonalAndContactDetails({user, headerValue})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.PersonalAndDetails() `, error)

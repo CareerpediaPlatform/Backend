@@ -33,16 +33,13 @@ function signUp(user) {
                 email: user.email,
                 phoneNumber: user.phoneNumber,
                 password: hashedPassword,
-                role: "student",
-                status: "ACTIVE"
+                status: "ACTIVE",
+                terms_and_condition: user.terms_and_condition
             };
             let userInsertQuery = `
 
-      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
-      VALUES (:uid, :firstName, :lastName, :email,:phoneNumber, :password, :role, :status)
-
-      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
 
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
@@ -68,11 +65,15 @@ function signupWithSocialAccount(user) {
                 lastName: user.lastName,
                 email: user.email,
                 uuid: hashedPassword,
+                role: user.role,
+                terms_and_condition: user.terms_and_condition,
                 status: "ACTIVE"
             };
             let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
+
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
+
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -136,11 +137,14 @@ function getAllStudentList() {
         const getTable1 = `SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-STUDENT_AUTH_FORM 
+
+STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
-STUDENT_AUTH_GMAIL;`;
+  STUDENT_AUTH_GMAIL;`;
+
+
         const res = yield (0, sql_query_util_1.executeQuery)(getTable1, sequelize_1.QueryTypes.SELECT, {});
         console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         console.log(res);
@@ -148,13 +152,19 @@ STUDENT_AUTH_GMAIL;`;
     });
 }
 exports.getAllStudentList = getAllStudentList;
-// update stauys active and deactive
+// update status active and deactive
 function findTable(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         const updateQuery = `SELECT 
   CASE
+
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
+      ELSE 'STUDENT_AUTH_GMAIL'
+
+
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
       ELSE 'STUDENT_AUTH_FORM'
+
   END AS table_name
   `;
         const [res] = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.SELECT, {
@@ -280,7 +290,6 @@ function verifyOTP(userotp) {
             else {
                 return false;
             }
-            // console.log("error")
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.verifyOTP()`, error);

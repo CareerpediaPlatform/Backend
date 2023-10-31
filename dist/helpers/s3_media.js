@@ -35,15 +35,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+
+exports.getSanitizedFileName = exports.getFileName = exports.getFileUrl = exports.saveFileBuffer = exports.saveFile = void 0;
+
 exports.getVideoDurations = exports.getSanitizedFileName = exports.getFileName = exports.getFileUrl = exports.saveFileBuffer = exports.saveFile = void 0;
+
 const logger_1 = __importDefault(require("../logger"));
 const path_1 = __importDefault(require("path"));
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3_config_1 = require("../Loaders/s3_config");
 const nodeUtil = __importStar(require("util"));
 const config_1 = require("../Loaders/config");
+
 const get_video_duration_1 = require("get-video-duration");
 const path_2 = require("path");
+
 const uuid_1 = require("uuid");
 const TAG = 'helpers.s3_media';
 // export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
@@ -106,10 +112,11 @@ function saveFileBuffer(fileBuffer, filePath, bucketName, fileName, videoPath) {
             logger_1.default.debug(`${TAG}.saveFileBuffer() s3 upload response::` + nodeUtil.inspect(data));
             data.savedFileKey = filePath;
             data.savedFileName = fileName;
-            data.savedLocation = getFileUrl(filePath, bucketName);
+            data.savedLocation = getFileUrl(filePath, bucketName)
             const duration = yield getVideoDurations(data.savedFileKey);
             console.log("****************************************");
             console.log(duration);
+
             return data;
         }
         catch (error) {
@@ -132,6 +139,7 @@ function getSanitizedFileName(fileName) {
     return Math.floor(Date.now()) + '-' + (fileName || '');
 }
 exports.getSanitizedFileName = getSanitizedFileName;
+
 function getVideoDurations(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -150,3 +158,4 @@ function getVideoDurations(filePath) {
     });
 }
 exports.getVideoDurations = getVideoDurations;
+

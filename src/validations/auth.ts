@@ -59,9 +59,7 @@ export const linkedInSignup= async (req, res, next) => {
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
     uuid: Joi.string().required(),
-    role: Joi.string().required()
-
-
+    terms_and_condition:Joi.boolean().required()
   });
   await validate(schema, req, res, next);
 };
@@ -77,10 +75,47 @@ export const formSignup= async (req, res, next) => {
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
     }),
-    role: Joi.string().required(),
+    terms_and_condition:Joi.boolean().required()
 
   });
   await validate(schema, req, res, next);
 };
 
+export const adminSignIn= async (req, res, next) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8).max(25).messages({
+      'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+      'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+        .replace('$length', '8'),
+      'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
+    }),
 
+  });
+  await validate(schema, req, res, next);
+};
+
+export const SignIn= async (req, res, next) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8).max(25).messages({
+      'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+      'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+        .replace('$length', '8'),
+      'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field', 'password')
+    }),
+
+  });
+  await validate(schema, req, res, next);
+};
+
+export const mentorSignup= async (req, res, next) => {
+  const schema = Joi.object().keys({
+   
+    email: Joi.string().email().required(),
+    type: Joi.string().required(),
+    course:Joi.string().required()
+
+  });
+  await validate(schema, req, res, next);
+};

@@ -31,13 +31,15 @@ const controller = __importStar(require("../../../controller/recruiter/recruiter
 const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
+const validation = __importStar(require("../../../validations/auth"));
+const authentication_1 = require("../../../middlewares/authentication");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(controller.loginRecruiter);
+    .post(validation.SignIn, controller.loginRecruiter);
 router.route('/signup')
     .post(controller.signupRecruiter);
 router.route('/change-password')
-    .post(controller.changePasswordController);
+    .patch(authentication_1.isAuthenticated, validation.passwordValidation, controller.changePasswordController);
 exports.default = router;

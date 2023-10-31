@@ -14,7 +14,6 @@ export async function recruiterProfilePostAndUpdate(req: any, res: Response, nex
       log.debug(`${TAG}.recruiterProfilePostAndUpdate() Object = ${JSON.stringify(req.body)}`)
       const user = req.body
       console.log(user)
-     
       const headerValue = req.headers.authorization.split(' ')[1];
       const authResponse: IServiceResponse = await recruiterProfileServices.recruiterProfile({...user,headerValue})
       responseBuilder(authResponse, res, next, req)
