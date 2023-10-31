@@ -11,12 +11,14 @@ export async function getRecruiterProfile(uid: any) {
     logger.info(`${TAG}.checkProfileExist() ==>`, uid);
 
     const basicQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE UID= :uid';
-    const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE UID= :uid';
     const contactQuery = 'SELECT * FROM `RECRUITER_CONTACT_DETAILS` WHERE UID= :uid';
+    const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE UID= :uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid:uid});
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
     const [company] = await executeQuery(companyQuery, QueryTypes.SELECT, {uid:uid});
-    return {basic,contact,company}; // Return null if no user is found
+
+    console.log("1234567890",company)
+    return {company}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
     throw error;
