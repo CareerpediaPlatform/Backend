@@ -746,3 +746,4 @@ export async function updateExercisesPost(user,exercise_id) {
     throw error;
   }
 }
+

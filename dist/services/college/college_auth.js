@@ -114,8 +114,15 @@ function changePassword(user) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(mentor.password, user.oldPassword);
                 if (IsValid) {
                     const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });
+
                     serviceResponse.message = "password changed successfully";
                     // serviceResponse.data=response
+
+                    console.log("response");
+                    console.log(response);
+                    serviceResponse.message = "password changed successfully";
+                    serviceResponse.data = response;
+
                 }
                 else {
                     serviceResponse.message = 'old password is wrong';

@@ -35,13 +35,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+
 exports.getSanitizedFileName = exports.getFileName = exports.getFileUrl = exports.saveFileBuffer = exports.saveFile = void 0;
+
+exports.getVideoDurations = exports.getSanitizedFileName = exports.getFileName = exports.getFileUrl = exports.saveFileBuffer = exports.saveFile = void 0;
+
 const logger_1 = __importDefault(require("../logger"));
 const path_1 = __importDefault(require("path"));
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3_config_1 = require("../Loaders/s3_config");
 const nodeUtil = __importStar(require("util"));
 const config_1 = require("../Loaders/config");
+
+const get_video_duration_1 = require("get-video-duration");
+const path_2 = require("path");
+
 const uuid_1 = require("uuid");
 const TAG = 'helpers.s3_media';
 // export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
@@ -105,9 +113,9 @@ function saveFileBuffer(fileBuffer, filePath, bucketName, fileName, videoPath) {
             data.savedFileKey = filePath;
             data.savedFileName = fileName;
             data.savedLocation = getFileUrl(filePath, bucketName);
-            // const duration = await getVideoDurations( data.savedFileKey);
-            //   console.log("****************************************")
-            //   console.log(duration)
+
+            const duration = yield getVideoDurations(data.savedFileKey);
+
             return data;
         }
         catch (error) {
@@ -130,3 +138,22 @@ function getSanitizedFileName(fileName) {
     return Math.floor(Date.now()) + '-' + (fileName || '');
 }
 exports.getSanitizedFileName = getSanitizedFileName;
+
+function getVideoDurations(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const absolutePath = (0, path_2.resolve)(filePath);
+            const duration = yield (0, get_video_duration_1.getVideoDurationInSeconds)(absolutePath);
+            if (duration !== undefined) {
+                console.log(duration);
+            }
+            else {
+                console.log('Unable to determine video duration.');
+            }
+        }
+        catch (error) {
+            console.error('Error fetching video duration:', error);
+        }
+    });
+}
+exports.getVideoDurations = getVideoDurations;
