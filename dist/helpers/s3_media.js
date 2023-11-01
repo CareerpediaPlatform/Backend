@@ -158,4 +158,3 @@ function getVideoDurations(filePath) {
     });
 }
 exports.getVideoDurations = getVideoDurations;
-
