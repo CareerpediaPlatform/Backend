@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "buildts": "tsc --project tsconfig.json",
-    "copyconfig": "copy src\\config dist\\ && copy ..\\careerpedia-doc.yml dist\\",
+    "copyconfig": "cp -r config dist/ && cp -r careerpedia-doc.yml dist/",
     "build": "npm run buildts && npm run copyconfig",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/index.ts",
@@ -44,6 +44,7 @@
     "nodemon": "^3.0.1",
     "otp-generator": "^4.0.1",
     "passport": "^0.6.0",
+    "razorpay": "^2.9.2",
     "sequelize": "^6.33.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",

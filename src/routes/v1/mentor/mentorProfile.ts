@@ -14,7 +14,7 @@ const router = Router()
  router.use(passport.initialize())
 
  router
- .route("/personal-details/:mentorUid")
+ .route("/personal-details")
  .post(isAuthenticated ,profileController.PersonalAndDetails);
 
  router

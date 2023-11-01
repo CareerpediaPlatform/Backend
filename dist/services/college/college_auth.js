@@ -24,11 +24,11 @@ const encryption_1 = require("src/helpers/encryption");
 ;
 const sql_query_util_1 = require("src/Database/mysql/helpers/sql.query.util");
 const nodemail_1 = require("../../utils/nodemail");
+const encryption_2 = require("src/helpers/encryption");
 const TAG = 'services.auth';
 function signupUser(user) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.signupUser() ==> `, user);
-        let transaction = null;
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let transaction = null;
@@ -39,15 +39,18 @@ function signupUser(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
+            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(20, "Careerpedia-College");
             transaction = yield (0, sql_query_util_1.getTransaction)();
-            const college_admin = yield mysql_1.CollegeAuth.signUp(user);
+            const college_admin = yield mysql_1.CollegeAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
-            (0, nodemail_1.sendRegistrationNotification)(user);
+
+            (0, nodemail_1.sendRegistrationNotifications)(user, generatePassword);
+
             const uid = college_admin.uid;
             const email = college_admin.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-                accessToken
+                accessToken, type: "college-signup"
             };
             serviceResponse.data = data;
         }
@@ -114,11 +117,10 @@ function changePassword(user) {
             if (mentor) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(mentor.password, user.oldPassword);
                 if (IsValid) {
-                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });
-                    console.log("response");
-                    console.log(response);
+                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });        
                     serviceResponse.message = "password changed successfully";
                     serviceResponse.data = response;
+
                 }
                 else {
                     serviceResponse.message = 'old password is wrong';

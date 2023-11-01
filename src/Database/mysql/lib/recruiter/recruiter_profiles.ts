@@ -52,7 +52,6 @@ export async function isValid(uid) {
 }
 // post recruiter all profile data
 export async function recruiterProfilePost(user: any) {
-  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrruuuuuuuuuuuuuuuuuuuuuuuuuuurrrrrrrrrrrr")
   console.log(user)
   const uid=user.uid
   logger.info(`${TAG}.recruiterProfilePost()`);
@@ -89,9 +88,10 @@ export async function recruiterProfilePost(user: any) {
     throw error;
   }
 }
+
 //update basic details
 export async function recruiterBasicDetailsUpdate(user: any) {
-  
+
   logger.info(`${TAG}.recruiterBasicDetailsUpdate()`);
 
   try {

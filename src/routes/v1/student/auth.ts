@@ -20,7 +20,7 @@ const router = Router()
  router.route('/verify-number')
      .post(isAuthenticated,validation.numberLogin,controller.signupPhonenumber);
 
-     
+    
     //  signin
  router.route('/email-login')
      .post(validation.emailLogin,controller.signinUser);
@@ -44,6 +44,8 @@ const router = Router()
      .patch(isAuthenticated,controller.setForgetPassword);
      
      router.route('/change-password')
-     .patch(validation.passwordValidation,controller.changePassword);
+     .patch(isAuthenticated,validation.passwordValidation,controller.changePassword);
 
+     router.route('/get-signIn')
+     .get(isAuthenticated,controller.getStudentSignin);
 export default router

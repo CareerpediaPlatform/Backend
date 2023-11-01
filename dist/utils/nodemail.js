@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentNotification = exports.sendRegistrationNotification = exports.studentOtpEmail = exports.sendSignupEmail = exports.sendmail = exports.createTransport = void 0;
+exports.studentNotification = exports.sendRegistrationNotifications = exports.sendRegistrationNotification = exports.studentOtpEmail = exports.sendSignupEmails = exports.sendSignupEmail = exports.sendmail = exports.createTransport = void 0;
 const nodeMailer = __importStar(require("nodemailer"));
 const logger_1 = __importDefault(require("../logger"));
 const config_1 = require("src/Loaders/config");
@@ -67,7 +67,6 @@ function createTransport() {
 exports.createTransport = createTransport;
 function sendmail(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("fffddddddddddddddddddddddddddddf");
         const email = user.email;
         console.log(email);
         try {
@@ -88,6 +87,7 @@ function sendmail(user) {
     });
 }
 exports.sendmail = sendmail;
+// const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Mentor");
 function sendSignupEmail(user) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -113,6 +113,31 @@ function sendSignupEmail(user) {
     });
 }
 exports.sendSignupEmail = sendSignupEmail;
+function sendSignupEmails(user, generatePassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            user.message = `<p>Hi 
+        <p style=fontSize:20px ; color:blue>Email:<b>${user.email},</b></p>
+        <br>
+        <p style=fontSize:20px; color:blue>Password:<b>${generatePassword}</b></p>
+        <p>Thanks for signing up with carrierpadia.</p>
+     
+        <br>
+        <br>
+        <h4>Best Regards</h4>
+        <p>Team  Carrierpedia</p>`;
+            user.subject = 'Welcome';
+            yield sendmail(user);
+            return;
+        }
+        catch (error) {
+            logger_1.default.error('Error occurred in sendSignupEmail');
+            logger_1.default.error(error);
+            throw error;
+        }
+    });
+}
+exports.sendSignupEmails = sendSignupEmails;
 function studentOtpEmail(user) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -165,6 +190,31 @@ function sendRegistrationNotification(user) {
     });
 }
 exports.sendRegistrationNotification = sendRegistrationNotification;
+function sendRegistrationNotifications(user, generatePassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let emailFailed = '';
+            if (user.email) {
+                try {
+                    yield sendSignupEmails(user, generatePassword);
+                }
+                catch (error) {
+                    logger_1.default.error(error);
+                    emailFailed = 'Failed to signup.';
+                    logger_1.default.error(error);
+                }
+            }
+            return {
+                emailFailed,
+            };
+        }
+        catch (error) {
+            logger_1.default.error(error);
+            throw error;
+        }
+    });
+}
+exports.sendRegistrationNotifications = sendRegistrationNotifications;
 function studentNotification(user) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

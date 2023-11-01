@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePassword = exports.loginUser = exports.signupUser = void 0;
+exports.recruiterUpdateStatus = exports.changePassword = exports.loginUser = exports.signupUser = void 0;
 const mysql_1 = require("src/Database/mysql");
 const recruiter_auth_1 = require("src/Database/mysql/lib/recruiter/recruiter_auth");
 const status_codes_1 = require("src/constants/status_codes");
@@ -23,6 +23,7 @@ const authentication_1 = require("../../helpers/authentication");
 const encryption_1 = require("src/helpers/encryption");
 const nodemail_1 = require("../../utils/nodemail");
 const sql_query_util_1 = require("src/Database/mysql/helpers/sql.query.util");
+const encryption_2 = require("src/helpers/encryption");
 const TAG = 'services.auth';
 function signupUser(user) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,15 +38,18 @@ function signupUser(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
+            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(25, "Careerpedia-Recruiter");
             transaction = yield (0, sql_query_util_1.getTransaction)();
-            const recruiter = yield mysql_1.RecruiterAuth.signUp(user, transaction);
+            const recruiter = yield mysql_1.RecruiterAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
-            (0, nodemail_1.sendRegistrationNotification)(user);
+            (0, nodemail_1.sendRegistrationNotifications)(user, generatePassword);
             const uid = recruiter.uid;
             const email = recruiter.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-                accessToken
+
+                accessToken, type: "Recruiter-signup"
+
             };
             serviceResponse.data = data;
         }
@@ -84,7 +88,7 @@ function loginUser(user) {
                 const email = existedUser.email;
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
                 const data = {
-                    accessToken
+                    accessToken, type: "recruiter-signin"
                 };
                 serviceResponse.data = data;
             }
@@ -108,10 +112,8 @@ function changePassword(user) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(recruiter.password, user.oldPassword);
                 if (IsValid) {
                     const response = yield mysql_1.RecruiterAuth.changePassword({ password: user.newPassword, uid: uid.uid });
-                    console.log("response");
-                    console.log(response);
                     serviceResponse.message = "password changed successfully";
-                    serviceResponse.data = response;
+                    // serviceResponse.data=response
                 }
                 else {
                     serviceResponse.message = 'old password is wrong';
@@ -128,3 +130,36 @@ function changePassword(user) {
     });
 }
 exports.changePassword = changePassword;
+//  access or remove accerss of a recruiter by admin
+function recruiterUpdateStatus(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            // find admin is valid or not
+            const decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
+            if (decoded && (user.status == "ACTIVE" || user.status == "DEACTIVE")) {
+                if (decoded.role != "admin") {
+                    serviceResponse.message = `UnAutharized Admin`;
+                    return serviceResponse;
+                }
+                const recruiter = yield mysql_1.RecruiterAuth.recruiterUpdateStatus(Object.assign({}, user));
+                const data = {
+                    recruiter
+                };
+                serviceResponse.message = `recruiter status changed to ${user.status} successfully `;
+                serviceResponse.data = data;
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = `something went wrong in url`;
+                return serviceResponse;
+            }
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.recruiterUpdateStatus`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return yield serviceResponse;
+    });
+}
+exports.recruiterUpdateStatus = recruiterUpdateStatus;

@@ -20,21 +20,14 @@ export async function signUp(user: IUser) {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phoneNumber:user.phoneNumber,
       password: hashedPassword,
-      role:"student",
-      status:"ACTIVE"
+      status:"ACTIVE",
+      terms_and_condition:user.terms_and_condition
     };
     let userInsertQuery = `
-
-      INSERT INTO STUDENT_AUTH_FORM(ID, UID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER,PASSWORD,ROLE,STATUS)
-      VALUES (:uid, :firstName, :lastName, :email, :phoneNumber, :password, :role, :status)
-
-      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,role,status)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :role, :status)
-
+      INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
     `;
-
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
       ...data,
     });
@@ -58,11 +51,12 @@ export async function signupWithSocialAccount(user: IUser) {
       lastName: user.lastName,
       email: user.email,
       uuid: hashedPassword,
+      terms_and_condition:user.terms_and_condition,
       status:"ACTIVE"
     };
     let userInsertQuery = `
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status)
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,TERM_AND_CONDITIONS)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:terms_and_condition)
     `;
 
     await executeQuery(userInsertQuery, QueryTypes.INSERT, {
@@ -120,16 +114,17 @@ try{
 }
 // getAllStudentList
 
-
 export async function getAllStudentList(){
   const getTable1=`SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-STUDENT_AUTH_FORM 
+STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
-STUDENT_AUTH_GMAIL;`
+  STUDENT_AUTH_GMAIL;`
+
+
 
     const res=await executeQuery(getTable1, QueryTypes.SELECT, {});
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -137,13 +132,14 @@ console.log(res)
    return await {...res};
 }
 
-// update stauys active and deactive
+// update status active and deactive
 export async function findTable(uid){
 
   const updateQuery = `SELECT 
   CASE
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
-      ELSE 'STUDENT_AUTH_FORM'
+      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
+      ELSE 'STUDENT_AUTH_GMAIL'
+
   END AS table_name
   `
 
@@ -180,7 +176,7 @@ export async function studentUpdateStatus(user){
 }
 
   // otp generator
-  export async function saveOTP(user:userOTP,transaction?:any){
+export async function saveOTP(user:userOTP,transaction?:any){
   logger.info(`${TAG}.saveOTP()`);
   try{
     const otp = await OTP();
@@ -207,7 +203,7 @@ export async function studentUpdateStatus(user){
   }
 }
 
-  export async function resendOTP(user,transaction?:any){
+export async function resendOTP(user,transaction?:any){
   logger.info(`${TAG}.resendOTP()`);
   try{
     const info={
@@ -273,7 +269,6 @@ export async function  verifyOTP(userotp: any) {
     else{
       return false
     }
-    // console.log("error")
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.verifyOTP()`, error);
     throw error;
@@ -321,6 +316,36 @@ export async function checkEmailOrPhoneExist(info) {
     return null; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkEmailOrPhoneExist()`, error);
+    throw error;
+  }
+}
+
+
+export async function getUserform(uid) {
+  logger.info(`${TAG}.getUserform()`);
+  try {
+  
+    let userGetQuery = `SELECT * FROM STUDENT_AUTH_FORM WHERE UID = :uid`;
+    let getUser =await executeQuery(userGetQuery, QueryTypes.INSERT, {uid});
+    return getUser;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserform()`, error);
+    throw error;
+  }
+}
+
+// get signin with email and linked in
+export async function getUserEmail(uid) {
+  logger.info(`${TAG}.getUserEmail()`);
+  try {
+  
+    let userGetQuery = `SELECT * FROM STUDENT_AUTH_GMAIL WHERE UID = :uid'`;
+    let getUserEmail = await executeQuery(userGetQuery, QueryTypes.INSERT, {uid});
+    return getUserEmail;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.getUserEmail()`, error);
     throw error;
   }
 }

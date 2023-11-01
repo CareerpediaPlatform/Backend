@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePasswordController = exports.loginRecruiter = exports.signupRecruiter = void 0;
+exports.recruiterUpdateStatus = exports.changePasswordController = exports.loginRecruiter = exports.signupRecruiter = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const authService = __importStar(require("../../services/recruiter/recruiter_auth"));
@@ -91,3 +91,20 @@ function changePasswordController(req, res, next) {
     });
 }
 exports.changePasswordController = changePasswordController;
+function recruiterUpdateStatus(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.recruiterUpdateStatus()`);
+            logger_1.default.debug(`${TAG}.recruiterUpdateStatus() Object = ${JSON.stringify(req.body)}`);
+            const { status, uid } = req.params;
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const authResponse = yield authService.recruiterUpdateStatus({ status, uid, headerValue });
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.collegeUpdateStatus() `, error);
+            next(error);
+        }
+    });
+}
+exports.recruiterUpdateStatus = recruiterUpdateStatus;

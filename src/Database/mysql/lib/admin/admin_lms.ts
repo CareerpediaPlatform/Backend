@@ -149,7 +149,7 @@ export async function  getPartDetail() {
     }
 
     // student
-  export async function  getMyCourses(list) {
+export async function  getMyCourses(list) {
     // let id=courseId
       try {
         logger.info(`${TAG}.getMyCourses()  ==>`);
@@ -344,6 +344,7 @@ export async function checkCoureUid(course_id) {
     throw error;
   }
 }
+
 export async function coursePartPost(user) {
   const part_id=crypto.randomUUID()
   logger.info(`${TAG}.coursePartPost()`);
@@ -400,6 +401,7 @@ export async function modulesPost(user) {
     throw error;
   }
 }
+
 export async function checkPartUid(part_id) {
   try {
     logger.info(`${TAG}.checkPartUid()  ==>`, part_id);
@@ -743,6 +745,6 @@ export async function updateExercisesPost(user,exercise_id) {
     logger.error(`ERROR occurred in ${TAG}.updateExercisesPost()`, error);
     throw error;
   }
+
 }
 
-  

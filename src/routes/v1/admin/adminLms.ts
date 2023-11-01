@@ -14,8 +14,6 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
-// router.route('/course-overview/:courseId')
-// .get(isAuthenticated,controller.getCourseOverview);
 
 router.route('/course-list')
 .get(isAuthenticated,controller.getCourses);

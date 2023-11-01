@@ -14,10 +14,10 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route(APIPaths.LOGIN)
-     .post(controller.adminLogin);
+     .post(validation.adminSignIn,controller.adminLogin);
 
  router.route('/signup')
-     .post(controller.signupUser);
+     .post(validation.adminSignIn,controller.signupUser);
 
 
 

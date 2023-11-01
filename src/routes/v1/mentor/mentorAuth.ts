@@ -3,8 +3,8 @@ import * as controller from '../../../controller/mentor/mentorAuth'
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
+import * as validation from '../../../validations/auth'
 import {isAuthenticated} from '../../../middlewares/authentication'
-
 
 passportConfiguration(passport)
 
@@ -12,13 +12,13 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route(APIPaths.LOGIN)
-     .post(controller.loginMentor);
+     .post(validation.SignIn,controller.loginMentor);
 
  router.route('/signup')
- .post(controller.signupMentor);
+ .post(validation.mentorSignup,controller.signupMentor);
 
   router.route('/change-password')
- .post(controller.changePasswordController);
+ .patch(isAuthenticated,validation.passwordValidation,controller.changePasswordController);
 
  
 export default router
