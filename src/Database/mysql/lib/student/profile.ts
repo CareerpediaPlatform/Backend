@@ -139,10 +139,12 @@ export async function updateWorkExperience(user) {
     logger.info(`${TAG}.updateWorkExperience()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY, ROLE, START_YEAR, END_YEAR) VALUES (:uid, :company, :role, :start_year, :end_year)`
+      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation ,:role, :skills ,:start_year, :end_year)`
 
       const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
+      OCCUPATION= :occupation,
       ROLE = :role,
+      SKILLS = :skills,
       START_YEAR = :start,
       END_YEAR = :end WHERE ID=:id`
 
