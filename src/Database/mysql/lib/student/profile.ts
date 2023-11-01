@@ -13,10 +13,9 @@ export async function studentProfilePost(user) {
   try {
     const profileInsertQuery = `
 
-   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC)
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC,  LINKEDIN_PROFILE)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
-
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile)`;
 
     const contactInsertQuery = `
     INSERT INTO STUDENT_CONTACT_DETAILS 
@@ -43,10 +42,9 @@ export async function studentProfileUpdate(user) {
   logger.info(`${TAG}.studentProfileUpdate()`);
   try {
     const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
-    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber,
-    LINKEDIN_PROFILE = :linkedInProfile,
-    PROFILE_PIC = :profilePic
-
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
     WHERE
     UID = :uid;
     `;
@@ -85,14 +83,12 @@ export async function checkProfilExist(uid) {
     const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
     const educationQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
     const experienceQuery = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE UID=:uid';
-    const resumeQuery = 'SELECT * FROM `STUDENT_RESUME` WHERE UID=:uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
     const [contact]= await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
     const education= await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
     const experience= await executeQuery(experienceQuery, QueryTypes.SELECT, {uid});
-    const resume= await executeQuery(resumeQuery, QueryTypes.SELECT, {uid});
     const data={
-      basic,contact,education: Object.values(education),experience:Object.values(experience),resume
+      basic,contact,education: Object.values(education),experience:Object.values(experience)
     }
     return {...data}; // Return null if no user is found
   } catch (error) {
@@ -108,10 +104,11 @@ export async function updateEducationDetails(user) {
       const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
       VALUES (:uid, :degree, :dept_branch, :college, :score, :start_year, :end_year)`
 
-      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`
+      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=:start_year, END_YEAR=:end_year WHERE ID=:id`
 
-      
-      for (const data of user.data) {
+      let items:any=Object.values(user.data)
+      for (const data of items) {
+
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -139,19 +136,18 @@ export async function updateWorkExperience(user) {
     logger.info(`${TAG}.updateWorkExperience()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation ,:role, :skills ,:start_year, :end_year)`
+      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :start_year, :end_year)`
 
       const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
-      OCCUPATION= :occupation,
+      OCCUPATION =:occupation,
       ROLE = :role,
-      SKILLS = :skills,
-      START_YEAR = :start,
-      END_YEAR = :end WHERE ID=:id`
+      SKILLS =:skills,
+      START_YEAR = :start_year,
+      END_YEAR = :end_year WHERE ID=:id`
 
-      
+      let items:any=Object.values(user.data)
 
-      for (const data of user.data) {
-        console.log(data)
+      for (const data of items) {
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
                 ...data
