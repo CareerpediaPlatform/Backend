@@ -45,7 +45,7 @@ router.route('/work-experience/')
     .put(authentication_1.isAuthenticated, controller.updateWorkExperience);
 router.route('/work-experience/')
     .delete(authentication_1.isAuthenticated, controller.studentProfileExperienceDelete);
-router.route('/profile')
+router.route('/personal-contact')
     .patch(authentication_1.isAuthenticated, controller.studentProfilePost);
 router.route('/profile/')
     .get(authentication_1.isAuthenticated, controller.getStudentProfile);

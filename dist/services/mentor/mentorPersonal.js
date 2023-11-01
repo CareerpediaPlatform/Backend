@@ -18,18 +18,21 @@ const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
 const api_error_1 = require("src/models/lib/api_error");
 const service_response_1 = require("src/models/lib/service_response");
+const authentication_1 = require("src/helpers/authentication");
 const TAG = 'services.mentor_PersonalAndContactDetails';
-function savePersonalAndContactDetails(menPersonalData, mentorUid) {
+function savePersonalAndContactDetails(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.savePersonalAndContactDetails() ==> `, menPersonalData);
+        logger_1.default.info(`${TAG}.savePersonalAndContactDetails() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
         try {
-            console.log(mentorUid);
-            console.log(menPersonalData);
+            let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
+            const uid = decoded[0].uid;
+            console.log(user);
             console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-            const mentorUserId = yield mysql_1.mentorPersonalAndContactData.isValid(mentorUid);
-            console.log(mentorUserId);
-            if (!mentorUserId) {
+            const mentorUserId = yield mysql_1.mentorPersonalAndContactData.isValid(uid);
+            const mentor = yield mysql_1.mentorPersonalAndContactData.isValids(uid);
+            console.log(mentor);
+            if (!mentor) {
                 serviceResponse.message = "Invalid mentor ID";
                 serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
@@ -37,27 +40,27 @@ function savePersonalAndContactDetails(menPersonalData, mentorUid) {
             }
             const existingPersonalDetails = yield mysql_1.mentorPersonalAndContactData.getPersonalDetailsByMentorId(mentorUserId.userId);
             if (existingPersonalDetails) {
-                existingPersonalDetails.profile_pic = menPersonalData.profile_pic;
-                existingPersonalDetails.first_name = menPersonalData.first_name;
-                existingPersonalDetails.last_name = menPersonalData.last_name;
-                existingPersonalDetails.email = menPersonalData.email;
-                existingPersonalDetails.mobile_number = menPersonalData.mobile_number;
-                existingPersonalDetails.date_of_birth = menPersonalData.date_of_birth;
-                existingPersonalDetails.linkedin_profile = menPersonalData.linkedin_profile;
-                existingPersonalDetails.address = menPersonalData.address;
-                existingPersonalDetails.city = menPersonalData.city;
-                existingPersonalDetails.district = menPersonalData.district;
-                existingPersonalDetails.state = menPersonalData.state;
-                existingPersonalDetails.pincode = menPersonalData.pincode;
-                existingPersonalDetails.country = menPersonalData.country;
+                existingPersonalDetails.profile_pic = user.profile_pic;
+                existingPersonalDetails.first_name = user.first_name;
+                existingPersonalDetails.last_name = user.last_name;
+                existingPersonalDetails.email = user.email;
+                existingPersonalDetails.mobile_number = user.mobile_number;
+                existingPersonalDetails.date_of_birth = user.date_of_birth;
+                existingPersonalDetails.linkedin_profile = user.linkedin_profile;
+                existingPersonalDetails.address = user.address;
+                existingPersonalDetails.city = user.city;
+                existingPersonalDetails.district = user.district;
+                existingPersonalDetails.state = user.state;
+                existingPersonalDetails.pincode = user.pincode;
+                existingPersonalDetails.country = user.country;
                 const updatedPersonalDataResponse = yield mysql_1.mentorPersonalAndContactData.updatePersonalAndContactDetails(mentorUserId.userId, existingPersonalDetails);
                 serviceResponse.data = {
                     mentorPersonalAndContactDetailsUid: updatedPersonalDataResponse,
                 };
             }
             else {
-                const personalDataResponse = yield mysql_1.mentorPersonalAndContactData.savePersonalAndContactDetails(menPersonalData, mentorUserId.userId);
-                menPersonalData.data = {
+                const personalDataResponse = yield mysql_1.mentorPersonalAndContactData.savePersonalAndContactDetails(user, mentorUserId.userId);
+                user.data = {
                     mentorPersonaDetailsUid: personalDataResponse,
                 };
             }

@@ -31,13 +31,15 @@ const controller = __importStar(require("../../../controller/mentor/mentorAuth")
 const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
+const validation = __importStar(require("../../../validations/auth"));
+const authentication_1 = require("../../../middlewares/authentication");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(controller.loginMentor);
+    .post(validation.SignIn, controller.loginMentor);
 router.route('/signup')
-    .post(controller.signupMentor);
+    .post(validation.mentorSignup, controller.signupMentor);
 router.route('/change-password')
-    .patch(controller.changePasswordController);
+    .patch(authentication_1.isAuthenticated, validation.passwordValidation, controller.changePasswordController);
 exports.default = router;

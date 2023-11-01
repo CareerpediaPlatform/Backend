@@ -15,7 +15,7 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/details')
- .post(isAuthenticated,controller.recruiterProfilePostAndUpdate);
+ .patch(isAuthenticated,controller.recruiterProfilePostAndUpdate);
  
  router.route('/details')
  .get(isAuthenticated,controller.getrecruiterProfile);

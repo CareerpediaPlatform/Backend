@@ -31,7 +31,7 @@ const sqlConnection = () => __awaiter(void 0, void 0, void 0, function* () {
             logging: false,
         });
         yield connection.authenticate();
-        console.log("db conncted");
+        console.log("db connected");
         return connection;
     }
     catch (error) {

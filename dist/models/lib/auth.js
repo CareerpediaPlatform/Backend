@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.College = exports.Recruiter = exports.Mentor = exports.Admin = exports.Otp = exports.ISignin = exports.User = void 0;
 class User {
-    constructor(id, uid, firstName, lastName, email, role, uuid, accessToken, password) {
+    constructor(id, uid, firstName, lastName, email, phoneNumber, role, uuid, accessToken, password) {
 
         this.id = id;
         this.uid = uid;
@@ -10,7 +10,6 @@ class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.accessToken = accessToken;

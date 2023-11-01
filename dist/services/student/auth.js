@@ -69,6 +69,7 @@ function signupPhonenumber(user) {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             const decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
+            console.log(user);
             if (decoded) {
                 const existedUser = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ phoneNumber: user.phoneNumber });
                 if (existedUser) {
@@ -88,12 +89,16 @@ function signupPhonenumber(user) {
                     otpsave = yield yield mysql_1.StudentAuth.saveOTP(Object.assign(Object.assign({}, decoded), { accessToken: otpAccessToken, phoneNumber: user.phoneNumber, otp }));
                 }
                 const resendOtpToken = yield (0, authentication_1.generateAccessToken)({ uid: decoded.uid, otp: true, type: otpsave.info.type, phoneNumber: user.phoneNumber });
+                // await transaction.commit()
+                // await studentNotification({otp,type:"lllllll",email:existedUser.email})
                 const data = {
-                    otpAccessToken,
-                    resendOtpToken,
-                    otpsave
+                    accessToken: resendOtpToken,
+                    otp: otpsave.info.otp,
+                    type: "otp"
                 };
                 serviceResponse.data = data;
+                // await transaction.commit()
+                // await studentNotification({otp:otpsave.info.otp,type:otpsave.info.type,email:existedUser.email})
             }
             return serviceResponse;
         }
@@ -281,6 +286,7 @@ function verifyOTP(otpInfo) {
             if (IsAutharaized) {
                 const student = yield mysql_1.StudentAuth.verifyOTP({ phoneNumber: IsAutharaized.phoneNumber });
                 if (student.otp != otpInfo.otp) {
+                    serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
                     serviceResponse.message = "wrong-otp";
                     return serviceResponse;
                 }
@@ -428,9 +434,14 @@ function forgetPassword(email) {
                     otpsave = yield mysql_1.StudentAuth.saveOTP(Object.assign(Object.assign({}, isValid), { accessToken: accessToken, type: "forget-password", otp }), transaction);
                 }
                 const resendOtpToken = yield (0, authentication_1.generateAccessToken)({ uid: isValid.uid, otp: true, type: otpsave.info.type, phoneNumber: isValid.phoneNumber });
-                serviceResponse.data = { resendOtpToken, otp: otpsave.info.otp };
+                serviceResponse.data = { accessToken: resendOtpToken, otp: otpsave.info.otp, type: "otp" };
                 yield transaction.commit();
                 yield (0, nodemail_1.studentNotification)(Object.assign(Object.assign({}, otpsave.info), { email: isValid.email }));
+            }
+            else {
+                serviceResponse.message = 'invalid email !';
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.NOT_FOUND;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
             }
         }
         catch (error) {
@@ -445,14 +456,11 @@ function setForgetPassword({ newPassword, headerValue }) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(headerValue);
             // finde student is valid or not
             const uid = yield (0, authentication_1.verifyAccessToken)(headerValue);
             const student = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: uid.uid });
             if (student) {
                 const response = yield mysql_1.StudentAuth.changePassword({ password: newPassword, uid: uid.uid });
-                console.log("response");
-                console.log(response);
                 serviceResponse.message = "password changed successfully";
                 serviceResponse.data = response;
             }

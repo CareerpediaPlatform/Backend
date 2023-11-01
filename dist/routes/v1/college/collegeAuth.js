@@ -31,14 +31,15 @@ const controller = __importStar(require("../../../controller/college/collegeAuth
 const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
+const validation = __importStar(require("../../../validations/auth"));
 const authentication_1 = require("../../../middlewares/authentication");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(controller.loginCollege);
+    .post(validation.SignIn, controller.loginCollege);
 router.route('/signup')
     .post(authentication_1.isAuthenticated, controller.signupCollege);
 router.route('/change-password')
-    .patch(authentication_1.isAuthenticated, controller.changePasswordController);
+    .patch(authentication_1.isAuthenticated, validation.passwordValidation, controller.changePasswordController);
 exports.default = router;

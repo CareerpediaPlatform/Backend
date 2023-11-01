@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePasswordController = exports.loginMentor = exports.signupMentor = void 0;
+exports.mentorUpdateStatus = exports.changePasswordController = exports.loginMentor = exports.signupMentor = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const authService = __importStar(require("../../services/mentor/mentor_auth"));
@@ -92,3 +92,20 @@ function changePasswordController(req, res, next) {
     });
 }
 exports.changePasswordController = changePasswordController;
+function mentorUpdateStatus(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.mentorUpdateStatus()`);
+            logger_1.default.debug(`${TAG}.mentorUpdateStatus() Object = ${JSON.stringify(req.body)}`);
+            const { status, uid } = req.params;
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const authResponse = yield authService.mentorUpdateStatus({ status, uid, headerValue });
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.mentorUpdateStatus() `, error);
+            next(error);
+        }
+    });
+}
+exports.mentorUpdateStatus = mentorUpdateStatus;

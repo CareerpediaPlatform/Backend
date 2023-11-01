@@ -112,9 +112,10 @@ function saveFileBuffer(fileBuffer, filePath, bucketName, fileName, videoPath) {
             logger_1.default.debug(`${TAG}.saveFileBuffer() s3 upload response::` + nodeUtil.inspect(data));
             data.savedFileKey = filePath;
             data.savedFileName = fileName;
-            data.savedLocation = getFileUrl(filePath, bucketName);
-
+            data.savedLocation = getFileUrl(filePath, bucketName)
             const duration = yield getVideoDurations(data.savedFileKey);
+            console.log("****************************************");
+            console.log(duration);
 
             return data;
         }

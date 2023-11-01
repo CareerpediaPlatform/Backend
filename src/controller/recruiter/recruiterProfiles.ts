@@ -30,7 +30,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       log.info(`${TAG}.getrecruiterProfile()`);
       log.debug(`${TAG}.getrecruiterProfile() Object = ${JSON.stringify(req.body)}`)
       const headerValue = req.headers.authorization.split(' ')[1];
-      const authResponse= await recruiterProfileServices.getRecruiterProfile(headerValue)
+      const authResponse:any= await recruiterProfileServices.getRecruiterProfile(headerValue)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getrecruiterProfile() `, error)
@@ -90,7 +90,7 @@ export async function getrecruiterProfile(req: any, res: Response, next: NextFun
       log.info(`${TAG}.getrecruiterCompanyLogo()`);
       log.debug(`${TAG}.getrecruiterCompanyLogo() Object = ${JSON.stringify(req.body)}`)
       let userID = req.params.userID
-      const authResponse= await recruiterProfileServices.getRecruiterProfile(userID)
+      const authResponse: any= await recruiterProfileServices.getRecruiterProfile(userID)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getrecruiterCompanyLogo() `, error)
