@@ -39,9 +39,7 @@ function signUp(user) {
             let userInsertQuery = `
 
       INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
-
-    `;
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)`;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
         }
@@ -143,7 +141,6 @@ UNION ALL SELECT
   id, uid, first_name, last_name, email,status
 FROM
   STUDENT_AUTH_GMAIL;`;
-
 
         const res = yield (0, sql_query_util_1.executeQuery)(getTable1, sequelize_1.QueryTypes.SELECT, {});
         console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh");

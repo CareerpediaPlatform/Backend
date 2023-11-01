@@ -745,6 +745,5 @@ export async function updateExercisesPost(user,exercise_id) {
     logger.error(`ERROR occurred in ${TAG}.updateExercisesPost()`, error);
     throw error;
   }
-
 }
 
