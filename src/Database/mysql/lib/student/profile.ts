@@ -17,7 +17,6 @@ export async function studentProfilePost(user) {
     VALUES
   (:uid, :firstName, :lastName, :email, :dateOfBirth,:gender, :phoneNumber, :profilePic, :linkedinProfile)`;
 
-
     const contactInsertQuery = `
     INSERT INTO STUDENT_CONTACT_DETAILS 
     (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
@@ -108,10 +107,11 @@ export async function updateEducationDetails(user) {
       const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
       VALUES (:uid, :degree, :branch, :college, :score, :start, :end)`
 
-      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`
+      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE ID=:userId`
 
       let items:any=Object.values(user.data)
       for (const data of items) {
+
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
