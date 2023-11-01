@@ -13,9 +13,9 @@ export async function studentProfilePost(user) {
   try {
     const profileInsertQuery = `
 
-   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH,GENDER, PHONE_NUMBER, PROFILE_PIC ,LINKEDIN_PROFILE, GENDER)
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH,GENDER, PHONE_NUMBER, PROFILE_PIC ,LINKEDIN_PROFILE)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth,:gender, :phoneNumber, :profilePic, :linkedinProfile)`;
 
 
     const contactInsertQuery = `
@@ -45,8 +45,7 @@ export async function studentProfileUpdate(user) {
     const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
     SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,GENDER =:gender,PHONE_NUMBER = :phoneNumber,
     PROFILE_PIC = :profilePic,
-    LINKEDIN_PROFILE =:linkedinProfile,
-    GENDER=:gender
+    LINKEDIN_PROFILE =:linkedinProfile
 
     WHERE
     UID = :uid;
