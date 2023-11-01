@@ -18,7 +18,7 @@ export async function getRecruiterProfile(uid: any) {
     const [company] = await executeQuery(companyQuery, QueryTypes.SELECT, {uid:uid});
 
     console.log("1234567890",company)
-    return {company}; // Return null if no user is found
+    return {basic,contact,company}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
     throw error;
