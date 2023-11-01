@@ -33,12 +33,12 @@ const adminStudent_1 = __importDefault(require("./adminStudent"));
 const adminCollege_1 = __importDefault(require("./adminCollege"));
 const adminLms_1 = __importDefault(require("./adminLms"));
 const adminRecruiter_1 = __importDefault(require("./adminRecruiter"));
-const adminRecruiter_2 = __importDefault(require("./adminRecruiter"));
+const adminMentor_1 = __importDefault(require("./adminMentor"));
 const router = (0, express_1.Router)();
 router.use(APIPath.ROOT_AUTH, adminAuth_1.default);
 router.use("/student", adminStudent_1.default);
-router.use("/college", adminCollege_1.default);
+router.use("/college", adminCollege_1.default); //college/auth/signup
 router.use("/course", adminLms_1.default);
 router.use("/recuiter", adminRecruiter_1.default); //api/v1/admin/recuiter/status/:status/:uid
-router.use("/mentor", adminRecruiter_2.default);
+router.use("/mentor", adminMentor_1.default); //mentor/auth/signup
 exports.default = router;

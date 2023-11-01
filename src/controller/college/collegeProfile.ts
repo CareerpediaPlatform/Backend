@@ -14,7 +14,7 @@ export async function collegeProfilePostAndUpdate(req: any, res: Response, next:
       const user: IcollegeProfile = req.body;
       const headerValue = req.headers.authorization.split(' ')[1];
       const authResponse: IServiceResponse = await collegeProfileServices.collegeProfile({...user,headerValue})
-      responseBuilder(headerValue, res, next, req)
+      responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.collegeProfilePostAndUpdate() `, error)
       next(error)

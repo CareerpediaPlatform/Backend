@@ -33,7 +33,7 @@ export async function signupUser(user: ICollege) {
       const email = college_admin.email
       const accessToken = await generateAccessToken({uid,email  });
       const data = {
-        accessToken
+        accessToken,type:"college-signup"
       }    
       serviceResponse.data = data
     } catch (error) {

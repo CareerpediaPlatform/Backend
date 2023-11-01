@@ -35,7 +35,7 @@ export async function signupMentor (req: any, res: Response, next: NextFunction)
     } 
   }
 
-  export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
+export async function changePasswordController(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.changePasswordController()`);
       log.debug(`${TAG}.changePasswordController() Object = ${JSON.stringify(req.body)}`);
@@ -50,6 +50,19 @@ export async function signupMentor (req: any, res: Response, next: NextFunction)
     }
   }
 
+  export async function mentorUpdateStatus(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.mentorUpdateStatus()`);
+      log.debug(`${TAG}.mentorUpdateStatus() Object = ${JSON.stringify(req.body)}`)
+      const {status,uid}= req.params;
+      const headerValue =req.headers.authorization.split(' ')[1]
+      const authResponse: IServiceResponse = await authService.mentorUpdateStatus({status,uid,headerValue})
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.mentorUpdateStatus() `, error)
+      next(error)
+    }
+  }
 
   
 

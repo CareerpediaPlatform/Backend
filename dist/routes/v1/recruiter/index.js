@@ -32,5 +32,5 @@ const recruiterAuth_1 = __importDefault(require("./recruiterAuth"));
 const recruiterProfiles_1 = __importDefault(require("./recruiterProfiles"));
 const router = (0, express_1.Router)();
 router.use(APIPath.ROOT_AUTH, recruiterAuth_1.default);
-router.use('/', recruiterProfiles_1.default);
+router.use('/profile', recruiterProfiles_1.default);
 exports.default = router;

@@ -19,11 +19,11 @@ const sequelize_1 = require("sequelize");
 const encryption_1 = require("src/helpers/encryption");
 var crypto = require("crypto");
 const TAG = 'data_stores_mysql_lib_user';
-function signUp(user, transaction) {
+function signUp(user, generatePassword, transaction) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.saveUser()`);
         try {
-            const hashedPassword = yield (0, encryption_1.hashPassword)(user.password);
+            const hashedPassword = yield (0, encryption_1.hashPassword)(generatePassword);
             const data = {
                 uid: crypto.randomUUID(),
                 email: user.email,

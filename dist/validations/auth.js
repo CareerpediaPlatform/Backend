@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
+exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
 const Joi = __importStar(require("joi"));
 const common_1 = require("./common");
 const error_constants_1 = require("src/constants/error_constants");
@@ -88,7 +88,8 @@ const linkedInSignup = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         lastName: Joi.string().required(),
         email: Joi.string().email().required(),
         uuid: Joi.string().required(),
-        role: Joi.string().required()
+        role: Joi.string().required(),
+        terms_and_condition: Joi.boolean().required()
     });
     yield (0, common_1.validate)(schema, req, res, next);
 });
@@ -104,8 +105,43 @@ const formSignup = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 .replace('$length', '8'),
             'string.pattern': error_constants_1.ErrorMessages.INVALID_FIELD.replace('$field', 'password')
         }),
-        role: Joi.string().required(),
+        terms_and_condition: Joi.boolean().required()
     });
     yield (0, common_1.validate)(schema, req, res, next);
 });
 exports.formSignup = formSignup;
+const adminSignIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        email: Joi.string().email().required(),
+        password: Joi.string().required().min(8).max(25).messages({
+            'any.required': error_constants_1.ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+            'any.max': error_constants_1.ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+                .replace('$length', '8'),
+            'string.pattern': error_constants_1.ErrorMessages.INVALID_FIELD.replace('$field', 'password')
+        }),
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.adminSignIn = adminSignIn;
+const SignIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        email: Joi.string().email().required(),
+        password: Joi.string().required().min(8).max(25).messages({
+            'any.required': error_constants_1.ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+            'any.max': error_constants_1.ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+                .replace('$length', '8'),
+            'string.pattern': error_constants_1.ErrorMessages.INVALID_FIELD.replace('$field', 'password')
+        }),
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.SignIn = SignIn;
+const mentorSignup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        email: Joi.string().email().required(),
+        type: Joi.string().required(),
+        course: Joi.string().required()
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.mentorSignup = mentorSignup;
