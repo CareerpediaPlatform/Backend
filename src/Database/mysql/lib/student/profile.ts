@@ -13,9 +13,9 @@ export async function studentProfilePost(user) {
   try {
     const profileInsertQuery = `
 
-   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC)
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH,GENDER, PHONE_NUMBER, PROFILE_PIC ,LINKEDIN_PROFILE)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth,:gender, :phoneNumber, :profilePic, :linkedinProfile)`;
 
 
     const contactInsertQuery = `
@@ -43,9 +43,9 @@ export async function studentProfileUpdate(user) {
   logger.info(`${TAG}.studentProfileUpdate()`);
   try {
     const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
-    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber,
-    LINKEDIN_PROFILE = :linkedInProfile,
-    PROFILE_PIC = :profilePic
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,GENDER =:gender,PHONE_NUMBER = :phoneNumber,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE =:linkedinProfile
 
     WHERE
     UID = :uid;
@@ -69,7 +69,7 @@ export async function studentProfileUpdate(user) {
     let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
         ...user.basicDetails,uid:user.uid});
 
-    return {profile,contact};
+    return user;
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.studentProfileUpdate()`, error);
