@@ -22,7 +22,7 @@ const router = Router()
  .delete(isAuthenticated,controller.studentProfileExperienceDelete);
  router.route('/personal-contact')
  .patch(isAuthenticated,controller.studentProfilePost);
- router.route('/profile/')
+ router.route('/personal-contact')
  .get(isAuthenticated,controller.getStudentProfile);
  router.route('/resume').post(isAuthenticated,videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadResume);
  router.route('/resume').get(isAuthenticated,controller.getStudentResume);

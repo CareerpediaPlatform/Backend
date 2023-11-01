@@ -61,7 +61,7 @@ try{
     if(existedUser) {
       serviceResponse.message = 'Mobile Number is already exist';
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-      serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+      // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       return serviceResponse;
     }
     let otp=await OTP()
@@ -219,7 +219,7 @@ return serviceResponse
       else{
         serviceResponse.message = 'wrong or invalid email/mobile';
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-        serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+        // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
       return await serviceResponse;
     }

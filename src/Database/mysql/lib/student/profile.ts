@@ -13,9 +13,9 @@ export async function studentProfilePost(user) {
   try {
     const profileInsertQuery = `
 
-   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC)
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC, GENDER)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic, :gender)`;
 
 
     const contactInsertQuery = `
@@ -45,7 +45,8 @@ export async function studentProfileUpdate(user) {
     const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
     SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber,
     LINKEDIN_PROFILE = :linkedInProfile,
-    PROFILE_PIC = :profilePic
+    PROFILE_PIC = :profilePic,
+    GENDER=:gender
 
     WHERE
     UID = :uid;
@@ -104,12 +105,12 @@ export async function updateEducationDetails(user) {
     try {
         const response=[]
       const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
-      VALUES (:uid, :degree, :dept_branch, :college, :score, :start_year, :end_year)`
+      VALUES (:uid, :degree, :branch, :college, :score, :start, :end)`
 
-      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`
+      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`
 
-      
-      for (const data of user.data) {
+      let items:any=Object.values(user.data)
+      for (const data of items) {
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -137,17 +138,16 @@ export async function updateWorkExperience(user) {
     logger.info(`${TAG}.updateWorkExperience()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY, ROLE, START_YEAR, END_YEAR) VALUES (:uid, :company, :role, :start_year, :end_year)`
+      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY, ROLE, START_YEAR, END_YEAR) VALUES (:uid, :PreviousCompanyName, :JobRole, :startDate, :endDate)`
 
-      const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
-      ROLE = :role,
-      START_YEAR = :start,
-      END_YEAR = :end WHERE ID=:id`
+      const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :PreviousCompanyName,
+      ROLE = :JobRole,
+      START_YEAR = :startDate,
+      END_YEAR = :endDate WHERE ID=:id`
 
-      
+      let items:any=Object.values(user.data)
 
-      for (const data of user.data) {
-        console.log(data)
+      for (const data of items) {
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
                 ...data

@@ -24,6 +24,7 @@ export async function studentProfilePost(user) {
             postResponse
           }    
           serviceResponse.data = data
+          serviceResponse.message = "successfully updated !"
           return serviceResponse
         }
         const response= await StudentProfile.studentProfilePost({...user,uid:decoded.uid});
