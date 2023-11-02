@@ -35,7 +35,7 @@ export async function checkExist(uid) {
 }
 
 export async function isValid(uid) {
-  console.log("jjjjjjjjjjjjjjjjjjjjjjjjj",uid)
+  
   try {
     logger.info(`${TAG}.isValid() ==>`, uid);
     const contactQuery = 'SELECT * FROM `COLLEGE_ADMIN` WHERE UID=:uid';
@@ -59,7 +59,7 @@ export async function collegeProfilePost(user) {
     const profileInsertQuery = `
     INSERT INTO COLLEGE_BASIC_DETAILS 
     (UID,INSTITUTE_LOGO, INSTITUTE_NAME, FOUNDER_NAME, EMAIL, PHONE_NUMBER, WEBSITE, LINKEDIN_PROFILE) 
-    VALUES (:uid, :logo, :instituteName, :founderName, :email, :phoneNumber, :website, :linkedInProfile)`;
+    VALUES (:uid, :instituteLogo, :instituteName, :founderName, :email, :phoneNumber, :website, :linkedinProfile)`;
 
     const contactInsertQuery = `
     INSERT INTO COLLEGE_CONTACT_DETAILS 
@@ -68,7 +68,7 @@ export async function collegeProfilePost(user) {
 
     const collegeInsertQuery = `
     INSERT INTO COLLEGE_PROFILE_DETAILS (UID, ACCREDITATION, DEEMED, NUMBER_OF_STUDENTS, DEPARTMENTS, COLLEGE_CODE, START_YEAR)
-    VALUES (:uid, :accreditation, :deemed, :numberOfStudents, :departments, :collegecode, :start);
+    VALUES (:uid, :accreditation, :deemed, :numberOfStudents, :departments, :collegeCode, :startYear);
     `;
     let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
       ...contactDetails});
@@ -94,13 +94,13 @@ export async function collegeProfileUpdate(user) {
     const updateQuery = `
     UPDATE COLLEGE_BASIC_DETAILS
     SET
-    INSTITUTE_LOGO=:logo,
+    INSTITUTE_LOGO=:instituteLogo,
     INSTITUTE_NAME=:instituteName,
     FOUNDER_NAME = :founderName,
     EMAIL = :email,
     PHONE_NUMBER = :phoneNumber,
     WEBSITE = :website,
-    LINKEDIN_PROFILE = :linkedInProfile
+    LINKEDIN_PROFILE = :linkedinProfile
         WHERE Id= :id;
   `;
 
@@ -154,8 +154,8 @@ export async function collegeDetailUpdate(user) {
     DEEMED = :deemed,
     NUMBER_OF_STUDENTS =:numberOfStudents,
     DEPARTMENTS = :departments,
-    COLLEGE_CODE = :collegecode,
-    START_YEAR  =:start
+    COLLEGE_CODE = :collegeCode,
+    START_YEAR  =:startYear
         WHERE Id= :id;
   `;
 

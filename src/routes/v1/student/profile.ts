@@ -6,6 +6,7 @@ import { isAuthenticated } from 'src/middlewares/authentication'
 import { videoFileReader } from 'src/middlewares/video_upload'
 import { FormParams } from 'src/constants/api_param_constants'
 import { emptyChecks } from 'src/validations/file'
+import * as validation from '../../../validations/user'
 
 passportConfiguration(passport)
 const router = Router()
