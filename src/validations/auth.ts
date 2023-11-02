@@ -120,3 +120,16 @@ export const mentorSignup= async (req, res, next) => {
   await validate(schema, req, res, next);
 };
 
+export const changePassword = async (req, res, next) => {
+  
+  const schema = Joi.object().keys({
+    newPassword: Joi.string().min(8).required().messages({
+        'string.empty': ErrorMessages.IS_REQUIRED.replace('$field', 'newPassword'),
+        'string.min': ErrorMessages.INVALID_LENGTH.replace('$field', 'newPassword')
+      }),
+    
+  });
+
+ await validate(schema, req, res, next);
+};
+// .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+|\-=\\{}\[\]:";'<>?,./]).{8,25}$/)
