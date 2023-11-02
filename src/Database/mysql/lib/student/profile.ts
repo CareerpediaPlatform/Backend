@@ -6,7 +6,6 @@ const TAG="student.database-lib.profile"
 
 // creating new student with form data with
 export async function studentProfilePost(user) {
-  // const uid=crypto.randomUUID()
   console.log(user)
   console.log(user.basicDetails)
   logger.info(`${TAG}.studentProfilePost()`);
@@ -15,7 +14,7 @@ export async function studentProfilePost(user) {
 
    INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC,  LINKEDIN_PROFILE)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile,)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile)`;
 
     const contactInsertQuery = `
     INSERT INTO STUDENT_CONTACT_DETAILS 
