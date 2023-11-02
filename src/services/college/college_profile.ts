@@ -28,7 +28,6 @@ export async function collegeProfile(user) {
             contactDetails,
             collegeDetsils
           }    
-          console.log("527364812394012341=234",data)
           serviceResponse.data = data
           return serviceResponse
         }
@@ -37,7 +36,6 @@ export async function collegeProfile(user) {
         const data = {
           ...response
         } 
-        console.log("ruasibdfaosidfoais",response)
         serviceResponse.data = data
         return serviceResponse  
     }
