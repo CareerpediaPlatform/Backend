@@ -76,7 +76,7 @@ export async function signupUser(user: ICollege) {
           const email = existedUser.uid;
           const accessToken = await generateAccessToken({ uid,email});
             const data = {
-                accessToken,
+                accessToken,type:"college-signin"
             };
 
             serviceResponse.data = data;
