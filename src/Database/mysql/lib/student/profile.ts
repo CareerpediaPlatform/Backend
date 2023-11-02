@@ -66,8 +66,10 @@ export async function studentProfileUpdate(user) {
 
     let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
         ...user.basicDetails,uid:user.uid});
+        const contactDetails=user.contactDetails
+        const basicDetails=user.basicDetails
 
-    return {profile,contact};
+    return {contactDetails,basicDetails};
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.studentProfileUpdate()`, error);

@@ -96,7 +96,7 @@ export async function changePassword(user){
 
     // finde recruiter is valid or not
     const uid=await verifyAccessToken(user.headerValue)
-    const recruiter=await RecruiterAuth.getRecruiterUid({uid:uid.uid})
+    const recruiter=await RecruiterAuth.getRecruiterUid(uid)
     if(recruiter){
       const IsValid=await comparePasswords(recruiter.password,user.oldPassword)
 
