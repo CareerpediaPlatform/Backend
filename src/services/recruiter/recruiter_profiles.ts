@@ -81,7 +81,7 @@ export async function getRecruiterProfile(headerValue) {
   try {
     let decoded=await verifyAccessToken(headerValue)
     const uid=decoded.uid
-    const isValid=await RecruiterAuth.getRecruiterUid(uid)
+    const isValid=await RecruiterAuth.checkRecruiterUid(uid)
     if(isValid){
       const existedProfile=await RecruiterProfileDetailsData.getRecruiterProfile(uid)
       if(existedProfile){

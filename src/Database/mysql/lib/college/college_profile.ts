@@ -14,6 +14,7 @@ export async function checkProfilExist(uid) {
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid:uid});
     const [college] = await executeQuery(collegeQuery, QueryTypes.SELECT, {uid:uid});
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
+    console.log(basic)
     return {basic,college,contact}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
