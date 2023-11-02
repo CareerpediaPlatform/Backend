@@ -31,9 +31,11 @@ export async function signupUser(user: IMentor) {
       await transaction.commit() 
       console.log(user)
       sendRegistrationNotifications(user,generatePassword)
-const accessToken = await generateAccessToken({ mentor });
+      const uid = mentor.uid
+      const email = mentor.email
+const accessToken = await generateAccessToken({ uid , email });
         const data = {
-        accessToken,type:"mentor-signup"      
+        accessToken     
       }      
       serviceResponse.data = data
     } catch (error) {
@@ -73,7 +75,7 @@ export async function loginUser(user: IMentor) {
           const email = existedUser.email;
             const accessToken = await generateAccessToken({uid,email});
             const data = {
-                accessToken   
+                accessToken,type:"mentor-signin"  
             };
             serviceResponse.data = data;
         }         

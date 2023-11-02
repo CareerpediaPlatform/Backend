@@ -58,7 +58,7 @@ export async function getRecruiterUid(uid){
       logger.info(`${TAG}.getRecruiterUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid
+        uid:uid.uid
       });
       return userId;
     } catch (error) {
@@ -68,12 +68,13 @@ export async function getRecruiterUid(uid){
   }
 
   
-  export async function getRECRUITERUid(uid){
+export async function checkRecruiterUid(uid){
+  console.log("333333333333333",uid)
     try {
       logger.info(`${TAG}.getRECRUITERUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid:uid.uid
+        uid
       });
       return userId;
     } catch (error) {

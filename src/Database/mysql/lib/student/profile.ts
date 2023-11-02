@@ -65,8 +65,10 @@ export async function studentProfileUpdate(user) {
 
     let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
         ...user.basicDetails,uid:user.uid});
+        const contactDetails=user.contactDetails
+        const basicDetails=user.basicDetails
 
-    return {profile,contact};
+    return {contactDetails,basicDetails};
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.studentProfileUpdate()`, error);
@@ -101,9 +103,9 @@ export async function updateEducationDetails(user) {
     try {
         const response=[]
       const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
-      VALUES (:uid, :degree, :dept_branch, :college, :score, :start_year, :end_year)`
+      VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`
 
-      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=:start_year, END_YEAR=:end_year WHERE ID=:id`
+      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`
 
       let items:any=Object.values(user.data)
       for (const data of items) {
@@ -123,7 +125,7 @@ export async function updateEducationDetails(user) {
       
       }
       
-      return {...response};
+      return user;
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
@@ -135,14 +137,14 @@ export async function updateWorkExperience(user) {
     logger.info(`${TAG}.updateWorkExperience()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :start_year, :end_year)`
+      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`
 
       const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
       OCCUPATION =:occupation,
       ROLE = :role,
       SKILLS =:skills,
-      START_YEAR = :start_year,
-      END_YEAR = :end_year WHERE ID=:id`
+      START_YEAR = :startYear,
+      END_YEAR = :endYear WHERE ID=:id`
 
       let items:any=Object.values(user.data)
 
@@ -161,7 +163,7 @@ export async function updateWorkExperience(user) {
       
       }
       
-      return {...response};
+      return user;
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.updateWorkExperiencess()`, error);

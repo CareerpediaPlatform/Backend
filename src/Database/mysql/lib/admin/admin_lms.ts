@@ -210,12 +210,12 @@ export async function uploadCourse(fileDetails:any, imageDetails:any,course:any,
     };
     console.log(data)
     console.log(data.uid)
-    const videoInsertQuery = `INSERT INTO COURSE (UID,  THUMBNAIL, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNTPRICE, Type )
+    const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID,  THUMBNAIL, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
     VALUES(:uid, :thumbnail, :video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`
     const response=[]
     
-    const learnQuery = `INSERT INTO  WHATYOULEARN
-    ( UID,LEARN)
+    const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
+    ( COURSE_UID,LEARN)
      values( :uid,:learn )`;
      let array=JSON.parse(course.learn)
      for( const singleData of array){
@@ -280,12 +280,12 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
     console.log(course)
 
     console.log(data)
-    const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE UID=:courseUID`;
+    const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
 
     const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
     const response=[]
     
-    const learnQuery = `UPDATE WHATYOULEARN SET LEARN= :learn WHERE UID= :courseUID`;
+    const learnQuery = `UPDATE WHATYOULEARN SET LEARN= :learn WHERE COURSE_UID= :courseUID`;
      let array=JSON.parse(course.learn)
      for( const singleData of array){
 

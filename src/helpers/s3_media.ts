@@ -55,10 +55,8 @@ const TAG = 'helpers.s3_media'
   
         savedFilesData.push(savedFileData);
       
-     
       }
    
-  
       return savedFilesData;
     } catch (e) {
       log.error(`ERROR occurred in ${TAG}.saveFile()`, e);
