@@ -296,4 +296,17 @@ export async function getStudentResume(uid:any){
     throw error;
   }
 }
-  
+ 
+
+export async function checkStudentEducationUid(uid: any) {
+
+  try {
+    logger.info(`${TAG}.checkExist() ==>`, uid);
+    const checkQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
+    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {uid});
+    return basic// Return null if no user is found
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+    throw error;
+  }
+}

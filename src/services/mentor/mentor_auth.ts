@@ -75,7 +75,7 @@ export async function loginUser(user: IMentor) {
           const email = existedUser.email;
             const accessToken = await generateAccessToken({uid,email});
             const data = {
-                accessToken,type:"mentor-signin"  
+                accessToken,type:"mentor-signin",role:"mentor" 
             };
             serviceResponse.data = data;
         }         
