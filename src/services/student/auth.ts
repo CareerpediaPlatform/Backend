@@ -164,7 +164,8 @@ return serviceResponse
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
                 const data = {
                   accessToken,
-                  signin:true
+                  signin:true,
+                  role:"student"
                 }
                 serviceResponse.data = data
               }
@@ -181,7 +182,8 @@ return serviceResponse
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
                 const data = {
                   accessToken,
-                  signin:true
+                  signin:true,
+                  role:"student"
                 }
                 serviceResponse.data = data
               }
