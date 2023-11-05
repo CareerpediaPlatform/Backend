@@ -48,3 +48,19 @@ export async function createUser (req, res, next): Promise<any> {
   }
 }
 
+
+export const personaldetails = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    basicDetails: Joi.object({
+      firstName: Joi.string().min(2).max(50).required(),
+      lastName: Joi.string().min(2).max(50).required(),
+      email: Joi.string().email().required(),
+      dateOfBirth: Joi.date().iso().max('now').required(),
+      gender: Joi.string().valid('male', 'female', 'other').required(),
+      phoneNumber: Joi.string().pattern(/^[0-9]{8,15}$/).required(),
+      profilePic: Joi.string().required(),
+      linkedinProfile: Joi.string().uri().required(),
+    }),
+  });
+  await validate(schema, req, res, next);
+};

@@ -6,6 +6,7 @@ import { verifyAccessToken } from "src/helpers/authentication";
 import { saveFile } from "src/helpers/s3_media";
 import log from "src/logger";
 import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { APIError } from "src/models/lib/api_error";
 
 const TAG="student.service.profile"
 
@@ -107,12 +108,38 @@ export async function updateEducationDetails(user) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
+      // console.log(decoded);
+      // if (!decoded) {
+      //   serviceResponse.message = "Invalid recruiter UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+  
+      // const existingPersonalDetails =
+      //   await StudentProfile.checkStudentEducationUid(decoded.uid);
+      //   console.log(existingPersonalDetails.degree)
+      //   console.log(existingPersonalDetails.college)
+      //   console.log(existingPersonalDetails.deptBranch)
+      //   console.log(existingPersonalDetails.score)
+      //   console.log(existingPersonalDetails.startYear)
+      //   console.log(existingPersonalDetails.endYear)
+
+      // if (existingPersonalDetails) {
+      //   existingPersonalDetails.degree = user.degree;
+      //   existingPersonalDetails.deptBranch = user.deptBranch;
+      //   existingPersonalDetails.college = user.college;
+      //   existingPersonalDetails.score = user.score;
+      //   existingPersonalDetails.startYear = user.startYear;
+      //   existingPersonalDetails.endYear = user.endYear;
+      
       const response = await StudentProfile.updateEducationDetails({...user,uid:decoded.uid})
       const data = {
         ...response,
       }
       serviceResponse.data = data
-    } catch (error) {
+    } 
+    catch (error) {
       log.error(`ERROR occurred in ${TAG}.updateEducationDetails`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
