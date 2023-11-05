@@ -12,7 +12,6 @@ const TAG = 'services.mentor_PersonalAndContactDetails'
 
 export async function savePersonalAndContactDetails(
     user: any,
-  
   ) {
     log.info(`${TAG}.savePersonalAndContactDetails() ==> `, user);
   

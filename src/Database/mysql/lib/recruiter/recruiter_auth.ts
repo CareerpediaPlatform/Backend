@@ -69,7 +69,7 @@ export async function getRecruiterUid(uid){
 
   
 export async function checkRecruiterUid(uid){
-  console.log("333333333333333",uid)
+  
     try {
       logger.info(`${TAG}.getRECRUITERUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
