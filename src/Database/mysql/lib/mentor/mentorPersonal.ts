@@ -7,16 +7,16 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
 export async function mentorProfilePost(user) {
+
   // const uid=crypto.randomUUID()
   console.log(user)
-  console.log(user.basicDetails)
-  logger.info(`${TAG}.studentProfilePost()`);
+  // console.log(user.basicDetails)
+  logger.info(`${TAG}.mentorProfilePost()`);
   try {
     const profileInsertQuery = `
-
-   INSERT INTO MENTOR_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC,  LINKEDIN_PROFILE)
-    VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile)`;
+    INSERT INTO MENTOR_PERSONAL_DETAILS (UID, FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC, LINKEDIN_PROFILE)
+    VALUES (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
+  
 
     const contactInsertQuery = `
     INSERT INTO MENTOR_CONTACT_DETAILS 
@@ -34,29 +34,49 @@ export async function mentorProfilePost(user) {
     return {profile,contact};
 
   } catch (error) {
-    logger.error(`ERROR occurred in ${TAG}.studentProfilePost()`, error);
+    logger.error(`ERROR occurred in ${TAG}.mentorProfilePost()`, error);
     throw error;
   }
 }
 
-export async function updatePersonalAndContactDetails(user:any) {
-    logger.info(`${TAG}.updatePersonalAndContactDetails()`);
-    try {
-    
-      let updatePersonalDetailQuery = `UPDATE MENTOR_PERSONAL_DETAILS SET
-      PROFILE_PIC= :profile_pic, FIRST_NAME = :first_name, LAST_NAME = :last_name, EMAIL = :email, MOBILE_NUMBER =:mobile_number, DATE_OF_BIRTH = :date_of_birth, LINKEDIN_PROFILE = :linkedin_profile ,
-      ADDRESS = :address, CITY = :city, DISTRICT = :district, STATE = :state, PINCODE =:pincode, COUNTRY = :country WHERE UID = :uid`;
-  
-      await executeQuery(
-        updatePersonalDetailQuery,
-        QueryTypes.UPDATE,{...user}
-      );
-      return user
-    } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.updatePersonalAndContactDetails()`, error);
-      throw error;
-    }
+export async function mentorProfileUpdate(user) {
+    logger.info(`${TAG}.mentorProfileUpdate()`);
+  try {
+    const profileUpdateQuery = `UPDATE MENTOR_PERSONAL_DETAILS
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
+    WHERE
+    UID = :uid;
+    `;
+
+    const contactUpdateQuery = `UPDATE MENTOR_CONTACT_DETAILS
+    SET
+    ADDRESS = :address,
+    DISTRICT = :district,
+    CITY = :city, 
+    STATE = :state,
+    PIN_CODE = :pinCode,
+    COUNTRY = :country
+    WHERE
+    UID = :uid;
+    `;
+
+    let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.UPDATE, {
+      ...user.contactDetails,uid:user.uid});
+
+    let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
+        ...user.basicDetails,uid:user.uid});
+        const contactDetails=user.contactDetails
+        const basicDetails=user.basicDetails
+
+    return {contactDetails,basicDetails};
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.mentorProfileUpdate()`, error);
+    throw error;
   }
+}
 
 export async function getPersonalDetailsByMentorId(mentorId: number) {
     try {
@@ -76,7 +96,7 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
     }
   }
 
-  export async function checkMentorUid(uid){
+export async function checkMentorUid(uid){
   
     try {
       logger.info(`${TAG}.checkMentorUid()  ==>`, uid);
@@ -91,7 +111,7 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
     }
   }
 
-  export async function checkExist(uid: any) {
+export async function checkExist(uid: any) {
 
     try {
       logger.info(`${TAG}.checkExist() ==>`, uid);
