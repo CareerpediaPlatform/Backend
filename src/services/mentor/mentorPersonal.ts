@@ -22,7 +22,7 @@ export async function savePersonalAndContactDetails(user) {
       if(isValid){
         const existedProfile=await mentorPersonalAndContactData.checkExist(uid)
         if(existedProfile){
-          const postResponse= await mentorPersonalAndContactData.mentorProfileUpdate({...user,uid:decoded.uid});
+          const postResponse= await mentorPersonalAndContactData.mentorProfileUpdate(user);
           const data = {
             postResponse
           }  
@@ -31,7 +31,7 @@ export async function savePersonalAndContactDetails(user) {
           serviceResponse.message = "successfully updated !"
           return serviceResponse
         }
-        const response= await mentorPersonalAndContactData.mentorProfilePost({...user,uid:decoded.uid});
+        const response= await mentorPersonalAndContactData.mentorProfilePost(user);
         const data = {
           ...response
         }    

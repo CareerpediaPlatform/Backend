@@ -9,6 +9,7 @@ const TAG = 'data_stores_mysql_lib_mentorPersonal'
 export async function mentorProfilePost(user) {
 
   // const uid=crypto.randomUUID()
+  console.log("555555555555555555555555555555555555555555555555")
   console.log(user)
   // console.log(user.basicDetails)
   logger.info(`${TAG}.mentorProfilePost()`);
@@ -97,7 +98,7 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
   }
 
 export async function checkMentorUid(uid){
-  
+  console.log(uid)
     try {
       logger.info(`${TAG}.checkMentorUid()  ==>`, uid);
       let query = 'select * from MENTOR where UID=:uid';
