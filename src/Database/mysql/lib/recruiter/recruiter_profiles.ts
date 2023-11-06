@@ -59,7 +59,7 @@ export async function recruiterProfilePost(user: any) {
     const basicInsertQuery = 
     `INSERT INTO RECRUITER_BASIC_DETAILS
     ( UID, LOGO, COMPANY_NAME, FOUNDER_NAME, EMAIL, PHONE_NUMBER, WEBSITE, LINKEDIN_PROFILE )
-      values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
+      values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :website, :linkedinProfile)`;
 
       const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
       ( UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
@@ -69,7 +69,7 @@ export async function recruiterProfilePost(user: any) {
     const companyInsertQuery = 
     `INSERT INTO RECRUITER_COMPANY_DETAILS
     ( UID, ESTABLISHED_YEAR, NUMBER_OF_EMPLOYEES, DEPARTMENTS, START_YEAR, ANNUAL_REVENUE)
-      values( :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
+      values( :uid, :establishedYear, :numberOfEmployees, :departments, :startYear, :annualRevenue)`;
 
    
      let [basic]=await executeQuery(basicInsertQuery, QueryTypes.INSERT, {
@@ -96,7 +96,7 @@ export async function recruiterBasicDetailsUpdate(user: any) {
   try {
     const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANY_NAME = :companyName, FOUNDER_NAME = :founderName, 
-    EMAIL = :email, PHONE_NUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDIN_PROFILE = :linkedInUrl WHERE UID = :uid`;
+    EMAIL = :email, PHONE_NUMBER= :phoneNumber, WEBSITE = :website, LINKEDIN_PROFILE = :linkedinProfile WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
@@ -132,8 +132,8 @@ export async function recruitercompanyDetailUpdate(user: any) {
   logger.info(`${TAG}.recruitercompanyDetailUpdate()`);
   try {
     const updateQuery = `UPDATE RECRUITER_COMPANY_DETAILS SET
-    ESTABLISHED_YEAR = :establishedyear, NUMBER_OF_EMPLOYEES = :numberofemployees, DEPARTMENTS = :departments, 
-    START_YEAR = :startyear, ANNUAL_REVENUE = :annualrevenue WHERE UID = :uid`;
+    ESTABLISHED_YEAR = :establishedYear, NUMBER_OF_EMPLOYEES = :numberOfEmployees, DEPARTMENTS = :departments, 
+    START_YEAR = :startYear, ANNUAL_REVENUE = :annualRevenue WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
