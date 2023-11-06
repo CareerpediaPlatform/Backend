@@ -63,7 +63,7 @@ export async function recruiterProfilePost(user: any) {
 
       const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
       ( UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
-        values( :uid, :address, :city, :district, 
+        values( :uid, :address, :city, :disrict, 
           :state, :pincode, :country)`;
 
     const companyInsertQuery = 
@@ -114,7 +114,7 @@ export async function recruiterContactUpdate(user: any) {
   try {
     const updateQuery =`UPDATE RECRUITER_CONTACT_DETAILS SET
     ADDRESS = :address, CITY = :city, 
-    DISRICT = :district, STATE = :state, 
+    DISRICT = :disrict, STATE = :state, 
     PINCODE = :pincode, COUNTRY = :country WHERE UID = :uid`;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
