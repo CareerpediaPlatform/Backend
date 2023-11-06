@@ -12,15 +12,16 @@ export async function saveEducationDetails(user) {
     try {
         const response=[]
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        const educationDetailsQuery = `INSERT INTO  MENTOR_EDUCATION_DETAILS
-        (USER_ID, UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
-         values(:userId, :uid,:degree ,:dept_branch, :start_year,:end_year)`;
+        const educationDetailsQuery = `INSERT INTO  MENTOR_EDUACTION_DETAILS
+        ( UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
+         values( :uid,:degree ,:dept_branch, :start_year,:end_year)`;
          
-      const updateEducationDetailQuery = `UPDATE MENTOR_EDUCATION_DETAILS SET
-    DEGREE = :degree, DEPT_BRANCH = :dept_branch, START_YEAR = :start_year, END_YEAR = :end_year WHERE id = :id`;
-
-      for (const data of user.data) {
-        let uid=crypto.randomUUID()
+      const updateEducationDetailQuery = `UPDATE MENTOR_EDUACTION_DETAILS SET
+    DEGREE = :degree, DEPT_BRANCH = :dept_branch, START_YEAR = :start_year, END_YEAR = :end_year WHERE USER_ID = :id`;
+      
+    let items:any = Object.values(user.data)
+      for (const data of items) {
+     
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateEducationDetailQuery, QueryTypes.UPDATE, {
@@ -29,12 +30,12 @@ export async function saveEducationDetails(user) {
               response.push(res)
         }else{
             const res=await executeQuery(educationDetailsQuery, QueryTypes.INSERT, {
-                ...data,uid,userId:user.id
+                ...data,uid:user.uid
               });
               response.push(res)
         }
       }
-    return {...response};
+    return user;
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.saveEducationDetails()`, error);
       throw error;

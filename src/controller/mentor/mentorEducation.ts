@@ -13,10 +13,10 @@ export async function updateEducationDetail(req: any, res: Response, next: NextF
   try {
     log.info(`${TAG}.updateEducationDetail()`);
     log.debug(`${TAG}.updateEducationDetail() Object = ${JSON.stringify(req.body)}`)
-  //   const headerValue = req.headers.authorization.split(' ')[1]
+    const headerValue = req.headers.authorization.split(' ')[1]
     const data:any=req.body;
-    const {id}=req.params
-    const otpResponse: IServiceResponse = await educationService.updateEducation({data,id})
+    // const {id}=req.params
+    const otpResponse: IServiceResponse = await educationService.updateEducation({data,headerValue})
     responseBuilder(otpResponse, res, next, req)
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.updateEducationDetail() `, error)

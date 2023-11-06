@@ -18,11 +18,11 @@ const router = Router()
  .patch(isAuthenticated ,profileController.PersonalAndDetails);
 
  router
- .route("/education-details/:id")
+ .route("/education-details")
  .put(isAuthenticated ,educationController.updateEducationDetail);
 
  router
- .route("/work-details/:id")
+ .route("/work-details")
  .put(isAuthenticated ,workController.updateWorkExperience);
 
  //mentor all profile details 

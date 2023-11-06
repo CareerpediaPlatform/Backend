@@ -13,10 +13,10 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
   try {
     log.info(`${TAG}.updateWorkExperience()`);
     log.debug(`${TAG}.updateWorkExperience() Object = ${JSON.stringify(req.body)}`)
-  //   const headerValue = req.headers.authorization.split(' ')[1]
+    const headerValue = req.headers.authorization.split(' ')[1]
     const data:any=req.body;
-    const {id}=req.params
-    const otpResponse: IServiceResponse = await workService.updateWorkExperience({data,id})
+    // const {id}=req.params
+    const otpResponse: IServiceResponse = await workService.updateWorkExperience({data,headerValue})
     responseBuilder(otpResponse, res, next, req)
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.updateWorkExperience() `, error)
