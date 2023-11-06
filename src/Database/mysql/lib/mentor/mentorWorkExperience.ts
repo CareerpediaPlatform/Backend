@@ -12,14 +12,14 @@ export async function saveWorkExperienceDetails(user) {
     try {
         const response=[]
       const insertQuery =`INSERT INTO  MENTOR_WORK_EXPERIENCE
-      (USER_ID, UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
-       values(:userId, :uid,:occupation ,:job_role, :start_date,:end_date,:year_of_experience)`;
+      ( UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
+       values( :uid,:occupation ,:job_role, :start_date,:end_date,:year_of_experience)`;
 
       const updateQuery=`UPDATE MENTOR_WORK_EXPERIENCE SET
-      OCCUPATION = :occupation, JOB_ROLE = :job_role, START_DATE = :start_date, END_DATE = :end_date , YEAR_OF_EXPERIENCE = :year_of_experience WHERE id = :id`;
+      OCCUPATION = :occupation, JOB_ROLE = :job_role, START_DATE = :start_date, END_DATE = :end_date , YEAR_OF_EXPERIENCE = :year_of_experience WHERE USER_ID = :id`;
+      let items:any = Object.values(user.data)
+      for (const data of items) {
 
-      for (const data of user.data) {
-        let uid=crypto.randomUUID()
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -29,12 +29,12 @@ export async function saveWorkExperienceDetails(user) {
               
         }else{
             const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
-                ...data,uid,userId:user.id
+                ...data,uid:user.uid
               });
               response.push(res)
         }
       }
-    return {...response};
+    return user;
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.saveWorkExperienceDetails()`, error);
       throw error;
