@@ -15,7 +15,7 @@ const router = Router()
 
  router
  .route("/personal-details")
- .post(isAuthenticated ,profileController.PersonalAndDetails);
+ .patch(isAuthenticated ,profileController.PersonalAndDetails);
 
  router
  .route("/education-details/:id")
