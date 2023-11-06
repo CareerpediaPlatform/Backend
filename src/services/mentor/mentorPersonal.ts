@@ -11,17 +11,18 @@ const TAG = 'services.mentor_PersonalAndContactDetails'
 
 
 export async function savePersonalAndContactDetails(user) {
-  console.log(user)
+  // console.log(user)
     log.info(`${TAG}.savePersonalAndContactDetails() ==> `, user); 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
       const uid = decoded.uid
+      console.log(uid)
       const isValid=await mentorPersonalAndContactData.checkMentorUid(uid)
       if(isValid){
         const existedProfile=await mentorPersonalAndContactData.checkExist(uid)
         if(existedProfile){
-          const postResponse= await mentorPersonalAndContactData.updatePersonalAndContactDetails({...user,uid:decoded.uid});
+          const postResponse= await mentorPersonalAndContactData.mentorProfileUpdate({...user,uid:decoded.uid});
           const data = {
             postResponse
           }  
