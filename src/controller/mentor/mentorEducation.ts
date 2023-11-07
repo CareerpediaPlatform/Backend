@@ -26,3 +26,17 @@ export async function updateEducationDetail(req: any, res: Response, next: NextF
 
 
  
+export async function mentorEducationPost(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.studentEducationPost()`);
+    log.debug(`${TAG}.studentEducationPost() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await educationService.postEducationDetails({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.studentEducationPost() `, error)
+    next(error)
+  }
+}

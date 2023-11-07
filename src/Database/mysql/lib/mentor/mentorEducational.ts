@@ -45,7 +45,7 @@ export async function saveEducationDetails(user) {
 
   export async function deleteEducationDetails(uid) {
     try {
-      logger.info(`${TAG}.deleteRecruiter() ==>`, uid);
+      logger.info(`${TAG}.deleteEducationDetails() ==>`, uid);
       console.log(" **************************llib*************")
       console.log(uid)
       const response=[]
@@ -65,7 +65,52 @@ export async function saveEducationDetails(user) {
     }
   }
 
+  export async function postEducationDetails(user) {
+    logger.info(`${TAG}.postEducationDetails()`);
+    try {
+       
+      const insertQuery =`INSERT INTO  MENTOR_EDUACTION_DETAILS
+      ( UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
+       values( :uid,:degree ,:deptBranch, :startYear, :endYear)`
+      let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+        ...user});
+    
+      return user;
+  
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+      throw error;
+    }
+  }
 
+  export async function checkId(id){
+    logger.info(`${TAG}. checkId()`);
+    try{
+      const checkQuery=`SELECT * FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID=:id`
+      const [userId]=await executeQuery(checkQuery, QueryTypes.SELECT,{id})
+      return userId
+    }
+    catch(error){
+      logger.error(`ERROR occurred in ${TAG}.checId()`, error);
+      throw error;
+    }
+  }
+  export async function updateEducationDetails(user) {
+    logger.info(`${TAG}.postEducationDetails()`);
+    try {
+       
+      const insertQuery =`UPDATE MENTOR_EDUACTION_DETAILS SET
+      DEGREE = :degree, DEPT_BRANCH = :deptBranch, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`
+      let [profile]=await executeQuery(insertQuery, QueryTypes.UPDATE, {
+        ...user});
+    
+      return profile;
+  
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+      throw error;
+    }
+  }
 
 
 

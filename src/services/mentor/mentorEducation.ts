@@ -44,3 +44,46 @@ export async function updateEducation(user) {
 }
 
 
+export async function postEducationDetails(user) {
+  console.log(user)
+    log.info(`${TAG}.postEducationDetails() ==> `, user); 
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      let decoded=await verifyAccessToken(user.headerValue)
+      const uid = decoded.uid
+      const isValid=await MentorAuth.checkMentorUid(uid);
+      if(isValid){
+        const checkId = await mentorEducationData.checkId(user.id)
+        if(checkId){
+
+        const response= await mentorEducationData.updateEducationDetails({...user,uid:decoded.uid});
+        const data = {
+          ...response
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }else{
+       const response= await mentorEducationData.postEducationDetails({...user,uid:decoded.uid});
+        const data = {
+          ...response
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+      }
+    
+      }
+
+      else{
+        serviceResponse.message="invalid user id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse
+      }
+  
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.postEducationDetails`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
