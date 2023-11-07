@@ -6,16 +6,18 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
-export async function mentorProfilePost(user) {
+export async function mentorProfilePost(user,uid) {
 
   // const uid=crypto.randomUUID()
+  console.log("555555555555555555555555555555555555555555555555")
   console.log(user)
-  // console.log(user.basicDetails)
+  console.log(user.contactDetails)
+  console.log(uid)
   logger.info(`${TAG}.mentorProfilePost()`);
   try {
     const profileInsertQuery = `
     INSERT INTO MENTOR_PERSONAL_DETAILS (UID, FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC, LINKEDIN_PROFILE)
-    VALUES (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
+    VALUES(:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
   
 
     const contactInsertQuery = `
@@ -25,10 +27,10 @@ export async function mentorProfilePost(user) {
 
     
     let [profile]=await executeQuery(profileInsertQuery, QueryTypes.INSERT, {
-      ...user.basicDetails,uid:user.uid});
+      ...user.basicDetails,uid});
 
     let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
-      ...user.contactDetails,uid:user.uid});
+      ...user.contactDetails,uid});
 
 
     return {profile,contact};
@@ -39,7 +41,7 @@ export async function mentorProfilePost(user) {
   }
 }
 
-export async function mentorProfileUpdate(user) {
+export async function mentorProfileUpdate(user,uid) {
     logger.info(`${TAG}.mentorProfileUpdate()`);
   try {
     const profileUpdateQuery = `UPDATE MENTOR_PERSONAL_DETAILS
@@ -63,10 +65,10 @@ export async function mentorProfileUpdate(user) {
     `;
 
     let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.UPDATE, {
-      ...user.contactDetails,uid:user.uid});
+      ...user.contactDetails,uid});
 
     let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
-        ...user.basicDetails,uid:user.uid});
+        ...user.basicDetails,uid});
         const contactDetails=user.contactDetails
         const basicDetails=user.basicDetails
 
@@ -97,7 +99,7 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
   }
 
 export async function checkMentorUid(uid){
-  
+  console.log(uid)
     try {
       logger.info(`${TAG}.checkMentorUid()  ==>`, uid);
       let query = 'select * from MENTOR where UID=:uid';

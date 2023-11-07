@@ -28,4 +28,10 @@ const router = Router()
  router.route('/resume').post(isAuthenticated,videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadResume);
  router.route('/resume').get(isAuthenticated,controller.getStudentResume);
 
+ router.route('/education')
+ .post(isAuthenticated,controller.studentEducationPost);
+
+ router.route('/work-experience')
+ .post(isAuthenticated,controller.studentWorkExperiencePost);
+
  export default router

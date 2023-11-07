@@ -13,7 +13,7 @@ export async function PersonalAndDetails (req: any, res: Response, next: NextFun
       log.debug(`${TAG}.PersonalAndDetails() Object = ${JSON.stringify(req.body)}`)
       const user = req.body;
       const headerValue = req.headers.authorization.split(' ')[1];
-      const authResponse: IServiceResponse = await profileService.savePersonalAndContactDetails({user, headerValue})
+      const authResponse: IServiceResponse = await profileService.savePersonalAndContactDetails(user, headerValue)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.PersonalAndDetails() `, error)
@@ -22,12 +22,12 @@ export async function PersonalAndDetails (req: any, res: Response, next: NextFun
   }
 
 
-export async function getrecruiterProfile(req: any, res: Response, next: NextFunction): Promise<void> {
+export async function getMentorProfile(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      log.info(`${TAG}.getrecruiterProfile()`);
-      log.debug(`${TAG}.getrecruiterProfile() Object = ${JSON.stringify(req.body)}`)
-      let userID = req.params.userId
-      const authResponse= await profileService.getMentorProfile(userID)
+      log.info(`${TAG}.getMentorProfile()`);
+      log.debug(`${TAG}.getMentorProfile() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const authResponse= await profileService.getMentorProfile(headerValue)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getrecruiterProfile() `, error)

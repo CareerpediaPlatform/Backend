@@ -268,7 +268,8 @@ export async function uploadResume(file: any,headerValue: any) {
     }
     return serviceResponse;
   }
-  export async function getStudentResume(headerValue: any) {
+
+export async function getStudentResume(headerValue: any) {
     log.info(`${TAG}.getStudentResume() ==> `, headerValue);  
   
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -295,3 +296,58 @@ export async function uploadResume(file: any,headerValue: any) {
     }
     return serviceResponse;
   }
+
+
+export async function postEducationDetails(user) {
+    console.log(user)
+      log.info(`${TAG}.postEducationDetails() ==> `, user); 
+      const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+      try {
+        let decoded=await verifyAccessToken(user.headerValue)
+        const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+        if(isValid){
+          const response= await StudentProfile.postEducationDetails({...user,uid:decoded.uid});
+          const data = {
+            ...response
+          }    
+          serviceResponse.data = data
+          return serviceResponse
+        }
+        else{
+          serviceResponse.message="invalid user id"
+          return serviceResponse
+        }
+    
+      } catch (error) {
+        log.error(`ERROR occurred in ${TAG}.postEducationDetails`, error);
+        serviceResponse.addServerError('Failed to create user due to technical difficulties');
+      }
+      return serviceResponse;
+    }
+
+export async function postWorkExperienceDetails(user) {
+      console.log(user)
+        log.info(`${TAG}.postWorkExperienceDetails() ==> `, user); 
+        const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+        try {
+          let decoded=await verifyAccessToken(user.headerValue)
+          const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+          if(isValid){
+            const response= await StudentProfile.postWorkExperience({...user,uid:decoded.uid});
+            const data = {
+              ...response
+            }    
+            serviceResponse.data = data
+            return serviceResponse
+          }
+          else{
+            serviceResponse.message="invalid user id"
+            return serviceResponse
+          }
+      
+        } catch (error) {
+          log.error(`ERROR occurred in ${TAG}.postWorkExperienceDetails`, error);
+          serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+      }    

@@ -25,6 +25,7 @@ MAX(c.type) AS type,
           'description', cp.description,
           'modules', (
               SELECT JSON_ARRAYAGG(
+                
                   JSON_OBJECT(
                       'name', m.moduleName,
                       'desc', m.moduleDescription,
@@ -237,7 +238,7 @@ export async function checkCourseIdExist(courseUID: any){
   console.log(courseUID)
   try {
     logger.info(`${TAG}.checkCourseIdExist() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';
+    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE UID= :courseUID';
     const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
     return basic// Return null if no user is found
   } catch (error) {
@@ -280,7 +281,7 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
     console.log(course)
 
     console.log(data)
-    const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
+    const updateQuery = `UPDATE COURSE_OVERVIEW SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
 
     const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
     const response=[]
@@ -314,13 +315,13 @@ export async function deleteuploadCourse(courseUID){
 
 // courses
 export async function coursesPost(user,coursetype) {
-  const course_id=crypto.randomUUID()
+  const course_uid=crypto.randomUUID()
   logger.info(`${TAG}.coursesPost()`);
   try {
-    const courseInsertQuery = `INSERT INTO courses(course_id, thumbnail, title, description, mentor, lesson, exercises, test, price, discountPrice,video,type) 
-VALUES (:course_id,:thumbnail,:title, :description, :mentor, :lesson, :exercises, :test, :price, :discountPrice,:video,:type)`;
+    const courseInsertQuery = `INSERT INTO COURSE_OVERVIEW(COURSE_UID, TITLE, DESCRIPTION, PRICE, DISCOUNT, THUMBNAIL, VIDEO, MENTOR, LESSON, EXERCISES,TEST,TYPE) 
+VALUES (:course_uid,:title, :description, :price, :discountPrice,:thumbnail,:video, :mentor, :lesson, :exercises, :test,:type)`;
     let [course]=await executeQuery(courseInsertQuery, QueryTypes.INSERT, {
-      ...user,coursetype,course_id:course_id});
+      ...user,coursetype,course_uid:course_uid});
     return course;
 
 

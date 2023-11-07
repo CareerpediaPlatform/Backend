@@ -6,7 +6,7 @@ import {adminLms} from "../../Database/mysql"
 
 import { AWS_S3 } from '../../Loaders/config';
 import { DIRECTORIES } from "src/constants/file_constants";
-import {  saveFile } from "src/helpers/s3_media";
+import {  getFileUrl, getVideoDurations, saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 
 const TAG = 'services.lms.admin'
@@ -51,7 +51,7 @@ export async function getCourses(coursetype){
   }
   
 
-  // course//
+  // course_overvew//
   export async function uploadCourse(files: any[],course:any,type: any): Promise<IServiceResponse> {
     log.info(`${TAG}.uploadCourse() `)
 
@@ -70,6 +70,10 @@ export async function getCourses(coursetype){
         metaData: null,
       
       }
+      const fileUrl=  getFileUrl(data[0]?.savedFileKey, AWS_S3.BUCKET_NAME)
+       const duration = await getVideoDurations(fileUrl);
+        console.log("****************************************")
+        console.log(duration)
    
       const imageDetails = {
         fileName: data[1]?.savedFileName,
@@ -84,7 +88,6 @@ export async function getCourses(coursetype){
       const fileSavedResp = await adminLms.uploadCourse(fileDetails,imageDetails,course,type)
     
         serviceResponse.data = {
-       
         uid: course.uid,
         thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
@@ -149,7 +152,6 @@ export async function getuploadCourse(courseUID) {
         fileUrl: data[0].savedLocation,
         isPublic: true,
         metaData: null,
-      
       }
      
       const imageDetails = {
@@ -161,7 +163,6 @@ export async function getuploadCourse(courseUID) {
         fileUrl: data[1]?.savedLocation,
         isPublic: true,
         metaData: null,
-      
       }
 
       const existedCourseID=await adminLms.checkCourseIdExist(courseUID)

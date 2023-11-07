@@ -310,3 +310,55 @@ export async function checkStudentEducationUid(uid: any) {
     throw error;
   }
 }
+
+
+export async function postEducationDetails(user) {
+  logger.info(`${TAG}.updateEducationDetails()`);
+  try {
+     
+    const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
+    VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`
+    let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+      ...user});
+  
+    return user;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+    throw error;
+  }
+}
+
+export async function postWorkExperience(user) {
+  logger.info(`${TAG}.postWorkExperience()`);
+  try {
+      
+    const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`
+    let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+      ...user});
+    return user;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.postWorkExperience()`, error);
+    throw error;
+  }
+}
+
+
+export async function updateEducationDetailss(user) {
+  logger.info(`${TAG}.updateEducationDetails()`);
+  try {
+   
+    const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`
+
+    let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
+      ...user});
+  
+    return user;
+    
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+    throw error;
+  }
+}
