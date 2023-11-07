@@ -13,10 +13,10 @@ export async function saveWorkExperienceDetails(user) {
         const response=[]
       const insertQuery =`INSERT INTO  MENTOR_WORK_EXPERIENCE
       ( UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
-       values( :uid,:occupation ,:job_role, :start_date,:end_date,:year_of_experience)`;
+       values( :uid,:occupation ,:jobRole, :startDate,:endDate,:yearOfExperience)`;
 
       const updateQuery=`UPDATE MENTOR_WORK_EXPERIENCE SET
-      OCCUPATION = :occupation, JOB_ROLE = :job_role, START_DATE = :start_date, END_DATE = :end_date , YEAR_OF_EXPERIENCE = :year_of_experience WHERE USER_ID = :id`;
+      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :id`;
       let items:any = Object.values(user.data)
       for (const data of items) {
 
@@ -60,17 +60,19 @@ export async function saveWorkExperienceDetails(user) {
 
 //geting all data  
 
-export async function checkProfilExist(userId) {
+export async function checkProfilExist(uid) {
     try {
-      logger.info(`${TAG}.checkProfileExist() ==>`, userId);
+      logger.info(`${TAG}.checkProfileExist() ==>`, uid);
   
-      const basicQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE USER_ID= :userId';
-      const educationQuery = 'SELECT * FROM MENTOR_EDUCATION_DETAILS WHERE USER_ID=:userId';
-      const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE USER_ID=:userId';
-      const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {userId});
-      const [work] = await executeQuery(workQuery, QueryTypes.SELECT, {userId});
-      const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {userId});
-      return {basic,eduaction,work}; 
+      const basicQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE UID= :uid';
+      const contactQuery = 'SELECT * FROM `MENTOR_CONTACT_DETAILS` WHERE UID= :uid' 
+      const educationQuery = 'SELECT * FROM MENTOR_EDUACTION_DETAILS WHERE UID= :uid';
+      const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE UID= :uid';
+      const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
+      const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid})
+      const [work] = await executeQuery(workQuery, QueryTypes.SELECT, {uid});
+      const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
+      return {basic,contact,eduaction,work}; 
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;

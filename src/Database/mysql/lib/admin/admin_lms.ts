@@ -237,7 +237,7 @@ export async function checkCourseIdExist(courseUID: any){
   console.log(courseUID)
   try {
     logger.info(`${TAG}.checkCourseIdExist() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE` WHERE UID= :courseUID';
+    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE UID= :courseUID';
     const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
     return basic// Return null if no user is found
   } catch (error) {
@@ -280,7 +280,7 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
     console.log(course)
 
     console.log(data)
-    const updateQuery = `UPDATE COURSE SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
+    const updateQuery = `UPDATE COURSE_OVERVIEW SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
 
     const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
     const response=[]

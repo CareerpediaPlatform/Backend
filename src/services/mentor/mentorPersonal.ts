@@ -10,19 +10,20 @@ import { verifyAccessToken } from "src/helpers/authentication";
 const TAG = 'services.mentor_PersonalAndContactDetails'
 
 
-export async function savePersonalAndContactDetails(user) {
+export async function savePersonalAndContactDetails(user,headerValue) {
+  
   // console.log(user)
     log.info(`${TAG}.savePersonalAndContactDetails() ==> `, user); 
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      let decoded=await verifyAccessToken(user.headerValue)
+      let decoded=await verifyAccessToken(headerValue)
       const uid = decoded.uid
       console.log(uid)
       const isValid=await mentorPersonalAndContactData.checkMentorUid(uid)
       if(isValid){
         const existedProfile=await mentorPersonalAndContactData.checkExist(uid)
         if(existedProfile){
-          const postResponse= await mentorPersonalAndContactData.mentorProfileUpdate(user);
+          const postResponse= await mentorPersonalAndContactData.mentorProfileUpdate(user,uid);
           const data = {
             postResponse
           }  
@@ -31,7 +32,7 @@ export async function savePersonalAndContactDetails(user) {
           serviceResponse.message = "successfully updated !"
           return serviceResponse
         }
-        const response= await mentorPersonalAndContactData.mentorProfilePost(user);
+        const response= await mentorPersonalAndContactData.mentorProfilePost(user,uid);
         const data = {
           ...response
         }    
@@ -39,8 +40,10 @@ export async function savePersonalAndContactDetails(user) {
         return serviceResponse
       }
       else{
-        serviceResponse.message="invalid user id"
-        return serviceResponse
+        serviceResponse.message="Invalid Mentor Uid"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
       }
   
     } catch (error) {
@@ -51,18 +54,30 @@ export async function savePersonalAndContactDetails(user) {
   }
 
 
-export async function getMentorProfile(userId) {
-    log.info(`${TAG}.getRecruiterProfile() ==> `, userId);
+export async function getMentorProfile(headerValue) {
+    log.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+   
     try {
-      const existedProfile=await mentorWorkExperienceData.checkProfilExist(userId)
-      if(existedProfile){
+      let decoded=await verifyAccessToken(headerValue)
+      const uid = decoded.uid
+      console.log(uid)
+      const isValid=await mentorPersonalAndContactData.checkMentorUid(uid)
+    
+      if(isValid){
+        const existedProfile=await mentorWorkExperienceData.checkProfilExist(uid)
         const data = {
           existedProfile
         }    
         serviceResponse.data = data
         return serviceResponse
+      }
+      else{
+        serviceResponse.message="Invalid Mentor Uid"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
       }
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getRecruiterProfile`, error);
