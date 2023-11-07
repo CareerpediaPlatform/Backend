@@ -12,7 +12,7 @@ export async function mentorProfilePost(user,uid) {
   try {
     const profileInsertQuery = `
     INSERT INTO MENTOR_PERSONAL_DETAILS (UID, FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC, LINKEDIN_PROFILE)
-    VALUES (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
+    VALUES(:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
   
 
     const contactInsertQuery = `
