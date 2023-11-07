@@ -8,11 +8,6 @@ const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
 export async function mentorProfilePost(user,uid) {
 
-  // const uid=crypto.randomUUID()
-  console.log("555555555555555555555555555555555555555555555555")
-  console.log(user)
-  console.log(user.contactDetails)
-  console.log(uid)
   logger.info(`${TAG}.mentorProfilePost()`);
   try {
     const profileInsertQuery = `

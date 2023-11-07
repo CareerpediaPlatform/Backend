@@ -45,7 +45,7 @@ export async function saveEducationDetails(user) {
 
   export async function deleteEducationDetails(uid) {
     try {
-      logger.info(`${TAG}.deleteRecruiter() ==>`, uid);
+      logger.info(`${TAG}.deleteEducationDetails() ==>`, uid);
       console.log(" **************************llib*************")
       console.log(uid)
       const response=[]
@@ -65,6 +65,7 @@ export async function saveEducationDetails(user) {
     }
   }
 
+ 
 
 
 
