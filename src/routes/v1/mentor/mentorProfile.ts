@@ -35,6 +35,11 @@ const router = Router()
  .get(isAuthenticated,profileController.getMentorSingleList);
 
 
+ router.route('/education')
+ .post(isAuthenticated,educationController.mentorEducationPost);
+
+
+
 export default router
 
 
