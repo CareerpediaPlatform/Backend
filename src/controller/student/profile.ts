@@ -104,6 +104,7 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
       next(error)
     }
   }
+
   export async function uploadResume(req: any, res: Response, next: NextFunction):Promise<void>{
     try {
       log.info(`${TAG}.uploadResume()`);
@@ -134,4 +135,32 @@ const Response: IServiceResponse = await profileService.uploadResume(file,header
       next(error)
     }
   }
- 
+
+export async function studentEducationPost(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.studentEducationPost()`);
+      log.debug(`${TAG}.studentEducationPost() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const user = req.body;
+      console.log(user)
+      const authResponse: IServiceResponse = await profileService.postEducationDetails({...user,headerValue})
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.studentEducationPost() `, error)
+      next(error)
+    }
+  }
+
+export async function studentWorkExperiencePost(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.studentWorkExperiencePost()`);
+      log.debug(`${TAG}.studentWorkExperiencePost() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const user = req.body;
+      const authResponse: IServiceResponse = await profileService.postWorkExperienceDetails({...user,headerValue})
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.studentWorkExperiencePost() `, error)
+      next(error)
+    }
+  }
