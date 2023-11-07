@@ -22,7 +22,7 @@ const router = Router()
  .put(isAuthenticated ,educationController.updateEducationDetail);
 
  router
- .route("/work-details")
+ .route("/work-experience")
  .put(isAuthenticated ,workController.updateWorkExperience);
 
  //mentor all profile details 
