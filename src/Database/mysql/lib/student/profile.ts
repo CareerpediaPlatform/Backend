@@ -117,7 +117,8 @@ export async function updateEducationDetails(user) {
                 ...data
               });
               response.push(res)
-        }else{
+        }
+        else{
             const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
                 ...data,uid:user.uid
               });
