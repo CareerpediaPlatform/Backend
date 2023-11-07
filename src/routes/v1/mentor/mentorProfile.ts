@@ -27,8 +27,8 @@ const router = Router()
 
  //mentor all profile details 
 
- router.route('/mentor-details/:userId')
- .get(isAuthenticated ,profileController.getrecruiterProfile);
+ router.route('/mentor-details')
+ .get(isAuthenticated ,profileController.getMentorProfile);
  
  //single mentorlist  profile details 
  router.route('/mentor-list/:userId')

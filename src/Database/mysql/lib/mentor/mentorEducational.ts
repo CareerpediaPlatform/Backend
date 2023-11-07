@@ -14,10 +14,10 @@ export async function saveEducationDetails(user) {
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         const educationDetailsQuery = `INSERT INTO  MENTOR_EDUACTION_DETAILS
         ( UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
-         values( :uid,:degree ,:dept_branch, :start_year,:end_year)`;
+         values( :uid,:degree ,:deptBranch, :startYear,:endYear)`;
          
       const updateEducationDetailQuery = `UPDATE MENTOR_EDUACTION_DETAILS SET
-    DEGREE = :degree, DEPT_BRANCH = :dept_branch, START_YEAR = :start_year, END_YEAR = :end_year WHERE USER_ID = :id`;
+    DEGREE = :degree, DEPT_BRANCH = :deptBranch, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`;
       
     let items:any = Object.values(user.data)
       for (const data of items) {
