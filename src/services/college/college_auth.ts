@@ -24,7 +24,7 @@ export async function signupUser(user: ICollege) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-College");
+      const generatePassword = await generatePasswordWithPrefixAndLength(15, "Careerpedia");
       transaction = await getTransaction()
       const college_admin = await CollegeAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
@@ -33,7 +33,7 @@ export async function signupUser(user: ICollege) {
       const email = college_admin.email
       const accessToken = await generateAccessToken({uid,email  });
       const data = {
-        accessToken
+        accessToken,type:"college-signup"
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -76,7 +76,7 @@ export async function signupUser(user: ICollege) {
           const email = existedUser.uid;
           const accessToken = await generateAccessToken({ uid,email});
             const data = {
-                accessToken,
+                accessToken,type:"college-signin",role:"college" 
             };
 
             serviceResponse.data = data;

@@ -9,18 +9,17 @@ const TAG = 'services.profile'
 
 
 export async function collegeProfile(user) {
-  console.log(user)
     log.info(`${TAG}.collegeProfile() ==> `, user);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(user.headerValue)
-  
-      const isValid=await collegeProfileLib.isValid(decoded[0].uid)
+      
+      const isValid=await collegeProfileLib.isValid(decoded.uid)
      
       if(isValid){
-        const existedProfile=await collegeProfileLib.checkExist(decoded[0].uid)
-        if(existedProfile){
+        const existedProfile=await collegeProfileLib.checkExist(decoded.uid)
+         if(existedProfile){
           const postResponse= await collegeProfileLib.collegeProfileUpdate({...user.basicDetails,id:existedProfile.id});
           const contactDetails= await collegeProfileLib.collegeContactUpdate({...user.contactDetails,id:existedProfile.id});
           const collegeDetsils= await collegeProfileLib.collegeDetailUpdate({...user.collegeDetails,id:existedProfile.id});
@@ -32,20 +31,23 @@ export async function collegeProfile(user) {
           serviceResponse.data = data
           return serviceResponse
         }
-        const response= await collegeProfileLib.collegeProfilePost({...user,uid:decoded[0].uid});
+        
+        const response= await collegeProfileLib.collegeProfilePost({...user,uid:decoded.uid});
         const data = {
           ...response
-        }    
+        } 
         serviceResponse.data = data
-        return serviceResponse
-      }
+        return serviceResponse  
+    }
       else{
         serviceResponse.message="invalid user id"
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse
       }
   
     } catch (error) {
-      log.error(`ERROR occurred in ${TAG}.signupUser`, error);
+      log.error(`ERROR occurred in ${TAG}.college_profile`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
     }
     return serviceResponse;
@@ -58,9 +60,9 @@ export async function getCollegeProfile(headerValue) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       let decoded=await verifyAccessToken(headerValue)
-      const isValid=await collegeProfileLib.isValid(decoded[0].uid)
+      const isValid=await collegeProfileLib.isValid(decoded.uid)
       if(isValid){
-        const existedProfile=await collegeProfileLib.checkProfilExist(decoded[0].uid)
+        const existedProfile=await collegeProfileLib.checkProfilExist(decoded.uid)
         if(existedProfile){
           const data = {
             existedProfile

@@ -8,12 +8,13 @@ export async function checkProfilExist(uid) {
   try {
     logger.info(`${TAG}.checkProfilExist() ==>`, uid);
 
-    const basicQuery = 'SELECT * FROM `COLLEGE_BASIC_DETAILS` WHERE user_uid= :uid';
-    const collegeQuery = 'SELECT * FROM `COLLEGE_DETAILS` WHERE user_uid= :uid';
-    const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid= :uid';
+    const basicQuery = 'SELECT * FROM `COLLEGE_BASIC_DETAILS` WHERE UID= :uid';
+    const collegeQuery = 'SELECT * FROM `COLLEGE_PROFILE_DETAILS` WHERE UID= :uid';
+    const contactQuery = 'SELECT * FROM `COLLEGE_CONTACT_DETAILS` WHERE UID= :uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid:uid});
     const [college] = await executeQuery(collegeQuery, QueryTypes.SELECT, {uid:uid});
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
+    console.log(basic)
     return {basic,college,contact}; // Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -24,7 +25,7 @@ export async function checkProfilExist(uid) {
 export async function checkExist(uid) {
   try {
     logger.info(`${TAG}.checkExist() ==>`, uid);
-    const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid=:uid';
+    const contactQuery = 'SELECT * FROM `COLLEGE_CONTACT_DETAILS` WHERE UID=:uid';
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
     return contact// Return null if no user is found
   } catch (error) {
@@ -34,10 +35,12 @@ export async function checkExist(uid) {
 }
 
 export async function isValid(uid) {
+  
   try {
     logger.info(`${TAG}.isValid() ==>`, uid);
-    const contactQuery = 'SELECT * FROM `COLLEGE` WHERE uid=:uid';
+    const contactQuery = 'SELECT * FROM `COLLEGE_ADMIN` WHERE UID=:uid';
     const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid:uid});
+    console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk",contact)
     return contact// Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.isValid()`, error);
@@ -55,17 +58,17 @@ export async function collegeProfilePost(user) {
   try {
     const profileInsertQuery = `
     INSERT INTO COLLEGE_BASIC_DETAILS 
-    (user_uid,institute_logo,instituteName, founderName, email, phoneNumber, website, linkedInProfile) 
-    VALUES (:uid, :logo, :instituteName, :founderName, :email, :phoneNumber, :website, :linkedInProfile)`;
+    (UID,INSTITUTE_LOGO, INSTITUTE_NAME, FOUNDER_NAME, EMAIL, PHONE_NUMBER, WEBSITE, LINKEDIN_PROFILE) 
+    VALUES (:uid, :instituteLogo, :instituteName, :founderName, :email, :phoneNumber, :website, :linkedinProfile)`;
 
     const contactInsertQuery = `
-    INSERT INTO CONTACT_DETAILS 
-    (user_uid,address, city, district, state, pinCode, country) 
+    INSERT INTO COLLEGE_CONTACT_DETAILS 
+    (UID,ADDRESS, CITY, DISTRICT, STATE, PIN_CODE, COUNTRY) 
     VALUES (:uid, :address, :city, :district, :state, :pinCode, :country)`;
 
     const collegeInsertQuery = `
-    INSERT INTO COLLEGE_DETAILS (user_uid, accreditation, deemed, numberOfStudents, departments, start)
-    VALUES (:uid, :accreditation, :deemed, :numberOfStudents, :departments, :start);
+    INSERT INTO COLLEGE_PROFILE_DETAILS (UID, ACCREDITATION, DEEMED, NUMBER_OF_STUDENTS, DEPARTMENTS, COLLEGE_CODE, START_YEAR)
+    VALUES (:uid, :accreditation, :deemed, :numberOfStudents, :departments, :collegeCode, :startYear);
     `;
     let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
       ...contactDetails});
@@ -74,7 +77,7 @@ export async function collegeProfilePost(user) {
         ...basicDetails});
     let [college]=await executeQuery(collegeInsertQuery, QueryTypes.INSERT, {
         ...collegeDetails});
-
+      
 
     return {profile,contact,college};
 
@@ -85,26 +88,28 @@ export async function collegeProfilePost(user) {
 }
 
 export async function collegeProfileUpdate(user) {
+  
   logger.info(`${TAG}.collegeProfileUpdate()`);
   try {
     const updateQuery = `
     UPDATE COLLEGE_BASIC_DETAILS
     SET
-    institute_logo=:logo,
-        instituteName=:instituteName,
-        founderName = :founderName,
-        email = :email,
-        phoneNumber = :phoneNumber,
-        website = :website,
-        linkedInProfile = :linkedInProfile
-        WHERE id= :id;
+    INSTITUTE_LOGO=:instituteLogo,
+    INSTITUTE_NAME=:instituteName,
+    FOUNDER_NAME = :founderName,
+    EMAIL = :email,
+    PHONE_NUMBER = :phoneNumber,
+    WEBSITE = :website,
+    LINKEDIN_PROFILE = :linkedinProfile
+        WHERE Id= :id;
   `;
 
-    await executeQuery(updateQuery, QueryTypes.UPDATE, {
+   await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user,
     });
+    console.log("3246385723848349814",user)
     return user;
-
+   
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.collegeProfileUpdate()`, error);
     throw error;
@@ -113,17 +118,18 @@ export async function collegeProfileUpdate(user) {
 
 export async function collegeContactUpdate(user) {
   logger.info(`${TAG}.collegeContactUpdate()`);
+  
   try {
     const updateQuery = `
-    UPDATE CONTACT_DETAILS
+    UPDATE COLLEGE_CONTACT_DETAILS
     SET
-    address =:address,
-    city = :city,
-    district =:district,
-    state =:state,
-    pinCode =:pinCode,
-    country =:country
-        WHERE id= :id;;
+    ADDRESS =:address,
+    CITY = :city,
+    DISTRICT =:district,
+    STATE =:state,
+    PIN_CODE =:pinCode,
+    COUNTRY =:country
+        WHERE Id= :id;
   `;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -139,16 +145,18 @@ export async function collegeContactUpdate(user) {
 
 export async function collegeDetailUpdate(user) {
   logger.info(`${TAG}.collegeDetailUpdate()`);
+
   try {
     const updateQuery = `
-    UPDATE COLLEGE_DETAILS
+    UPDATE COLLEGE_PROFILE_DETAILS
     SET
-    accreditation =:accreditation,
-        deemed =:deemed,
-        numberOfStudents =:numberOfStudents,
-        departments =:departments,
-        start =:start
-        WHERE id= :id;
+    ACCREDITATION = :accreditation,
+    DEEMED = :deemed,
+    NUMBER_OF_STUDENTS =:numberOfStudents,
+    DEPARTMENTS = :departments,
+    COLLEGE_CODE = :collegeCode,
+    START_YEAR  =:startYear
+        WHERE Id= :id;
   `;
 
     await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -167,10 +175,10 @@ export async function collegeProfileDelete(user) {
   try {
     const response=[]
     const deleteQueries = [
-      "DELETE FROM COLLEGE_BASIC_DETAILS WHERE userID = :userID;",
-      "DELETE FROM CONTACT_DETAILS WHERE userID = :userID;",
-      "DELETE FROM COLLEGE_DETAILS WHERE userID = :userID;",
-      "DELETE FROM college WHERE user_ID = :userID;",
+      "DELETE FROM COLLEGE_BASIC_DETAILS WHERE ID = :userID;",
+      "DELETE FROM COLLEGE_CONTACT_DETAILS WHERE ID = :userID;",
+      "DELETE FROM COLLEGE_PROFILE_DETAILS WHERE ID = :userID;",
+      "DELETE FROM COLLEGE_ADMIN WHERE ID = :userID;",
     ];
     
     for (const query of deleteQueries) {

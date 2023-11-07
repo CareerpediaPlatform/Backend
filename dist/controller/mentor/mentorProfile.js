@@ -45,9 +45,10 @@ function PersonalAndDetails(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.PersonalAndDetails()`);
             logger_1.default.debug(`${TAG}.PersonalAndDetails() Object = ${JSON.stringify(req.body)}`);
-            const mentorPersonalData = req.body;
-            const { mentorUid } = req.params;
-            const authResponse = yield profileService.savePersonalAndContactDetails(mentorPersonalData, mentorUid);
+            const user = req.body;
+            // const {mentorUid}= req.params
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const authResponse = yield profileService.savePersonalAndContactDetails({ user, headerValue });
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {

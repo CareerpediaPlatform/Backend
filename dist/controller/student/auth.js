@@ -69,7 +69,7 @@ function signupPhonenumber(req, res, next) {
             logger_1.default.debug(`${TAG}.signupPhonenumber() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log("first");
-            console.log(user);
+            console.log(req.headers.authorization);
             const headerValue = req.headers.authorization.split(' ')[1];
             const authResponse = yield authService.signupPhonenumber(Object.assign(Object.assign({}, user), { headerValue }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);

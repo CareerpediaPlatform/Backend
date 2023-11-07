@@ -7,23 +7,28 @@ const TAG="student.database-lib.profile"
 // creating new student with form data with
 export async function studentProfilePost(user) {
   // const uid=crypto.randomUUID()
+  console.log(user)
+  console.log(user.basicDetails)
   logger.info(`${TAG}.studentProfilePost()`);
   try {
     const profileInsertQuery = `
-   INSERT INTO student_personal_details (user_uid,firstName, lastName, email, dob, phoneNumber, linkedInProfile, profilePic, resume)
+
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC,  LINKEDIN_PROFILE)
     VALUES
-  (:uid,:firstName, :lastName, :email, :dob, :phoneNumber, :linkedInProfile, :profilePic, :resume)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile)`;
 
     const contactInsertQuery = `
-    INSERT INTO CONTACT_DETAILS 
-    (user_uid,address, city, district, state, pinCode, country) 
-    VALUES (:uid, :address, :city, :district, :state, :pinCode, :country)`;
+    INSERT INTO STUDENT_CONTACT_DETAILS 
+    (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
+    VALUES (:uid, :address, :district, :city,  :state, :pinCode, :country)`;
+
+    
+    let [profile]=await executeQuery(profileInsertQuery, QueryTypes.INSERT, {
+      ...user.basicDetails,uid:user.uid});
 
     let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
       ...user.contactDetails,uid:user.uid});
 
-    let [profile]=await executeQuery(profileInsertQuery, QueryTypes.INSERT, {
-        ...user.basicDetails,uid:user.uid});
 
     return {profile,contact};
 
@@ -36,25 +41,24 @@ export async function studentProfilePost(user) {
 export async function studentProfileUpdate(user) {
   logger.info(`${TAG}.studentProfileUpdate()`);
   try {
-    const profileUpdateQuery = `UPDATE student_personal_details
-    SET firstName = :firstName,lastName = :lastName, email = :email,dob = :dob,phoneNumber = :phoneNumber,
-      linkedInProfile = :linkedInProfile,
-      profilePic = :profilePic,
-      resume = :resume
+    const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
     WHERE
-    user_uid = :uid;
+    UID = :uid;
     `;
 
-    const contactUpdateQuery = `UPDATE CONTACT_DETAILS
+    const contactUpdateQuery = `UPDATE STUDENT_CONTACT_DETAILS
     SET
-      address = :address,
-      city = :city,
-      district = :district,
-      state = :state,
-      pinCode = :pinCode,
-      country = :country
+    ADDRESS = :address,
+    DISTRICT = :district,
+    CITY = :city, 
+    STATE = :state,
+    PIN_CODE = :pinCode,
+    COUNTRY = :country
     WHERE
-    user_uid = :uid;
+    UID = :uid;
     `;
 
     let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.UPDATE, {
@@ -62,8 +66,10 @@ export async function studentProfileUpdate(user) {
 
     let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
         ...user.basicDetails,uid:user.uid});
+        const contactDetails=user.contactDetails
+        const basicDetails=user.basicDetails
 
-    return {profile,contact};
+    return {contactDetails,basicDetails};
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.studentProfileUpdate()`, error);
@@ -75,10 +81,10 @@ export async function checkProfilExist(uid) {
   try {
     logger.info(`${TAG}.checkProfilExist() ==>`, uid);
 
-    const basicQuery = 'SELECT * FROM `student_personal_details` WHERE user_uid= :uid';
-    const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid=:uid';
-    const educationQuery = 'SELECT * FROM `EDUCATION_DETAILS` WHERE user_uid=:uid';
-    const experienceQuery = 'SELECT * FROM `WORK_EXPERIENCE` WHERE user_uid=:uid';
+    const basicQuery = 'SELECT * FROM `STUDENT_PERSONAL_DETAILS` WHERE UID= :uid';
+    const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
+    const educationQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
+    const experienceQuery = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE UID=:uid';
     const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
     const [contact]= await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
     const education= await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
@@ -97,13 +103,14 @@ export async function updateEducationDetails(user) {
     logger.info(`${TAG}.updateEducationDetails()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO EDUCATION_DETAILS (user_uid, degree, field, college, score, start, end) 
-      VALUES (:uid, :degree, :field, :college, :score, :start, :end)`
+      const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
+      VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`
 
-      const updateQuery=`UPDATE EDUCATION_DETAILS SET degree=:degree, field=:field, college=:college, score=:score, start=start, end=end WHERE id=:id`
+      const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`
 
-      
-      for (const data of user.data) {
+      let items:any=Object.values(user.data)
+      for (const data of items) {
+
         console.log(data)
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
@@ -119,7 +126,7 @@ export async function updateEducationDetails(user) {
       
       }
       
-      return {...response};
+      return user;
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
@@ -131,16 +138,18 @@ export async function updateWorkExperience(user) {
     logger.info(`${TAG}.updateWorkExperience()`);
     try {
         const response=[]
-      const insertQuery =`INSERT INTO WORK_EXPERIENCE (user_uid, company, role, start, end) VALUES (:uid, :company, :role, :start, :end)`
+      const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`
 
-      const updateQuery=`UPDATE WORK_EXPERIENCE SET  company = :company,
-      role = :role,
-      start = :start,
-      end = :end WHERE id=:id`
+      const updateQuery=`UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
+      OCCUPATION =:occupation,
+      ROLE = :role,
+      SKILLS =:skills,
+      START_YEAR = :startYear,
+      END_YEAR = :endYear WHERE ID=:id`
 
-      
-      for (const data of user.data) {
-        console.log(data)
+      let items:any=Object.values(user.data)
+
+      for (const data of items) {
         if(data.id){
             const res=await executeQuery(updateQuery, QueryTypes.UPDATE, {
                 ...data
@@ -155,7 +164,7 @@ export async function updateWorkExperience(user) {
       
       }
       
-      return {...response};
+      return user;
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.updateWorkExperiencess()`, error);
@@ -166,7 +175,7 @@ export async function updateWorkExperience(user) {
   export async function studentEducationDelete(id) {
     logger.info(`${TAG}.studentEducationDelete()`);
     try {
-      const deleteQueries ="DELETE FROM EDUCATION_DETAILS WHERE  id= :id;"
+      const deleteQueries ="DELETE FROM STUDENT_EDUCATION_DETAILS WHERE  ID=:id;"
       
         const res=await executeQuery(deleteQueries, QueryTypes.DELETE, {
           id:id
@@ -183,7 +192,7 @@ export async function updateWorkExperience(user) {
   export async function studentExperienceDelete(id) {
     logger.info(`${TAG}.studentExperienceDelete()`);
     try {
-      const deleteQueries ="DELETE FROM WORK_EXPERIENCE WHERE id= :id;"
+      const deleteQueries ="DELETE FROM STUDENT_WORK_EXPERIENCE WHERE  ID=:id;"
         const res=await executeQuery(deleteQueries, QueryTypes.DELETE, {
           id:id
         });
@@ -195,28 +204,35 @@ export async function updateWorkExperience(user) {
   }
 
   export async function checkExistEducationAndExperience(id) {
-    let query1: string;
-    let query2: string;
-    let user=[]
+    console.log(id);
+    let query1;
+    let query2;
+    let user = [];
     try {
       logger.info(`${TAG}.checkExistEducationAndExperience() ==>`, id);
-      query1 = 'SELECT * FROM `WORK_EXPERIENCE` WHERE id=:id';
-      user= await executeQuery(query1, QueryTypes.SELECT, { id:id });
-      if(user.length<1){
-        query2 = 'SELECT * FROM `EDUCATION_DETAILS` WHERE id=:id';
-        user= await executeQuery(query2, QueryTypes.SELECT, { id:id });
+  
+      // Use ? as a placeholder for the parameter and pass the actual value separately
+      query1 = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE ID = ?';
+      user = await executeQuery(query1, QueryTypes.SELECT, [id]);
+  
+      if (user.length < 1) {
+        // Use ? as a placeholder for the parameter and pass the actual value separately
+        query2 = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE ID = ?';
+        user = await executeQuery(query2, QueryTypes.SELECT, [id]);
       }
-      return user// Return null if no user is found
+  
+      return user; // Return null if no user is found
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkExistEducationAndExperience()`, error);
       throw error;
     }
   }
+  
 
   export async function checkExist(uid) {
     try {
       logger.info(`${TAG}.checkExist() ==>`, uid);
-      const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid=:uid';
+      const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
       const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid});
       return contact// Return null if no user is found
     } catch (error) {
@@ -231,7 +247,7 @@ export async function updateWorkExperience(user) {
     
     try {
       logger.info(`${TAG}.uploadResume() ==>`, source,uid);
-      const query = `INSERT INTO STUDENT_RESUME (USER_UID,SOURCE_URL ) VALUES(:uid,:file)`
+      const query = `INSERT INTO STUDENT_RESUME (UID,SOURCE_URL ) VALUES(:uid,:file)`
       const resume= await executeQuery(query, QueryTypes.INSERT, {file:source.fileUrl,uid});
       return resume// Return null if no user is found
     } catch (error) {
@@ -247,7 +263,7 @@ export async function updateWorkExperience(user) {
     
     try {
       logger.info(`${TAG}.updateResume() ==>`, source,uid);
-      const query = `UPDATE STUDENT_RESUME SET SOURCE_URL= :file  WHERE USER_UID= :uid`
+      const query = `UPDATE STUDENT_RESUME SET SOURCE_URL= :file  WHERE UID= :uid`
       const resume= await executeQuery(query, QueryTypes.UPDATE, {file:source.fileUrl,uid});
       return resume// Return null if no user is found
     } catch (error) {
@@ -261,7 +277,7 @@ export async function updateWorkExperience(user) {
     try {
       logger.info(`${TAG}.checkResume() ==>`, uid);
  
-      const query = `SELECT * From STUDENT_RESUME WHERE USER_UID= :uid`
+      const query = `SELECT * From STUDENT_RESUME WHERE UID= :uid`
       const resume= await executeQuery(query, QueryTypes.SELECT, {uid:uid});
       return resume
     } catch (error) {
@@ -272,7 +288,7 @@ export async function updateWorkExperience(user) {
 export async function getStudentResume(uid:any){
   try{
     logger.info(`${TAG}.getStudentResume() ==>`,uid);
-    const query = `SELECT * FROM STUDENT_RESUME WHERE USER_UID= :uid`
+    const query = `SELECT * FROM STUDENT_RESUME WHERE UID= :uid`
     const resume= await executeQuery(query, QueryTypes.SELECT,{uid:uid});
     return resume
   } catch(error){
@@ -280,4 +296,69 @@ export async function getStudentResume(uid:any){
     throw error;
   }
 }
+ 
+
+export async function checkStudentEducationUid(uid: any) {
+
+  try {
+    logger.info(`${TAG}.checkExist() ==>`, uid);
+    const checkQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
+    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {uid});
+    return basic// Return null if no user is found
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+    throw error;
+  }
+}
+
+
+export async function postEducationDetails(user) {
+  logger.info(`${TAG}.updateEducationDetails()`);
+  try {
+     
+    const insertQuery =`INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
+    VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`
+    let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+      ...user});
   
+    return user;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+    throw error;
+  }
+}
+
+export async function postWorkExperience(user) {
+  logger.info(`${TAG}.postWorkExperience()`);
+  try {
+      
+    const insertQuery =`INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`
+    let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+      ...user});
+    return user;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.postWorkExperience()`, error);
+    throw error;
+  }
+}
+
+
+export async function updateEducationDetailss(user) {
+  logger.info(`${TAG}.updateEducationDetails()`);
+  try {
+   
+    const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`
+
+    let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
+      ...user});
+  
+    return user;
+    
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+    throw error;
+  }
+}

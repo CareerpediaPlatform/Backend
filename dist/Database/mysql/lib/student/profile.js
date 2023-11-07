@@ -21,18 +21,20 @@ const TAG = "student.database-lib.profile";
 function studentProfilePost(user) {
     return __awaiter(this, void 0, void 0, function* () {
         // const uid=crypto.randomUUID()
+        console.log(user);
+        console.log(user.basicDetails);
         logger_1.default.info(`${TAG}.studentProfilePost()`);
         try {
             const profileInsertQuery = `
-   INSERT INTO student_personal_details (user_uid,firstName, lastName, email, dob, phoneNumber, linkedInProfile, profilePic, resume)
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC)
     VALUES
-  (:uid,:firstName, :lastName, :email, :dob, :phoneNumber, :linkedInProfile, :profilePic, :resume)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
             const contactInsertQuery = `
-    INSERT INTO CONTACT_DETAILS 
-    (user_uid,address, city, district, state, pinCode, country) 
-    VALUES (:uid, :address, :city, :district, :state, :pinCode, :country)`;
-            let [contact] = yield (0, sql_query_util_1.executeQuery)(contactInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.contactDetails), { uid: user.uid }));
+    INSERT INTO STUDENT_CONTACT_DETAILS 
+    (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
+    VALUES (:uid, :address, :district, :city,  :state, :pinCode, :country)`;
             let [profile] = yield (0, sql_query_util_1.executeQuery)(profileInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.basicDetails), { uid: user.uid }));
+            let [contact] = yield (0, sql_query_util_1.executeQuery)(contactInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.contactDetails), { uid: user.uid }));
             return { profile, contact };
         }
         catch (error) {
@@ -46,24 +48,23 @@ function studentProfileUpdate(user) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.studentProfileUpdate()`);
         try {
-            const profileUpdateQuery = `UPDATE student_personal_details
-    SET firstName = :firstName,lastName = :lastName, email = :email,dob = :dob,phoneNumber = :phoneNumber,
-      linkedInProfile = :linkedInProfile,
-      profilePic = :profilePic,
-      resume = :resume
+            const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber,
+    LINKEDIN_PROFILE = :linkedInProfile,
+    PROFILE_PIC = :profilePic
     WHERE
-    user_uid = :uid;
+    UID = :uid;
     `;
-            const contactUpdateQuery = `UPDATE CONTACT_DETAILS
+            const contactUpdateQuery = `UPDATE STUDENT_CONTACT_DETAILS
     SET
-      address = :address,
-      city = :city,
-      district = :district,
-      state = :state,
-      pinCode = :pinCode,
-      country = :country
+    ADDRESS = :address,
+    DISTRICT = :district,
+    CITY = :city, 
+    STATE = :state,
+    PIN_CODE = :pinCode,
+    COUNTRY = :country
     WHERE
-    user_uid = :uid;
+    UID = :uid;
     `;
             let [contact] = yield (0, sql_query_util_1.executeQuery)(contactUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.contactDetails), { uid: user.uid }));
             let [profile] = yield (0, sql_query_util_1.executeQuery)(profileUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.basicDetails), { uid: user.uid }));
@@ -80,16 +81,18 @@ function checkProfilExist(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkProfilExist() ==>`, uid);
-            const basicQuery = 'SELECT * FROM `student_personal_details` WHERE user_uid= :uid';
-            const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid=:uid';
-            const educationQuery = 'SELECT * FROM `EDUCATION_DETAILS` WHERE user_uid=:uid';
-            const experienceQuery = 'SELECT * FROM `WORK_EXPERIENCE` WHERE user_uid=:uid';
+            const basicQuery = 'SELECT * FROM `STUDENT_PERSONAL_DETAILS` WHERE UID= :uid';
+            const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
+            const educationQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
+            const experienceQuery = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE UID=:uid';
+            const resumeQuery = 'SELECT * FROM `STUDENT_RESUME` WHERE UID=:uid';
             const [basic] = yield (0, sql_query_util_1.executeQuery)(basicQuery, sequelize_1.QueryTypes.SELECT, { uid });
             const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid });
             const education = yield (0, sql_query_util_1.executeQuery)(educationQuery, sequelize_1.QueryTypes.SELECT, { uid });
             const experience = yield (0, sql_query_util_1.executeQuery)(experienceQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            const resume = yield (0, sql_query_util_1.executeQuery)(resumeQuery, sequelize_1.QueryTypes.SELECT, { uid });
             const data = {
-                basic, contact, education: Object.values(education), experience: Object.values(experience)
+                basic, contact, education: Object.values(education), experience: Object.values(experience), resume
             };
             return Object.assign({}, data); // Return null if no user is found
         }
@@ -105,9 +108,9 @@ function updateEducationDetails(user) {
         logger_1.default.info(`${TAG}.updateEducationDetails()`);
         try {
             const response = [];
-            const insertQuery = `INSERT INTO EDUCATION_DETAILS (user_uid, degree, field, college, score, start, end) 
-      VALUES (:uid, :degree, :field, :college, :score, :start, :end)`;
-            const updateQuery = `UPDATE EDUCATION_DETAILS SET degree=:degree, field=:field, college=:college, score=:score, start=start, end=end WHERE id=:id`;
+            const insertQuery = `INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
+      VALUES (:uid, :degree, :dept_branch, :college, :score, :start_year, :end_year)`;
+            const updateQuery = `UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`;
             for (const data of user.data) {
                 console.log(data);
                 if (data.id) {
@@ -133,11 +136,11 @@ function updateWorkExperience(user) {
         logger_1.default.info(`${TAG}.updateWorkExperience()`);
         try {
             const response = [];
-            const insertQuery = `INSERT INTO WORK_EXPERIENCE (user_uid, company, role, start, end) VALUES (:uid, :company, :role, :start, :end)`;
-            const updateQuery = `UPDATE WORK_EXPERIENCE SET  company = :company,
-      role = :role,
-      start = :start,
-      end = :end WHERE id=:id`;
+            const insertQuery = `INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY, ROLE, START_YEAR, END_YEAR) VALUES (:uid, :company, :role, :start_year, :end_year)`;
+            const updateQuery = `UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
+      ROLE = :role,
+      START_YEAR = :start,
+      END_YEAR = :end WHERE ID=:id`;
             for (const data of user.data) {
                 console.log(data);
                 if (data.id) {
@@ -162,7 +165,7 @@ function studentEducationDelete(id) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.studentEducationDelete()`);
         try {
-            const deleteQueries = "DELETE FROM EDUCATION_DETAILS WHERE  id= :id;";
+            const deleteQueries = "DELETE FROM STUDENT_EDUCATION_DETAILS WHERE  ID=:id;";
             const res = yield (0, sql_query_util_1.executeQuery)(deleteQueries, sequelize_1.QueryTypes.DELETE, {
                 id: id
             });
@@ -179,7 +182,7 @@ function studentExperienceDelete(id) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.studentExperienceDelete()`);
         try {
-            const deleteQueries = "DELETE FROM WORK_EXPERIENCE WHERE id= :id;";
+            const deleteQueries = "DELETE FROM STUDENT_WORK_EXPERIENCE WHERE  ID=:id;";
             const res = yield (0, sql_query_util_1.executeQuery)(deleteQueries, sequelize_1.QueryTypes.DELETE, {
                 id: id
             });
@@ -194,16 +197,19 @@ function studentExperienceDelete(id) {
 exports.studentExperienceDelete = studentExperienceDelete;
 function checkExistEducationAndExperience(id) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(id);
         let query1;
         let query2;
         let user = [];
         try {
             logger_1.default.info(`${TAG}.checkExistEducationAndExperience() ==>`, id);
-            query1 = 'SELECT * FROM `WORK_EXPERIENCE` WHERE id=:id';
-            user = yield (0, sql_query_util_1.executeQuery)(query1, sequelize_1.QueryTypes.SELECT, { id: id });
+            // Use ? as a placeholder for the parameter and pass the actual value separately
+            query1 = 'SELECT * FROM `STUDENT_WORK_EXPERIENCE` WHERE ID = ?';
+            user = yield (0, sql_query_util_1.executeQuery)(query1, sequelize_1.QueryTypes.SELECT, [id]);
             if (user.length < 1) {
-                query2 = 'SELECT * FROM `EDUCATION_DETAILS` WHERE id=:id';
-                user = yield (0, sql_query_util_1.executeQuery)(query2, sequelize_1.QueryTypes.SELECT, { id: id });
+                // Use ? as a placeholder for the parameter and pass the actual value separately
+                query2 = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE ID = ?';
+                user = yield (0, sql_query_util_1.executeQuery)(query2, sequelize_1.QueryTypes.SELECT, [id]);
             }
             return user; // Return null if no user is found
         }
@@ -218,7 +224,7 @@ function checkExist(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkExist() ==>`, uid);
-            const contactQuery = 'SELECT * FROM `CONTACT_DETAILS` WHERE user_uid=:uid';
+            const contactQuery = 'SELECT * FROM `STUDENT_CONTACT_DETAILS` WHERE UID=:uid';
             const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid });
             return contact; // Return null if no user is found
         }
@@ -235,7 +241,7 @@ function uploadResume(source, uid) {
         console.log(source, uid);
         try {
             logger_1.default.info(`${TAG}.uploadResume() ==>`, source, uid);
-            const query = `INSERT INTO STUDENT_RESUME (USER_UID,SOURCE_URL ) VALUES(:uid,:file)`;
+            const query = `INSERT INTO STUDENT_RESUME (UID,SOURCE_URL ) VALUES(:uid,:file)`;
             const resume = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.INSERT, { file: source.fileUrl, uid });
             return resume; // Return null if no user is found
         }
@@ -253,7 +259,7 @@ function updateResume(source, uid) {
         console.log(source.fileUrl);
         try {
             logger_1.default.info(`${TAG}.updateResume() ==>`, source, uid);
-            const query = `UPDATE STUDENT_RESUME SET SOURCE_URL= :file  WHERE USER_UID= :uid`;
+            const query = `UPDATE STUDENT_RESUME SET SOURCE_URL= :file  WHERE UID= :uid`;
             const resume = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.UPDATE, { file: source.fileUrl, uid });
             return resume; // Return null if no user is found
         }
@@ -268,7 +274,7 @@ function checkResume(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.checkResume() ==>`, uid);
-            const query = `SELECT * From STUDENT_RESUME WHERE USER_UID= :uid`;
+            const query = `SELECT * From STUDENT_RESUME WHERE UID= :uid`;
             const resume = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { uid: uid });
             return resume;
         }
@@ -283,7 +289,7 @@ function getStudentResume(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.getStudentResume() ==>`, uid);
-            const query = `SELECT * FROM STUDENT_RESUME WHERE USER_UID= :uid`;
+            const query = `SELECT * FROM STUDENT_RESUME WHERE UID= :uid`;
             const resume = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { uid: uid });
             return resume;
         }

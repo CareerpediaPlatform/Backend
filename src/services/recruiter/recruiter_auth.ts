@@ -26,7 +26,7 @@ export async function signupUser(user: IRecruiter) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-      const generatePassword = await generatePasswordWithPrefixAndLength(25, "Careerpedia-Recruiter");
+      const generatePassword = await generatePasswordWithPrefixAndLength(14, "Careerpedia");
       transaction = await getTransaction()
       const recruiter = await RecruiterAuth.signUp(user,generatePassword,transaction);
       await transaction.commit() 
@@ -36,7 +36,7 @@ export async function signupUser(user: IRecruiter) {
       const accessToken = await generateAccessToken({ uid,email});  
       const data = {
 
-        accessToken
+        accessToken,type:"Recruiter-signup"
 
       }    
       serviceResponse.data = data
@@ -77,7 +77,7 @@ export async function loginUser(user: IRecruiter) {
             const email = existedUser.email
             const accessToken = await generateAccessToken({ uid,email})
             const data = {
-                accessToken
+                accessToken,type:"recruiter-signin", role:"recruiter"
             };
 
             serviceResponse.data = data;
@@ -96,7 +96,7 @@ export async function changePassword(user){
 
     // finde recruiter is valid or not
     const uid=await verifyAccessToken(user.headerValue)
-    const recruiter=await RecruiterAuth.getRecruiterUid({uid:uid.uid})
+    const recruiter=await RecruiterAuth.getRecruiterUid(uid)
     if(recruiter){
       const IsValid=await comparePasswords(recruiter.password,user.oldPassword)
 
@@ -113,6 +113,37 @@ export async function changePassword(user){
     }
   }catch (error) {
     log.error(`ERROR occurred in ${TAG}.changePassword`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return await serviceResponse
+}
+
+
+//  access or remove accerss of a recruiter by admin
+
+export async function recruiterUpdateStatus(user){
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try{
+      // find admin is valid or not
+    const decoded=await verifyAccessToken(user.headerValue)
+    if(decoded &&(user.status=="ACTIVE" ||user.status=="DEACTIVE")){
+      if(decoded.role!="admin"){
+        serviceResponse.message = `UnAutharized Admin`
+        return serviceResponse
+      }
+      const recruiter=await RecruiterAuth.recruiterUpdateStatus({...user})
+      const data={
+        recruiter
+      }
+      serviceResponse.message = `recruiter status changed to ${user.status} successfully `
+      serviceResponse.data = data
+      return serviceResponse
+    }else{
+      serviceResponse.message = `something went wrong in url`
+          return serviceResponse
+    }
+  }catch (error) {
+    log.error(`ERROR occurred in ${TAG}.recruiterUpdateStatus`, error);
     serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
   return await serviceResponse

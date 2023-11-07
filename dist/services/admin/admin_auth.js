@@ -62,7 +62,7 @@ function loginAdmin(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
-            //comaparing password
+            //comparing password
             const isPasswordValid = yield (0, encryption_1.comparePasswords)(existedUser.password, user.password);
             if (!isPasswordValid) {
                 serviceResponse.message = 'password is does not match';
@@ -75,6 +75,7 @@ function loginAdmin(user) {
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid: Admin[0].uid, role: "admin" });
                 const data = {
                     accessToken,
+                    role: "admin",
                     user_id
                 };
                 serviceResponse.data = data;

@@ -14,21 +14,21 @@ const router = Router()
  router.use(passport.initialize())
 
  router
- .route("/personal-details/:mentorUid")
- .post(isAuthenticated ,profileController.PersonalAndDetails);
+ .route("/personal-details")
+ .patch(isAuthenticated ,profileController.PersonalAndDetails);
 
  router
- .route("/education-details/:id")
+ .route("/education-details")
  .put(isAuthenticated ,educationController.updateEducationDetail);
 
  router
- .route("/work-details/:id")
+ .route("/work-experience")
  .put(isAuthenticated ,workController.updateWorkExperience);
 
  //mentor all profile details 
 
- router.route('/mentor-details/:userId')
- .get(isAuthenticated ,profileController.getrecruiterProfile);
+ router.route('/mentor-details')
+ .get(isAuthenticated ,profileController.getMentorProfile);
  
  //single mentorlist  profile details 
  router.route('/mentor-list/:userId')

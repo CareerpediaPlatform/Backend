@@ -1,4 +1,3 @@
-import { any } from "joi";
 import { StudentAuth} from "src/Database/mysql";
 import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
 import { checkEmailOrPhoneExist } from "src/Database/mysql/lib/student/auth";
@@ -39,6 +38,7 @@ export async function signupUser(user: IUser) {
       const accessToken = await generateAccessToken({uid:findUser.uid,number:true,id:findUser.id,type:"signup"}); 
       const data = {
         accessToken,
+        
         type:"signup"
       }
       serviceResponse.data = data
@@ -54,13 +54,15 @@ export async function signupPhonenumber(user) {
     log.info(`${TAG}.signupPhonenumber() ==> `, user);
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
 try{
+
   const decoded=await verifyAccessToken(user.headerValue)
+  console.log(user)
   if(decoded){
     const existedUser = await StudentAuth.checkEmailOrPhoneExist({phoneNumber:user.phoneNumber});
     if(existedUser) {
       serviceResponse.message = 'Mobile Number is already exist';
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-      serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+      // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       return serviceResponse;
     }
     let otp=await OTP()
@@ -73,13 +75,20 @@ try{
       otpsave=await await StudentAuth.saveOTP({...decoded,accessToken:otpAccessToken,phoneNumber:user.phoneNumber,otp})
     }
     const resendOtpToken=await generateAccessToken({uid:decoded.uid,otp:true,type:otpsave.info.type,phoneNumber:user.phoneNumber})
+ 
+    // await transaction.commit()
+    // await studentNotification({otp,type:"lllllll",email:existedUser.email})
     const data = {
-      otpAccessToken,
-      resendOtpToken,
-      otpsave
+      accessToken:resendOtpToken,
+      otp:otpsave.info.otp,
+      type:"otp"
     }
     serviceResponse.data = data
+    // await transaction.commit()
+    // await studentNotification({otp:otpsave.info.otp,type:otpsave.info.type,email:existedUser.email})
   }
+
+ 
 return serviceResponse
 
 }catch(error){
@@ -153,10 +162,10 @@ return serviceResponse
               if(compare){
                 const uid=existedUser.uid
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
-                console.log(accessToken)
                 const data = {
                   accessToken,
-                  signin:true
+                  signin:true,
+                  role:"student"
                 }
                 serviceResponse.data = data
               }
@@ -167,13 +176,14 @@ return serviceResponse
               }
             }
             else{
-              let compare=await comparePasswords(existedUser.uniqId,user.uuid)
+              let compare=await comparePasswords(existedUser.uniqid,user.uuid)
               if(compare){
                 // const uid=existedUser.uid
                 const accessToken=await generateAccessToken({uid:existedUser.uid,signin:true})
                 const data = {
                   accessToken,
-                  signin:true
+                  signin:true,
+                  role:"student"
                 }
                 serviceResponse.data = data
               }
@@ -197,13 +207,14 @@ return serviceResponse
             otpsave=await StudentAuth.saveOTP({...existedUser,accessToken:otpAccessToken,type:"signin",otp,transaction})
             
           }
-          const resendOtpToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
+          const accessToken=await generateAccessToken({uid:existedUser.uid,otp:true,type:"signin",phoneNumber:user.phoneNumber})
           await transaction.commit()
           await studentNotification({...otpsave.info,email:existedUser.email})
           const data = {
             // otpAccessToken,
-            resendOtpToken,
-            otpsave
+            accessToken,
+            otp:otpsave.info.otp,
+            type:"otp"
           }
           serviceResponse.data = data
         }``
@@ -211,7 +222,7 @@ return serviceResponse
       else{
         serviceResponse.message = 'wrong or invalid email/mobile';
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-        serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
+        // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
       return await serviceResponse;
     }
@@ -262,6 +273,7 @@ catch (error) {
       if(IsAutharaized){
         const student = await StudentAuth.verifyOTP({phoneNumber:IsAutharaized.phoneNumber});
         if(student.otp!=otpInfo.otp){
+          serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
           serviceResponse.message = "wrong-otp"
           return serviceResponse
         }
@@ -299,12 +311,22 @@ catch (error) {
           }
           const user=await StudentAuth.checkEmailOrPhoneExist({phoneNumber:student.phoneNumber})
         const token=await generateAccessToken({uid:user.uid,type:type})
+        if(type=="signin"){
+          const data = {
+            token,
+            signin:true
+          }
+          serviceResponse.message = "otp validated"
+          serviceResponse.data = data
+        }else{
           const data = {
             token,
             type
           }
           serviceResponse.message = "otp validated"
           serviceResponse.data = data
+        }
+       
         }
         else{
           serviceResponse.message = 'invalid otp or wrong otp';
@@ -366,8 +388,6 @@ catch (error) {
         if(IsValid){
       
       const response=await StudentAuth.changePassword({password:user.newPassword,uid:uid.uid})
-      console.log("response")
-      console.log(response)
       serviceResponse.message="password changed successfully"
       serviceResponse.data=response
         }
@@ -402,9 +422,14 @@ catch (error) {
           otpsave=await StudentAuth.saveOTP({...isValid,accessToken:accessToken,type:"forget-password",otp},transaction);
         }
         const resendOtpToken=await generateAccessToken({uid:isValid.uid,otp:true,type:otpsave.info.type,phoneNumber:isValid.phoneNumber})
-        serviceResponse.data={resendOtpToken,otp:otpsave.info.otp}
+        serviceResponse.data={accessToken:resendOtpToken,otp:otpsave.info.otp,type:"otp"}
         await transaction.commit()
           await studentNotification({...otpsave.info,email:isValid.email})
+      }
+      else{
+        serviceResponse.message = 'invalid email !';
+        serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
+        serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
       }
     }catch(error){
       log.error(`ERROR occurred in ${TAG}.forgetPassword`, error);
@@ -416,15 +441,13 @@ catch (error) {
   export async function setForgetPassword({newPassword,headerValue}){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
-      console.log(headerValue)
       // finde student is valid or not
       const uid=await verifyAccessToken(headerValue)
       
       const student=await StudentAuth.checkEmailOrPhoneExist({uid:uid.uid})
       if(student){
       const response=await StudentAuth.changePassword({password:newPassword,uid:uid.uid})
-      console.log("response")
-      console.log(response)
+
       serviceResponse.message="password changed successfully"
       serviceResponse.data=response
       }
@@ -459,6 +482,28 @@ export async function getAllStudentList(user){
 
 }
 
-
-
+export async function getStudentSignin(headerValue) {
+  log.info(`${TAG}.getStudentProfile() ==> `, headerValue);
+  const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+  try {
+    let decoded=await verifyAccessToken(headerValue)
+    const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid})
+    if(isValid){
+      const existedProfile=await StudentAuth.getUserform(decoded.uid)
+      console.log(existedProfile)
+      if(existedProfile){
+        serviceResponse.data = existedProfile
+        return serviceResponse
+      }
+    }else{
+      serviceResponse.message="invalid user id"
+      return serviceResponse
+    }
+  
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.getStudentProfile`, error);
+    serviceResponse.addServerError('Failed to create user due to technical difficulties');
+  }
+  return serviceResponse;
+}
   

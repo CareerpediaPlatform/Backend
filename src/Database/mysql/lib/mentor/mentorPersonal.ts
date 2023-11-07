@@ -6,54 +6,79 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_mentorPersonal'
 
-export async function savePersonalAndContactDetails(
-    mentorPersonalData: any,
-    userId: number
-  ) {
-    logger.info(`${TAG}.savePersonalAndContactDetails()`);
-    try {
-        mentorPersonalData["uid"] = crypto.randomUUID();
-      mentorPersonalData["mentorUserId"] = userId;
+export async function mentorProfilePost(user,uid) {
 
-      let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
-                                   (USER_ID, UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
-                                    CITY, DISTRICT, STATE, PINCODE, COUNTRY)
-                                   values(:mentorUserId,:uid,:profile_pic ,:first_name, :last_name, :email, :mobile_number, :date_of_birth, :linkedin_profile, 
-                                          :address, :city, :district, :state, :pincode, :country)`;
+  // const uid=crypto.randomUUID()
+  console.log("555555555555555555555555555555555555555555555555")
+  console.log(user)
+  console.log(user.contactDetails)
+  console.log(uid)
+  logger.info(`${TAG}.mentorProfilePost()`);
+  try {
+    const profileInsertQuery = `
+    INSERT INTO MENTOR_PERSONAL_DETAILS (UID, FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC, LINKEDIN_PROFILE)
+    VALUES(:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
   
-      console.log(`mentor personal data in data store`, mentorPersonalData);
-      await executeQuery(personalDetailQuery, QueryTypes.INSERT, {
-        ...mentorPersonalData
-      });
-      return mentorPersonalData.uid;
-    } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.savePersonalAndContactDetails()`, error);
-      throw error;
-    }
-  }
 
-export async function updatePersonalAndContactDetails(
-    userId: number,
-    mentorPersonalData: any
-  ) {
-    logger.info(`${TAG}.updatePersonalAndContactDetails()`);
-    try {
-        // mentorPersonalData["updatedBy"] = userId;
-      let updatePersonalDetailQuery = `UPDATE MENTOR_PERSONAL_DETAILS SET
-      PROFILE_PIC= :profile_pic, FIRST_NAME = :first_name, LAST_NAME = :last_name, EMAIL = :email, MOBILE_NUMBER =:mobile_number, DATE_OF_BIRTH = :date_of_birth, LINKEDIN_PROFILE = :linkedin_profile ,
-      ADDRESS = :address, CITY = :city, DISTRICT = :district, STATE = :state, PINCODE =:pincode, COUNTRY = :country WHERE UID = :uid`;
-  
-      await executeQuery(
-        updatePersonalDetailQuery,
-        QueryTypes.UPDATE,
-        mentorPersonalData
-      );
-      return mentorPersonalData.uid;
-    } catch (error) {
-      logger.error(`ERROR occurred in ${TAG}.updatePersonalAndContactDetails()`, error);
-      throw error;
-    }
+    const contactInsertQuery = `
+    INSERT INTO MENTOR_CONTACT_DETAILS 
+    (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
+    VALUES (:uid, :address, :district, :city,  :state, :pinCode, :country)`;
+
+    
+    let [profile]=await executeQuery(profileInsertQuery, QueryTypes.INSERT, {
+      ...user.basicDetails,uid});
+
+    let [contact]=await executeQuery(contactInsertQuery, QueryTypes.INSERT, {
+      ...user.contactDetails,uid});
+
+
+    return {profile,contact};
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.mentorProfilePost()`, error);
+    throw error;
   }
+}
+
+export async function mentorProfileUpdate(user,uid) {
+    logger.info(`${TAG}.mentorProfileUpdate()`);
+  try {
+    const profileUpdateQuery = `UPDATE MENTOR_PERSONAL_DETAILS
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
+    WHERE
+    UID = :uid;
+    `;
+
+    const contactUpdateQuery = `UPDATE MENTOR_CONTACT_DETAILS
+    SET
+    ADDRESS = :address,
+    DISTRICT = :district,
+    CITY = :city, 
+    STATE = :state,
+    PIN_CODE = :pinCode,
+    COUNTRY = :country
+    WHERE
+    UID = :uid;
+    `;
+
+    let [contact]=await executeQuery(contactUpdateQuery, QueryTypes.UPDATE, {
+      ...user.contactDetails,uid});
+
+    let [profile]=await executeQuery(profileUpdateQuery, QueryTypes.UPDATE, {
+        ...user.basicDetails,uid});
+        const contactDetails=user.contactDetails
+        const basicDetails=user.basicDetails
+
+    return {contactDetails,basicDetails};
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.mentorProfileUpdate()`, error);
+    throw error;
+  }
+}
 
 export async function getPersonalDetailsByMentorId(mentorId: number) {
     try {
@@ -73,15 +98,28 @@ export async function getPersonalDetailsByMentorId(mentorId: number) {
     }
   }
 
-export async function isValid(userId) {
-    console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj")
-    console.log(userId)
+export async function checkMentorUid(uid){
+  console.log(uid)
     try {
-      logger.info(`${TAG}.checkProfilExist() ==>`, userId);
-      console.log("1234567890")
-      const contactQuery = 'SELECT * FROM `MENTOR` WHERE USER_ID=:userId';
-      const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {userId:userId});
-      return contact// Return null if no user is found
+      logger.info(`${TAG}.checkMentorUid()  ==>`, uid);
+      let query = 'select * from MENTOR where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid
+      });
+      return userId;
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.checkMentorUid()`, error); 
+      throw error;
+    }
+  }
+
+export async function checkExist(uid: any) {
+
+    try {
+      logger.info(`${TAG}.checkExist() ==>`, uid);
+      const checkQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE UID=:uid';
+      const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {uid});
+      return basic// Return null if no user is found
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;

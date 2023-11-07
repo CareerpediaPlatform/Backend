@@ -19,11 +19,12 @@ const sequelize_1 = require("sequelize");
 const encryption_1 = require("src/helpers/encryption");
 var crypto = require("crypto");
 const TAG = 'data_stores_mysql_lib_user';
-function signUp(user, transaction) {
+function signUp(user, generatePassword, transaction) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.saveUser()`);
         try {
-            const hashedPassword = yield (0, encryption_1.hashPassword)(user.password);
+            console.log(generatePassword);
+            const hashedPassword = yield (0, encryption_1.hashPassword)(generatePassword);
             const data = {
                 uid: crypto.randomUUID(),
                 email: user.email,
@@ -61,12 +62,13 @@ function checkEmailExist(email) {
 exports.checkEmailExist = checkEmailExist;
 function getRecruiterUid(uid) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("333333333333333", uid);
         try {
             console.log(uid);
-            logger_1.default.info(`${TAG}.getMentorUid()  ==>`, uid);
+            logger_1.default.info(`${TAG}.getRecruiterUid()  ==>`, uid);
             let query = 'select * from RECRUITER where UID=:uid';
             const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
-                uid: uid.uid
+                uid
             });
             return userId;
         }

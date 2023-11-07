@@ -130,6 +130,8 @@ function studentProfileEducationDelete(req, res, next) {
             logger_1.default.info(`${TAG}.studentProfileEducationDelete()`);
             logger_1.default.debug(`${TAG}.studentProfileEducationDelete() Object = ${JSON.stringify(req.body)}`);
             const info = req.body;
+            console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            console.log(info);
             const headerValue = req.headers.authorization.split(' ')[1];
             const Response = yield profileService.studentProfileEducationDelete(Object.assign(Object.assign({}, info), { headerValue }));
             (0, response_builder_1.responseBuilder)(Response, res, next, req);

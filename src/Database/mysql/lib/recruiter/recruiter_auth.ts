@@ -51,17 +51,16 @@ export async function checkEmailExist(email: string) {
   }
 
 export async function getRecruiterUid(uid){
+  console.log("333333333333333",uid)
     try {
 
       console.log(uid)
-      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      logger.info(`${TAG}.getRecruiterUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid.uid
       });
-
       return userId;
-
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
       throw error;
@@ -69,12 +68,13 @@ export async function getRecruiterUid(uid){
   }
 
   
-  export async function getRECRUITERUid(uid){
+export async function checkRecruiterUid(uid){
+  
     try {
       logger.info(`${TAG}.getRECRUITERUid()  ==>`, uid);
       let query = 'select * from RECRUITER where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
-        uid:uid.uid
+        uid
       });
       return userId;
     } catch (error) {
