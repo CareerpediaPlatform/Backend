@@ -19,7 +19,7 @@ router.route('/course-list')
 .get(isAuthenticated,controller.getCourses);
 
 // courses//
-router.route('/course/:coursetype')
+router.route('/course-overview/:coursetype')
  .post(isAuthenticated,controller.coursePost);
 
  router.route('/part/:course_id')
