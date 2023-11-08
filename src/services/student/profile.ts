@@ -104,6 +104,7 @@ export async function studentProfilePost(user) {
   }
   
 export async function updateEducationDetails(user) {
+
     log.info(`${TAG}.updateEducationDetails() ==> `,user);  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {

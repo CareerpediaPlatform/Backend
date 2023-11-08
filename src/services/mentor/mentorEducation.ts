@@ -53,7 +53,7 @@ export async function postEducationDetails(user) {
       const uid = decoded.uid
       const isValid=await MentorAuth.checkMentorUid(uid);
       if(isValid){
-       
+
        const response= await mentorEducationData.postEducationDetails({...user,uid:decoded.uid});
         const data = {
           ...response
