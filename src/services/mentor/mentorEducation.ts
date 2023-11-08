@@ -59,8 +59,10 @@ export async function postEducationDetails(user) {
         const response= await mentorEducationData.updateEducationDetails({...user,uid:decoded.uid});
         const data = {
           ...response
+
         }    
         serviceResponse.data = data
+        
         return serviceResponse
       }else{
        const response= await mentorEducationData.postEducationDetails({...user,uid:decoded.uid});

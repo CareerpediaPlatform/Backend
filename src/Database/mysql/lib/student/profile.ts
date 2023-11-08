@@ -345,13 +345,24 @@ export async function postWorkExperience(user) {
   }
 }
 
+export async function checkId(id){
+  logger.info(`${TAG}. checkId()`);
+  try{
+    const checkQuery=`SELECT * FROM STUDENT_EDUCATION_DETAILS WHERE ID=:id`
+    const [userId]=await executeQuery(checkQuery, QueryTypes.SELECT,{id})
+    return userId
+  }
+  catch(error){
+    logger.error(`ERROR occurred in ${TAG}.checId()`, error);
+    throw error;
+  }
+}
 
 export async function updateEducationDetailss(user) {
   logger.info(`${TAG}.updateEducationDetails()`);
   try {
    
     const updateQuery=`UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`
-
     let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
       ...user});
   
