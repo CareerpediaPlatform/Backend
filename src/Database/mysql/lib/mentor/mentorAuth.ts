@@ -113,6 +113,20 @@ export async function checkEmailExist(email: string) {
       throw error;
     }
   }
+
+  export async function checkMentorUid(uid){
+    try {
+      logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      let query = 'select * from MENTOR where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid
+      });
+      return userId;
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.getMentorUid()`, error); 
+      throw error;
+    }
+  }
   
   
 export async function login(user:IMentor) {
