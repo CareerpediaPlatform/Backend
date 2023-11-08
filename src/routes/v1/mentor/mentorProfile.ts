@@ -37,7 +37,18 @@ const router = Router()
 
  router.route('/education')
  .post(isAuthenticated,educationController.mentorEducationPost);
+ router.route('/education')
+.patch(isAuthenticated,educationController.mentorEducationUpdate)
+router.route('/education')
+.delete(isAuthenticated,educationController.mentorEducationDelete)
 
+
+router.route('/work')
+.post(isAuthenticated,workController.mentorWorkExperiencePost);
+router.route('/work')
+.patch(isAuthenticated,workController.mentorWorkExperienceUpdate)
+router.route('/work')
+.delete(isAuthenticated,workController.mentorWorkExperienceDelete)
 
 
 export default router
