@@ -101,11 +101,12 @@ export async function saveEducationDetails(user) {
     }
   }
   export async function updateEducationDetails(user) {
-    logger.info(`${TAG}.postEducationDetails()`);
+    logger.info(`${TAG}.updateEducationDetails()`);
     try {
-       
+       console.log("hsgdjASHCJahsjcASC")
+       console.log(user)
       const updateQuery =`UPDATE MENTOR_EDUACTION_DETAILS SET
-      DEGREE = :degree, DEPT_BRANCH = :deptBranch, PERCENTAGE= :percentage, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`
+      DEGREE = :degree, DEPT_BRANCH = :deptBranch, PERCENTAGE= :percentage, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :userId`
       let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
         ...user});
     
@@ -124,9 +125,9 @@ export async function saveEducationDetails(user) {
     console.log(user.id)
     try {
        
-      const insertQuery =`DELETE FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID = :id`
+      const insertQuery =`DELETE FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID = :userId`
       let userId=await executeQuery(insertQuery, QueryTypes.DELETE, {
-        id:user.id});
+        userId:user.userId});
     
       return userId;
   
