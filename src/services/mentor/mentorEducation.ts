@@ -132,7 +132,7 @@ export async function postEducationDetails(user) {
     
             const response= await mentorEducationData.deleteEducation({...user});
             const data = {
-              ...response
+              id:response
             }    
             serviceResponse.data = data;
             serviceResponse.message="Data is deleted  Successfully";

@@ -66,12 +66,14 @@ export async function saveEducationDetails(user) {
   }
 //sigle object of education details
   export async function postEducationDetails(user) {
+    console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+    console.log(user)
     logger.info(`${TAG}.postEducationDetails()`);
     try {
        
       const insertQuery =`INSERT INTO  MENTOR_EDUACTION_DETAILS
-      ( UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
-       values( :uid,:degree ,:deptBranch, :startYear, :endYear)`
+      ( UID,DEGREE, DEPT_BRANCH, PERCENTAGE, START_YEAR,END_YEAR)
+       values( :uid,:degree ,:deptBranch, :percentage, :startYear, :endYear)`
       let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
         ...user});
     
@@ -103,7 +105,7 @@ export async function saveEducationDetails(user) {
     try {
        
       const updateQuery =`UPDATE MENTOR_EDUACTION_DETAILS SET
-      DEGREE = :degree, DEPT_BRANCH = :deptBranch, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`
+      DEGREE = :degree, DEPT_BRANCH = :deptBranch, PERCENTAGE= :percentage, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`
       let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
         ...user});
     
