@@ -121,7 +121,7 @@ export async function postWorkExperience(user) {
         const uid = decoded.uid
         const isValid=await MentorAuth.checkMentorUid(uid);
         if(isValid){
-          const checkId = await mentorWorkExperienceData.checkId(user.id)
+          const checkId = await mentorWorkExperienceData.checkId(user.userId)
           if(checkId){
   
           const response= await mentorWorkExperienceData.updateWorKExperience({...user});
@@ -163,7 +163,7 @@ export async function postWorkExperience(user) {
           const uid = decoded.uid
           const isValid=await MentorAuth.checkMentorUid(uid);
           if(isValid){
-            const checkId = await mentorWorkExperienceData.checkId(user.id)
+            const checkId = await mentorWorkExperienceData.checkId(user.userId)
             if(checkId){
     
             const response= await mentorWorkExperienceData.deleteWorkExperience({...user});
