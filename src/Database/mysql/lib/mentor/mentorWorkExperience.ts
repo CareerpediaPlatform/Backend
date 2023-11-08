@@ -117,8 +117,75 @@ export async function checkExist(userId) {
   //   }
   // }
 
+  
+//sigle object of work experience
+
+  export async function postWorkExperience(user) {
+    logger.info(`${TAG}.postWorExperience()`);
+    try {
+       
+      const insertQuery =`INSERT INTO  MENTOR_WORK_EXPERIENCE
+      ( UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
+       values( :uid,:occupation ,:jobRole, :startDate,:endDate,:yearOfExperience)`
+      let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
+        ...user});
+    
+      return profile;
+  
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.postWorExperience()`, error);
+      throw error;
+    }
+  }
+
+  export async function checkId(id){
+    logger.info(`${TAG}. checkId()`);
+    try{
+      const checkQuery=`SELECT * FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID=:id`
+      const [userId]=await executeQuery(checkQuery, QueryTypes.SELECT,{id})
+      return userId
+    }
+    catch(error){
+      logger.error(`ERROR occurred in ${TAG}.checId()`, error);
+      throw error;
+    }
+  }
+  export async function updateWorKExperience(user) {
+    logger.info(`${TAG}.updateWorKExperience()`);
+    try {
+       
+      const insertQuery =`UPDATE MENTOR_WORK_EXPERIENCE SET
+      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :id`
+      let [profile]=await executeQuery(insertQuery, QueryTypes.UPDATE, {
+        ...user});
+    
+      return profile;
+  
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.updateWorKExperience()`, error);
+      throw error;
+    }
+  }
 
 
+export async function deleteWorkExperience(user) {
+  logger.info(`${TAG}.deleteWorkExperience()`);
+  console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+  console.log(user)
+  console.log(user.id)
+  try {
+     
+    const insertQuery =`DELETE FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID = :id`
+    let userId=await executeQuery(insertQuery, QueryTypes.DELETE, {
+      id:user.id});
+  
+    return user.id;
+
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.deleteEducation()`, error);
+    throw error;
+  }
+}
 
 
 

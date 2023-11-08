@@ -64,7 +64,7 @@ export async function saveEducationDetails(user) {
       throw error;
     }
   }
-
+//sigle object of education details
   export async function postEducationDetails(user) {
     logger.info(`${TAG}.postEducationDetails()`);
     try {
@@ -84,10 +84,13 @@ export async function saveEducationDetails(user) {
   }
 
   export async function checkId(id){
+    console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg")
+    console.log(id)
     logger.info(`${TAG}. checkId()`);
     try{
       const checkQuery=`SELECT * FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID=:id`
       const [userId]=await executeQuery(checkQuery, QueryTypes.SELECT,{id})
+      console.log(userId)
       return userId
     }
     catch(error){
@@ -99,9 +102,9 @@ export async function saveEducationDetails(user) {
     logger.info(`${TAG}.postEducationDetails()`);
     try {
        
-      const insertQuery =`UPDATE MENTOR_EDUACTION_DETAILS SET
+      const updateQuery =`UPDATE MENTOR_EDUACTION_DETAILS SET
       DEGREE = :degree, DEPT_BRANCH = :deptBranch, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`
-      let [profile]=await executeQuery(insertQuery, QueryTypes.UPDATE, {
+      let [profile]=await executeQuery(updateQuery, QueryTypes.UPDATE, {
         ...user});
     
       return profile;
@@ -111,6 +114,26 @@ export async function saveEducationDetails(user) {
       throw error;
     }
   }
+
+  export async function deleteEducation(user) {
+    logger.info(`${TAG}.deleteEducation()`);
+    console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    console.log(user)
+    console.log(user.id)
+    try {
+       
+      const insertQuery =`DELETE FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID = :id`
+      let userId=await executeQuery(insertQuery, QueryTypes.DELETE, {
+        id:user.id});
+    
+      return userId;
+  
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.deleteEducation()`, error);
+      throw error;
+    }
+  }
+
 
 
 

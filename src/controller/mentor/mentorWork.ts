@@ -24,6 +24,65 @@ export async function updateWorkExperience(req: any, res: Response, next: NextFu
   }
 }
 
+export async function mentorWorkExperiencePost(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.mentorWorkExperiencePost()`);
+    log.debug(`${TAG}.mentorWorkExperiencePost() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await workService.postWorkExperience({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorWorkExperiencePost() `, error)
+    next(error)
+  }
+}
+
+// export async function mentorWorkExperienceUpdate(req: any, res: Response, next: NextFunction): Promise<void> {
+//   try {
+//     log.info(`${TAG}.mentorWorkExperienceUpdate()`);
+//     log.debug(`${TAG}.mentorWorkExperienceUpdate() Object = ${JSON.stringify(req.body)}`)
+//     const headerValue = req.headers.authorization.split(' ')[1];
+//     const user = req.body;
+//     console.log(user)
+//     const authResponse: IServiceResponse = await educationService.postEducationDetails({...user,headerValue})
+//     responseBuilder(authResponse, res, next, req)
+//   } catch (error) {
+//     log.error(`ERROR occurred in ${TAG}.mentorWorkExperienceUpdate() `, error)
+//     next(error)
+//   }
+// }
+export async function mentorWorkExperienceUpdate(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}mentorWorkExperienceUpdate()`);
+    log.debug(`${TAG}.mentorWorkExperienceUpdate() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await workService.updateWorkexperience({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorWorkExperienceUpdate() `, error)
+    next(error)
+  }
+}
+
+export async function mentorWorkExperienceDelete(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.mentorWorkExperienceDelete()`);
+    log.debug(`${TAG}.mentorWorkExperienceDelete() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await workService.deleteWorkExperience({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorWorkExperienceDelete() `, error)
+    next(error)
+  }
+}
+
 
  
 
