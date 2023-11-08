@@ -37,3 +37,161 @@ export async function updateWorkExperience(user) {
   }
   return serviceResponse;
 }
+// export async function postEducationDetails(user) {
+//   console.log(user)
+//     log.info(`${TAG}.postEducationDetails() ==> `, user); 
+//     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+//     try {
+//       let decoded=await verifyAccessToken(user.headerValue)
+//       const uid = decoded.uid
+//       const isValid=await MentorAuth.checkMentorUid(uid);
+//       if(isValid){
+//         const checkId = await mentorWorkExperienceData.checkId(user.id)
+//         if(checkId){
+
+//         const response= await mentorWorkExperienceData.updateWorKExperience({...user,uid:decoded.uid});
+//         const data = {
+//           ...response
+//         }    
+//         serviceResponse.data = data
+//         return serviceResponse
+//       }else{
+//        const response= await mentorWorkExperienceData.postWorkExperience({...user,uid:decoded.uid});
+//         const data = {
+//           ...response
+//         }    
+//         serviceResponse.data = data
+//         return serviceResponse
+//       }
+    
+//       }
+
+//       else{
+//         serviceResponse.message="invalid user id";
+//         serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+//         serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+//         return serviceResponse
+//       }
+  
+//     } catch (error) {
+//       log.error(`ERROR occurred in ${TAG}.postEducationDetails`, error);
+//       serviceResponse.addServerError('Failed to create user due to technical difficulties');
+//     }
+//     return serviceResponse;
+//   }
+
+export async function postWorkExperience(user) {
+  console.log(user)
+    log.info(`${TAG}.postWorExperience() ==> `, user); 
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      let decoded=await verifyAccessToken(user.headerValue)
+      const uid = decoded.uid
+      const isValid=await MentorAuth.checkMentorUid(uid);
+      if(isValid){
+       
+       const response= await mentorWorkExperienceData.postWorkExperience({...user,uid:decoded.uid});
+        const data = {
+          ...response
+        }    
+        serviceResponse.data = data
+        serviceResponse.message="Data is posted  Successfully"
+        return serviceResponse
+      }
+      else{
+        serviceResponse.message="invalid user id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse
+      }
+  
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.postWorExperience`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
+
+  export async function updateWorkexperience(user) {
+    console.log(user)
+      log.info(`${TAG}.updateWorKExperience() ==> `, user); 
+      const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+      try {
+        let decoded=await verifyAccessToken(user.headerValue)
+        const uid = decoded.uid
+        const isValid=await MentorAuth.checkMentorUid(uid);
+        if(isValid){
+          const checkId = await mentorWorkExperienceData.checkId(user.id)
+          if(checkId){
+  
+          const response= await mentorWorkExperienceData.updateWorKExperience({...user});
+          const data = {
+            ...response
+          }    
+          serviceResponse.data = data
+          serviceResponse.message="Data is updated  Successfully"
+          return serviceResponse
+        }   
+          else{
+            serviceResponse.message="invalid user id";
+            serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            return serviceResponse
+          }
+        }
+  
+        else{
+          serviceResponse.message="invalid user Uid";
+          serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+          serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+          return serviceResponse
+        }
+    
+      } catch (error) {
+        log.error(`ERROR occurred in ${TAG}.updateWorKExperience`, error);
+        serviceResponse.addServerError('Failed to create user due to technical difficulties');
+      }
+      return serviceResponse;
+    }
+
+    export async function deleteWorkExperience(user) {
+      console.log(user)
+        log.info(`${TAG}.deleteWorkExperience() ==> `, user); 
+        const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+        try {
+          let decoded=await verifyAccessToken(user.headerValue)
+          const uid = decoded.uid
+          const isValid=await MentorAuth.checkMentorUid(uid);
+          if(isValid){
+            const checkId = await mentorWorkExperienceData.checkId(user.id)
+            if(checkId){
+    
+            const response= await mentorWorkExperienceData.deleteWorkExperience({...user});
+            const data = {
+              ...response
+            }    
+            serviceResponse.data = data;
+            serviceResponse.message="Data is deleted  Successfully";
+            return serviceResponse
+          }   
+            else{
+              serviceResponse.message="invalid user id";
+              serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+              serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+              return serviceResponse
+            }
+          }
+    
+          else{
+            serviceResponse.message="invalid user Uid";
+            serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            return serviceResponse
+          }
+      
+        } catch (error) {
+          log.error(`ERROR occurred in ${TAG}.deleteWorkExperience`, error);
+          serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+      }

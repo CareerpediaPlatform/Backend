@@ -25,4 +25,47 @@ export async function updateEducationDetail(req: any, res: Response, next: NextF
 }
 
 
- 
+ // single object education detrails
+export async function mentorEducationPost(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.mentorEducationPost()`);
+    log.debug(`${TAG}.mentorEducationPost() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await educationService.postEducationDetails({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.studentEducationPost() `, error)
+    next(error)
+  }
+}
+export async function mentorEducationUpdate(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.mentorEducationUpdate()`);
+    log.debug(`${TAG}.mentorEducationUpdate() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await educationService.updateEducationDetails({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorEducationUpdate() `, error)
+    next(error)
+  }
+}
+
+export async function mentorEducationDelete(req: any, res: Response, next: NextFunction): Promise<void> {
+  try {
+    log.info(`${TAG}.mentorEducationDelete()`);
+    log.debug(`${TAG}.mentorEducationDelete() Object = ${JSON.stringify(req.body)}`)
+    const headerValue = req.headers.authorization.split(' ')[1];
+    const user = req.body;
+    console.log(user)
+    const authResponse: IServiceResponse = await educationService.deleteEducationDetails({...user,headerValue})
+    responseBuilder(authResponse, res, next, req)
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.mentorEducationUpdate() `, error)
+    next(error)
+  }
+}
