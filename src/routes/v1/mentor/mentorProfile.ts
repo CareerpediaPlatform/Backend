@@ -18,11 +18,11 @@ const router = Router()
  .patch(isAuthenticated ,profileController.PersonalAndDetails);
 
  router
- .route("/education-details")
+ .route("/education-detail")
  .put(isAuthenticated ,educationController.updateEducationDetail);
 
  router
- .route("/work-experience")
+ .route("/work-experienc")
  .put(isAuthenticated ,workController.updateWorkExperience);
 
  //mentor all profile details 
@@ -35,19 +35,19 @@ const router = Router()
  .get(isAuthenticated,profileController.getMentorSingleList);
 
 
- router.route('/education')
+ router.route('/education-details')
  .post(isAuthenticated,educationController.mentorEducationPost);
- router.route('/education')
+ router.route('/education-details')
 .patch(isAuthenticated,educationController.mentorEducationUpdate)
-router.route('/education')
+router.route('/education-details')
 .delete(isAuthenticated,educationController.mentorEducationDelete)
 
 
-router.route('/work')
+router.route('/work-experience')
 .post(isAuthenticated,workController.mentorWorkExperiencePost);
-router.route('/work')
+router.route('/work-experience')
 .patch(isAuthenticated,workController.mentorWorkExperienceUpdate)
-router.route('/work')
+router.route('/work-experience')
 .delete(isAuthenticated,workController.mentorWorkExperienceDelete)
 
 
