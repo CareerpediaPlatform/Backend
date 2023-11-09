@@ -155,7 +155,7 @@ export async function checkExist(userId) {
     try {
        
       const insertQuery =`UPDATE MENTOR_WORK_EXPERIENCE SET
-      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :id`
+      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :userId`
       let [profile]=await executeQuery(insertQuery, QueryTypes.UPDATE, {
         ...user});
     
@@ -172,14 +172,14 @@ export async function deleteWorkExperience(user) {
   logger.info(`${TAG}.deleteWorkExperience()`);
   console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
   console.log(user)
-  console.log(user.id)
+  console.log(user.userId)
   try {
      
-    const insertQuery =`DELETE FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID = :id`
+    const insertQuery =`DELETE FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID = :userId`
     let userId=await executeQuery(insertQuery, QueryTypes.DELETE, {
-      id:user.id});
-  
-    return user.id;
+      userId:user.userId});
+      
+    return user.userId;
 
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.deleteEducation()`, error);
