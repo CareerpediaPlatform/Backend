@@ -73,7 +73,8 @@ export async function saveEducationDetails(user) {
        
       const insertQuery =`INSERT INTO  MENTOR_EDUACTION_DETAILS
       ( UID,DEGREE, DEPT_BRANCH, PERCENTAGE, START_YEAR,END_YEAR)
-       values( :uid,:degree ,:deptBranch, :percentage, :startYear, :endYear)`
+       values( :uid,:degree ,:deptBranch, :percentage
+        , :startYear, :endYear)`
       let [profile]=await executeQuery(insertQuery, QueryTypes.INSERT, {
         ...user});
     

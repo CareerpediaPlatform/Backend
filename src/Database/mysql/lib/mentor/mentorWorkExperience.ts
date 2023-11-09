@@ -70,9 +70,12 @@ export async function checkProfilExist(uid) {
       const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE UID= :uid';
       const [basic] = await executeQuery(basicQuery, QueryTypes.SELECT, {uid});
       const [contact] = await executeQuery(contactQuery, QueryTypes.SELECT, {uid})
-      const [work] = await executeQuery(workQuery, QueryTypes.SELECT, {uid});
-      const [eduaction] = await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
-      return {basic,contact,eduaction,work}; 
+      const work= await executeQuery(workQuery, QueryTypes.SELECT, {uid});
+      const eduaction = await executeQuery(educationQuery, QueryTypes.SELECT, {uid});
+      const data={
+        basic,contact,education: Object.values(eduaction),experience:Object.values(work)
+      }
+      return {...data};
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
       throw error;
