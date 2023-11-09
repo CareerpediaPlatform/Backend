@@ -12,12 +12,12 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/education/')
+ router.route('/educatio/')
  .put(isAuthenticated,controller.updateEducationDetails);
  router.route('/education/')
  .delete(isAuthenticated,controller.studentProfileEducationDelete);
 
- router.route('/work-experience/')
+ router.route('/work-experienc/')
  .put(isAuthenticated,controller.updateWorkExperience);
  router.route('/work-experience/')
  .delete(isAuthenticated,controller.studentProfileExperienceDelete);
@@ -31,7 +31,13 @@ const router = Router()
  router.route('/education')
  .post(isAuthenticated,controller.studentEducationPost);
 
+ router.route('/education')
+ .patch(isAuthenticated,controller.studentEducationUpdate)
+
  router.route('/work-experience')
  .post(isAuthenticated,controller.studentWorkExperiencePost);
+
+ router.route('/work-experience')
+ .patch(isAuthenticated,controller.studentWorkUpdate);
 
  export default router

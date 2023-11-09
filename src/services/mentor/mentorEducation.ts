@@ -76,7 +76,7 @@ export async function postEducationDetails(user) {
     return serviceResponse;
   }
 
-  export async function updateEducationDetails(user) {
+export async function updateEducationDetails(user) {
     console.log(user)
       log.info(`${TAG}.updateEducationDetails() ==> `, user); 
       const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -118,7 +118,7 @@ export async function postEducationDetails(user) {
       return serviceResponse;
     }
 
-    export async function deleteEducationDetails(user) {
+export async function deleteEducationDetails(user) {
       console.log(user)
         log.info(`${TAG}.deleteEducationDetails() ==> `, user); 
         const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);

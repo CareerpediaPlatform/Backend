@@ -164,3 +164,33 @@ export async function studentWorkExperiencePost(req: any, res: Response, next: N
       next(error)
     }
   }
+
+export async function studentEducationUpdate(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.studentEducationUpdate()`);
+      log.debug(`${TAG}.studentEducationUpdate() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const user = req.body;
+      console.log(user)
+      const authResponse: IServiceResponse = await profileService.EducationDetails({...user,headerValue})
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.studentEducationUpdate() `, error)
+      next(error)
+    }
+  }
+
+export async function studentWorkUpdate(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.studentWorkUpdate()`);
+      log.debug(`${TAG}.studentWorkUpdate() Object = ${JSON.stringify(req.body)}`)
+      const headerValue = req.headers.authorization.split(' ')[1];
+      const user = req.body;
+      console.log(user)
+      const authResponse: IServiceResponse = await profileService.workExperienceDetails({...user,headerValue})
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.studentWorkUpdate() `, error)
+      next(error)
+    }
+  }
