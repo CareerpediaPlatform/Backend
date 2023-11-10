@@ -22,40 +22,40 @@ router.route('/course-list')
 router.route('/course-overvie/:coursetype')
  .post(isAuthenticated,controller.coursePost);
 
- router.route('/part/:course_id')
+ router.route('/part/:courseUid')
  .post(isAuthenticated,controller.coursePartPost);
 
- router.route('/module/:part_id')
+ router.route('/module/:partUid')
  .post(isAuthenticated,controller.courseModulesPost);
 
- router.route('/lesson/:module_id')
+ router.route('/lesson/:moduleUid')
  .post(isAuthenticated,controller.courseLessonPost);
 
- router.route('/test/:module_id')
+ router.route('/test/:moduleUid')
  .post(isAuthenticated,controller.coursetestPost);
 
- router.route('/exercise/:module_id')
+ router.route('/exercise/:moduleUid')
  .post(isAuthenticated,controller.courseExercisePost);
 
- router.route('/part/:course_id/:part_id')
+ router.route('/part/:courseUid/:partUid')
  .get(isAuthenticated,controller.getCourseParts);
 
- router.route('/module/:part_id/:module_id')
+ router.route('/module/:partUid/:moduleUid')
  .get(isAuthenticated,controller.getCourseModule);
 
- router.route('/lesson/:module_id/:lesson_id')
+ router.route('/lesson/:moduleUid/:lessonUid')
  .get(isAuthenticated,controller.getModulesLesson);
 
- router.route('/lesson/:module_id/:lesson_id')
+ router.route('/lesson/:moduleUid/:lessonUid')
  .delete(isAuthenticated,controller.deleteModulesLesson);
 
- router.route('/test/:module_id/:test_id')
+ router.route('/test/:moduleUid/:testUid')
  .get(isAuthenticated,controller.getModulesTest);
 
- router.route('/test/:module_id/:test_id')
+ router.route('/test/:moduleUid/:testUid')
  .delete(isAuthenticated,controller.deleteModulesTest);
 
- router.route('/exercise/:module_id/:exercise_id')
+ router.route('/exercise/:moduleUid/:exerciseUid')
  .get(isAuthenticated,controller.getModulesExercise);
 
  router.route('/exercise/:module_id/:exercise_id')

@@ -119,9 +119,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.coursePartPost() Object = ${JSON.stringify(req.body)}`)
       const user = req.body;
       console.log(user)
-      let course_id = req.params.course_id
-      console.log(course_id)
-      const authResponse: IServiceResponse = await adminlmsServices.coursePartUser({...user,course_id})
+      let courseUid = req.params.courseUid
+      console.log(courseUid)
+      const authResponse: IServiceResponse = await adminlmsServices.coursePartUser({...user,courseUid})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.coursePartPost() `, error)
@@ -133,11 +133,11 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getCourseParts()`);
       log.debug(`${TAG}.getCourseParts() Object = ${JSON.stringify(req.body)}`)
-      let course_id = req.params.course_id
-      console.log(course_id)
-      let part_id = req.params.part_id
-      console.log(part_id)
-      const authResponse= await adminlmsServices.getCoursePart(course_id,part_id)
+      let courseUid = req.params.courseUid
+      console.log(courseUid)
+      let partUid = req.params.partUid
+      console.log(partUid)
+      const authResponse= await adminlmsServices.getCoursePart(courseUid,partUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseParts() `, error)
@@ -152,9 +152,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.courseModulesPost() Object = ${JSON.stringify(req.body)}`)
       const user = req.body;
       console.log(user)
-      let part_id = req.params.part_id
-      console.log(part_id)
-      const authResponse: IServiceResponse = await adminlmsServices.courseModulesUser({...user,part_id})
+      let partUid = req.params.partUid;
+      console.log(partUid)
+      const authResponse: IServiceResponse = await adminlmsServices.courseModulesUser({...user,partUid})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.courseModulesPost() `, error)
@@ -166,11 +166,11 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getCourseModule()`);
       log.debug(`${TAG}.getCourseModule() Object = ${JSON.stringify(req.body)}`)
-      let part_id = req.params.part_id
-      console.log(part_id)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      const authResponse= await adminlmsServices.getCourseModules(part_id,module_id)
+      let partUid = req.params.partUid
+      console.log(partUid)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse= await adminlmsServices.getCourseModules(partUid,moduleUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseModule() `, error)
@@ -185,9 +185,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.courseLessonPost() Object = ${JSON.stringify(req.body)}`)
       const lessonData = req.body;
       console.log(lessonData)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      const authResponse: IServiceResponse = await adminlmsServices.lessonUser({...lessonData,module_id})
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse: IServiceResponse = await adminlmsServices.lessonUser({...lessonData,moduleUid})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.courseModulesPost() `, error)
@@ -202,9 +202,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.coursetestPost() Object = ${JSON.stringify(req.body)}`)
       const testData = req.body;
       console.log(testData)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      const authResponse: IServiceResponse = await adminlmsServices.testUser({...testData,module_id})
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse: IServiceResponse = await adminlmsServices.testUser({...testData,moduleUid})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.coursetestPost() `, error)
@@ -218,9 +218,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.courseExercisePost() Object = ${JSON.stringify(req.body)}`)
       const exerciseData = req.body;
       console.log(exerciseData)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      const authResponse: IServiceResponse = await adminlmsServices.exerciseUser({...exerciseData,module_id})
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse: IServiceResponse = await adminlmsServices.exerciseUser({...exerciseData,moduleUid})
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.courseExercisePost() `, error)
@@ -233,11 +233,11 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getModulesLesson()`);
       log.debug(`${TAG}.getModulesLesson() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let lesson_id = req.params.lesson_id
-      console.log(lesson_id)
-      const authResponse= await adminlmsServices.getModulesLesspon(module_id,lesson_id)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      let lessonUid = req.params.lessonUid
+      console.log(lessonUid)
+      const authResponse= await adminlmsServices.getModulesLesson(moduleUid,lessonUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesLesson() `, error)
