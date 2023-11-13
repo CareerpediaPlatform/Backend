@@ -75,21 +75,21 @@ export async function getCourses(coursetype){
         console.log("****************************************")
         console.log(duration)
    
-      const imageDetails = {
-        fileName: data[1]?.savedFileName,
-        originalFileName: files[1]?.originalname,
-        contentType:files[1]?.mimetype,
-        s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data[1]?.savedFileKey,
-        fileUrl: data[1]?.savedLocation,
-        isPublic: true,
-        metaData: null,
-      }
-      const fileSavedResp = await adminLms.uploadCourse(fileDetails,imageDetails,course,type)
+      // const imageDetails = {
+      //   fileName: data[1]?.savedFileName,
+      //   originalFileName: files[1]?.originalname,
+      //   contentType:files[1]?.mimetype,
+      //   s3Bucket: AWS_S3.BUCKET_NAME,
+      //   filePath: data[1]?.savedFileKey,
+      //   fileUrl: data[1]?.savedLocation,
+      //   isPublic: true,
+      //   metaData: null,
+      // }
+      const fileSavedResp = await adminLms.uploadCourse(fileDetails,course,type)
     
         serviceResponse.data = {
-        uid: course.uid,
-        thumbnail: imageDetails.fileUrl,
+        courseUID: course.courseUID,
+        // thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
         title: course.title,
         description: course.description,
@@ -136,7 +136,7 @@ export async function getuploadCourse(courseUID) {
     return serviceResponse;
   }
   
-  export async function updateuploadCourse(courseUID:any, files:any, course:any) {
+export async function updateuploadCourse(courseUID:any, files:any, course:any) {
     log.info(`${TAG}.updateuploadCourse() ==> `, courseUID);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -186,7 +186,7 @@ export async function getuploadCourse(courseUID) {
     return serviceResponse;
   }
 
-  export async function deleteuploadCourse(courseUID:any) {
+export async function deleteuploadCourse(courseUID:any) {
     log.info(`${TAG}.getRecruiterProfile() ==> `, courseUID);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -209,7 +209,7 @@ export async function getuploadCourse(courseUID) {
   }
 
   // courses//
-  export async function courseUser(user,coursetype) {
+export async function courseUser(user,coursetype) {
     log.info(`${TAG}.courseUser() ==> `, coursetype);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
@@ -246,14 +246,14 @@ export async function coursePartUser(user) {
     return serviceResponse;
   }
 
-export async function getCoursePart(course_id,part_id) {
-    log.info(`${TAG}.getCoursePart() ==> `, course_id,part_id);
+export async function getCoursePart(courseUid,partUid) {
+    log.info(`${TAG}.getCoursePart() ==> `, courseUid,partUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(course_id)
-      console.log(part_id)
-      const getCourseUid = await adminLms.checkCoureUid(course_id);
+      console.log(courseUid)
+      console.log(partUid)
+      const getCourseUid = await adminLms.checkCoureUid(courseUid);
       console.log(getCourseUid);
       if (!getCourseUid) {
         serviceResponse.message = "Invalid course part UID";
@@ -261,7 +261,7 @@ export async function getCoursePart(course_id,part_id) {
         serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse;
       }
-      const coursePart = await adminLms.getPart(part_id)
+      const coursePart = await adminLms.getPart(partUid)
       const data = {
         coursePart       
       }    
@@ -291,14 +291,14 @@ export async function courseModulesUser(user) {
     return serviceResponse;
   } 
   
-export async function getCourseModules(part_id,module_id) {
-    log.info(`${TAG}.getCourseModules() ==> `, module_id);
+export async function getCourseModules(partUid,moduleUid) {
+    log.info(`${TAG}.getCourseModules() ==> `, moduleUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(module_id)
-      console.log(part_id)
-      const getPartUid = await adminLms.checkPartUid(part_id);
+      console.log(moduleUid)
+      console.log(partUid)
+      const getPartUid = await adminLms.checkPartUid(partUid);
       console.log(getPartUid);
       if (!getPartUid) {
         serviceResponse.message = "Invalid course part UID";
@@ -306,7 +306,7 @@ export async function getCourseModules(part_id,module_id) {
         serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse;
       }
-      const courseModules = await adminLms.getModule(module_id)
+      const courseModules = await adminLms.getModule(moduleUid)
       const data = {
         courseModules       
       }    
@@ -324,9 +324,9 @@ export async function lessonUser(lessonData) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
     
-      const courseModules = await adminLms.lessonPost(lessonData)
+      const lessonModulePost = await adminLms.lessonPost(lessonData)
       const data = {
-        courseModules       
+        lessonModulePost       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -342,9 +342,9 @@ export async function testUser(testData) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
     
-      const courseModules = await adminLms.testPost(testData)
+      const testModulesPost = await adminLms.testPost(testData)
       const data = {
-        courseModules       
+        testModulesPost       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -360,9 +360,9 @@ export async function exerciseUser(exerciseData) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
     
-      const courseModules = await adminLms.exercisesPost(exerciseData)
+      const exerciseModulesPost = await adminLms.exercisesPost(exerciseData)
       const data = {
-        courseModules       
+        exerciseModulesPost       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -372,14 +372,14 @@ export async function exerciseUser(exerciseData) {
     return serviceResponse;
   }
 
-export async function getModulesLesspon(module_id,lesson_id) {
-    log.info(`${TAG}.getModulesLesspon() ==> `, module_id);
+export async function getModulesLesson(moduleUid,lessonUid) {
+    log.info(`${TAG}.getModulesLesspon() ==> `, moduleUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(module_id)
-      console.log(lesson_id)
-      const getLesonid = await adminLms.checkModuleUid(module_id);
+      console.log(moduleUid)
+      console.log(lessonUid)
+      const getLesonid = await adminLms.checkModuleUid(moduleUid);
       console.log(getLesonid);
       if (!getLesonid) {
         serviceResponse.message = "Invalid course lesson UID";
@@ -387,9 +387,9 @@ export async function getModulesLesspon(module_id,lesson_id) {
         serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
         return serviceResponse;
       }
-      const courseModules = await adminLms.getLessonPost(lesson_id)
+      const getLessonModules = await adminLms.getLessonPost(lessonUid)
       const data = {
-        courseModules       
+        getLessonModules       
       }    
       serviceResponse.data = data
     } catch (error) {
