@@ -75,21 +75,21 @@ export async function getCourses(coursetype){
         console.log("****************************************")
         console.log(duration)
    
-      const imageDetails = {
-        fileName: data[1]?.savedFileName,
-        originalFileName: files[1]?.originalname,
-        contentType:files[1]?.mimetype,
-        s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data[1]?.savedFileKey,
-        fileUrl: data[1]?.savedLocation,
-        isPublic: true,
-        metaData: null,
-      }
-      const fileSavedResp = await adminLms.uploadCourse(fileDetails,imageDetails,course,type)
+      // const imageDetails = {
+      //   fileName: data[1]?.savedFileName,
+      //   originalFileName: files[1]?.originalname,
+      //   contentType:files[1]?.mimetype,
+      //   s3Bucket: AWS_S3.BUCKET_NAME,
+      //   filePath: data[1]?.savedFileKey,
+      //   fileUrl: data[1]?.savedLocation,
+      //   isPublic: true,
+      //   metaData: null,
+      // }
+      const fileSavedResp = await adminLms.uploadCourse(fileDetails,course,type)
     
         serviceResponse.data = {
         courseUID: course.courseUID,
-        thumbnail: imageDetails.fileUrl,
+        // thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
         title: course.title,
         description: course.description,

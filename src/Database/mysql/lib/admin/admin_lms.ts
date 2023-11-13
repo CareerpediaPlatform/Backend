@@ -190,13 +190,13 @@ export async function  getAllCourses() {
     }
 
 // course
-export async function uploadCourse(fileDetails:any, imageDetails:any,course:any,type:any): Promise<any> {
+export async function uploadCourse(fileDetails:any,course:any,type:any): Promise<any> {
   logger.info(`${TAG}.uploadVideoFile()`)
   try {
 
   const data = {
     courseUID: crypto.randomUUID(),
-      thumbnail: imageDetails.fileUrl,
+      // thumbnail: imageDetails.fileUrl,
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -211,8 +211,8 @@ export async function uploadCourse(fileDetails:any, imageDetails:any,course:any,
     };
     console.log(data)
     console.log(data.courseUID)
-    const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID,  THUMBNAIL, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
-    VALUES(:courseUID, :thumbnail, :video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`
+    const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
+    VALUES(:courseUID,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`
     const response=[]
     
     const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
