@@ -149,11 +149,11 @@ export async function updateuploadCourse(courseUID:any, files:any, course:any) {
         contentType: files[0]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
         filePath: data[0]?.savedFileKey,
-        fileUrl: data[0]?.savedLocation,
+        fileUrl: data[0].savedLocation,
         isPublic: true,
         metaData: null,
       }
-     
+   
       // const imageDetails = {
       //   fileName: data[1]?.savedFileName,
       //   originalFileName: files[1].originalname,
@@ -164,7 +164,7 @@ export async function updateuploadCourse(courseUID:any, files:any, course:any) {
       //   isPublic: true,
       //   metaData: null,
       // }
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    
 
       const existedCourseID=await adminLms.checkCourseIdExist(courseUID)
       if(existedCourseID){
