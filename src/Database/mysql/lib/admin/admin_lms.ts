@@ -254,7 +254,7 @@ export async function getuploadCourse(courseUID){
     const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUID';
     const query= ''
     const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
-    const [basicCourseLearn] = await executeQuery(getQuery, QueryTypes.SELECT, {courseUID});
+    const basicCourseLearn= await executeQuery(getQuery, QueryTypes.SELECT, {courseUID});
     return {basicCourse,basicCourseLearn}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -262,11 +262,11 @@ export async function getuploadCourse(courseUID){
   }
 }
 
-export async function updateuploadCourse(fileDetails: any,imageDetails: any,courseUID: any, course:any){
+export async function updateuploadCourse(fileDetails: any,courseUID: any, course:any){
   try {
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUID);
     const data = {
-      thumbnail: imageDetails.fileUrl,
+      // thumbnail: imageDetails.fileUrl,
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -279,9 +279,8 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
       learn: course.learn
     }
     console.log(course)
-
     console.log(data)
-    const updateQuery = `UPDATE COURSE_OVERVIEW SET THUMBNAIL = :thumbnail, VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNTPRICE= :discountprice WHERE COURSE_UID=:courseUID`;
+    const updateQuery = `UPDATE COURSE_OVERVIEW SET  VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNT= :discountprice WHERE COURSE_UID=:courseUID`;
 
     const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
     const response=[]
@@ -289,11 +288,10 @@ export async function updateuploadCourse(fileDetails: any,imageDetails: any,cour
     const learnQuery = `UPDATE WHAT_YOU_LEARN SET LEARN= :learn WHERE COURSE_UID= :courseUID`;
      let array=JSON.parse(course.learn)
      for( const singleData of array){
-
       const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUID})
       response.push(res)
      }
-    return {basicCourse,response}
+    return {course}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
     throw error;
@@ -425,7 +423,7 @@ export async function getModule(moduleUid) {
     logger.info(`${TAG}.getModule()  ==>`, moduleUid);
 
     let query ="select * from COURSE_MODULE where MODULE_UID = :moduleUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const personalDetails = await executeQuery(query, QueryTypes.SELECT, {
       moduleUid
     });
     return personalDetails;
@@ -632,17 +630,17 @@ export async function deleteExercisePost(exerciseUid) {
 
 //UPDATE QUERY
 
-export async function updateCoursePartPost(user,part_id) {
+export async function updateCoursePartPost(user,partUid) {
   logger.info(`${TAG}.updateCoursePartPost()`);
   try {
-    
-    let updateCoursePartPostQuery = `UPDATE courses_parts SET
-    partTitle= :partTitle, description = :description, lessons = :lessons, duration = :duration, exercises =:exercises, tests = :tests WHERE part_id = :part_id`;
+
+    let updateCoursePartPostQuery = `UPDATE COURSE_PART SET
+    PART_TITLE= :partTitle, DESCRIPTION = :description, LESSONS = :lessons, DURATION = :duration, EXERCISES =:exercises, TESTS = :tests WHERE PART_UID = :partUid`;
   const updateCoursePartPosts= await executeQuery(
       updateCoursePartPostQuery,
-      QueryTypes.UPDATE,{...user,part_id:part_id});
+      QueryTypes.UPDATE,{...user,partUid:partUid});
     
-    return updateCoursePartPosts;
+    return user;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateCoursePartPost()`, error);
     throw error;
@@ -650,16 +648,17 @@ export async function updateCoursePartPost(user,part_id) {
 
 }
 
-export async function updateModulesPost(user,module_id) {
+export async function updateModulesPost(user,moduleUid) {
   logger.info(`${TAG}.updateModulesPost()`);
   try {
-    let updateModulesPostQuery = `UPDATE modules SET
-    module_name= :module_name, description = :description, lesson = :lesson, test = :test, exercises =:exercises, hours = :hours WHERE module_id = :module_id`;
+
+    let updateModulesPostQuery = `UPDATE COURSE_MODULE SET
+    MODULE_NAME= :moduleName, DESCRIPTION = :description, MENTOR = :mentor, LESSONS = :lesson, EXERCISES =:exercises, TESTS = :tests WHERE MODULE_UID = :moduleUid`;
   const updateModulesPort= await executeQuery(
     updateModulesPostQuery,
-      QueryTypes.UPDATE,{...user,module_id}
+      QueryTypes.UPDATE,{...user,moduleUid}
     );
-    return updateModulesPort;
+    return user;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateModulesPost()`, error);
     throw error;
@@ -684,32 +683,32 @@ export async function checkLearnId(learnId: any){
 }
 
 
-export async function updateLessonPost(user,lesson_id) {
+export async function updateLessonPost(user,lessonUid) {
   logger.info(`${TAG}.updateLessonPost()`);
   try {
-    let updateLessonPostQuery = `UPDATE lesson SET
-    LESSON_NAME= :lesson_name, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_ID = :lesson_id`;
+    let updateLessonPostQuery = `UPDATE LESSON_MODULES SET
+    LESSON_NAME= :lessonName, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_UID = :lessonUid`;
   const updateLessonPost= await executeQuery(
     updateLessonPostQuery,
-      QueryTypes.UPDATE,{...user,lesson_id}
+      QueryTypes.UPDATE,{...user,lessonUid}
     );
-    return updateLessonPost;
+    return user;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);
     throw error;
   }
 }
 
-export async function updateTestPost(user,test_id) {
+export async function updateTestPost(user,testUid) {
   logger.info(`${TAG}.updateTestPost()`);
   try {
-    let updateTestPostQuery = `UPDATE test SET
-    TEST_TYPE= :test_type, MARKS = :marks, POINTS = :points, TEST_NAME = :test_name WHERE TEST_ID = :test_id`;
+    let updateTestPostQuery = `UPDATE TEST_MODULES SET
+    TEST_TYPE= :testType, MARKS = :marks, POINTS = :points, TEST_NAME = :testName WHERE TEST_UID = :testUid`;
   const updateTestPost= await executeQuery(
     updateTestPostQuery,
-      QueryTypes.UPDATE,{...user,test_id}
+      QueryTypes.UPDATE,{...user,testUid}
     );
-    return updateTestPost;
+    return user;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateTestPost()`, error);
   }}
@@ -734,14 +733,15 @@ export async function deleteLearnId(learnId) {
 }
 
 
-export async function updateExercisesPost(user,exercise_id) {
+export async function updateExercisesPost(user,exerciseUid) {
   logger.info(`${TAG}.updateExercisesPost()`);
   try {
-    let updateExercisesPostQuery = `UPDATE exercise SET
-    QUESTION_NAME= :question_name, MARKS = :marks, QUESTION_TYPE = :question_type, points = :points WHERE EXERCISE_ID = :exercise_id`;
+
+    let updateExercisesPostQuery = `UPDATE EXERCISE_MODULES SET
+    QUESTION_NAME= :questionName, MARKS = :marks, POINTS = :points, OPTION1 = :option1,OPTION2 = :option2,OPTION3 = :option3,OPTION4 = :option4,ANSWER = :answer WHERE EXERCISE_UID = :exerciseUid`;
   const updateExercisesPost= await executeQuery(
     updateExercisesPostQuery,
-      QueryTypes.UPDATE,{...user,exercise_id}
+      QueryTypes.UPDATE,{...user,exerciseUid}
     );
     return updateExercisesPost;
   } catch (error) {
