@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import getVideoDurationInSeconds from 'get-video-duration';
 
 
+
 const TAG = 'helpers.s3_media'
 // export async function saveFile(file: any, folderName: string, bucketName: string): Promise<any> {
   
@@ -42,6 +43,16 @@ const TAG = 'helpers.s3_media'
           continue;  
         }
         const originalname = individualFile.originalname;
+        console.log("originalnameaaaaaaaaaaaaaaaaaaa")
+        console.log(originalname)
+        const fileMimetype = individualFile.mimetype;
+
+        // Add validation to check if the file is an MP4 video
+        if (fileMimetype !== 'video/mp4') {
+          console.error('Invalid file type. Only MP4 files are allowed.');
+          continue;
+        }
+  
         const uniqueIdentifier = uuidv4(); // Generate a unique identifier for each file
         const filePath = path.join( folderName,uniqueIdentifier + '-' + originalname);
         console.log('Original Name:', filePath);

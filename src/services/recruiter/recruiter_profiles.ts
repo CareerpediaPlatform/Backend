@@ -38,16 +38,15 @@ export async function recruiterProfile(user) {
           const basicDetails= await RecruiterProfileDetailsData.recruiterBasicDetailsUpdate({...user.Profile,uid});
           const contactDetails= await RecruiterProfileDetailsData.recruiterContactUpdate({...user.Contact,uid});
           const companyDetsils= await RecruiterProfileDetailsData.recruitercompanyDetailUpdate({...user.Company,uid});
-         
-      
-        const response= await RecruiterProfileDetailsData.recruiterProfilePost({...user,uid});
+
         const data = {
           basicDetails,
           contactDetails,
           companyDetsils,
         };
-        serviceResponse.data = data;
-        return serviceResponse;
+        serviceResponse.data = data
+        serviceResponse.message = "successfully updated !"
+        return serviceResponse
       }
 
       const response = await RecruiterProfileDetailsData.recruiterProfilePost({

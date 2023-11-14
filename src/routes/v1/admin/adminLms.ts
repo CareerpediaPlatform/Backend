@@ -40,7 +40,7 @@ router.route('/course-overvie/:coursetype')
  router.route('/part/:courseUid/:partUid')
  .get(isAuthenticated,controller.getCourseParts);
 
- router.route('/module/:partUid/:moduleUid')
+ router.route('/module/:partUid')
  .get(isAuthenticated,controller.getCourseModule);
 
  router.route('/lesson/:moduleUid/:lessonUid')
@@ -61,26 +61,26 @@ router.route('/course-overvie/:coursetype')
  router.route('/exercise/:module_id/:exercise_id')
  .delete(isAuthenticated,controller.deleteModulesExercise);
 
- router.route('/part/:part_id')
+ router.route('/part/:partUid')
  .patch(isAuthenticated,controller.updateCoursePartPost);
 
- router.route('/module/:module_id')
+ router.route('/module/:moduleUid')
  .patch(isAuthenticated,controller.updateCourseModulePost);
 
- router.route('/lesson/:lesson_id')
+ router.route('/lesson/:lessonUid')
  .patch(isAuthenticated,controller.updateModuleLesson);
 
- router.route('/test/:test_id')
+ router.route('/test/:testUid')
  .patch(isAuthenticated,controller.updateModuleTest);
 
- router.route('/exercise/:exercise_id')
+ router.route('/exercise/:exerciseUid')
  .patch(isAuthenticated,controller.updateModuleExercise);
 
 //  course//
  router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
- router.route('/course-overview/:uid').get(controller.getuploadCourse);
- router.route('/course-overview/:uid').patch(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.updateuploadCourse)
- router.route('/course-overview/:uid').delete(controller.deleteuploadCourse);
+ router.route('/course-overview/:courseUID').get(controller.getuploadCourse);
+ router.route('/course-overview/:courseUID').patch(videoFileReader(FormParams.FILE_FIELD,2),controller.updateuploadCourse)
+ router.route('/course-overview/:courseUID').delete(controller.deleteuploadCourse);
  router.route('/learn/:id').delete(controller.deleteSingleLearn)
 
  

@@ -149,25 +149,26 @@ export async function updateuploadCourse(courseUID:any, files:any, course:any) {
         contentType: files[0]?.mimetype,
         s3Bucket: AWS_S3.BUCKET_NAME,
         filePath: data[0]?.savedFileKey,
-        fileUrl: data[0].savedLocation,
+        fileUrl: data[0]?.savedLocation,
         isPublic: true,
         metaData: null,
       }
      
-      const imageDetails = {
-        fileName: data[1]?.savedFileName,
-        originalFileName: files[1].originalname,
-        contentType:files[1].mimetype,
-        s3Bucket: AWS_S3.BUCKET_NAME,
-        filePath: data[1]?.savedFileKey,
-        fileUrl: data[1]?.savedLocation,
-        isPublic: true,
-        metaData: null,
-      }
+      // const imageDetails = {
+      //   fileName: data[1]?.savedFileName,
+      //   originalFileName: files[1].originalname,
+      //   contentType:files[1].mimetype,
+      //   s3Bucket: AWS_S3.BUCKET_NAME,
+      //   filePath: data[1]?.savedFileKey,
+      //   fileUrl: data[1]?.savedLocation,
+      //   isPublic: true,
+      //   metaData: null,
+      // }
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
       const existedCourseID=await adminLms.checkCourseIdExist(courseUID)
       if(existedCourseID){
-        const existedCourse=await adminLms.updateuploadCourse(fileDetails,imageDetails,courseUID,course)
+        const existedCourse=await adminLms.updateuploadCourse(fileDetails,courseUID,course)
         const data = {
           existedCourse 
         }    
@@ -291,24 +292,24 @@ export async function courseModulesUser(user) {
     return serviceResponse;
   } 
   
-export async function getCourseModules(partUid,moduleUid) {
-    log.info(`${TAG}.getCourseModules() ==> `, moduleUid);
+export async function getCourseModules(partUid) {
+    log.info(`${TAG}.getCourseModules() ==> `, partUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(moduleUid)
+      // console.log(moduleUid)
       console.log(partUid)
       const getPartUid = await adminLms.checkPartUid(partUid);
       console.log(getPartUid);
-      if (!getPartUid) {
-        serviceResponse.message = "Invalid course part UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
-      const courseModules = await adminLms.getModule(moduleUid)
+      // if (!getPartUid) {
+      //   serviceResponse.message = "Invalid course part UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+      // const courseModules = await adminLms.getModule(moduleUid)
       const data = {
-        courseModules       
+        getPartUid       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -537,13 +538,13 @@ export async function deleteModulesExercise(module_id,exercise_id) {
 
 
   
-export async function updateCoursePartPost(user,part_id) {
+export async function updateCoursePartPost(user,partUid) {
 
   log.info(`${TAG}.updateCoursePartPost() ==> `,user);  
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    console.log(part_id)
-    const getPartUid = await adminLms.getPart(part_id);
+    console.log(partUid)
+    const getPartUid = await adminLms.getPart(partUid);
     console.log(getPartUid);
     if (!getPartUid) {
       serviceResponse.message = "Invalid course part UID";
@@ -551,7 +552,7 @@ export async function updateCoursePartPost(user,part_id) {
       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       return serviceResponse;
     }
-    const response = await adminLms.updateCoursePartPost(user,part_id)
+    const response = await adminLms.updateCoursePartPost(user,partUid)
     const data = {
       ...response
           }
@@ -563,13 +564,13 @@ export async function updateCoursePartPost(user,part_id) {
   return serviceResponse;
 }
 
-export async function updateCourseModulePost(user,module_id) {
+export async function updateCourseModulePost(user,moduleUid) {
 
   log.info(`${TAG}.updateCourseModulePost() ==> `,user);  
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    console.log(module_id)
-    const getModuleUid = await adminLms.getModule(module_id);
+    console.log(moduleUid)
+    const getModuleUid = await adminLms.getModule(moduleUid);
     console.log(getModuleUid);
     if (!getModuleUid) {
       serviceResponse.message = "Invalid course module UID";
@@ -577,7 +578,7 @@ export async function updateCourseModulePost(user,module_id) {
       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       return serviceResponse;
     }
-    const response = await adminLms.updateModulesPost(user,module_id)
+    const response = await adminLms.updateModulesPost(user,moduleUid)
     const data = {
       ...response
           }
@@ -589,12 +590,12 @@ export async function updateCourseModulePost(user,module_id) {
   return serviceResponse;
 }
 
-export async function updateLessonPost(user,lesson_id) {
+export async function updateLessonPost(user,lessonUid) {
   log.info(`${TAG}.updateLessonPost() ==> `,user);  
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    console.log(lesson_id)
-    const getLessonUid = await adminLms.getLessonPost(lesson_id);
+    console.log(lessonUid)
+    const getLessonUid = await adminLms.getLessonPost(lessonUid);
     console.log(getLessonUid);
     if (!getLessonUid) {
       serviceResponse.message = "Invalid  module lesson UID";
@@ -602,7 +603,7 @@ export async function updateLessonPost(user,lesson_id) {
       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       return serviceResponse;
     }
-    const response = await adminLms.updateModulesPost(user,lesson_id)
+    const response = await adminLms.updateLessonPost(user,lessonUid)
     const data = {
       ...response
           }
@@ -614,13 +615,13 @@ export async function updateLessonPost(user,lesson_id) {
   return serviceResponse;
 }
 
-export async function updateTestPost(user,test_id) {
+export async function updateTestPost(user,testUid) {
 
   log.info(`${TAG}.updateTestPost() ==> `,user);  
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    console.log(test_id)
-    const getTestUid = await adminLms.getTestPost(test_id);
+    console.log(testUid)
+    const getTestUid = await adminLms.getTestPost(testUid);
     console.log(getTestUid);
     if (!getTestUid) {
       serviceResponse.message = "Invalid  module test UID";
@@ -628,7 +629,7 @@ export async function updateTestPost(user,test_id) {
       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       return serviceResponse;
     }
-    const response = await adminLms.updateTestPost(user,test_id)
+    const response = await adminLms.updateTestPost(user,testUid)
     const data = {
       ...response
           }
@@ -640,27 +641,27 @@ export async function updateTestPost(user,test_id) {
   return serviceResponse;
 }
 
-export async function updateExercisePost(user,test_id) {
+export async function updateExercisePost(user,exerciseUid) {
 
-  log.info(`${TAG}.updateLessonPost() ==> `,user);  
+  log.info(`${TAG}.updateExercisePost() ==> `,user);  
   const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
   try {
-    console.log(test_id)
-    const getTestUid = await adminLms.getTestPost(test_id);
+    console.log(exerciseUid)
+    const getTestUid = await adminLms.getExercisePost(exerciseUid);
     console.log(getTestUid);
     if (!getTestUid) {
-      serviceResponse.message = "Invalid  module test UID";
+      serviceResponse.message = "Invalid  module Exercise UID";
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       return serviceResponse;
     }
-    const response = await adminLms.updateTestPost(user,test_id)
+    const response = await adminLms.updateExercisesPost(user,exerciseUid)
     const data = {
       ...response
           }
     serviceResponse.data = data
   } catch (error) {
-    log.error(`ERROR occurred in ${TAG}.updateLessonPost`, error);
+    log.error(`ERROR occurred in ${TAG}.updateExercisePost`, error);
     serviceResponse.addServerError('Failed to create user due to technical difficulties');
   }
   return serviceResponse;
