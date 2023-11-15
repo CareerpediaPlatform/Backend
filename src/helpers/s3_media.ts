@@ -45,13 +45,13 @@ const TAG = 'helpers.s3_media'
         const originalname = individualFile.originalname;
         console.log("originalnameaaaaaaaaaaaaaaaaaaa")
         console.log(originalname)
-        const fileMimetype = individualFile.mimetype;
+        // const fileMimetype = individualFile.mimetype;
 
-        // Add validation to check if the file is an MP4 video
-        if (fileMimetype !== 'video/mp4') {
-          console.error('Invalid file type. Only MP4 files are allowed.');
-          continue;
-        }
+        // // Add validation to check if the file is an MP4 video
+        // if (fileMimetype !== 'video/mp4') {
+        //   console.error('Invalid file type. Only MP4 files are allowed.');
+        //   continue;
+        // }
   
         const uniqueIdentifier = uuidv4(); // Generate a unique identifier for each file
         const filePath = path.join( folderName,uniqueIdentifier + '-' + originalname);

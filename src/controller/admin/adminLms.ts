@@ -58,8 +58,8 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getuploadCourse()`);
       log.debug(`${TAG}.getuploadCourse() Object = ${JSON.stringify(req.body)}`)
-      let courseUID = req.params.courseUID
-      const authResponse= await adminlmsServices.getuploadCourse(courseUID)
+      let courseUid = req.params.courseUid
+      const authResponse= await adminlmsServices.getuploadCourse(courseUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getuploadCourse() `, error)
@@ -71,12 +71,12 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.updateuploadCourse()`);
       log.debug(`${TAG}.updateuploadCourse() Object = ${JSON.stringify(req.body)}`)
-      let courseUID = req.params.courseUID
+      let courseUid = req.params.courseUid
       const file = req.files
       const course = req.body
       console.log(course)
-      console.log(courseUID)
-      const authResponse= await adminlmsServices.updateuploadCourse(courseUID,file,course)
+      console.log(courseUid)
+      const authResponse= await adminlmsServices.updateuploadCourse(courseUid,file,course)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.updateuploadCourse() `, error)
@@ -88,8 +88,8 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getuploadCourse()`);
       log.debug(`${TAG}.getuploadCourse() Object = ${JSON.stringify(req.body)}`)
-      let courseUID = req.params.courseUID
-      const authResponse= await adminlmsServices.deleteuploadCourse(courseUID)
+      let courseUid = req.params.courseUid
+      const authResponse= await adminlmsServices.deleteuploadCourse(courseUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getuploadCourse() `, error)
@@ -237,9 +237,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.getModulesLesson() Object = ${JSON.stringify(req.body)}`)
       let moduleUid = req.params.moduleUid
       console.log(moduleUid)
-      let lessonUid = req.params.lessonUid
-      console.log(lessonUid)
-      const authResponse= await adminlmsServices.getModulesLesson(moduleUid,lessonUid)
+      // let lessonUid = req.params.lessonUid
+      // console.log(lessonUid)
+      const authResponse= await adminlmsServices.getModulesLesson(moduleUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesLesson() `, error)
@@ -251,11 +251,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.deleteModulesLesson()`);
       log.debug(`${TAG}.deleteModulesLesson() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let lesson_id = req.params.lesson_id
-      console.log(lesson_id)
-      const authResponse= await adminlmsServices.deleteModulesLesspon(module_id,lesson_id)
+      let lessonUid = req.params.lessonUid
+      console.log(lessonUid)
+      const authResponse= await adminlmsServices.deleteModulesLesspon(lessonUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.deleteModulesLesson() `, error)
@@ -268,11 +266,11 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getModulesTest()`);
       log.debug(`${TAG}.getModulesTest() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let test_id = req.params.test_id
-      console.log(test_id)
-      const authResponse= await adminlmsServices.getModulesTest(module_id,test_id)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      // let testUid = req.params.testUid
+      // console.log(testUid)
+      const authResponse= await adminlmsServices.getModulesTest(moduleUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesTest() `, error)
@@ -284,11 +282,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.deleteModulesTest()`);
       log.debug(`${TAG}.deleteModulesTest() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let test_id = req.params.test_id
-      console.log(test_id)
-      const authResponse= await adminlmsServices.deleteModulesTest(module_id,test_id)
+      let testUid = req.params.testUid
+      console.log(testUid)
+      const authResponse= await adminlmsServices.deleteModulesTest(testUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.deleteModulesTest() `, error)
@@ -300,11 +296,11 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getModulesExercise()`);
       log.debug(`${TAG}.getModulesExercise() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let exercise_id = req.params.exercise_id
-      console.log(exercise_id)
-      const authResponse= await adminlmsServices.getModulesTest(module_id,exercise_id)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      // let exerciseUid = req.params.exerciseUid
+      // console.log(exerciseUid)
+      const authResponse= await adminlmsServices.getModulesExercise(moduleUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesExercise() `, error)
@@ -312,15 +308,13 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     }
   }
   
-  export async function deleteModulesExercise(req: any, res: Response, next: NextFunction): Promise<void> {
+export async function deleteModulesExercise(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       log.info(`${TAG}.deleteModulesExercise()`);
       log.debug(`${TAG}.deleteModulesExercise() Object = ${JSON.stringify(req.body)}`)
-      let module_id = req.params.module_id
-      console.log(module_id)
-      let exercise_id = req.params.exercise_id
-      console.log(exercise_id)
-      const authResponse= await adminlmsServices.deleteModulesTest(module_id,exercise_id)
+      let exerciseUid = req.params.exerciseUid
+      console.log(exerciseUid)
+      const authResponse= await adminlmsServices.deleteModulesExercise(exerciseUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.deleteModulesExercise() `, error)
@@ -425,8 +419,33 @@ export async function updateModuleExercise(req: any, res: Response, next: NextFu
     }
   }
 
+export async function deleteCoursePart(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.deleteCoursePart()`);
+      log.debug(`${TAG}.deleteCoursePart() Object = ${JSON.stringify(req.body)}`)
+      let partUid = req.params.partUid
+      console.log(partUid)
+      const authResponse= await adminlmsServices.deleteCoursePart(partUid)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.deleteCoursePart() `, error)
+      next(error)
+    }
+  }
 
+  export async function deleteCourseModule(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.deleteCourseModule()`);
+      log.debug(`${TAG}.deleteCourseModule() Object = ${JSON.stringify(req.body)}`)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse= await adminlmsServices.deleteCourseModule(moduleUid)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.deleteCourseModule() `, error)
+      next(error)
+    }
+  }
 
-  
 
 

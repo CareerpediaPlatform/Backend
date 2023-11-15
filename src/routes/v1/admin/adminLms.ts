@@ -43,22 +43,22 @@ router.route('/course-overvie/:coursetype')
  router.route('/module/:partUid')
  .get(isAuthenticated,controller.getCourseModule);
 
- router.route('/lesson/:moduleUid/:lessonUid')
+ router.route('/lesson/:moduleUid')
  .get(isAuthenticated,controller.getModulesLesson);
 
- router.route('/lesson/:moduleUid/:lessonUid')
+ router.route('/lesson/:lessonUid')
  .delete(isAuthenticated,controller.deleteModulesLesson);
 
- router.route('/test/:moduleUid/:testUid')
+ router.route('/test/:moduleUid')
  .get(isAuthenticated,controller.getModulesTest);
 
- router.route('/test/:moduleUid/:testUid')
+ router.route('/test/:testUid')
  .delete(isAuthenticated,controller.deleteModulesTest);
 
- router.route('/exercise/:moduleUid/:exerciseUid')
+ router.route('/exercise/:moduleUid')
  .get(isAuthenticated,controller.getModulesExercise);
 
- router.route('/exercise/:module_id/:exercise_id')
+ router.route('/exercise/:exerciseUid')
  .delete(isAuthenticated,controller.deleteModulesExercise);
 
  router.route('/part/:partUid')
@@ -78,11 +78,16 @@ router.route('/course-overvie/:coursetype')
 
 //  course//
  router.route('/course-overview/:type').post(videoFileReader(FormParams.FILE_FIELD,2),emptyChecks,controller.uploadCourse)
- router.route('/course-overview/:courseUID').get(controller.getuploadCourse);
- router.route('/course-overview/:courseUID').patch(videoFileReader(FormParams.FILE_FIELD,2),controller.updateuploadCourse)
- router.route('/course-overview/:courseUID').delete(controller.deleteuploadCourse);
+ router.route('/course-overview/:courseUid').get(controller.getuploadCourse);
+ router.route('/course-overview/:courseUid').patch(videoFileReader(FormParams.FILE_FIELD,2),controller.updateuploadCourse)
+ router.route('/course-overview/:courseUid').delete(controller.deleteuploadCourse);
  router.route('/learn/:id').delete(controller.deleteSingleLearn)
 
+ router.route('/part/:partUid')
+ .delete(isAuthenticated,controller.deleteCoursePart);
+
+ router.route('/module/:moduleUid')
+ .delete(isAuthenticated,controller.deleteCourseModule);
  
 
 export default router;
