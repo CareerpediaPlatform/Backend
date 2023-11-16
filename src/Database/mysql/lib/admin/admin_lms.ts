@@ -190,13 +190,12 @@ export async function  getAllCourses() {
     }
 
 // course
-export async function uploadCourse(fileDetails:any,course:any,type:any): Promise<any> {
+export async function uploadCourse(fileDetails: any, course: any, type: any): Promise<any> {
   logger.info(`${TAG}.uploadVideoFile()`)
   try {
 
-  const data = {
-    courseUID: crypto.randomUUID(),
-      // thumbnail: imageDetails.fileUrl,
+    const data = {
+      courseUid: crypto.randomUUID(),
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -206,34 +205,41 @@ export async function uploadCourse(fileDetails:any,course:any,type:any): Promise
       test: course.test,
       price: course.price,
       discount: course.discount,
-      filePath:fileDetails.filePath,
+      filePath: fileDetails.filePath,
       learn: course.learn
     };
-    console.log(data)
-    console.log(data.courseUID)
+
     const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
-    VALUES(:courseUID,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discount, :type )`
-    const response=[]
-    
+    VALUES(:courseUid,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discount, :type )`
+    const response = []
+
     const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
     ( COURSE_UID,LEARN)
-     values( :courseUID,:learn )`;
-     let array=JSON.parse(course.learn)
-     for( const singleData of array){
-
-      const res=await executeQuery( learnQuery, QueryTypes.INSERT,{ learn:singleData,courseUID:data.courseUID})
+     values( :courseUid,:learn )`;
+    let array = JSON.parse(course.learn);
+    for (const singleData of array) {
+      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid: data.courseUid })
       response.push(res)
-     }
-     console.log(data)
+    }
+
     const [coursedata] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
-      ...data,...type
+      ...data, ...type, courseUid: data.courseUid
     })
-    return {response,coursedata}
+
+    // Include courseUid in the response object
+    const responseObject = {
+      response,
+      coursedata,
+      courseUid: data.courseUid
+    };
+
+    return responseObject;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
   }
 }
+
 
 export async function checkCourseIdExist(courseUid: any){
   console.log(courseUid)

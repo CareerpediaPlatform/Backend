@@ -49,7 +49,7 @@ router.route('/course-overvie/:coursetype')
  router.route('/lesson/:lessonUid')
  .delete(isAuthenticated,controller.deleteModulesLesson);
 
- router.route('/test/:moduleUid')
+ router.route('/test/:moduleUid') 
  .get(isAuthenticated,controller.getModulesTest);
 
  router.route('/test/:testUid')
