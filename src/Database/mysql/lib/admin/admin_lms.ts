@@ -190,13 +190,12 @@ export async function  getAllCourses() {
     }
 
 // course
-export async function uploadCourse(fileDetails:any,course:any,type:any): Promise<any> {
+export async function uploadCourse(fileDetails: any, course: any, type: any): Promise<any> {
   logger.info(`${TAG}.uploadVideoFile()`)
   try {
 
-  const data = {
-    courseUID: crypto.randomUUID(),
-      // thumbnail: imageDetails.fileUrl,
+    const data = {
+      courseUid: crypto.randomUUID(),
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -205,41 +204,49 @@ export async function uploadCourse(fileDetails:any,course:any,type:any): Promise
       exercises: course.exercises,
       test: course.test,
       price: course.price,
-      discountprice: course.discountprice,
-      filePath:fileDetails.filePath,
+      discount: course.discount,
+      filePath: fileDetails.filePath,
       learn: course.learn
     };
-    console.log(data)
-    console.log(data.courseUID)
+
     const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
-    VALUES(:courseUID,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discountprice, :type )`
-    const response=[]
-    
+    VALUES(:courseUid,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discount, :type )`
+    const response = []
+
     const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
     ( COURSE_UID,LEARN)
-     values( :courseUID,:learn )`;
-     let array=JSON.parse(course.learn)
-     for( const singleData of array){
-
-      const res=await executeQuery( learnQuery, QueryTypes.INSERT,{ learn:singleData,courseUID:data.courseUID})
+     values( :courseUid,:learn )`;
+    let array = JSON.parse(course.learn);
+    for (const singleData of array) {
+      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid: data.courseUid })
       response.push(res)
-     }
+    }
+
     const [coursedata] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
-      ...data,...type
+      ...data, ...type, courseUid: data.courseUid
     })
-    return {response,coursedata}
+
+    // Include courseUid in the response object
+    const responseObject = {
+      response,
+      coursedata,
+      courseUid: data.courseUid
+    };
+
+    return responseObject;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
   }
 }
 
-export async function checkCourseIdExist(courseUID: any){
-  console.log(courseUID)
+
+export async function checkCourseIdExist(courseUid: any){
+  console.log(courseUid)
   try {
-    logger.info(`${TAG}.checkCourseIdExist() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUID';
-    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
+    logger.info(`${TAG}.checkCourseIdExist() ==>`, courseUid);
+    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUid';
+    const [basic] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUid});
     return basic// Return null if no user is found
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkCourseIdExist()`, error);
@@ -247,14 +254,14 @@ export async function checkCourseIdExist(courseUID: any){
   }
 }
 
-export async function getuploadCourse(courseUID){
+export async function getuploadCourse(courseUid){
   try {
-    logger.info(`${TAG}.getuploadCourse() ==>`, courseUID);
-    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUID';
-    const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUID';
+    logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
+    const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUid';
+    const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUid';
     const query= ''
-    const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUID});
-    const basicCourseLearn= await executeQuery(getQuery, QueryTypes.SELECT, {courseUID});
+    const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUid});
+    const basicCourseLearn= await executeQuery(getQuery, QueryTypes.SELECT, {courseUid});
     return {basicCourse,basicCourseLearn}
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -262,9 +269,9 @@ export async function getuploadCourse(courseUID){
   }
 }
 
-export async function updateuploadCourse(fileDetails: any,courseUID: any, course:any){
+export async function updateuploadCourse(fileDetails: any,courseUid: any, course:any){
   try {
-    logger.info(`${TAG}.getuploadCourse() ==>`, courseUID);
+    logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
     const data = {
       // thumbnail: imageDetails.fileUrl,
       video: fileDetails.fileUrl,
@@ -275,20 +282,20 @@ export async function updateuploadCourse(fileDetails: any,courseUID: any, course
       exercises: course.exercises,
       test: course.test,
       price: course.price,
-      discountprice: course.discountprice,
+      discount: course.discount,
       learn: course.learn
     }
     console.log(course)
     console.log(data)
-    const updateQuery = `UPDATE COURSE_OVERVIEW SET  VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNT= :discountprice WHERE COURSE_UID=:courseUID`;
+    const updateQuery = `UPDATE COURSE_OVERVIEW SET  VIDEO= :video, TITLE= :title, DESCRIPTION=:description, MENTOR= :mentor, LESSON= :lesson, EXERCISES= :exercises, TEST= :test, PRICE= :price, DISCOUNT= :discount WHERE COURSE_UID=:courseUid`;
 
-    const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUID});
+    const [basicCourse] = await executeQuery(updateQuery, QueryTypes.UPDATE, {...data,courseUid});
     const response=[]
     
-    const learnQuery = `UPDATE WHAT_YOU_LEARN SET LEARN= :learn WHERE COURSE_UID= :courseUID`;
+    const learnQuery = `UPDATE WHAT_YOU_LEARN SET LEARN= :learn WHERE COURSE_UID= :courseUid`;
      let array=JSON.parse(course.learn)
      for( const singleData of array){
-      const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUID})
+      const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUid})
       response.push(res)
      }
     return {course}
@@ -299,11 +306,11 @@ export async function updateuploadCourse(fileDetails: any,courseUID: any, course
 }
 
 
-export async function deleteuploadCourse(courseUID){
+export async function deleteuploadCourse(courseUid){
   try {
-    logger.info(`${TAG}.deleteuploadCourse() ==>`, courseUID);
-    const checkQuery = 'DELETE  FROM `COURSE_OVERVIEW` WHERE COURSE_UID=:courseUID';
-    const basicCourse = await executeQuery(checkQuery, QueryTypes.DELETE, {courseUID});
+    logger.info(`${TAG}.deleteuploadCourse() ==>`, courseUid);
+    const checkQuery = 'DELETE  FROM `COURSE_OVERVIEW` WHERE COURSE_UID=:courseUid';
+    const basicCourse = await executeQuery(checkQuery, QueryTypes.DELETE, {courseUid});
     return basicCourse
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.deleteuploadCourse()`, error);
@@ -480,15 +487,18 @@ export async function checkModuleUid(moduleUid) {
   }
 }
 
-export async function getLessonPost(lessonUid) {
+export async function getLessonPost(moduleUid) {
   try {
-    logger.info(`${TAG}.getLessonPost()  ==>`,lessonUid);
+    logger.info(`${TAG}.getLessonPost()  ==>`,moduleUid);
 
-    let query ="select * from LESSON_MODULES where LESSON_UID = :lessonUid";
-    const [lessonDetails] = await executeQuery(query, QueryTypes.SELECT, {
-      lessonUid
+    let query ="select * from LESSON_MODULES where MODULE_UID = :moduleUid";
+    const lessonDetails = await executeQuery(query, QueryTypes.SELECT, {
+      moduleUid
     });
-    return lessonDetails;
+    const data={
+      lessonDetails: Object.values(lessonDetails)
+    }
+    return {...data};
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.getLessonPost()`,
@@ -536,15 +546,18 @@ export async function testPost(user) {
   }
 }
 
-export async function getTestPost(testUid) {
+export async function getTestPost(moduleUid) {
   try {
-    logger.info(`${TAG}.getTestPost()  ==>`,testUid);
+    logger.info(`${TAG}.getTestPost()  ==>`,moduleUid);
 
-    let query ="select * from TEST_MODULES where TEST_UID = :testUid";
-    const [testDetails] = await executeQuery(query, QueryTypes.SELECT, {
-      testUid
+    let query ="select * from TEST_MODULES where MODULE_UID = :moduleUid";
+    const testDetails = await executeQuery(query, QueryTypes.SELECT, {
+      moduleUid
     });
-    return testDetails;
+    const data={
+      testDetails: Object.values(testDetails)
+    }
+    return {...data};
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.getTestPost()`,
@@ -592,15 +605,18 @@ export async function exercisesPost(user) {
   }
 }
 
-export async function getExercisePost(exerciseUid) {
+export async function getExercisePost(moduleUid) {
   try {
-    logger.info(`${TAG}.getTestPost()  ==>`,exerciseUid);
+    logger.info(`${TAG}.getTestPost()  ==>`,moduleUid);
 
-    let query ="select * from EXERCISE_MODULES where EXERCISE_UID = :exerciseUid";
-    const [exerciseDetails] = await executeQuery(query, QueryTypes.SELECT, {
-      exerciseUid
+    let query ="select * from EXERCISE_MODULES where MODULE_UID = :moduleUid";
+    const exerciseDetails = await executeQuery(query, QueryTypes.SELECT, {
+      moduleUid
     });
-    return exerciseDetails;
+    const data={
+      exerciseDetails: Object.values(exerciseDetails)
+    }
+    return {...data};
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.getTestPost()`,
@@ -615,7 +631,7 @@ export async function deleteExercisePost(exerciseUid) {
     logger.info(`${TAG}.deleteExercisePost()  ==>`,exerciseUid);
 
     let query = "DELETE FROM EXERCISE_MODULES WHERE EXERCISE_UID = :exerciseUid";
-    const [exerciseDetails] = await executeQuery(query, QueryTypes.DELETE, {
+    const exerciseDetails = await executeQuery(query, QueryTypes.DELETE, {
       exerciseUid
     });
     return exerciseDetails;
@@ -732,7 +748,6 @@ export async function deleteLearnId(learnId) {
   }
 }
 
-
 export async function updateExercisesPost(user,exerciseUid) {
   logger.info(`${TAG}.updateExercisesPost()`);
   try {
@@ -750,3 +765,80 @@ export async function updateExercisesPost(user,exerciseUid) {
   }
 }
 
+
+//DELETE
+
+export async function deleteCoursePart(partUid){
+  try {
+    logger.info(`${TAG}.deleteCoursePart() ==>`, partUid);
+    const checkQuery = 'DELETE  FROM `COURSE_PART` WHERE PART_UID=:partUid';
+    const basicCourse = await executeQuery(checkQuery, QueryTypes.DELETE, {partUid});
+    return basicCourse
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.deleteCoursePart()`, error);
+    throw error;
+  }
+}
+
+export async function deleteCourseModule(moduleUid){
+  try {
+    logger.info(`${TAG}.deleteCourseModule() ==>`, moduleUid);
+    const checkQuery = 'DELETE  FROM `COURSE_MODULE` WHERE MODULE_UID=:moduleUid';
+    const basicCourse = await executeQuery(checkQuery, QueryTypes.DELETE, {moduleUid});
+    return basicCourse
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.deleteCourseModule()`, error);
+    throw error;
+  }
+}
+
+export async function checkLessonUid(lessonUid) {
+  try {
+    logger.info(`${TAG}.checkLessonUid()  ==>`, lessonUid);
+    let query ="select * from LESSON_MODULES where LESSON_UID = :lessonUid";
+    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+      lessonUid
+    });
+    return personalDetails;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.checkLessonUid()`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function checkTestUid(testUid) {
+  try {
+    logger.info(`${TAG}.checkTestUid()  ==>`, testUid);
+    let query ="select * from TEST_MODULES where TEST_UID = :testUid";
+    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+      testUid
+    });
+    return personalDetails;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.checkTestUid()`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function checkExerciseUid(exerciseUid) {
+  try {
+    logger.info(`${TAG}.checkExerciseUid()  ==>`, exerciseUid);
+    let query ="select * from EXERCISE_MODULES where EXERCISE_UID = :exerciseUid";
+    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+      exerciseUid
+    });
+    return personalDetails;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.checkExerciseUid()`,
+      error
+    );
+    throw error;
+  }
+}
