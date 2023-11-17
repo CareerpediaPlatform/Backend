@@ -27,7 +27,7 @@ export async function signupUser(user: IAdmin) {
         return serviceResponse;
       }
       const Admin = await AdminAuth.signUp(user);
-      const data = { Admin  }
+      const data = { Admin   }
      
       serviceResponse.data = data
     } catch (error) {
@@ -53,7 +53,7 @@ export async function loginAdmin(user:IAdmin) {
         serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         return serviceResponse;
       }
-  //comaparing password
+  //comparing password
       const isPasswordValid = await comparePasswords(existedUser.password ,user.password);
       if(!isPasswordValid ){
         serviceResponse.message = 'password is does not match';
@@ -62,10 +62,10 @@ export async function loginAdmin(user:IAdmin) {
         return serviceResponse;
       }else{
       const Admin = await AdminAuth.login(user);
-      const accessToken = await generateAccessToken({...Admin})
+      const accessToken = await generateAccessToken({uid:Admin[0].uid,role:"admin"})
       const data = { 
       accessToken,
-      Admin,
+      role:"admin",
       user_id
         }
         serviceResponse.data = data

@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "C:\\Users\\mohdz\\Documents\\Inkprog\\Projects\\Careerpedia\\Backend\\logs\\.9e74ecd77726b05683a537a24ce1a9632c95f5ed-audit.json",
+    "files": [
+        {
+            "date": 1697447133922,
+            "name": "C:\\Users\\mohdz\\Documents\\Inkprog\\Projects\\Careerpedia\\Backend\\logs\\careerpedia-platform-api-2023-10-16.log",
+            "hash": "6eb57bb6a40d6055019192ed06b192fdebb95627ed3f7e9e6e7e7bd6490a7d3e"
+        }
+    ],
+    "hashType": "sha256"
+}

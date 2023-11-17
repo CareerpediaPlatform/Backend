@@ -7,20 +7,22 @@ var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'
 
-export async function signUp(user: ICollege) {
+
+export async function signUp(user: ICollege,generatePassword:any,transaction?:any) {
   logger.info(`${TAG}.saveUser()`);
   try {
-    const hashedPassword = await hashPassword(user.password);
+    const hashedPassword = await hashPassword(generatePassword);
     const data = {
       uid: crypto.randomUUID(),
       email: user.email,
-      password: hashedPassword
+      password: hashedPassword,
+      status:"ACTIVE"
     };
-    let collegeInsertQuery = `insert into COLLEGE(UID, EMAIL, PASSWORD)
-    values(:uid, :email, :password)`;
+    let collegeInsertQuery = `insert into COLLEGE_ADMIN(UID, EMAIL, PASSWORD,STATUS)
+    values(:uid, :email, :password, :status)`;
 
     await executeQuery(collegeInsertQuery, QueryTypes.INSERT, {
-      ...data,
+      ...data,transaction
     });
     return data;
 
@@ -31,11 +33,11 @@ export async function signUp(user: ICollege) {
 }
 
 
-export async function checkEmailExist(email: string) {
+export async function checkEmailExist(email) {
     try {
       logger.info(`${TAG}.checkEmailExist()  ==>`, email);
   
-      let query = 'select * from COLLEGE where EMAIL=:email ';
+      let query = 'select * from COLLEGE_ADMIN where EMAIL=:email ';
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         email
       });
@@ -47,10 +49,10 @@ export async function checkEmailExist(email: string) {
   }
 
 
-  export async function checkUidExist(uid: string) {
+  export async function checkUidExist(uid) {
     try {
       logger.info(`${TAG}.checkUidExist() ==>`, uid);
-      let query = 'SELECT * FROM COLLEGE WHERE UID = :uid'; 
+      let query = 'SELECT * FROM COLLEGE_ADMIN WHERE UID = :uid'; 
       const [user] = await executeQuery(query, QueryTypes.SELECT, {
         uid
       });  
@@ -60,13 +62,27 @@ export async function checkEmailExist(email: string) {
       throw error;
     }
   }
+  export async function getCollegeAdminUid(uid){
+    try {
+      console.log(uid)
+      logger.info(`${TAG}.getCollegeAdminUid()  ==>`, uid);
+      let query = 'select * from COLLEGE_ADMIN where UID=:uid';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        uid:uid.uid
+      });
+      return userId;
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.getCollegeAdminUid()`, error); 
+      throw error;
+    }
+  }
 
 
 export async function login(user:ICollege) {
   
   try{
     logger.info(`${TAG}.saveUser()`);
-    let query = 'SELECT * FROM COLLEGE WHERE EMAIL=:email'
+    let query = 'SELECT * FROM COLLEGE_ADMIN WHERE EMAIL=:email'
     const collgeloginQuery  = await executeQuery(query,QueryTypes.SELECT,{
       email: user.email
     })
@@ -81,7 +97,7 @@ export async function changePassword(user:any): Promise<void> {
   try {
     let hashedPassword=await hashPassword(user.password)
     // Update the mentor's password in the database
-    const query = `UPDATE COLLEGE SET PASSWORD = :hashedPassword WHERE UID = :uid`;
+    const query = `UPDATE COLLEGE_ADMIN SET PASSWORD = :hashedPassword WHERE UID = :uid`;
     const collegeChangePassword = await executeQuery(query, QueryTypes.UPDATE, {hashedPassword ,...user});
     return collegeChangePassword;
   } catch (error) {
@@ -90,6 +106,29 @@ export async function changePassword(user:any): Promise<void> {
   }
 }
 
+export async function collegeUpdateStatus(user){
+  logger.info(`${TAG}.studentUpdateStatus()`);
+  try{
+    const info={
+      uid:user.uid,
+      status:user.status,
+    }
+    
+    const updateQuery = `UPDATE COLLEGE_ADMIN
+    SET status = :status
+    WHERE uid = :uid;
+    `
+    const [res]=await executeQuery(updateQuery,QueryTypes.UPDATE, {
+      ...info,
+    });
+    console.log(res)
+    return res;
+  }
+  catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.studentUpdateStatus()`, error);
+    throw error;
+  }
+}
 
 
 

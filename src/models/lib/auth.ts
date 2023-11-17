@@ -1,47 +1,61 @@
+import { string } from "joi"
+
+export interface MyObject {
+  id?: number;
+  uid?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  status?: string;
+}
+
 export interface IUser {
-  uid: string
-  firstName: string
-  lastName: string
-  email: string
-  password?:string
-  phoneNumber: string
-  role: string
-  uuid?:string
-  accessToken?:string
+  id: number;
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password?: string;
+  role?: string;
+  uuid?: string;
+  accessToken?: string;
+  terms_and_condition?:string
 }
 
 export class User implements IUser {
-  public uid: string
-  public firstName: string
-  public lastName: string
-  public email: string
-  public phoneNumber: string
-  public role: string
-  public uuid?:string
-   public password?:string
-  public accessToken?:string
+  public id: number;
+  public uid: string;
+  public firstName: string;
+  public lastName: string;
+  public email: string;
+  public password?: string;
+  public role?: string;
+  public uuid?: string;
+  public accessToken?: string;
 
-  constructor ( 
+  constructor(
+    id: number,
+    uid: string,
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string,
-    role: string,
-    password?:string,
-    uuid?:string,
-    accessToken?:string
-               ) {
-
-    this.firstName = firstName
-    this.lastName = lastName
-    this.email = email
-    this.phoneNumber = phoneNumber
-    this.role = role
-    this.accessToken = accessToken
-    this.uuid = uuid
-    this.password=password
+    role?: string,
+    uuid?: string,
+    accessToken?: string,
+    password?: string
+  ) {
+    this.id = id;
+    this.uid = uid;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.accessToken = accessToken;
+    this.uuid = uuid;
   }
 }
+
 
 
 // signim
@@ -50,6 +64,7 @@ export interface ISingin{
   password?:string
   uuid?:string
   phoneNumber?:string
+  status?:string
 }
 
 export class ISignin implements ISingin {
@@ -57,16 +72,19 @@ export class ISignin implements ISingin {
   public password?:string
   public uuid?:string
   public phoneNumber?:string
+  public status?:string
 
  
 
   constructor (
     phoneNumber:string,
     email?:string,
-    uuid?:string) {
+    uuid?:string,status?:string) {
     this.phoneNumber = phoneNumber
     this.uuid = uuid
     this.email = email
+    this.status=status
+
   }
 }
 
@@ -89,8 +107,6 @@ export class Otp implements userOTP {
   public type:string
   public accessToken:string
   public createdAt?:string
-
- 
 
   constructor (
     student_id:string,
@@ -138,19 +154,31 @@ export interface IMentor {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
+  type:string;
+  course:string;
+  status?:string;
 }
 
 export class Mentor implements IMentor {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
+  public type:string;
+  public course:string;
+  public status?:string;
   
-  constructor(email: string, password: string) {
+  
+  constructor(email: string,password : string ,type:string,course:string,status:string) {
     this.email = email;
     this.password = password;
+    this.type = type;
+    this.course = course;
+    this.status = status;
+    
   }
+
 }
 
 //recruiter
@@ -158,18 +186,23 @@ export interface IRecruiter {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
+  status?:string
 }
 
 export class Recruiter implements IRecruiter {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
+  public status?:string;
 
-  constructor(email: string, password: string) {
+
+
+  constructor(email: string, password: string,status?:string) {
     this.email = email;
     this.password = password;
+    this.status=status
   }
 }
 
@@ -179,14 +212,14 @@ export interface ICollege {
   id?: string;
   uid?: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 export class College implements ICollege {
   public id?: string;
   public uid?: string;
   public email: string;
-  public password: string;
+  public password?: string;
 
   constructor(email: string, password: string) {
     this.email = email;

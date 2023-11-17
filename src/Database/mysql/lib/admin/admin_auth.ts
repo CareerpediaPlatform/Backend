@@ -31,7 +31,6 @@ export async function signUp(user: IAdmin) {
   }
 }
 
-
 export async function checkEmailExist(email: string) {
     try {
       logger.info(`${TAG}.checkEmailExist()  ==>`, email);
@@ -62,4 +61,7 @@ export async function checkEmailExist(email: string) {
       throw error;
     }
   }
+  
+
+
   
