@@ -18,6 +18,7 @@ const router = Router()
 router.route('/course-list')
 .get(isAuthenticated,controller.getCourses);
 
+
 // courses//
 router.route('/course-overvie/:coursetype')
  .post(isAuthenticated,controller.coursePost);
@@ -43,19 +44,19 @@ router.route('/course-overvie/:coursetype')
  router.route('/module/:partUid')
  .get(isAuthenticated,controller.getCourseModule);
 
- router.route('/lesson/:moduleUid')
+ router.route('/lesson/:lessonUid')
  .get(isAuthenticated,controller.getModulesLesson);
 
  router.route('/lesson/:lessonUid')
  .delete(isAuthenticated,controller.deleteModulesLesson);
 
- router.route('/test/:moduleUid') 
+ router.route('/test/:testUid') 
  .get(isAuthenticated,controller.getModulesTest);
 
  router.route('/test/:testUid')
  .delete(isAuthenticated,controller.deleteModulesTest);
 
- router.route('/exercise/:moduleUid')
+ router.route('/exercise/:exerciseUid')
  .get(isAuthenticated,controller.getModulesExercise);
 
  router.route('/exercise/:exerciseUid')
@@ -88,6 +89,10 @@ router.route('/course-overvie/:coursetype')
 
  router.route('/module/:moduleUid')
  .delete(isAuthenticated,controller.deleteCourseModule);
+
+ router.route('/-overviecoursew')
+.get(isAuthenticated,controller.getCourseOverview);
+
  
 
 export default router;
