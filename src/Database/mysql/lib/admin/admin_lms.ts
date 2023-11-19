@@ -4,8 +4,8 @@ import { QueryTypes } from "sequelize";
 var crypto=require("crypto") 
 const TAG = 'data_stores_mysql_lib_user_lms'
 
-export async function  getCourseOverview(courseId) {
-  let id=courseId
+export async function  getCourseOverview(courseUid) {
+  let id=courseUid
     try {
       logger.info(`${TAG}.getCourseOverview()  ==>`);
 
@@ -487,18 +487,18 @@ export async function checkModuleUid(moduleUid) {
   }
 }
 
-export async function getLessonPost(moduleUid) {
+export async function getLessonPost(lessonUid) {
   try {
-    logger.info(`${TAG}.getLessonPost()  ==>`,moduleUid);
+    logger.info(`${TAG}.getLessonPost()  ==>`,lessonUid);
 
-    let query ="select * from LESSON_MODULES where MODULE_UID = :moduleUid";
+    let query ="select * from LESSON_MODULES where MODULE_UID = :lessonUid";
     const lessonDetails = await executeQuery(query, QueryTypes.SELECT, {
-      moduleUid
+      lessonUid
     });
-    const data={
-      lessonDetails: Object.values(lessonDetails)
-    }
-    return {...data};
+    // const data={
+    //   lessonDetails: Object.values(lessonDetails)
+    // }
+    return lessonDetails ;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.getLessonPost()`,

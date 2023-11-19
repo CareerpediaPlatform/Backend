@@ -10,11 +10,12 @@ import {  getFileUrl, getVideoDurations, saveFile } from "src/helpers/s3_media";
 import nodeUtil from 'util';
 
 const TAG = 'services.lms.admin'
-export async function getCourseOverview(courseId){
+
+export async function getCourseOverview(courseUid){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try{
       
-          const response=await adminLms.getCourseOverview(courseId)
+          const response=await adminLms.getCourseOverview(courseUid)
           const data=[
             ...response
           ]
@@ -373,21 +374,21 @@ export async function exerciseUser(exerciseData) {
     return serviceResponse;
   }
 
-export async function getModulesLesson(moduleUid) {
-    log.info(`${TAG}.getModulesLesspon() ==> `, moduleUid);
+export async function getModulesLesson(lessonUid) {
+    log.info(`${TAG}.getModulesLesspon() ==> `, lessonUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(moduleUid)
-      const getLesonid = await adminLms.checkModuleUid(moduleUid);
-      console.log(getLesonid);
-      if (!getLesonid) {
-        serviceResponse.message = "Invalid course lesson UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
-      const getLessonModules = await adminLms.getLessonPost(moduleUid)     
+      console.log(lessonUid)
+      // const getLesonid = await adminLms.checkModuleUid(lessonUid);
+      // console.log(getLesonid);
+      // if (!getLesonid) {
+      //   serviceResponse.message = "Invalid course lesson UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+      const getLessonModules = await adminLms.checkLessonUid(lessonUid)     
       serviceResponse.data = getLessonModules
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesLesspon`, error);
@@ -426,21 +427,21 @@ export async function deleteModulesLesspon(lessonUid) {
     return serviceResponse;
   }
 
-export async function getModulesTest(moduleUid) {
-    log.info(`${TAG}.getModulesTest() ==> `, moduleUid);
+export async function getModulesTest(testUid) {
+    log.info(`${TAG}.getModulesTest() ==> `, testUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(moduleUid)
-      const getLesonid = await adminLms.checkModuleUid(moduleUid);
-      console.log(getLesonid);
-      if (!getLesonid) {
-        serviceResponse.message = "Invalid course test UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
-      const courseModules = await adminLms.getTestPost(moduleUid)   
+      console.log(testUid)
+      // const getLesonid = await adminLms.checkModuleUid(moduleUid);
+      // console.log(getLesonid);
+      // if (!getLesonid) {
+      //   serviceResponse.message = "Invalid course test UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+      const courseModules = await adminLms.checkTestUid(testUid)   
       serviceResponse.data = courseModules
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesTest`, error);
@@ -475,21 +476,21 @@ export async function deleteModulesTest(testUid) {
     return serviceResponse;
   }
 
-export async function getModulesExercise(moduleUid) {
-    log.info(`${TAG}.getModulesExercise() ==> `, moduleUid);
+export async function getModulesExercise(exerciseUid) {
+    log.info(`${TAG}.getModulesExercise() ==> `, exerciseUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(moduleUid)
-      const getLesonid = await adminLms.checkModuleUid(moduleUid);
-      console.log(getLesonid);
-      if (!getLesonid) {
-        serviceResponse.message = "Invalid course exercise UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
-      const courseModules = await adminLms.getExercisePost(moduleUid)    
+      console.log(exerciseUid)
+      // const getLesonid = await adminLms.checkModuleUid(moduleUid);
+      // console.log(getLesonid);
+      // if (!getLesonid) {
+      //   serviceResponse.message = "Invalid course exercise UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+      const courseModules = await adminLms.checkExerciseUid(exerciseUid)    
       serviceResponse.data = courseModules
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getModulesExercise`, error);
@@ -523,7 +524,6 @@ export async function deleteModulesExercise(exerciseUid) {
     }
     return serviceResponse;
   }
-
 
   
 export async function updateCoursePartPost(user,partUid) {
