@@ -90,7 +90,7 @@ router.route('/course-overvie/:coursetype')
  router.route('/module/:moduleUid')
  .delete(isAuthenticated,controller.deleteCourseModule);
 
- router.route('/-overviecoursew')
+ router.route('/single-course-overview/:courseUid')
 .get(isAuthenticated,controller.getCourseOverview);
 
  

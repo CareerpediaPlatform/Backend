@@ -5,75 +5,73 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_user_lms'
 
 export async function  getCourseOverview(courseUid) {
-  let id=courseUid
+
+  console.log(courseUid)
     try {
       logger.info(`${TAG}.getCourseOverview()  ==>`);
-
+console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
   let query=`SELECT
-  c.thumbnail AS thumbnail,
   c.video AS video,
   c.title AS title,
-MAX(c.description) AS description,
-MAX(c.mentor) AS mentor,
-MAX(c.id) AS id,
-MAX(c.type) AS type,
-  GROUP_CONCAT(DISTINCT wyl.point) AS whatYouLearn,
-(
- select JSON_ARRAYAGG(
+  MAX(c.description) AS description,
+  MAX(c.mentor) AS mentor,
+  MAX(c.COURSE_UID) AS id,
+  MAX(c.type) AS type,
+  (
+   select JSON_ARRAYAGG(
       JSON_OBJECT(
-          'part', cp.partTitle,
-          'description', cp.description,
-          'modules', (
-              SELECT JSON_ARRAYAGG(
-                
-                  JSON_OBJECT(
-                      'name', m.moduleName,
-                      'desc', m.moduleDescription,
-                       'lesson', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                   'name', l.lessonName,
-                                  'points', l.lessonPoints,
-                                  'duration', l.lessonDuration
-                  )
-              ) 
-              FROM lesson AS l WHERE m.id = l.moduleId
-          ),
-                          'exercises', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                                   'name', e.exerciseName,
-                          'points', e.exercisePoints
-                  )
-              ) 
-              FROM Exercise AS e WHERE m.id = e.moduleId
-          ),
-                      'test', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                    'name', t.testName,
-                          'points', t.testPoints
-                  )
-              ) 
-              FROM Test AS t WHERE m.id = t.moduleId
-          )
-                  )
-              ) 
-              FROM Module AS m 
-              WHERE cp.id = m.coursePartId
-          )
-      ) 
-  ) FROM CoursePart cp where c.id = cp.courseId 
-)AS part
-FROM Course AS c 
-LEFT JOIN WhatYouLearn AS wyl ON c.id = wyl.courseId WHERE c.id=:id
+      'id',wyl.ID,
+      'learn',wyl.LEARN
+      )
+      ) FROM WHAT_YOU_LEARN AS wyl WHERE wyl.COURSE_UID=c.COURSE_UID
+  ) AS whatyoulearn,
+    (
+   select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'partUid',p.PART_UID,
+      'title',p.PART_TITLE,
+    'modules',(
+     select JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'moduleId',m.MODULE_UID,
+      'name',m.MODULE_NAME,
+      'Lessons',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'lessonId',l.LESSON_UID,
+      'lesson',l.LESSON_NAME,
+      'points',l.POINTS
+      )) FROM LESSON_MODULES AS l WHERE l.MODULE_UID=m.MODULE_UID),
+        'tests',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'testId',t.TEST_UID,
+      'test',t.TEST_NAME,
+      'points',t.POINTS,
+      'marks',t.MARKS
+      )) FROM TEST_MODULES AS t WHERE t.MODULE_UID=m.MODULE_UID),
+            'exercise',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'exerciseId',e.EXERCISE_UID,
+      'exercise',e.QUESTION_NAME,
+      'points',e.POINTS,
+      'marks',e.MARKS
+      )) FROM EXERCISE_MODULES AS e WHERE e.MODULE_UID=m.MODULE_UID)
+      )
+      ) FROM COURSE_MODULE AS m  where m.PART_UID=p.PART_UID)
+      )
+      ) FROM COURSE_PART AS p  WHERE p.COURSE_UID=c.COURSE_UID
+  ) AS courseParts
+FROM COURSE_OVERVIEW AS c
+WHERE c.COURSE_UID = :courseUid
 GROUP BY
-  c.thumbnail,
   c.video,
   c.title,
-  c.description,
-  c.mentor,c.id,c.type;`
-      const results= await executeQuery(query, QueryTypes.SELECT,{id:id});
+  c.mentor,
+  c.COURSE_UID,
+  c.type;`
+      const results= await executeQuery(query, QueryTypes.SELECT,{courseUid:courseUid});
         return results;
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getCourseOverview()`, error);
