@@ -1,0 +1,343 @@
+@import "../../../../../../../index.scss";
+.edit {
+  width: 100%;
+  height: 80vh;
+  overflow-y: scroll;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 1700px) {
+    gap: 18px;
+  }
+  @media (max-width: 1450px) {
+    gap: 16px;
+  }
+
+  .Accordion {
+    width: 100%;
+    box-shadow: none !important;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 20px;
+      color: $heading;
+
+      @media (max-width: 1700px) {
+        font-size: 14px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .new-part {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+
+    @media (max-width: 1700px) {
+      gap: 18px;
+    }
+    @media (max-width: 1450px) {
+      gap: 16px;
+    }
+
+    .arrow {
+      height: 40px;
+      // padding: 15px;
+      cursor: pointer;
+      @media (max-width: 1700px) {
+        height: 35px;
+        // padding: 13px;
+      }
+      @media (max-width: 1450px) {
+        height: 30px;
+        // padding: 10px;
+      }
+    }
+    img {
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid $border;
+      background: $white;
+      box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.06);
+      @media (max-width: 1700px) {
+        height: 45px;
+      }
+      @media (max-width: 1450px) {
+        height: 40px;
+      }
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 20px;
+      color: $heading;
+
+      @media (max-width: 1700px) {
+        font-size: 16px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 14px;
+      }
+    }
+    span {
+      color: $light-grey;
+
+      font-size: 16px;
+
+      font-weight: 500;
+      line-height: 20px;
+      @media (max-width: 1700px) {
+        font-size: 14px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .courses {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+
+    // select {
+    //   width: 100%;
+    //   color: $light-blue;
+    //   height: 50px;
+    //   font-size: 16px;
+    //   font-weight: 600;
+    //   line-height: 20px;
+    //   border: 2px solid $border;
+    //   border-radius: 6px;
+    //   padding: 0 20px;
+    //   outline: none;
+    //   cursor: pointer;
+    //   @media (max-width: 1700px) {
+    //     height: 38px;
+    //     font-size: 14px;
+    //   }
+    //   @media (max-width: 1450px) {
+    //     height: 36px;
+    //     font-size: 12px;
+    //   }
+    // }
+  }
+
+  .content-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    span,
+    div {
+      font-size: 12px;
+      font-weight: 500;
+      color: $light-blue !important;
+
+      @media (max-width: 1700px) {
+        font-size: 11px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 10px;
+      }
+    }
+    .nested-accordions {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      flex-direction: column;
+      gap: 20px;
+
+      @media (max-width: 1700px) {
+        gap: 18px;
+      }
+      @media (max-width: 1450px) {
+        gap: 16px;
+      }
+      .nested-module {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        gap: 10px;
+        h2 {
+          font-size: 14px;
+          font-weight: 600;
+          color: $heading;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+        img {
+          height: 15px;
+        }
+      }
+      .double-nested-main {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        .nested-icons-text {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 20px;
+          @media (max-width: 1700px) {
+            gap: 18px;
+          }
+          @media (max-width: 1450px) {
+            gap: 15px;
+          }
+          .text {
+            color: $heading;
+            font-size: 14px;
+            font-weight: 600;
+            @media (max-width: 1700px) {
+              font-size: 13px;
+            }
+            @media (max-width: 1450px) {
+              font-size: 12px;
+            }
+          }
+          .lessons-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            .lists {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              .list {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                img {
+                  cursor: pointer;
+                  height: 10px;
+                }
+              }
+              // .points-time {
+              //   display: flex;
+              //   justify-content: flex-start;
+              //   align-items: center;
+              //   flex-direction: row;
+              //   gap: 70px;
+
+              //   @media (max-width: 1700px) {
+              //     gap: 68px;
+              //   }
+              //   @media (max-width: 1450px) {
+              //     gap: 66px;
+              //   }
+              //   .points {
+              //     display: flex;
+              //     justify-content: flex-start;
+              //     align-items: center;
+              //     flex-direction: row;
+              //     white-space: nowrap;
+              //   }
+              //   .time {
+              //     display: flex;
+              //     justify-content: flex-start;
+              //     align-items: center;
+              //     flex-direction: row;
+              //     white-space: nowrap;
+              //   }
+              // }
+              .lesson-data {
+                font-size: 12px;
+                color: $light-blue;
+                font-weight: 500;
+                @media (max-width: 1700px) {
+                  font-size: 11px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .add-new-part {
+    width: 100%;
+    padding: 18px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 10px;
+    h4 {
+      font-size: 14px;
+      color: $link;
+      font-weight: 600;
+      cursor: pointer;
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+    span {
+      font-size: 16px;
+      color: $light-blue;
+      cursor: pointer;
+      font-weight: 600;
+      @media (max-width: 1700px) {
+        font-size: 14px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+}
+.xyz {
+  box-shadow: none !important;
+  border-radius: 6px;
+  border: 2px solid $border;
+  .part-img {
+    padding-left: 10px;
+    height: 15px;
+  }
+  .MuiAccordionSummary-expandIconWrapper {
+    img {
+      height: 10px;
+    }
+  }
+}
+
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root:before {
+  height: 0 !important;
+}

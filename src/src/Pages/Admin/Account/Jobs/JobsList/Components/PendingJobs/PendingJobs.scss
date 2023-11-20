@@ -1,0 +1,124 @@
+@import "../../../../../../../index.scss";
+
+.pending-jobs {
+  width: 100%;
+  border: 2px solid $border;
+  border-radius: 20px;
+  min-height: 90vh;
+
+  .course-filters {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 14vh;
+    right: 30px;
+    @media (max-width: 1700px) {
+      gap: 11px;
+      top: 13%;
+      right: 2%;
+    }
+    @media (max-width: 1450px) {
+      top: 13.5%;
+      gap: 10px;
+    }
+
+    .course-dropdown {
+      border: 2px solid $border !important;
+      outline: none;
+      padding: 8px 13px;
+      color: $heading;
+      font-weight: 700;
+      width: 157px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 14px;
+      @media (max-width: 1700px) {
+        padding: 7px 12px;
+        width: 153px;
+        height: 38px;
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        padding: 6px 11px;
+        width: 150px;
+        height: 36px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .jobList {
+    border-bottom: none;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .job-list-table {
+      width: 100%;
+
+      .table-head {
+        width: 100%;
+        .table-head-data {
+          font-size: 14px !important;
+          color: $heading;
+          font-weight: 700;
+          overflow: hidden;
+          align-items: center;
+          border-bottom: 2px solid $border;
+          font-family: "Montserrat", sans-serif;
+          @media (max-width: 1700px) {
+            font-size: 13px !important;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px !important;
+          }
+        }
+      }
+
+      .table-body {
+        width: 100%;
+        tr {
+          &:hover {
+            background-color: $table-hover;
+          }
+        }
+
+        .selected-status {
+          font-weight: 700 !important;
+          color: $green !important;
+        }
+
+        .rejected-status {
+          font-weight: 700 !important;
+          color: $red !important;
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+
+          img {
+            width: 40px;
+            border-radius: 10px;
+            @media (max-width: 1700px) {
+              width: 38px;
+            }
+            @media (max-width: 1450px) {
+              width: 36px;
+            }
+          }
+         
+        }
+      }
+      border: none;
+    }
+  }
+}

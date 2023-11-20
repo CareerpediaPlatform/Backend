@@ -1,0 +1,111 @@
+@import "../../../../../index.scss";
+
+.StatusOfCandidates {
+  border: 2px solid $border;
+  border-radius: 20px;
+
+  .job-role-filters {
+    position: absolute;
+    top: 10vh;
+    right: 30px;
+    @media (max-width: 1700px) {
+      right: 25px;
+    }
+    @media (max-width: 1450px) {
+      right: 20px;
+    }
+
+    .course-dropdown {
+      border: 2px solid $border !important;
+      outline: none;
+      padding: 0px 5px;
+      color: $heading;
+      font-weight: 700;
+      width: 157px;
+      height: 40px;
+      border-radius: 10px;
+      position: absolute;
+      top: 30px;
+      right: 0;
+      font-size: 14px;
+      @media (max-width: 1700px) {
+        width: 155px;
+        height: 45px;
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        width: 150px;
+        height: 40px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .recruiterList {
+    border-bottom: none;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .recruiter-list-table {
+      width: 100%;
+      table-layout: fixed;
+
+      .table-head {
+        width: 100%;
+        .table-head-data {
+          font-family: "Montserrat", sans-serif;
+          font-size: 14px !important;
+          color: $heading;
+          font-weight: 700;
+          overflow: hidden;
+          align-items: center;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .table-body {
+        .selected-status {
+          font-weight: 700 !important;
+          color: $green !important;
+        }
+        .rejected-status {
+          font-weight: 700 !important;
+          color: $red !important;
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+
+          img {
+            width: 40px;
+            border-radius: 50%;
+            @media (max-width: 1700px) {
+              width: 38px;
+            }
+            @media (max-width: 1450px) {
+              width: 36px;
+            }
+          }
+        }
+      }
+
+      border: none;
+    }
+  }
+}

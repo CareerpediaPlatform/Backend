@@ -1,0 +1,60 @@
+@import "../../../../../../index.scss";
+
+.revenue-graph {
+  width: 50%;
+  background-color: $white !important;
+  border: 2px solid $border;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  @media (max-width: 1700px) {
+    padding: 18px;
+    gap: 25px;
+  }
+  @media (max-width: 1450px) {
+    padding: 15px;
+    gap: 20px;
+  }
+  .headings {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    h3 {
+      color: $heading;
+      font-size: 14px;
+      font-weight: 700;
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+    .months {
+      display: flex;
+      gap: 20px;
+
+      .months-button {
+        color: $light-blue;
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+    }
+  }
+  .bar-graph {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    tspan {
+      font-size: 12px;
+      color: $light-blue !important;
+    }
+  }
+}

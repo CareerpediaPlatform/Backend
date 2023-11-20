@@ -1,0 +1,115 @@
+@import "../../../../../../../index.scss";
+
+.mentor-details {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  .mentor-heading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    h2 {
+      font-size: 18px;
+      color: $heading;
+      @media (max-width: 1700px) {
+        font-size: 16px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 14px;
+      }
+    }
+    p {
+      font-size: 14px;
+      color: $light-blue;
+
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+  .personal-list {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    .personal-data {
+      width: 50%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 40px;
+
+      .image-logo {
+        width: 100px;
+        height: 100px;
+        @media (max-width: 1450px) {
+          width: 80px;
+          height: 80px;
+        }
+        .img-default {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+      .keys {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+        h3 {
+          font-size: 14px;
+          color: $light-blue;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+        h4 {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 600;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+        p {
+          font-size: 14px;
+          color: $light-blue;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+        #linkedIn{
+          width : 350px;
+          @media (max-width: 1700px) {
+            width: 300px;
+          }
+          @media (max-width: 1450px) {
+           width: 250px;
+          }
+
+
+        }
+      }
+    }
+  }
+}

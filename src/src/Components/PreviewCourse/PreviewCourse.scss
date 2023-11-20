@@ -1,0 +1,177 @@
+@import "../../index.scss";
+
+.main-preview {
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: $white;
+  border-radius: 20px;
+  padding: 30px 30px 30px;
+  @media (max-width: 1700px) {
+    gap: 25px;
+    padding: 25px 25px 30px;
+  }
+  @media (max-width: 1450px) {
+    gap: 20px 20px 20px;
+  }
+  .preview-main {
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+    color: $heading;
+    gap: 80px;
+    justify-content: space-between;
+    .add-content {
+      color: $heading;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+  .video-main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .video {
+      width: 50% !important;
+      height: 40vh !important;
+      border-radius: 14px;
+      overflow: hidden;
+      video {
+        width: auto !important;
+        height: 100% !important;
+      }
+    }
+    .video-content {
+      width: 45%;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      .video-content2 {
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        width: 80%;
+        @media (max-width: 1380px) {
+          width: 90%;
+        }
+        .video-heading {
+          font-size: 24px;
+          font-weight: 700px;
+          color: $heading;
+        }
+        .video-text {
+          font-size: 12px;
+          color: $light-grey;
+          font-weight: 500;
+        }
+        .main-icons {
+          display: flex;
+          gap: 40px;
+          color: $light-blue;
+
+          .icons-main {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+            .icons-text {
+              display: flex;
+              gap: 10px;
+              color: $blue;
+              font-size: 12px;
+              font-weight: 500;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+        .price {
+          display: flex;
+          gap: 16px;
+          .price1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: $yellow;
+          }
+          .price2 {
+            font-size: 15px;
+            font-weight: 500;
+            color: $light-blue;
+          }
+        }
+        a {
+          width: 100%;
+          .button {
+            background-color: $yellow;
+            color: $white;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px;
+            width: 70%;
+            border: none;
+            border-radius: 5px;
+            @media (max-width: 1700px) {
+              font-size: 13px;
+            }
+            @media (max-width: 1450px) {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .Tabs-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .tabs {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid $border;
+
+      .mui-tabs {
+        .tab {
+          font-size: 16px !important;
+          color: $heading;
+          font-weight: 700;
+          @media(max-width:1700px){
+            font-size: 15px !important;
+          }
+          @media(max-width:1450px){
+            font-size: 14px !important;
+          }
+        }
+        & .Mui-selected {
+          color: $yellow;
+        }
+      }
+      a{
+        color: $heading;
+        font-size: 16px;
+        font-weight: 600;
+        @media(max-width:1700px){
+          font-size: 15px ;
+        }
+        @media(max-width:1450px){
+          font-size: 14px ;
+        }
+      }
+    }
+
+    .MuiTabs-flexContainer {
+      display: flex;
+      gap: 30px;
+    }
+  }
+}

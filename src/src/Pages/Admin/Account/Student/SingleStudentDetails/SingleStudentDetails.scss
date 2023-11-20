@@ -1,0 +1,67 @@
+@import "../../../../../index.scss";
+
+.admin-single-student {
+  width: 100%;
+  display: flex;
+  .single-student-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .single-student-details {
+      width: 100%;
+      margin-top: 10vh;
+      background-color: $background;
+      padding: 30px 30px 30px;
+      gap: 30px;
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px 20px 30px;
+      }
+
+      .single-student {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: $white;
+        border-radius: 15px;
+        gap: 40px;
+        padding: 50px 60px;
+        @media (max-width: 1700px) {
+          padding: 40px 50px;
+        }
+        @media (max-width: 1450px) {
+          padding: 40px 40px;
+        }
+
+        .remove-access {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: row;
+          span {
+            text-transform: none;
+          }
+          button {
+            padding: 10px 30px;
+            border: none;
+            outline: none;
+            background-color: #f96e6f;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+          }
+        }
+        .dialog-button {
+          z-index: 9999999 !important;
+        }
+      }
+    }
+  }
+}
