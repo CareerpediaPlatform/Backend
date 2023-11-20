@@ -1,0 +1,77 @@
+@import '../../../../../../../../../index.scss';
+.contents-list{
+    width: 100%;
+    border: 1px solid #F8F8F8;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 8px;
+
+    .contents-list-heading{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap:12px;
+        img{
+            width: 24px;
+            height: 24px;
+        }
+        h2{
+            color: $light-blue;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    }
+
+    .list{
+        width: 100%;
+            .content-slot:hover{
+                background-color: #E2EBFE;
+            }
+           .content-slot{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 17px 35px;
+            .title {
+                display: flex;
+                gap:10px;
+                h4{color:#5E5873;
+            font-size: 14px;
+            font-weight: 600;
+                 }
+                h3{color:#5E5873;
+            font-size: 14px;
+            font-weight: 500;
+                 }
+            }
+
+            .points-duration{
+                display: flex ;
+                // gap:50px;
+                width: 170px;
+                justify-content: space-between;
+                p{
+                    color: $light-blue;
+                    font-size: 12px;
+                    font-weight: 600;
+                }
+                .duration{
+                    display: flex;
+                    gap:17px;
+                    align-items: center;
+                    img{
+                     width: 13px;
+                     height: 15px;   
+                    }
+                    p{
+                        color: #6E6B7B;
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+                }
+            }
+            }
+        }
+    }

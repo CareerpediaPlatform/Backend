@@ -1,0 +1,77 @@
+@import "../../../../index.scss";
+.mentor-edit-profile {
+  width: 100%;
+  display: flex;
+  .edit-profile-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .edit-profile-details {
+      width: 100%;
+      margin-top: 10vh;
+      background-color: $background;
+      padding: 30 30px 30px;
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px 20px 30px;
+      }
+      .edit-profile-components {
+        border-radius: 20px;
+        border: 2px solid #f8f8f8;
+        background: #fff;
+        display: flex;
+        padding: 30px 25px;
+        .edit-profile-components-left {
+          width: 30%;
+          border-right: solid #f8f8f8;
+          position: relative;
+          height: 80vh;
+          overflow-y: scroll;
+          .back-btn {
+            position: absolute;
+            width: 40px;
+            // he: 40px;
+            img {
+              width: 100%;
+            }
+          }
+        }
+        .edit-profile-components-right {
+          width: 70%;
+          height: 80vh;
+          overflow-y: scroll;
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          padding: 0px 0px 0px 5vw;
+
+          .buttons {
+            align-self: center;
+            button {
+              width: 200px;
+              height: 50px;
+              color: #ffffff;
+              background-color: #ff9f43;
+              border: none;
+              font-size: 16px;
+              font-weight: 600;
+              border-radius: 10px;
+              @media (max-width: 1700px) {
+                width: 180px;
+                height: 45px;
+                font-size: 15px;
+              }
+              @media (max-width: 1450px) {
+                width: 150px;
+                height: 40px;
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@import "../../index.scss";
+.mobile-screen {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: auto;
+  justify-content: center;
+  height: 100vh;
+  gap: 50px;
+  @media (max-width: 450px) {
+    gap: 40px;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+    @media (max-width: 450px) {
+      gap: 20px;
+    }
+    h2 {
+      font-size: 32px;
+      color: $yellow;
+      text-align: center;
+      @media (max-width: 450px) {
+        font-size: 28px;
+      }
+    }
+    p {
+      color: $light-grey;
+      font-size: 18px;
+      text-align: center;
+      @media (max-width: 450px) {
+        font-size: 16px;
+      }
+    }
+  }
+}

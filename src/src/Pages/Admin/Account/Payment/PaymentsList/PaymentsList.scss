@@ -1,0 +1,205 @@
+@import "../../../../../index.scss";
+
+.payments {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .headings {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h3 {
+      color: $heading;
+      font-size: 14px;
+      font-weight: 700;
+      @media(max-width:1700px){
+        font-size: 13px;
+      }
+      @media(max-width:1450px){
+        font-size: 12px;
+      }
+    }
+    select {
+      width: 150px;
+      height: 40px;
+      border: 2px solid $border;
+      color: $heading;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      padding: 0 5px;
+      @media(max-width:1700px){
+        font-size: 13px;
+      }
+      @media(max-width:1450px){
+        font-size: 12px;
+      }
+    }
+  }
+  .payment-table {
+    width: 100%;
+    border: 2px solid $border;
+    border-radius: 20px !important;
+    background-color: $white;
+    tr {
+      border-bottom: 2px solid $border;
+    }
+
+    .table-head {
+      .table-head-data {
+        font-size: 14px ;
+        color: $heading;
+        font-weight: 700;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: 1700px) {
+          font-size: 13px ;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px ;
+        }
+      }
+    }
+    .table-body {
+      tr {
+        &:hover {
+          background-color: $table-hover;
+        }
+      }
+      cursor: pointer;
+      .table-body-data {
+        font-size: 14px;
+        color: $light-blue;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: 1700px) {
+          font-size: 13px ;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px ;
+        }
+      }
+    }
+  }
+}
+.popup-content {
+  border: 0px !important;
+  border-radius: 10px;
+  .popup-main-Container {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 30px;
+    position: relative;
+    padding: 40px;
+    border-radius: 20px !important;
+    @media (max-width: 1700px) {
+      padding: 35px;
+    }
+    @media (max-width: 1450px) {
+      padding: 30px;
+    }
+    .close {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+
+      cursor: pointer;
+    }
+    .popup-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: $heading;
+      @media (max-width: 1700px) {
+        font-size: 17px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 16px;
+      }
+    }
+
+    .popup-mains {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 20px;
+
+      .popup-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 30px;
+        @media (max-width: 1700px) {
+          gap: 28px;
+        }
+        @media (max-width: 1450px) {
+          gap: 25px;
+        }
+        h4,
+        .dot {
+          font-size: 14px;
+          font-weight: 700;
+          color: $heading;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+        .value {
+          font-size: 14px;
+          color: $light-grey;
+          font-weight: 400;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+
+        .success {
+          color: $green;
+          font-weight: 700;
+        }
+        .fail {
+          color: $red;
+          font-weight: 700;
+        }
+      }
+
+      .label {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        color: $heading;
+        font-weight: 500;
+        .input {
+          padding: 10px 14px;
+          font-size: 14px;
+          color: $blue;
+          font-weight: 400;
+          border-radius: 10px;
+          border: 2px solid $border;
+          resize: none;
+          &::placeholder {
+            font-size: 14px;
+            color: $light-grey;
+          }
+        }
+      }
+    }
+  }
+}

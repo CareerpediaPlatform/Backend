@@ -1,0 +1,46 @@
+@import "../../../../index.scss";
+
+.college-student {
+  width: 100%;
+  display: flex;
+  .student-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .student-details {
+      width: 100%;
+      margin-top: 10vh;
+      padding: 30px 30px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      background-color: $background;
+
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px;
+        gap: 25px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px 20px 30px;
+        gap: 20px;
+      }
+      .individual-profile{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: $white;
+        border-radius: 15px;
+        gap: 40px;
+        padding: 50px 60px;
+        @media (max-width: 1700px) {
+          padding: 40px 50px;
+        }
+        @media (max-width: 1450px) {
+          padding: 40px 40px;
+        }
+      }
+    }
+  }
+}

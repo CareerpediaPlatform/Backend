@@ -1,0 +1,23 @@
+@import "../../../../index.scss";
+.mentor-discussion {
+  width: 100%;
+  display: flex;
+  .discussion-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .discussion-details {
+      background-color: $background;
+      width: 100%;
+      margin-top: 10vh;
+      padding: 30px 30px 30px;
+      min-height: 90vh;
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 25px 25px 30px;
+      }
+    }
+  }
+}

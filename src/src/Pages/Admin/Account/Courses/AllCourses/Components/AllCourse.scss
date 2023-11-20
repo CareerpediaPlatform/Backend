@@ -1,0 +1,167 @@
+@import "../../../../../../index.scss";
+
+.allcourse-main {
+  background-color: $background;
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+
+  .sub-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .heading {
+      font-size: 16px;
+      font-weight: 600px;
+      color: $black;
+      @media (max-width: 1500px) {
+        font-size: 15px;
+      }
+      @media (max-width: 1350px) {
+        font-size: 14px;
+      }
+    }
+    .Swiper {
+      width: 90%;
+      display: flex !important;
+      justify-content: center !important;
+
+      @media (max-width: 1450px) {
+        width: 95%;
+      }
+
+      .swiper-button-next,
+      .swiper-button-prev {
+        color: $heading; 
+        font-weight: 900;
+        width: 30px;
+        height: 30px;
+        border: 2px solid $heading;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .swiper-button-next:after,
+      .swiper-button-prev:after {
+        font-size: 14px !important;
+        font-weight: 900 !important;
+        // cursor: pointer;
+      }
+
+      .swiper-wrapper {
+        width: 80%;
+        height: auto;
+        @media (max-width: 1450px) {
+          width: 85%;
+        }
+
+        .swiper-slide {
+          width: 32% !important ;
+
+          .addCard {
+            border-radius: 10px;
+            border: 2px solid $border;
+            display: flex;
+            background-color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .addCard-text {
+              font-size: 12px;
+              font-weight: 700;
+              color: $heading;
+            }
+          }
+          .card {
+            width: 100%;
+            border: 2px solid $border;
+            background-color: $white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            height: 100%;
+            .card-image {
+              width: 100%;
+            }
+            .card-title {
+              font-weight: 700;
+              font-size: 12px;
+              color: $black;
+            }
+            .card-content {
+              font-weight: 500;
+              font-size: 10px;
+              color: $light-grey;
+            }
+            .main-icons {
+              display: flex;
+              gap: 25px;
+              color: $light-blue;
+              @media (max-width: 1700px) {
+                font-size: 23px;
+              }
+              @media (max-width: 1500px) {
+                font-size: 20px;
+              }
+              @media (max-width: 1350px) {
+                font-size: 18px;
+              }
+              .icons-main {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                .icons-text {
+                  display: flex;
+                  gap: 5px;
+                  color: $black;
+                  font-size: 10px;
+                  font-weight: 500;
+                  align-items: center;
+
+                  .icons-img {
+                    width: 15px;
+                    height: 15px;
+                  }
+                }
+              }
+            }
+            .price {
+              font-size: 16px;
+              font-weight: 600;
+              color: $yellow;
+              @media (max-width: 1700px) {
+                font-size: 15px;
+              }
+              @media (max-width: 1500px) {
+                font-size: 14px;
+              }
+            }
+            .price-button {
+              background-color: $yellow;
+              color: $white;
+              font-size: 14px;
+              width: 100%;
+              font-weight: 600;
+              border: none;
+              border-radius: 6px;
+              padding: 10px;
+              @media (max-width: 1700px) {
+                padding: 9px;
+              }
+              @media (max-width: 1500px) {
+                font-size: 13px;
+              }
+              @media (max-width: 1500px) {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+@import "../../../../../../index.scss";
+
+.student-UI-UX {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 2px solid $border;
+  padding: 20px;
+  border-radius: 10px;
+  white-space: nowrap;
+  background-color: $white;
+  @media (max-width: 1700px) {
+    padding: 18px;
+  }
+  @media (max-width: 1450px) {
+    padding: 16px;
+  }
+}

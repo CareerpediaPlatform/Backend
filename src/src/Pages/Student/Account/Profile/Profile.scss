@@ -1,0 +1,30 @@
+@import "../../../../index.scss";
+.student-profile{
+    display: flex;
+    gap:16px;
+    .profile-content{
+        .profile-data{    
+            margin-top: 10vh;
+            background-color: $background;
+            padding:30px 30px 30px;
+            @media(max-width:1700px){
+                padding: 25px 25px 30px;
+            }
+            @media(max-width:1450px){
+                padding:20px 20px 30px;
+            }
+            .profile-components{
+                border-radius: 20px; 
+               
+                background: #FFF;
+                display: flex;
+                flex-direction: column;
+                gap:75px;
+                padding: 30px 25px;
+                @media(max-width:1440px){
+                    gap:40px;
+                }
+            }
+        }
+    }
+    }

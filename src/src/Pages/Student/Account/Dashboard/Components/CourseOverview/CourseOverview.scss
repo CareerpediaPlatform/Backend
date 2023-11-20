@@ -1,0 +1,78 @@
+@import "../../../../../../index.scss";
+
+.course-content {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  background-color: $white;
+  border: 2px solid $border;
+  gap: 20px;
+  @media (max-width: 1700px) {
+    gap: 18px;
+  }
+  @media (max-width: 1450px) {
+    gap: 16px;
+  }
+
+  border-radius: 10px;
+  border: 1px solid #f8f8f8;
+  padding: 10px 20px;
+
+  .course-content-part {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    height: 240px;
+    overflow-y: scroll;
+  }
+  .course-heading {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    color: $heading;
+
+    h3 {
+      color: $light-blue;
+      color: $heading;
+      font-size: 14px;
+
+      font-weight: 700;
+      @media (max-width: 1700px) {
+        font-size: 16px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+
+    h4 {
+      color: $light-blue;
+      color: $heading;
+      font-size: 12px;
+
+      font-weight: 700;
+      @media (max-width: 1700px) {
+        font-size: 11px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 10px;
+      }
+    }
+
+    p {
+      color: $light-blue;
+
+      font-size: 10px;
+
+      font-weight: 400;
+    }
+  }
+}

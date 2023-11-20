@@ -1,0 +1,120 @@
+@import "../../../../../../index.scss";
+
+.dashboard-cards {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+
+  @media (max-width: 1700px) {
+    gap: 12px;
+  }
+  @media (max-width: 1450px) {
+    gap: 10px;
+  }
+
+  .card {
+    width: 25%;
+    border-radius: 20px;
+    border: 2px solid #f8f8f8;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: $white;
+    border: 2px solid $border;
+
+    @media (max-width: 1700px) {
+      padding: 12px;
+    }
+    @media (max-width: 1450px) {
+      padding: 10px;
+    }
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: $heading;
+
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+    .course {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      p {
+        font-size: 10px;
+        color: $light-blue;
+      }
+      .circular-progres {
+        width: 60px !important;
+        height: 60px !important;
+        color: #e9ecef;
+
+        @media (max-width: 1700px) {
+          width: 55px !important;
+          height: 55px !important;
+        }
+        @media (max-width: 1450px) {
+          width: 50px !important;
+          height: 50px !important;
+        }
+      }
+      .circular-progress {
+        width: 60px !important;
+        height: 60px !important;
+
+        @media (max-width: 1700px) {
+          width: 55px !important;
+          height: 55px !important;
+        }
+        @media (max-width: 1450px) {
+          width: 50px !important;
+          height: 50px !important;
+        }
+      }
+      span {
+        font-size: 10px;
+        color: $yellow;
+        font-weight: 500;
+
+        @media (max-width: 1450px) {
+          font-size: 9px;
+        }
+      }
+    }
+    .lessons {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      .linear {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        span {
+          color: $light-blue;
+          font-size: 10px;
+        }
+        .linear-progressbar {
+          // background-color: $blue ;git
+          height: 5px;
+          width: 100%;
+          // border-radius: 50% !important;
+        }
+      }
+      p {
+        color: $light-blue;
+        font-size: 10px;
+        align-self: flex-end;
+        transform: translateY(3px);
+      }
+    }
+  }
+}

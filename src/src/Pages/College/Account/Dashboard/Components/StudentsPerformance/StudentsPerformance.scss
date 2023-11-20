@@ -1,0 +1,92 @@
+@import "../../../../../../index.scss";
+.student-performance {
+  width: 50%;
+  border: 2px solid $border;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: $white;
+
+  @media (max-width: 1700px) {
+    padding: 18px;
+    gap: 25px;
+  }
+  @media (max-width: 1450px) {
+    padding: 15px;
+    gap: 20px;
+  }
+  .top {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .headings {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      h3 {
+        color: $heading;
+        font-size: 14px;
+        font-weight: 700;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+      }
+      .months {
+        display: flex;
+        gap: 20px;
+        .months-button {
+          color: $light-blue;
+          font-size: 10px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+      }
+    }
+    .colors {
+      display: flex;
+      gap: 40px;
+      @media (max-width: 1700px) {
+        gap: 35px;
+      }
+      @media (max-width: 1450px) {
+        gap: 30px;
+      }
+      .color {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        p {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+        .green {
+          background-color: #34b53a;
+        }
+        .blue {
+          background-color: #0557a2;
+        }
+        .orange {
+          background-color: #ffbd35;
+        }
+        span {
+          color: $light-blue;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  .graph {
+    width: 100%;
+    margin: 0 !important;
+    tspan {
+      font-size: 10px;
+    }
+  }
+}

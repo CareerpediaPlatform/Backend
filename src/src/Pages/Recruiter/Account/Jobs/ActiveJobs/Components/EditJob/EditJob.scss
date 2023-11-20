@@ -1,0 +1,583 @@
+@import "../../../../../../../index.scss";
+
+.recruiter-dashboard {
+  width: 100%;
+  display: flex;
+  .recruiter-dashboard-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: $background;
+    .dashboard-details {
+      width: 100%;
+      margin-top: 10vh;
+      padding: 30px 30px 30px;
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px 20px 30px;
+      }
+      .edit-job {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        background-color: $white;
+        border-radius: 20px;
+        padding: 25px 30px;
+        gap: 30px;
+        @media (max-width: 1700px) {
+          padding: 20px 25px;
+          gap: 28px;
+        }
+        @media (max-width: 1450px) {
+          padding: 15px 20px;
+          gap: 26px;
+        }
+        .mui-tabs {
+          padding-bottom: 30px;
+          @media (max-width: 1700px) {
+            padding-bottom: 25px;
+          }
+          @media (max-width: 1450px) {
+            padding-bottom: 20px;
+          }
+          .css-heg063-MuiTabs-flexContainer {
+            display: flex;
+            gap: 50px;
+            @media (max-width: 1700px) {
+              gap: 48px;
+            }
+            @media (max-width: 1450px) {
+              gap: 46px;
+            }
+
+          }
+          .tab {
+            font-weight: 600;
+            font-size: 14px !important;
+            color: $light-blue;
+            @media (max-width: 1700px) {
+              font-size: 13px !important;
+            }
+            @media (max-width: 1450px) {
+              font-size: 12px !important;
+            }
+          }
+          & .Mui-selected {
+            color: $yellow;
+          }
+        }
+
+        .edition {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          flex-direction: row;
+          gap:10px;
+          .left-edition {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
+            h4 {
+              color: #2f4362;
+
+              font-size: 16px;
+
+              font-weight: 600;
+              @media (max-width: 1700px) {
+                font-size: 14px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 12px;
+              }
+            }
+            p {
+              color: #7d8fb3;
+
+              font-size: 12px;
+
+              font-weight: 400;
+              @media (max-width: 1700px) {
+                font-size: 11px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 10px;
+              }
+            }
+          }
+          .right-edition {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 20px;
+            @media (max-width: 1700px) {
+              gap: 18px;
+            }
+            @media (max-width: 1450px) {
+              gap: 16px;
+            }
+            input {
+              display: inline-flex;
+              height: 40px;
+              width: 100%;
+              align-items: center;
+              border-radius: 4px;
+              border: 2px solid $input-border;
+              outline: none;
+              background-color: $white;
+              color: $light-blue;
+              padding: 10px 15px;
+              @media (max-width: 1700px) {
+                height: 38px;
+                padding: 9px 14px;
+              }
+              @media (max-width: 1450px) {
+                height: 36px;
+                padding: 8px 13px;
+              }
+            }
+            input::placeholder {
+              color: $light-blue;
+
+              font-size: 12px;
+
+              font-weight: 400;
+              @media (max-width: 1700px) {
+                font-size: 11px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 10px;
+              }
+            }
+            textarea {
+              display: inline-flex;
+              height: 100px;
+              width: 100%;
+              align-items: center;
+              border-radius: 4px;
+              border: 2px solid $input-border;
+              background-color: $white;
+              outline: none;
+              color: $light-blue;
+              padding: 10px 15px;
+              resize: none;
+              @media (max-width: 1700px) {
+                height: 95px;
+                padding: 9px 14px;
+              }
+              @media (max-width: 1450px) {
+                height: 90px;
+                padding: 8px 13px;
+              }
+            }
+            textarea::placeholder {
+              display: flex;
+              height: 20px;
+              flex-direction: column;
+              justify-content: center;
+              color: $light-blue;
+
+              font-size: 12px;
+
+              font-weight: 400;
+              @media (max-width: 1700px) {
+                height: 18px;
+                font-size: 11px;
+              }
+              @media (max-width: 1450px) {
+                height: 16px;
+                font-size: 10px;
+              }
+            }
+
+            select {
+              height: 40px;
+              width: 100%;
+              display: inline-flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 4px;
+              border: 2px solid $input-border;
+              background-color: $white;
+              color: $light-blue;
+              outline: none;
+              padding: 10px 15px;
+              font-size: 12px;
+
+              font-weight: 400;
+              @media (max-width: 1700px) {
+                height: 38px;
+                font-size: 11px;
+                padding: 9px 14px;
+              }
+              @media (max-width: 1450px) {
+                height: 36px;
+                font-size: 10px;
+                padding: 8px 13px;
+              }
+            }
+
+            label {
+              color: $light-blue;
+
+              font-size: 12px;
+
+              font-weight: 400;
+              @media (max-width: 1700px) {
+               
+                font-size: 11px;
+             
+              }
+              @media (max-width: 1450px) {
+               
+                font-size: 10px;
+          
+              }
+            }
+
+            .edit-checkbox-fields {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: row;
+              gap: 20px;
+              @media (max-width: 1700px) {
+               
+                gap:18px;
+             
+              }
+              @media (max-width: 1450px) {
+               
+             gap:16px;
+          
+              }
+
+              .edit-checkbox {
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+                gap: 20px;
+                border: 2px solid $input-border;
+
+                border-radius: 4px;
+
+                padding: 10px 15px;
+                @media (max-width: 1700px) {
+               
+                  gap:18px;
+                  padding: 9px 14px;
+               
+                }
+                @media (max-width: 1450px) {
+                 
+                  gap:16px;
+                  padding: 8px 13px;
+            
+                }
+
+                input[type="checkbox"] {
+                  display: flex;
+                  width: 20px;
+                  height: 20px;
+                  justify-content: center;
+                  align-items: center;
+                  border-radius: 5px;
+                  @media (max-width: 1700px) {
+               
+                    width: 18px;
+                    height: 18px;
+                 
+                  }
+                  @media (max-width: 1450px) {
+                   
+                    width: 16px;
+                    height: 16px;
+                  }
+                }
+
+                label {
+                  display: flex;
+                  width: 100%;
+                  height: 20px;
+                  flex-direction: column;
+                  justify-content: center;
+                  color: $light-blue;
+
+                  font-size: 12px;
+
+                  font-weight: 400;
+                  @media (max-width: 1700px) {
+               
+                    font-size: 11px;
+                    height: 18px;
+                 
+                  }
+                  @media (max-width: 1450px) {
+                   
+                    font-size: 10px;
+                    height: 16px;
+                  }
+                }
+              }
+            }
+
+            .edit-radio-fields {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              flex-direction: row;
+              gap: 20px;
+              @media (max-width: 1700px) {
+               
+                gap:18px;
+              
+               }
+               @media (max-width: 1450px) {
+                
+                 gap:16px;
+               }
+              .edit-radio {
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                flex-direction: row;
+                gap: 20px;
+                border: 2px solid $input-border;
+                border-radius: 4px;
+                padding: 10px 15px;
+                @media (max-width: 1700px) {
+               
+                  gap:18px;
+                  padding: 9px 14px;
+                
+                 }
+                 @media (max-width: 1450px) {
+                  
+                   gap:16px;
+                   padding: 8px 13px;
+                 }
+                input[type="radio"] {
+                  display: flex;
+                  width: 20px;
+                  height: 20px;
+                  justify-content: center;
+                  align-items: center;
+                  border-radius: 5px;
+                  @media (max-width: 1700px) {
+               
+                    width: 18px;
+                    height: 18px;
+                 
+                  }
+                  @media (max-width: 1450px) {
+                   
+                    width: 16px;
+                    height: 16px;
+                  }
+                }
+              }
+            }
+
+            .edit-interview-fields {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: row;
+              gap: 20px;
+              @media (max-width: 1700px) {
+               
+                gap: 18px;
+             
+              }
+              @media (max-width: 1450px) {
+               
+                gap: 16px;
+              }
+
+              .interview-type {
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                gap: 10px;
+                border-radius: 4px;
+                label {
+                  display: flex;
+                  width: 100%;
+                  height: 20px;
+                  flex-direction: column;
+                  justify-content: center;
+                  color: #2f4362;
+
+                  font-size: 12px;
+
+                  font-weight: 600;
+                  @media (max-width: 1700px) {
+               
+                    
+                    height: 18px;
+                    font-size: 11px;
+                  }
+                  @media (max-width: 1450px) {
+                   
+                    height: 16px;
+                    font-size: 10px;
+                  }
+                }
+              }
+            }
+            .edit-skill {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+              gap: 20px;
+              position: relative;
+              @media (max-width: 1700px) {
+               
+                gap:18px;
+                }
+                @media (max-width: 1450px) {
+                 
+                  gap: 16px;
+                
+                }
+              img {
+                height: 20px;
+                cursor: pointer;
+                @media (max-width: 1700px) {
+               
+                  height:18px;
+                  }
+                  @media (max-width: 1450px) {
+                   
+                    height: 16px;
+                  
+                  }
+              }
+              #plusIcon {
+                position: absolute;
+                top: 10;
+                right: 3%;
+              }
+            }
+            .add-buttons {
+              width: 100%;
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              grid-template-rows: 1fr 1fr 1fr;
+              gap: 20px;
+              @media (max-width: 1700px) {
+               
+                gap:18px;
+                }
+                @media (max-width: 1450px) {
+                 
+                  gap: 16px;
+                
+                }
+              .delete-buttons {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-direction: row;
+                gap: 10px;
+                border-radius: 100px;
+                background: $light-blue;
+                padding: 0 10px;
+                button {
+                  height: 24px;
+                  border: none;
+                  background-color: transparent;
+                  color: #fff;
+
+                  font-size: 12px;
+
+                  font-weight: 400;
+                  line-height: 20px;
+                  @media (max-width: 1700px) {
+               
+                    height:22px;
+                    font-size: 11px;
+                    }
+                    @media (max-width: 1450px) {
+                     
+                      height: 20px;
+                      font-size: 10px;
+                    
+                    }
+                }
+              }
+            }
+          }
+        }
+
+        .button-edition {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: row;
+          .edit-button {
+            display: flex;
+            width: 110px;
+            height: 30px;
+            padding: 4px 32px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            background-color: $yellow;
+            border: none;
+            @media (max-width: 1700px) {
+               
+              width: 105px;
+              height: 28px;
+              padding: 3px 30px;
+              }
+              @media (max-width: 1450px) {
+                width: 100px;
+                height: 26px;
+                padding: 2px 28px;
+              
+              }
+          }
+          button {
+            color: $white;
+
+            font-size: 12px;
+
+            font-weight: 400;
+            @media (max-width: 1700px) {
+               
+              font-size: 11px;
+        
+           
+            }
+            @media (max-width: 1450px) {
+             
+              font-size: 10px;
+    
+            }
+          }
+        }
+      }
+    }
+  }
+}

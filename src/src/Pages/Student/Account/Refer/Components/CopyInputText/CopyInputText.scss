@@ -1,0 +1,21 @@
+@import "../../../../../../index.scss";
+.inputText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  border: 2px solid $input-border;
+  border-radius: 8px;
+
+  .inputValue {
+    font-size: 14px;
+    color: #adb8cc;
+    cursor: pointer;
+  }
+  input {
+    color: #adb8cc;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+}

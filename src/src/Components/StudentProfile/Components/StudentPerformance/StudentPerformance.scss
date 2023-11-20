@@ -1,0 +1,180 @@
+@import "../../../../index.scss";
+
+.single-student-performance {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+
+  .performance-details-heading {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    h1 {
+      color: #2f4362;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+      @media (max-width: 1700px) {
+        font-size: 15px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .student-progress-part1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 18px;
+  border: 2px solid $border;
+    padding: 25px;
+    border-radius: 10px;
+
+    .border-linear-progress-div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 10px;
+      position: relative;
+
+      .border-linear-progress {
+        border-radius: 3px;
+      }
+
+      .progress-percent65 {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+      }
+
+      .progress-percent50 {
+        position: absolute;
+        top: 10%;
+        left: 25%;
+      }
+
+      .progress-percent78 {
+        position: absolute;
+        top: 10%;
+        left: 40%;
+      }
+
+      span {
+        font-size: 10px;
+        color: $light-blue;
+        font-weight: 500;
+      }
+    }
+    .linear-progress-div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 20px;
+
+      span {
+        font-size: 10px;
+        font-weight: 700;
+        color: $light-blue;
+      }
+    }
+  }
+
+  .student-progress-part2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+  
+
+
+      .student-englishLogical {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 2px solid $border;
+        padding: 20px;
+        border-radius: 10px;
+        .student-progress-heading{
+          width: 100%;
+          display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        h1{
+          font-size: 10px;
+          font-weight: 700;
+          color: $light-blue;
+        }
+        .student-progress-buttons{
+          display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        button{
+          background-color: $white;
+          border:2px solid $border;
+          padding:5px 10px;
+          font-size: 8px;
+          color: $light-blue;
+          font-weight: 600;
+        }
+        }
+        }
+      }
+
+      .student-UI-UX {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 2px solid $border;
+        padding: 20px;
+        border-radius: 10px;
+        .student-progress-heading {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-direction: row;
+          h1 {
+            font-size: 10px;
+            font-weight: 700;
+            color: $light-blue;
+          }
+          .student-progress-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            button {
+              background-color: $white;
+              border: 2px solid $border;
+              padding: 5px 10px;
+              font-size: 8px;
+              color: $light-blue;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+

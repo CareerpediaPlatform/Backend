@@ -1,0 +1,150 @@
+@import "../../../../../../index.scss";
+
+.level-right-side {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  .level-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    background-color: $white;
+    border: 2px solid #f8f8f8;
+    padding: 20px;
+
+    @media (max-width: 1700px) {
+      padding: 18px;
+    }
+    @media (max-width: 1450px) {
+      padding: 16px;
+    }
+
+    h3 {
+      color: $light-blue;
+
+      font-size: 10px;
+
+      font-weight: 700;
+    }
+    .grid-level-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+
+      .level-to-level {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        position: relative;
+        cursor: pointer;
+        img {
+          width: 25px;
+          height: 25px;
+          @media (max-width: 1700px) {
+            width: 23px;
+            height: 23px;
+          }
+          @media (max-width: 1450px) {
+            width: 21px;
+            height: 21px;
+          }
+        }
+        h4 {
+          color: $white;
+
+          font-size: 11px;
+
+          font-weight: 700;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    .single-level {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      h3 {
+        color: $light-blue;
+
+        font-size: 10px;
+
+        font-weight: 700;
+      }
+
+      img {
+        width: 30px;
+        height: 30px;
+
+        @media (max-width: 1700px) {
+          width: 28px;
+          height: 28px;
+        }
+        @media (max-width: 1450px) {
+          width: 26px;
+          height: 26px;
+        }
+      }
+      h4 {
+        color: $white;
+
+        font-size: 11px;
+
+        font-weight: 700;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .primary-level {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+
+      .primary {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      img {
+        width: 10px;
+        height: 10px;
+      }
+
+      h4 {
+        color: $blue;
+
+        font-size: 11px;
+
+        font-weight: 700;
+      }
+    }
+  }
+}

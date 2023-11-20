@@ -1,0 +1,17 @@
+@import "../../../../../index.scss";
+
+.student-preview{
+    width: 100vw;
+    display: flex;    
+    .student-preview-data{    
+        margin-top: 10vh;
+        padding:  30px;
+        background-color: $background;
+        @media(max-width:1700px){
+            padding:25px;
+        }
+        @media(max-width:1450px){
+            padding:20px;
+        }
+    }
+    }

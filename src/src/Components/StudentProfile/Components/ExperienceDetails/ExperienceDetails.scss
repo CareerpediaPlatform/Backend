@@ -1,0 +1,187 @@
+@import "../../../../index.scss";
+
+.experience-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+
+  @media (max-width: 1700px) {
+    gap: 18px;
+  }
+  @media (max-width: 1450px) {
+    gap: 16px;
+  }
+
+  .experience-details-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    h2 {
+      color: $heading;
+      font-size: 16px;
+      font-weight: 700;
+            @media (max-width: 1700px) {
+      line-height: 20px;
+
+        font-size: 15px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 14px;
+      }
+    }
+  }
+  .experience-details-single-card{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+
+     @media (max-width: 1700px) {
+        gap: 18px;
+      }
+      @media (max-width: 1450px) {
+        gap: 16px;
+      }
+
+    .experience-details-card {
+      width :33%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 20px;
+      border: 2px solid $border;
+      border-radius: 5px;
+      padding: 20px;
+
+      @media (max-width: 1700px) {
+        gap: 18px;
+        padding: 18px;
+      }
+      @media (max-width: 1450px) {
+        gap: 16px;
+        padding: 16px;
+      }  
+      h3{
+        font-size: 14px;
+        font-weight: 600;
+        color:$heading;
+         @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 400;
+        color: $light-blue;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+      }
+      .experience-details-companyName-position {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;      
+      }
+      .experience-details-year-month{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        .experience-details-year-month-part{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+          @media (max-width: 1700px) {
+          gap: 9px;  
+        }
+        @media (max-width: 1450px) {
+          gap: 8px;
+        }
+  
+          h3{
+            font-size: 38px;
+            font-weight: 600;
+            color:#2F4362;
+              @media (max-width: 1700px) {
+            font-size: 36px;
+          }
+          @media (max-width: 1450px) {
+            gap: 8px;
+          }
+
+          h3 {
+            font-size: 38px;
+            font-weight: 600;
+            color: #2f4362;
+            @media (max-width: 1700px) {
+              font-size: 36px;
+            }
+            @media (max-width: 1450px) {
+              font-size: 34px;
+            }
+          }
+          #year,
+          #month {
+            font-size: 14px;
+            font-weight: 500;
+            color: $light-blue;
+             @media (max-width: 1700px) {
+            font-size: 13px;
+   
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+           
+          }
+          }
+        }
+      }
+
+      .experience-details-year {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 8px;
+        @media (max-width: 1700px) {
+          gap: 7px;
+        }
+        @media (max-width: 1450px) {
+          gap: 6px;
+        }
+        span{
+          font-size: 12px;
+          color:$light-blue;
+          font-weight: 400;
+          @media (max-width: 1700px) {
+            font-size: 11px;  
+
+          }
+          @media (max-width: 1450px) {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+}

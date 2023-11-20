@@ -1,0 +1,136 @@
+@import "../../../../../index.scss";
+
+.college-students {
+  width: 100%;
+
+  .course-filters {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 12px;
+    padding : 0 0 20px;
+
+
+    @media (max-width: 1700px) {
+      gap: 11px;
+
+    }
+    @media (max-width: 1450px) {
+      gap: 10px;
+    }
+
+    h3 {
+      color: $heading;
+      font-size: 16px;
+      font-weight: 700;
+      @media (max-width: 1700px) {
+        font-size: 14px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+
+    .select-courses {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 15px;
+      @media (max-width: 1700px) {
+        gap: 13px;
+      }
+      @media (max-width: 1450px) {
+        gap: 11px;
+      }
+    }
+
+    .course-dropdown {
+      border: 2px solid $border !important;
+      outline: none;
+      padding: 8px 13px;
+      color: $heading;
+      font-weight: 700;
+      width: 157px;
+      height: 40px;
+      border-radius: 10px;
+      @media (max-width: 1700px) {
+        padding: 7px 12px;
+        width: 153px;
+        height: 38px;
+      }
+      @media (max-width: 1450px) {
+        padding: 6px 11px;
+        width: 150px;
+        height: 36px;
+      }
+    }
+  }
+
+  .collegeList {
+    border-bottom: 2px solid $border;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .college-list-table {
+      width: 100%;
+
+      .table-head {
+        .table-head-data {
+          font-family: "Montserrat", sans-serif;
+          font-size: 14px !important;
+          color: $heading;
+          font-weight: 700;
+          overflow: hidden;
+          align-items: center;
+          @media (max-width: 1700px) {
+            font-size: 13px !important;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px !important;
+          }
+        }
+      }
+
+      .table-body {
+        width:100%;
+        tr {
+          cursor: pointer;
+          &:hover {
+            background-color: $table-hover;
+
+          }
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+
+          img {
+            width: 40px;
+            border-radius: 10px;
+            @media (max-width: 1700px) {
+              width: 38px;
+            }
+            @media (max-width: 1450px) {
+              width: 36px;
+            }
+          }
+        }
+      }
+
+      border: none;
+    }
+  }
+}

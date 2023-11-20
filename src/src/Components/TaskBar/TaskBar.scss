@@ -1,0 +1,78 @@
+@import "../../index.scss";
+
+.taskBar-container{
+display: flex;
+flex-direction: row-reverse;
+justify-content:center;
+gap:12px;
+// background-color: #0557A2;
+
+.headings{
+    padding-top: 8px;
+    @media(max-width:1570px){
+        padding-top: 5px;
+    }
+    h2{
+        font-size: 14px;
+        color: #2F4362;
+        font-weight: 600;
+        line-height: 20px;
+        @media(max-width:1570px){
+            font-size: 13px;
+        }
+        @media(max-width:1470px){
+            font-size: 12px;
+        }
+    }
+    P{
+        font-size: 14px;
+        color: #7D8FB3;
+        font-weight: 400;
+        line-height: 20px;
+        @media(max-width:1700px){
+            font-size: 13px;
+        }
+        @media(max-width:1570px){
+            font-size: 12px;
+        }
+        @media(max-width:1470px){
+            font-size: 11px;
+        }
+    }
+}
+    .taskBar{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .circle{
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: $grey;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 1s;
+            .innerCircle{
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: $white;
+            }
+        }
+    
+        .bar{
+            width: 2px;
+            height: 120px;
+            background-color:$grey;
+            .innerBar{
+                width: 100%;
+                height: 10%;
+                transition: 1s;
+                background-color: #0557A2;;
+            }
+        }
+    }
+
+}

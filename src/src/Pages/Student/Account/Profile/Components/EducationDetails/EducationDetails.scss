@@ -1,0 +1,142 @@
+.education-detail{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap:20px;
+    @media(max-width:"1440px"){
+        gap: 17px;
+    }
+    .education-detail-heading{
+        h1{
+            color: #2F4362;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 20px; 
+        }
+    }
+
+    // cards
+    .education-detail-cards{
+        display: flex;
+        justify-content: space-between;
+        .education-detail-cards-card{
+            width: 28% !important;
+            padding: 18px;
+            width: max-content;
+            display: flex;
+            flex-direction:column;
+            gap: 28px;
+            border-radius: 12px;
+            border: 2px solid #F8F8F8;
+            background: #FFF;
+              @media(max-width:"1440px"){
+                padding: 15px;
+                gap: 22px;
+            }
+            .education-detail-card-top{
+                display: flex;
+                flex-direction: column;
+                gap:16px;
+                @media(max-width:"1440px"){
+                    gap: 12px;
+                }
+                .education-detail-card-headings{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    h2{
+                        color: #2F4362;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 20px; 
+                        @media(max-width:"1440px"){
+                            font-size: 12px;
+                        }
+                    }
+                    P{
+                        color: #7D8FB3;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 20px;
+                        @media(max-width:"1440px"){
+                            font-size: 11px;
+                        }
+                    }
+                }
+    
+                .education-detail-card-clg-name{
+                    display:flex;
+                    align-items: center;
+                    gap:6px;
+                 
+                    img{
+                        width: 11px;
+                        height: 11px;
+                    }
+                    p{
+                        color: #7D8FB3;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: 20px;
+                        @media(max-width:"1440px"){
+                            font-size: 11px;
+                        }
+                    }
+            }
+               
+            }
+
+            .education-detail-card-bottom{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;
+                .education-detail-card-gpa{
+                    display: flex;
+                    align-items: end;
+                    color: #2F4362;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    @media(max-width:"1440px"){
+                        font-size: 15px;
+                    }
+                    h2{
+                        font-size: 36px;
+                        font-weight: 600;
+                        line-height: 38px;
+                        @media(max-width:"1440px"){
+                            font-size: 31px;
+                            line-height: 33px;
+                        }
+                    }
+                }
+
+                .education-detail-card-dates{
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    img{
+                        width: 18px;
+                        height: 18px;
+                        @media(max-width:"1440px"){
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                    p{
+                        color: #2F4362;
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 20px;
+                    }
+
+                }
+            }
+        }
+    }
+}

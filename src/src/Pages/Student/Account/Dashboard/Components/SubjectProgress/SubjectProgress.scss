@@ -1,0 +1,91 @@
+@import "../../../../../../index.scss";
+
+.student-performance {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $white !important;
+  border-radius: 10px;
+  gap: 20px;
+  @media (max-width: 1700px) {
+    gap: 18px;
+  }
+  @media (max-width: 1450px) {
+    gap: 16px;
+  }
+
+  .student-progress-part1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    border: 2px solid $border;
+    padding: 25px;
+    border-radius: 10px;
+    @media (max-width: 1700px) {
+      padding: 23px;
+      gap: 18px;
+    }
+    @media (max-width: 1450px) {
+      padding: 21px;
+      gap: 16px;
+    }
+
+    .border-linear-progress-div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 10px;
+      position: relative;
+
+      .border-linear-progress {
+        border-radius: 3px;
+      }
+
+      .progress-percent65 {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+      }
+
+      .progress-percent50 {
+        position: absolute;
+        top: 10%;
+        left: 25%;
+      }
+
+      .progress-percent78 {
+        position: absolute;
+        top: 10%;
+        left: 40%;
+      }
+
+      span {
+        font-size: 10px;
+        color: $light-blue;
+        font-weight: 500;
+      }
+    }
+    .linear-progress-div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 20px;
+
+      span {
+        font-size: 10px;
+        font-weight: 700;
+        color: $light-blue;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
