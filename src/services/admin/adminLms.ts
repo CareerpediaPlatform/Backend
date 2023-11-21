@@ -249,24 +249,23 @@ export async function coursePartUser(user) {
     return serviceResponse;
   }
 
-export async function getCoursePart(courseUid,partUid) {
-    log.info(`${TAG}.getCoursePart() ==> `, courseUid,partUid);
+export async function getCoursePart(courseUid) {
+    log.info(`${TAG}.getCoursePart() ==> `, courseUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       console.log(courseUid)
-      console.log(partUid)
       const getCourseUid = await adminLms.checkCoureUid(courseUid);
-      console.log(getCourseUid);
-      if (!getCourseUid) {
-        serviceResponse.message = "Invalid course part UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
-      const coursePart = await adminLms.getPart(partUid)
+      // console.log(getCourseUid);
+      // if (!getCourseUid) {
+      //   serviceResponse.message = "Invalid course part UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
+      // const coursePart = await adminLms.getPart(partUid)
       const data = {
-        coursePart       
+        getCourseUid       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -300,8 +299,8 @@ export async function getCourseModules(partUid) {
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
       console.log(partUid)
-      const getPartUid = await adminLms.checkPartUid(partUid);
-      console.log(getPartUid);
+      const getModule= await adminLms.checkPartUid(partUid);
+      console.log(getModule);
       // if (!getPartUid) {
       //   serviceResponse.message = "Invalid course part UID";
       //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
@@ -310,7 +309,7 @@ export async function getCourseModules(partUid) {
       // }
       // const courseModules = await adminLms.getModule(moduleUid)
       const data = {
-        getPartUid       
+        getModule       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -713,7 +712,7 @@ export async function deleteCourseModule(moduleUid:any) {
       const existedCourseID=await adminLms.getModule(moduleUid)
       if(existedCourseID){
         const existedCourse=await adminLms.deleteCourseModule(moduleUid)
-        serviceResponse.message = "Course module successfully deleted!"
+        serviceResponse.message = "Course modules successfully deleted!"
         return serviceResponse
       }
       else{

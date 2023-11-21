@@ -83,7 +83,7 @@ export async function  getCourses(courseType) {
       try {
         logger.info(`${TAG}.getCourses()  ==>`);
   
-    let query=`SELECT * FROM COURSE WHERE TYPE=:type`
+    let query=`SELECT * FROM COURSE_OVERVIEW WHERE TYPE=:type`
         const results= await executeQuery(query, QueryTypes.SELECT,{type:courseType});
           return results;
       } catch (error) {
@@ -682,7 +682,7 @@ export async function checkLearnId(learnId: any){
   try {
     logger.info(`${TAG}.checkLearnId()  ==>`, learnId);
 
-    let query = 'select * from whatyoulearn where ID= :learnId';
+    let query = 'select * from WHAT_YOU_LEARN where ID= :learnId';
     const [learnID] = await executeQuery(query, QueryTypes.SELECT, {
       learnId:learnId.id
     });
@@ -730,7 +730,7 @@ export async function deleteLearnId(learnId) {
   try {
     logger.info(`${TAG}.deleteLearnId()  ==>`,learnId);
     console.log(learnId)
-    let query = "DELETE FROM whatyoulearn WHERE ID = :Id";
+    let query = "DELETE FROM WHAT_YOU_LEARN WHERE ID = :Id";
     const [learnDetails] = await executeQuery(query, QueryTypes.DELETE, {
       Id: learnId.id
     });

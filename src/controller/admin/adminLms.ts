@@ -137,9 +137,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
       log.debug(`${TAG}.getCourseParts() Object = ${JSON.stringify(req.body)}`)
       let courseUid = req.params.courseUid
       console.log(courseUid)
-      let partUid = req.params.partUid
-      console.log(partUid)
-      const authResponse= await adminlmsServices.getCoursePart(courseUid,partUid)
+      // let partUid = req.params.partUid
+      // console.log(partUid)
+      const authResponse= await adminlmsServices.getCoursePart(courseUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseParts() `, error)

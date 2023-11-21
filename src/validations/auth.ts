@@ -133,3 +133,4 @@ export const changePassword = async (req, res, next) => {
  await validate(schema, req, res, next);
 };
 // .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+|\-=\\{}\[\]:";'<>?,./]).{8,25}$/)
+
