@@ -1,0 +1,149 @@
+.Discussion-threads{
+    display: flex;
+    flex-direction: column;
+    gap:16px;
+    padding-bottom: 20px;
+    .discussion-top-bar{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:17px 26px ;
+        border: 2px solid #F8F8F8;
+        border-top-left-radius:12px ;
+        border-top-right-radius:12px ;
+    
+        .discussion-top-bar-left{
+            display: flex;
+            align-items: center;
+            gap:36px;
+            h2{
+                color: #7D8FB3;
+                font-size: 16px;
+                font-weight: 600;
+            }
+    
+            .discussion-switch{
+                border-radius: 5px;
+                overflow: hidden;
+                cursor: pointer;
+                button{
+                    color: #7D8FB3;
+                    font-size: 14px;
+                    font-weight: 400;
+                    border: none;
+                    padding: 8px 20px 8px 15px;
+                    background-color: #f1ebeb;
+                    cursor: pointer;
+                }
+            }
+        }
+    
+        .discussion-top-bar-right{
+            color: #FFF;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            background: #FF9F43;
+            padding: 10px 20px;
+            border: none;
+        }
+    }
+
+    .thread-cards{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-inline: 20px;
+    gap:16px;
+        .threads-cards-card{
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #E7E7E7;
+            background: #FEFEFE;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            .threads-cards-card-heading{
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 5px;
+                .left{
+                    display: flex;
+                    align-items: center;
+                    gap: 17px;
+                    .circle{
+                        width: 22px;
+                        height: 22px;
+                        background-color: blue;
+                        border-radius: 50%;
+                    }
+                    h2{
+                        color: #7D8FB3;
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+                }
+                .right-time{
+                    color: #ADB8CC;
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+            }
+
+            .threads-cards-card-middle{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                h3{
+                    color: #ADB8CC;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                p{
+                    color: #ADB8CC;
+                    font-size: 12px;
+                    font-weight: 500;
+                    padding-right: 27%;
+                }
+            }
+
+            .threads-cards-card-bottom{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-top: 1px solid #E7E7E7;
+                padding-top: 11px;
+
+
+                .bottom-left{
+                    display: flex;
+                    align-items: center;
+                    gap:7px;
+                    img{
+                        width: 28px;
+                        height: 28px;
+                    }
+                    h3{
+                        color:#84818A;
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+                }
+
+                .bottom-right{
+                    color: #FF9F43;
+                    font-size: 14px;
+                    font-weight: 500;
+                    border: none;
+                    background-color: transparent;
+                    text-decoration-line: underline;
+                }
+            }
+
+        }
+    }
+}

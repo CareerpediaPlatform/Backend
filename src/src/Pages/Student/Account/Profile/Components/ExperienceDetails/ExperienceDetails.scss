@@ -1,0 +1,132 @@
+.experience-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap:20px;
+    @media(max-width:"1440px"){
+        gap: 17px;
+    }
+    .experience-details-heading{
+        h1{
+            color: #2F4362;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 20px; 
+        }
+    }
+
+    // cards
+    .experience-details-cards{
+        display: flex;
+        justify-content: space-between;
+        .experience-details-cards-card{
+            width: 28% !important;
+            padding: 36px 18px;
+            width: max-content;
+            display: flex;
+            flex-direction:column;
+            gap: 28px;
+            border-radius: 12px;
+            border: 2px solid #F8F8F8;
+            background: #FFF;
+              @media(max-width:"1440px"){
+                padding: 24px 15px;
+                gap: 22px;
+            }
+         
+                .experience-details-card-headings{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    h2{
+                        color: #2F4362;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 20px; 
+                        @media(max-width:"1440px"){
+                            font-size: 12px;
+                        }
+                    }
+                    P{
+                        color: #7D8FB3;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 20px;
+                        @media(max-width:"1440px"){
+                            font-size: 11px;
+                        }
+                    }
+                }
+    
+            //     .experience-details-card-clg-name{
+            //         display:flex;
+            //         align-items: center;
+            //         gap:6px;
+                 
+            //         img{
+            //             width: 11px;
+            //             height: 11px;
+            //         }
+            //         p{
+            //             color: #7D8FB3;
+            //             font-size: 12px;
+            //             font-style: normal;
+            //             font-weight: 500;
+            //             line-height: 20px;
+            //             @media(max-width:"1440px"){
+            //                 font-size: 11px;
+            //             }
+            //         }
+            // }
+               
+            
+
+            .experience-details-card-bottom{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;
+                .experience-details-card-years{
+                    display: flex;
+                    // background-color: #867676;
+                    gap: 6px;
+                    align-items: end;
+                    color: #2F4362;
+                    font-style: normal;
+                    @media(max-width:"1440px"){
+                        font-size: 15px;
+                    }
+                    span{
+                        font-weight: 400;
+                        font-size: 14px;
+                    }
+                    h2{
+                        font-size: 36px;
+                        font-weight: 600;
+                        @media(max-width:"1440px"){
+                            font-size: 31px;
+                        }
+                    }
+                }
+
+                .experience-details-card-dates{
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    flex-direction: column;
+                    p{
+                        color: #2F4362;
+                        font-family: Montserrat;
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 20px;
+                    }
+
+                }
+            }
+        }
+    }
+}

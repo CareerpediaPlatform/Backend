@@ -1,0 +1,173 @@
+@import "../../../../../../index.scss";
+
+.College-dashboard-cards {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+
+
+  @media (max-width: 1700px) {
+    gap: 12px;
+  }
+  @media (max-width: 1450px) {
+    gap: 10px;
+  }
+
+  .card {
+    width: 25%;
+    border-radius: 20px;
+    border: 2px solid #f8f8f8;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: $white;
+
+    @media (max-width: 1700px) {
+      padding: 12px;
+    }
+    @media (max-width: 1450px) {
+      padding: 10px;
+    }
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: $heading;
+
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+    .course {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      p {
+        font-size: 10px;
+        color: $light-blue;
+      }
+      .English-back {
+        color: $pink;
+        opacity: 0.2;
+        position: absolute;
+      }
+      .LogicalReasoning-back {
+        color: $yellow;
+        opacity: 0.2;
+        position: absolute;
+      }
+      .GraphicDesign-back {
+        color: $green;
+        opacity: 0.2;
+        position: absolute;
+      }
+      .GRE-back {
+        color: $violet;
+        opacity: 0.2;
+        position: absolute;
+      }
+      .English-front {
+        color: $pink;
+      }
+      .LogicalReasoning-front {
+        color: $yellow;
+      }
+      .GraphicDesign-front {
+        color: $green;
+      }
+      .GRE-front {
+        color: $violet;
+      }
+
+      .English-text {
+        color: $pink;
+        font-size: 10px;
+        font-weight: 500;
+        @media (max-width: 1450px) {
+          font-size: 9px;
+        }
+      }
+      .LogicalReasoning-text {
+        color: $yellow;
+        font-size: 10px;
+        font-weight: 500;
+        @media (max-width: 1450px) {
+          font-size: 9px;
+        }
+      }
+      .GraphicDesign-text {
+        color: $green;
+        font-size: 10px;
+        font-weight: 500;
+        @media (max-width: 1450px) {
+          font-size: 9px;
+        }
+      }
+      .GRE-text {
+        color: $violet;
+        font-size: 10px;
+        font-weight: 500;
+        @media (max-width: 1450px) {
+          font-size: 9px;
+        }
+      }
+    }
+    .lessons {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      .linear {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        h6 {
+          color: $light-blue;
+          font-size: 10px;
+        }
+        span {
+          height: 5px;
+          width: 100%;
+          border-radius: 5px !important;
+          overflow: hidden;
+          background-color: #f3f3f3;
+        }
+        .GRE-progress {
+          span {
+            background-color: #7947f7;
+          }
+        }
+        .English-progress {
+          span {
+            background-color: #f96e6f;
+          }
+        }
+        .LogicalReasoning-progress {
+          span {
+            background-color: #ffab00;
+          }
+        }
+        .GraphicDesign-progress {
+          span {
+            background-color: #28c76f;
+          }
+        }
+      }
+      p {
+        color: $light-blue;
+        font-size: 10px;
+        align-self: flex-end;
+        transform: translateY(3px);
+      }
+    }
+  }
+}
+// .css-5xe99f-MuiLinearProgress-bar1{
+//   background-color: red !important;
+// }

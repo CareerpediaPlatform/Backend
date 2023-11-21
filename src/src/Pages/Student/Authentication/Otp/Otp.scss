@@ -1,0 +1,293 @@
+@import "../../../../index.scss";
+
+// OTP Container Styling
+#Otp-Container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+
+  .Otp-Form {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    // OTP Sub Form
+    .Otp-Sub-Form {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 32px;
+
+      @media (max-width: 1700px) {
+        gap: 30px;
+      }
+
+      @media (max-width: 1450px) {
+        width: 55%;
+        gap: 25px;
+      }
+
+      // OTP Headings
+      .Otp-Headings {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+
+        @media (max-width: 1700px) {
+          gap: 10px;
+        }
+
+        @media (max-width: 1450px) {
+          gap: 10px;
+        }
+
+        // OTP Heading
+        #Otp-head {
+          font-size: 24px;
+          font-weight: 700;
+          letter-spacing: 0.2px;
+          color: $blue;
+
+          @media (max-width: 1700px) {
+            font-size: 22px;
+          }
+
+          @media (max-width: 1450px) {
+            font-size: 20px;
+          }
+        }
+
+        #Otp-para {
+          font-size: 14px;
+          font-weight: 400;
+          color: $light-blue;
+
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .Otp-Form-Input {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+
+        @media (max-width: 1700px) {
+          gap: 14px;
+        }
+
+        @media (max-width: 1450px) {
+          gap: 12px;
+        }
+
+        // OTP Input
+
+        .Otp-Input {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .otp-field {
+            width: 14%;
+            height: 60px;
+            border-radius: 5px;
+            border: 1px solid $light-grey;
+            text-align: center;
+            color: $light-blue;
+            font-size: 16px;
+
+            @media (max-width: 1700px) {
+              height: 55px;
+              font-size: 15px;
+            }
+
+            @media (max-width: 1450px) {
+              height: 50px;
+              font-size: 14px;
+            }
+          }
+        }
+
+        .resend {
+          align-self: flex-end;
+
+          button {
+            background-color: transparent;
+            border: none;
+            font-size: 14px;
+            color: $light-blue;
+            font-weight: 500;
+            cursor: pointer;
+            @media (max-width: 1700px) {
+              font-size: 13px;
+            }
+            @media (max-width: 1450px) {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .Otp-Form-Buttons {
+        width: 100%;
+
+        // OTP Button
+        #Otp-Button {
+          width: 100%;
+          height: 55px;
+          font-size: 16px;
+          font-weight: 700;
+          letter-spacing: 0.2px;
+          background-color: $blue;
+          color: $white;
+          border-radius: 10px;
+          border: none;
+
+          @media (max-width: 1700px) {
+            height: 50px;
+            font-size: 15px;
+          }
+
+          @media (max-width: 1450px) {
+            height: 45px;
+            font-size: 14px;
+          }
+        }
+
+        // OTP Divider
+
+        .Otp-Divider {
+          width: 100%;
+        }
+
+        .Otp-Media {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          padding: 10px;
+
+          // Buttons alignment
+          #btn2 {
+            width: 50%;
+            height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: "16px";
+            font-weight: "600";
+            letter-spacing: "0.2px";
+            color: $light-blue;
+            border: 1px solid $light-grey;
+            text-transform: capitalize;
+            @media (max-width: 1850px) {
+              height: 54px;
+            }
+            @media (max-width: 1750px) {
+              height: 53px;
+            }
+            @media (max-width: 1650px) {
+              height: 52px;
+            }
+            @media (max-width: 1550px) {
+              height: 51px;
+            }
+            @media (max-width: 1450px) {
+              height: 50px;
+            }
+            @media (max-width: 1350px) {
+              height: 49px;
+            }
+            @media (max-width: 1250px) {
+              height: 48px;
+            }
+          }
+
+          #btn1 {
+            width: 50%;
+            height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: "16px";
+            font-weight: "600";
+            letter-spacing: "0.2px";
+            color: $light-blue;
+            border: 1px solid $light-grey;
+            text-transform: capitalize;
+            @media (max-width: 1850px) {
+              height: 54px;
+            }
+            @media (max-width: 1750px) {
+              height: 53px;
+            }
+            @media (max-width: 1650px) {
+              height: 52px;
+            }
+            @media (max-width: 1550px) {
+              height: 51px;
+            }
+            @media (max-width: 1450px) {
+              height: 50px;
+            }
+            @media (max-width: 1350px) {
+              height: 49px;
+            }
+            @media (max-width: 1250px) {
+              height: 48px;
+            }
+          }
+        }
+
+        #Otp-blue {
+          color: $blue;
+          font-weight: bold;
+          text-decoration: none;
+          font-size: 14px;
+          @media (max-width: 1500px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1300px) {
+            font-size: 12px;
+          }
+        }
+
+        .Otp-small {
+          font-size: 14px;
+          font-weight: 400;
+          align-self: center;
+          @media (max-width: 1500px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1300px) {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}

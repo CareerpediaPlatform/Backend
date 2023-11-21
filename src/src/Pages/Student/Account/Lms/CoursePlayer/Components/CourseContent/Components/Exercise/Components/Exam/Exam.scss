@@ -1,0 +1,189 @@
+@import "../../../../../../../../../../../index.scss";
+.student-dashboard {
+  width: 100vw;
+  display: flex;
+  .dashboard-content {
+    width: 100%;
+    .dashboard-data {
+      width: 100%;
+      margin-top: 10vh;
+      padding: 0 30px 30px;
+
+      @media (max-width: 1700px) {
+        padding: 0 25px 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 0 20px 30px;
+      }
+      .Exam-questions {
+        border-radius: 10px;
+        border: 2px solid $border;
+        padding: 40px;
+        @media (max-width: 1700px) {
+          padding: 35px;
+        }
+        @media (max-width: 1450px) {
+          padding: 30px;
+        }
+
+        .answers-container {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          @media (max-width: 1700px) {
+            gap: 35px;
+          }
+          @media (max-width: 1450px) {
+            gap: 30px;
+          }
+          .marks-section {
+            display: flex;
+            gap: 30px;
+            @media (max-width: 1700px) {
+              gap: 25px;
+            }
+            @media (max-width: 1450px) {
+              gap: 20px;
+            }
+            h3 {
+              color: $light-blue;
+              font-size: 16px;
+              font-weight: 700;
+              @media (max-width: 1700px) {
+                font-size: 15px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 14px;
+              }
+            }
+          }
+          .answer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            @media (max-width: 1700px) {
+              gap: 25px;
+            }
+            @media (max-width: 1450px) {
+              gap: 20px;
+            }
+            .question {
+              color: $light-blue;
+              font-size: 14px;
+              font-weight: 600;
+              @media (max-width: 1700px) {
+                font-size: 13px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 12px;
+              }
+            }
+            .answers {
+              display: flex;
+              gap: 80px;
+              p,
+              label {
+                color: $light-grey;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                @media (max-width: 1700px) {
+                  font-size: 13px;
+                  gap: 10px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 12px;
+                  gap: 8px;
+                }
+                .ans-icon {
+                  height: 14px;
+                  @media (max-width: 1700px) {
+                    height: 13px;
+                  }
+                  @media (max-width: 1700px) {
+                    height: 12px;
+                  }
+                }
+              }
+              input[type="radio"] {
+                width: 14px;
+                height: 14px;
+                border: 2px solid;
+                @media (max-width: 1700px) {
+                  width: 13px;
+                  height: 13px;
+                }
+                @media (max-width: 1450px) {
+                  width: 12px;
+                  height: 12px;
+                }
+              }
+            }
+          }
+          .details {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            h2 {
+              color: $light-blue;
+              font-size: 16px;
+              font-weight: 700;
+              @media (max-width: 1700px) {
+                font-size: 15px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 14px;
+              }
+            }
+            h3 {
+              color: $light-blue;
+              font-size: 14px;
+              font-weight: 700;
+              @media (max-width: 1700px) {
+                font-size: 13px;
+              }
+              @media (max-width: 1450px) {
+                font-size: 12px;
+              }
+            }
+          }
+          .points{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            .point{
+              background-color: #D9D9D9;
+              color: $black;
+              font-size: 10px;
+              font-weight: 600;
+              padding: 2px 5px;
+              border-radius: 3px;
+            }
+          }
+          button {
+            align-self: center;
+            width: 150px;
+            height: 55px;
+            border-radius: 5px;
+            background-color: $yellow;
+            border: none;
+            color: $white;
+            font-size: 16px;
+            font-weight: 600;
+            @media (max-width: 1700px) {
+              width: 130px;
+              height: 50px;
+              font-size: 15px;
+            }
+            @media (max-width: 1450px) {
+              width: 120px;
+              height: 45px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,241 @@
+@import "../../../../../index.scss";
+
+.mentorList {
+  border: 2px solid $border;
+  border-bottom: none;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: none !important;
+
+  .mentor-list-table {
+    width: 100%;
+
+    .table-head {
+      .table-head-data {
+        font-size: 14px;
+        color: $heading;
+        font-weight: 700;
+        overflow: hidden;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: "1700px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1450px") {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .table-body-mentor {
+      tr {
+        &:hover {
+          background-color: $table-hover;
+        }
+        cursor: auto;
+      }
+      .table-body-data {
+        font-size: 14px;
+        color: $light-blue;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: "1700px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1450px") {
+          font-size: 12px;
+        }
+        .Remarks {
+          padding: 8px 16px;
+          background-color: $white;
+          color: $yellow;
+          font-size: 14px;
+          font-weight: 700;
+          border: 1px solid $yellow;
+          border-radius: 12px;
+
+          @media (max-width: "1500px") {
+            font-size: 13px;
+          }
+          @media (max-width: "1300px") {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.popup-main-Containers {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 40px;
+  position: relative;
+
+  @media (max-width: "1500px") {
+    gap: 37;
+  }
+  @media (max-width: "100px") {
+    gap: 35;
+  }
+
+  .close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    cursor: pointer;
+  }
+
+  .popup-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: $heading;
+    @media (max-width: "1500px") {
+      font-size: 16px;
+    }
+    @media (max-width: "1500px") {
+      font-size: 15px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 24px;
+
+    .button-promoted,
+    .button-Demoted {
+      width: 137px;
+      height: 40px;
+      color: $white;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      @media (max-width: "1500px") {
+        font-size: 13px;
+      }
+      @media (max-width: "1300px") {
+        font-size: 12px;
+      }
+    }
+
+    .button-promoted {
+      background-color: $green;
+    }
+
+    .button-Demoted {
+      background-color: $red;
+    }
+  }
+  #popup-1 {
+    border-radius: 6px;
+  }
+  .popup-main {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 70px;
+    gap: 20px;
+
+    .label {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      font-size: 14px;
+
+      color: $heading;
+      font-weight: 500;
+      gap: 30px;
+      @media (max-width: "1500px") {
+        font-size: 13px;
+      }
+      @media (max-width: "1300px") {
+        font-size: 12px;
+      }
+
+      .inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .input {
+          padding: 5px 7px;
+          font-size: 14px;
+          color: $blue;
+          font-weight: 400;
+          border-radius: 6px;
+          border: 2px solid $input-border;
+          resize: none;
+          outline: none;
+
+          @media (max-width: "1500px") {
+            font-size: 13px;
+          }
+          @media (max-width: "1300px") {
+            font-size: 12px;
+          }
+
+          &::placeholder {
+            font-size: 14px;
+            color: $light-grey;
+            @media (max-width: "1500px") {
+              font-size: 13px;
+            }
+            @media (max-width: "1300px") {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    .popup-dots {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 30px;
+
+      .dot {
+        font-size: 14px;
+        color: $heading;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .popup-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 30px;
+
+      p {
+        font-size: 14px;
+        font-weight: 700;
+        color: $heading;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+#popup-1 {
+  border-radius: 6px;
+}
