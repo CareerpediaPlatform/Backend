@@ -38,7 +38,7 @@ router.route('/course-overvie/:coursetype')
  router.route('/exercise/:moduleUid')
  .post(isAuthenticated,controller.courseExercisePost);
 
- router.route('/part/:courseUid/:partUid')
+ router.route('/part/:courseUid')
  .get(isAuthenticated,controller.getCourseParts);
 
  router.route('/module/:partUid')
