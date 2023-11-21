@@ -427,7 +427,7 @@ export async function getModule(moduleUid) {
     logger.info(`${TAG}.getModule()  ==>`, moduleUid);
 
     let query ="select * from COURSE_MODULE where MODULE_UID = :moduleUid";
-    const personalDetails = await executeQuery(query, QueryTypes.SELECT, {
+    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
       moduleUid
     });
     return personalDetails;
@@ -793,10 +793,10 @@ export async function checkLessonUid(lessonUid) {
   try {
     logger.info(`${TAG}.checkLessonUid()  ==>`, lessonUid);
     let query ="select * from LESSON_MODULES where LESSON_UID = :lessonUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [lessonDetails] = await executeQuery(query, QueryTypes.SELECT, {
       lessonUid
     });
-    return personalDetails;
+    return lessonDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkLessonUid()`,
@@ -810,10 +810,10 @@ export async function checkTestUid(testUid) {
   try {
     logger.info(`${TAG}.checkTestUid()  ==>`, testUid);
     let query ="select * from TEST_MODULES where TEST_UID = :testUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [testDetails] = await executeQuery(query, QueryTypes.SELECT, {
       testUid
     });
-    return personalDetails;
+    return testDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkTestUid()`,
@@ -827,10 +827,10 @@ export async function checkExerciseUid(exerciseUid) {
   try {
     logger.info(`${TAG}.checkExerciseUid()  ==>`, exerciseUid);
     let query ="select * from EXERCISE_MODULES where EXERCISE_UID = :exerciseUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [exerciseDetails] = await executeQuery(query, QueryTypes.SELECT, {
       exerciseUid
     });
-    return personalDetails;
+    return exerciseDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkExerciseUid()`,

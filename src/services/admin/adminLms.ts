@@ -249,13 +249,13 @@ export async function coursePartUser(user) {
     return serviceResponse;
   }
 
-export async function getCoursePart(courseUid) {
-    log.info(`${TAG}.getCoursePart() ==> `, courseUid);
+export async function getCoursePart(partUid) {
+    log.info(`${TAG}.getCoursePart() ==> `, partUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(courseUid)
-      const getCourseUid = await adminLms.checkCoureUid(courseUid);
+      console.log(partUid)
+      // const getCourseUid = await adminLms.checkCoureUid(courseUid);
       // console.log(getCourseUid);
       // if (!getCourseUid) {
       //   serviceResponse.message = "Invalid course part UID";
@@ -263,9 +263,9 @@ export async function getCoursePart(courseUid) {
       //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       //   return serviceResponse;
       // }
-      // const coursePart = await adminLms.getPart(partUid)
+      const coursePart = await adminLms.getPart(partUid)
       const data = {
-        getCourseUid       
+        coursePart       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -293,23 +293,23 @@ export async function courseModulesUser(user) {
     return serviceResponse;
   } 
   
-export async function getCourseModules(partUid) {
-    log.info(`${TAG}.getCourseModules() ==> `, partUid);
+export async function getCourseModules(moduleUid) {
+    log.info(`${TAG}.getCourseModules() ==> `, moduleUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(partUid)
-      const getModule= await adminLms.checkPartUid(partUid);
-      console.log(getModule);
+      console.log(moduleUid)
+      // const getModule= await adminLms.checkPartUid(partUid);
+      // console.log(getModule);
       // if (!getPartUid) {
       //   serviceResponse.message = "Invalid course part UID";
       //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       //   return serviceResponse;
       // }
-      // const courseModules = await adminLms.getModule(moduleUid)
+      const courseModules = await adminLms.getModule(moduleUid)
       const data = {
-        getModule       
+        courseModules       
       }    
       serviceResponse.data = data
     } catch (error) {
