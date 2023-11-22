@@ -24,9 +24,10 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try{
       log.info(`${TAG}.getCourses()`);
       log.debug(`${TAG}.getCourses()`)
-      
-      const courseType = req.query.type;
-      let response:IServiceResponse= await adminlmsServices.getCourses(courseType)
+      // const type = req.query.type;
+      const type = req.params
+      console.log(type)
+      let response:IServiceResponse= await adminlmsServices.getCourses(type)
       responseBuilder(response, res, next, req)
     }catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourses() `, error)
@@ -443,5 +444,17 @@ export async function deleteCoursePart(req: any, res: Response, next: NextFuncti
     }
   }
 
-
+  export async function getCourseListAll(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getCourseListAll()`);
+      log.debug(`${TAG}.getCourseListAll() Object = ${JSON.stringify(req.body)}`)
+      let type = req.params.type
+      console.log(type)
+      const authResponse= await adminlmsServices.getCourseAllList(type)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCourseListAll() `, error)
+      next(error)
+    }
+  }
 

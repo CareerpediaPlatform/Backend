@@ -23,7 +23,7 @@ const router = Router()
     
     //  signin
  router.route('/email-login')
-     .post(validation.emailLogin,controller.signinUser);
+     .post(validation.studentLimiter,validation.emailLogin,controller.signinUser);
 
  router.route('/google-signin')
      .post(validation.linkedInLogin,controller.signinUser);

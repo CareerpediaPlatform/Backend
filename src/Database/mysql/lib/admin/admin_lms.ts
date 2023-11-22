@@ -78,13 +78,13 @@ GROUP BY
     }
   }
 
-export async function  getCourses(courseType) {
-    // let id=courseId
+export async function  getCourses(type) {
+ console.log(type)
       try {
         logger.info(`${TAG}.getCourses()  ==>`);
   
-    let query=`SELECT * FROM COURSE_OVERVIEW WHERE TYPE=:type`
-        const results= await executeQuery(query, QueryTypes.SELECT,{type:courseType});
+    let query=`SELECT * FROM COURSE_OVERVIEW WHERE TYPE=:type` 
+        const results= await executeQuery(query, QueryTypes.SELECT,{type:type});
           return results;
       } catch (error) {
         logger.error(`ERROR occurred in ${TAG}.getCourses()`, error);
@@ -161,7 +161,7 @@ export async function  getMyCourses(list) {
       }
     }
     // student
-  export async function  getMyCourse(courseId) {
+export async function  getMyCourse(courseId) {
       try {
         logger.info(`${TAG}.getMyCourse()  ==>`);
         const query = 'SELECT * FROM courses WHERE course_id=:courseId';
@@ -834,6 +834,28 @@ export async function checkExerciseUid(exerciseUid) {
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkExerciseUid()`,
+      error
+    );
+    throw error;
+  }
+}
+
+
+export async function getAllCourseList(type) {
+  try {
+    logger.info(`${TAG}.getAllCourseList()  ==>`,type);
+console.log(type)
+    let query ="select * from COURSE_OVERVIEW where TYPE = :type";
+    const courseList = await executeQuery(query, QueryTypes.SELECT, {
+      type
+    });
+    // const data={
+    //   exerciseDetails: Object.values(exerciseDetails)
+    // }
+    return courseList;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.getAllCourseList()`,
       error
     );
     throw error;

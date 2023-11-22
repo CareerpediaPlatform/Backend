@@ -13,7 +13,7 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route(APIPaths.LOGIN)
-     .post(validation.SignIn,controller.loginRecruiter);
+     .post(validation.SignIn,validation.recruiterLimiter,controller.loginRecruiter);
 
  router.route('/signup')
  .post(controller.signupRecruiter);
