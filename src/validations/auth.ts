@@ -2,6 +2,7 @@ import * as Joi from 'joi'
 import log from '../logger'
 import { validate } from './common'
 import { ErrorMessages } from 'src/constants/error_constants'
+import rateLimit , {Options} from 'express-rate-limit';
 
 const TAG = 'validations.auth'
 
@@ -133,4 +134,23 @@ export const changePassword = async (req, res, next) => {
  await validate(schema, req, res, next);
 };
 // .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+|\-=\\{}\[\]:";'<>?,./]).{8,25}$/)
+
+// Throttling login attempts
+  
+ export const createRateLimiter = (windowMs, max, message) => {
+  return rateLimit({
+    windowMs,
+    max,
+    message: {
+      status: 429,
+      message,
+    },
+  });
+};
+
+ export const studentLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many student login attempts, please try again later.');
+ export const mentorLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many mentor login attempts, please try again later.');
+ export const recruiterLimiter = createRateLimiter(15 * 60 * 1000, 5,  'Too many recruiter login attempts, please try again later.');
+ export const adminLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many admin login attempts, please try again later.');
+ export const collegeLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many college-admin login attempts, please try again later.');
 

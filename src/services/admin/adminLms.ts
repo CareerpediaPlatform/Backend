@@ -28,22 +28,19 @@ export async function getCourseOverview(courseUid){
   
   }
   
-export async function getCourses(coursetype){
+export async function getCourses(type){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-    let response;
+
     try{
-      if(coursetype){
-        response=await adminLms.getCourses(coursetype)
+    console.log(type)
+      const existedCourse=await adminLms.getCourses(type)
+      const data = {
+        existedCourse 
       }
-      else{
-        response=await adminLms.getAllCourses()
-      }
-          
-          const data=[
-            ...response
-          ]
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+      console.log(data)
           serviceResponse.data=data
-          return await serviceResponse
+          return serviceResponse
     }catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseOverview`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
@@ -727,6 +724,34 @@ export async function deleteCourseModule(moduleUid:any) {
     return serviceResponse;
   }
 
+export async function getCourseAllList(type) {
+    log.info(`${TAG}.getCourseAllList() ==> `, type);
+      
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(type)
+      const existedCourse=await adminLms.getAllCourseList(type)
+      if(existedCourse){
+        const data = {
+          existedCourse 
+        }    
+        serviceResponse.data = data
+        return serviceResponse
+
+      }else{
+        serviceResponse.message = "Invalid course-overview type";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
+
+      }
+      
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCourseAllList`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
 
 
 

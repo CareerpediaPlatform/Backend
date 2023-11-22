@@ -93,6 +93,7 @@ router.route('/course-overvie/:coursetype')
  router.route('/single-course-overview/:courseUid')
 .get(isAuthenticated,controller.getCourseOverview);
 
- 
+router.route('/course-list/:type')
+.get(isAuthenticated,controller.getCourseListAll);
 
 export default router;
