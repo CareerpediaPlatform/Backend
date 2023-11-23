@@ -167,10 +167,11 @@ export async function updateuploadCourse(courseUid:any, files:any, course:any) {
 
       const existedCourseID=await adminLms.checkCourseIdExist(courseUid)
       if(existedCourseID){
-        const existedCourse=await adminLms.updateuploadCourse(fileDetails,courseUid,course)
-        const data = {
-          existedCourse 
-        }    
+        const updatedCourse=await adminLms.updateuploadCourse(fileDetails,courseUid,course)
+         const data = {
+          updatedCourse
+         }
+         serviceResponse.message= "sucessfully updated"
         serviceResponse.data = data
         return serviceResponse
       }
