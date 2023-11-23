@@ -265,6 +265,7 @@ export async function updateuploadCourse(fileDetails: any,courseUid: any, course
   try {
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
     const data = {
+      courseUid:courseUid,
       // thumbnail: imageDetails.fileUrl,
       video: fileDetails.fileUrl,
       title: course.title,
@@ -290,7 +291,7 @@ export async function updateuploadCourse(fileDetails: any,courseUid: any, course
       const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUid})
       response.push(res)
      }
-    return {course}
+    return data;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
     throw error;
