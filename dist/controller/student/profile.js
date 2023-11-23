@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudentResume = exports.uploadResume = exports.studentProfileExperienceDelete = exports.studentProfileEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.getSingleStudentProfile = exports.getStudentProfile = exports.studentProfilePost = void 0;
+exports.studentWorkUpdate = exports.studentEducationUpdate = exports.studentWorkExperiencePost = exports.studentEducationPost = exports.getStudentResume = exports.uploadResume = exports.studentProfileExperienceDelete = exports.studentProfileEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.getSingleStudentProfile = exports.getStudentProfile = exports.studentProfilePost = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const profileService = __importStar(require("../../services/student/profile"));
@@ -194,3 +194,74 @@ function getStudentResume(req, res, next) {
     });
 }
 exports.getStudentResume = getStudentResume;
+function studentEducationPost(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.studentEducationPost()`);
+            logger_1.default.debug(`${TAG}.studentEducationPost() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield profileService.postEducationDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.studentEducationPost() `, error);
+            next(error);
+        }
+    });
+}
+exports.studentEducationPost = studentEducationPost;
+function studentWorkExperiencePost(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.studentWorkExperiencePost()`);
+            logger_1.default.debug(`${TAG}.studentWorkExperiencePost() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            const authResponse = yield profileService.postWorkExperienceDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.studentWorkExperiencePost() `, error);
+            next(error);
+        }
+    });
+}
+exports.studentWorkExperiencePost = studentWorkExperiencePost;
+function studentEducationUpdate(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.studentEducationUpdate()`);
+            logger_1.default.debug(`${TAG}.studentEducationUpdate() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield profileService.EducationDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.studentEducationUpdate() `, error);
+            next(error);
+        }
+    });
+}
+exports.studentEducationUpdate = studentEducationUpdate;
+function studentWorkUpdate(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.studentWorkUpdate()`);
+            logger_1.default.debug(`${TAG}.studentWorkUpdate() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield profileService.workExperienceDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.studentWorkUpdate() `, error);
+            next(error);
+        }
+    });
+}
+exports.studentWorkUpdate = studentWorkUpdate;

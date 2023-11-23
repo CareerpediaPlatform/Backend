@@ -83,10 +83,10 @@ export async function getCourses(type){
       //   isPublic: true,
       //   metaData: null,
       // }
-      const fileSavedResp = await adminLms.uploadCourse(fileDetails,course,type)
+      const fileSavedResp = await adminLms.uploadCourses(fileDetails,course,type)
     
         serviceResponse.data = {
-        courseUID: course.courseUID,
+        courseUid:fileSavedResp.courseUid,
         // thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
         title: course.title,
@@ -100,6 +100,7 @@ export async function getCourses(type){
         type:type,
         learn: course.learn
       }
+      return serviceResponse
 
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadCourse`, error)
@@ -752,7 +753,5 @@ export async function getCourseAllList(type) {
     }
     return serviceResponse;
   }
-
-
 
 

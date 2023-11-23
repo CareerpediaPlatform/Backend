@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMentorSingleList = exports.getrecruiterProfile = exports.PersonalAndDetails = void 0;
+exports.getMentorSingleList = exports.getMentorProfile = exports.PersonalAndDetails = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const profileService = __importStar(require("../../services/mentor/mentorPersonal"));
@@ -46,9 +46,8 @@ function PersonalAndDetails(req, res, next) {
             logger_1.default.info(`${TAG}.PersonalAndDetails()`);
             logger_1.default.debug(`${TAG}.PersonalAndDetails() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
-            // const {mentorUid}= req.params
             const headerValue = req.headers.authorization.split(' ')[1];
-            const authResponse = yield profileService.savePersonalAndContactDetails({ user, headerValue });
+            const authResponse = yield profileService.savePersonalAndContactDetails(user, headerValue);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -58,13 +57,13 @@ function PersonalAndDetails(req, res, next) {
     });
 }
 exports.PersonalAndDetails = PersonalAndDetails;
-function getrecruiterProfile(req, res, next) {
+function getMentorProfile(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getrecruiterProfile()`);
-            logger_1.default.debug(`${TAG}.getrecruiterProfile() Object = ${JSON.stringify(req.body)}`);
-            let userID = req.params.userId;
-            const authResponse = yield profileService.getMentorProfile(userID);
+            logger_1.default.info(`${TAG}.getMentorProfile()`);
+            logger_1.default.debug(`${TAG}.getMentorProfile() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const authResponse = yield profileService.getMentorProfile(headerValue);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -73,7 +72,7 @@ function getrecruiterProfile(req, res, next) {
         }
     });
 }
-exports.getrecruiterProfile = getrecruiterProfile;
+exports.getMentorProfile = getMentorProfile;
 function getMentorSingleList(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -38,7 +38,7 @@ function signupUser(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
-            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(25, "Careerpedia-Recruiter");
+            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(14, "Careerpedia");
             transaction = yield (0, sql_query_util_1.getTransaction)();
             const recruiter = yield mysql_1.RecruiterAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
@@ -47,9 +47,7 @@ function signupUser(user) {
             const email = recruiter.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-
                 accessToken, type: "Recruiter-signup"
-
             };
             serviceResponse.data = data;
         }
@@ -88,7 +86,7 @@ function loginUser(user) {
                 const email = existedUser.email;
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
                 const data = {
-                    accessToken, type: "recruiter-signin"
+                    accessToken, type: "recruiter-signin", role: "recruiter"
                 };
                 serviceResponse.data = data;
             }
@@ -107,7 +105,7 @@ function changePassword(user) {
         try {
             // finde recruiter is valid or not
             const uid = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
-            const recruiter = yield mysql_1.RecruiterAuth.getRecruiterUid({ uid: uid.uid });
+            const recruiter = yield mysql_1.RecruiterAuth.getRecruiterUid(uid);
             if (recruiter) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(recruiter.password, user.oldPassword);
                 if (IsValid) {

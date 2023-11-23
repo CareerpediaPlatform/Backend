@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkEmailOrPhoneExist = exports.verifyOTP = exports.deleteOTP = exports.resendOTP = exports.saveOTP = exports.studentUpdateStatus = exports.findTable = exports.getAllStudentList = exports.signupPhonenumbers = exports.signupPhonenumber = exports.changePassword = exports.signupWithSocialAccount = exports.signUp = void 0;
+exports.getUserEmail = exports.getUserform = exports.checkEmailOrPhoneExist = exports.verifyOTP = exports.deleteOTP = exports.resendOTP = exports.saveOTP = exports.studentUpdateStatus = exports.findTable = exports.getAllStudentList = exports.signupPhonenumbers = exports.signupPhonenumber = exports.changePassword = exports.signupWithSocialAccount = exports.signUp = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -31,15 +31,14 @@ function signUp(user) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
                 password: hashedPassword,
                 status: "ACTIVE",
                 terms_and_condition: user.terms_and_condition
             };
             let userInsertQuery = `
-
       INSERT INTO STUDENT_AUTH_FORM(id, uid, first_name, last_name, email, password,status,TERM_AND_CONDITIONS)
-      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)`;
+      VALUES (:id, :uid, :firstName, :lastName, :email, :password, :status, :terms_and_condition)
+    `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
         }
@@ -63,15 +62,12 @@ function signupWithSocialAccount(user) {
                 lastName: user.lastName,
                 email: user.email,
                 uuid: hashedPassword,
-                role: user.role,
                 terms_and_condition: user.terms_and_condition,
                 status: "ACTIVE"
             };
             let userInsertQuery = `
-
-      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,role,TERM_AND_CONDITIONS)
-      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:role,:terms_and_condition)
-
+      INSERT INTO STUDENT_AUTH_GMAIL (id, uid, first_name, last_name, email, uniqId, status,TERM_AND_CONDITIONS)
+      VALUES (:id , :uid, :firstName, :lastName, :email, :uuid, :status,:terms_and_condition)
     `;
             yield (0, sql_query_util_1.executeQuery)(userInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return data;
@@ -135,13 +131,11 @@ function getAllStudentList() {
         const getTable1 = `SELECT 
   id, uid, first_name, last_name, email, status
 FROM
-
 STUDENT_AUTH_FORM
 UNION ALL SELECT 
   id, uid, first_name, last_name, email,status
 FROM
   STUDENT_AUTH_GMAIL;`;
-
         const res = yield (0, sql_query_util_1.executeQuery)(getTable1, sequelize_1.QueryTypes.SELECT, {});
         console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         console.log(res);
@@ -154,13 +148,8 @@ function findTable(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         const updateQuery = `SELECT 
   CASE
-
       WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_FORM WHERE uid = :uid) THEN 'STUDENT_AUTH_FORM'
       ELSE 'STUDENT_AUTH_GMAIL'
-
-
-      WHEN EXISTS (SELECT 1 FROM STUDENT_AUTH_GMAIL WHERE uid = :uid) THEN 'STUDENT_AUTH_GMAIL'
-      ELSE 'STUDENT_AUTH_FORM'
 
   END AS table_name
   `;
@@ -343,3 +332,34 @@ function checkEmailOrPhoneExist(info) {
     });
 }
 exports.checkEmailOrPhoneExist = checkEmailOrPhoneExist;
+function getUserform(uid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.getUserform()`);
+        try {
+            let userGetQuery = `SELECT * FROM STUDENT_AUTH_FORM WHERE UID = :uid`;
+            let getUser = yield (0, sql_query_util_1.executeQuery)(userGetQuery, sequelize_1.QueryTypes.INSERT, { uid });
+            return getUser;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getUserform()`, error);
+            throw error;
+        }
+    });
+}
+exports.getUserform = getUserform;
+// get signin with email and linked in
+function getUserEmail(uid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.getUserEmail()`);
+        try {
+            let userGetQuery = `SELECT * FROM STUDENT_AUTH_GMAIL WHERE UID = :uid'`;
+            let getUserEmail = yield (0, sql_query_util_1.executeQuery)(userGetQuery, sequelize_1.QueryTypes.INSERT, { uid });
+            return getUserEmail;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getUserEmail()`, error);
+            throw error;
+        }
+    });
+}
+exports.getUserEmail = getUserEmail;

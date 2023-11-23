@@ -37,18 +37,26 @@ const file_1 = require("src/validations/file");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
-router.route('/education/')
+router.route('/educatio/')
     .put(authentication_1.isAuthenticated, controller.updateEducationDetails);
 router.route('/education/')
     .delete(authentication_1.isAuthenticated, controller.studentProfileEducationDelete);
-router.route('/work-experience/')
+router.route('/work-experienc/')
     .put(authentication_1.isAuthenticated, controller.updateWorkExperience);
 router.route('/work-experience/')
     .delete(authentication_1.isAuthenticated, controller.studentProfileExperienceDelete);
 router.route('/personal-contact')
     .patch(authentication_1.isAuthenticated, controller.studentProfilePost);
-router.route('/profile/')
+router.route('/student-profile')
     .get(authentication_1.isAuthenticated, controller.getStudentProfile);
 router.route('/resume').post(authentication_1.isAuthenticated, (0, video_upload_1.videoFileReader)(api_param_constants_1.FormParams.FILE_FIELD, 1), file_1.emptyChecks, controller.uploadResume);
 router.route('/resume').get(authentication_1.isAuthenticated, controller.getStudentResume);
+router.route('/education')
+    .post(authentication_1.isAuthenticated, controller.studentEducationPost);
+router.route('/education')
+    .patch(authentication_1.isAuthenticated, controller.studentEducationUpdate);
+router.route('/work-experience')
+    .post(authentication_1.isAuthenticated, controller.studentWorkExperiencePost);
+router.route('/work-experience')
+    .patch(authentication_1.isAuthenticated, controller.studentWorkUpdate);
 exports.default = router;

@@ -28,13 +28,13 @@ function recruiterProfile(user) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.recruiterProfile() ==> `, user);
         console.log(user);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
-            console.log("11111111111111111111111", decoded);
             const uid = decoded.uid;
-            console.log("222222222222222222", uid);
-            const isValid = yield mysql_1.RecruiterAuth.getRecruiterUid(uid);
+            console.log(uid);
+            const isValid = yield mysql_1.RecruiterAuth.checkRecruiterUid(uid);
+            console.log(isValid);
             if (isValid) {
                 const existedProfile = yield mysql_1.RecruiterProfileDetailsData.checkExist(uid);
                 if (existedProfile) {
@@ -47,6 +47,7 @@ function recruiterProfile(user) {
                         companyDetsils,
                     };
                     serviceResponse.data = data;
+                    serviceResponse.message = "successfully updated !";
                     return serviceResponse;
                 }
                 const response = yield mysql_1.RecruiterProfileDetailsData.recruiterProfilePost(Object.assign(Object.assign({}, user), { uid }));
@@ -76,7 +77,7 @@ function getRecruiterProfile(headerValue) {
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
             const uid = decoded.uid;
-            const isValid = yield mysql_1.RecruiterAuth.getRecruiterUid(uid);
+            const isValid = yield mysql_1.RecruiterAuth.checkRecruiterUid(uid);
             if (isValid) {
                 const existedProfile = yield mysql_1.RecruiterProfileDetailsData.getRecruiterProfile(uid);
                 if (existedProfile) {
@@ -84,7 +85,7 @@ function getRecruiterProfile(headerValue) {
                         existedProfile
                     };
                     serviceResponse.data = data;
-                    return serviceResponse;
+                    return data;
                 }
                 else {
                     serviceResponse.message = "invalid user uid";

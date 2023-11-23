@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSingleLearn = exports.updateExercisePost = exports.updateTestPost = exports.updateLessonPost = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesspon = exports.getModulesLesspon = exports.exerciseUser = exports.testUser = exports.lessonUser = exports.getCourseModules = exports.courseModulesUser = exports.getCoursePart = exports.coursePartUser = exports.courseUser = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
+exports.getCourseAllList = exports.deleteCourseModule = exports.deleteCoursePart = exports.deleteSingleLearn = exports.updateExercisePost = exports.updateTestPost = exports.updateLessonPost = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesspon = exports.getModulesLesson = exports.exerciseUser = exports.testUser = exports.lessonUser = exports.getCourseModules = exports.courseModulesUser = exports.getCoursePart = exports.coursePartUser = exports.courseUser = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
 const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
 const api_error_1 = require("src/models/lib/api_error");
@@ -22,11 +22,11 @@ const config_1 = require("../../Loaders/config");
 const file_constants_1 = require("src/constants/file_constants");
 const s3_media_1 = require("src/helpers/s3_media");
 const TAG = 'services.lms.admin';
-function getCourseOverview(courseId) {
+function getCourseOverview(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const response = yield mysql_1.adminLms.getCourseOverview(courseId);
+            const response = yield mysql_1.adminLms.getCourseOverview(courseUid);
             const data = [
                 ...response
             ];
@@ -40,22 +40,19 @@ function getCourseOverview(courseId) {
     });
 }
 exports.getCourseOverview = getCourseOverview;
-function getCourses(coursetype) {
+function getCourses(type) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
-        let response;
         try {
-            if (coursetype) {
-                response = yield mysql_1.adminLms.getCourses(coursetype);
-            }
-            else {
-                response = yield mysql_1.adminLms.getAllCourses();
-            }
-            const data = [
-                ...response
-            ];
+            console.log(type);
+            const existedCourse = yield mysql_1.adminLms.getCourses(type);
+            const data = {
+                existedCourse
+            };
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            console.log(data);
             serviceResponse.data = data;
-            return yield serviceResponse;
+            return serviceResponse;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getCourseOverview`, error);
@@ -64,9 +61,9 @@ function getCourses(coursetype) {
     });
 }
 exports.getCourses = getCourses;
-// course//
+// course_overvew//
 function uploadCourse(files, course, type) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var _a, _b, _c, _d, _e, _f;
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadCourse() `);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
@@ -83,20 +80,24 @@ function uploadCourse(files, course, type) {
                 isPublic: true,
                 metaData: null,
             };
-            const imageDetails = {
-                fileName: (_f = data[1]) === null || _f === void 0 ? void 0 : _f.savedFileName,
-                originalFileName: (_g = files[1]) === null || _g === void 0 ? void 0 : _g.originalname,
-                contentType: (_h = files[1]) === null || _h === void 0 ? void 0 : _h.mimetype,
-                s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: (_j = data[1]) === null || _j === void 0 ? void 0 : _j.savedFileKey,
-                fileUrl: (_k = data[1]) === null || _k === void 0 ? void 0 : _k.savedLocation,
-                isPublic: true,
-                metaData: null,
-            };
-            const fileSavedResp = yield mysql_1.adminLms.uploadCourse(fileDetails, imageDetails, course, type);
+            const fileUrl = (0, s3_media_1.getFileUrl)((_f = data[0]) === null || _f === void 0 ? void 0 : _f.savedFileKey, config_1.AWS_S3.BUCKET_NAME);
+            const duration = yield (0, s3_media_1.getVideoDurations)(fileUrl);
+            console.log("****************************************");
+            console.log(duration);
+            // const imageDetails = {
+            //   fileName: data[1]?.savedFileName,
+            //   originalFileName: files[1]?.originalname,
+            //   contentType:files[1]?.mimetype,
+            //   s3Bucket: AWS_S3.BUCKET_NAME,
+            //   filePath: data[1]?.savedFileKey,
+            //   fileUrl: data[1]?.savedLocation,
+            //   isPublic: true,
+            //   metaData: null,
+            // }
+            const fileSavedResp = yield mysql_1.adminLms.uploadCourse(fileDetails, course, type);
             serviceResponse.data = {
-                uid: course.uid,
-                thumbnail: imageDetails.fileUrl,
+                courseUID: course.courseUID,
+                // thumbnail: imageDetails.fileUrl,
                 video: fileDetails.fileUrl,
                 title: course.title,
                 description: course.description,
@@ -118,14 +119,14 @@ function uploadCourse(files, course, type) {
     });
 }
 exports.uploadCourse = uploadCourse;
-function getuploadCourse(courseUID) {
+function getuploadCourse(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getuploadCourse() ==> `, courseUID);
+        logger_1.default.info(`${TAG}.getuploadCourse() ==> `, courseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUID);
+            const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUid);
             if (existedCourseID) {
-                const existedCourse = yield mysql_1.adminLms.getuploadCourse(courseUID);
+                const existedCourse = yield mysql_1.adminLms.getuploadCourse(courseUid);
                 const data = {
                     existedCourse
                 };
@@ -146,10 +147,10 @@ function getuploadCourse(courseUID) {
     });
 }
 exports.getuploadCourse = getuploadCourse;
-function updateuploadCourse(courseUID, files, course) {
-    var _a, _b, _c, _d, _e, _f, _g;
+function updateuploadCourse(courseUid, files, course) {
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.updateuploadCourse() ==> `, courseUID);
+        logger_1.default.info(`${TAG}.updateuploadCourse() ==> `, courseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             const fileDirectory = file_constants_1.DIRECTORIES.LMS_VIDEOS;
@@ -160,23 +161,23 @@ function updateuploadCourse(courseUID, files, course) {
                 contentType: (_c = files[0]) === null || _c === void 0 ? void 0 : _c.mimetype,
                 s3Bucket: config_1.AWS_S3.BUCKET_NAME,
                 filePath: (_d = data[0]) === null || _d === void 0 ? void 0 : _d.savedFileKey,
-                fileUrl: data[0].savedLocation,
+                fileUrl: (_e = data[0]) === null || _e === void 0 ? void 0 : _e.savedLocation,
                 isPublic: true,
                 metaData: null,
             };
-            const imageDetails = {
-                fileName: (_e = data[1]) === null || _e === void 0 ? void 0 : _e.savedFileName,
-                originalFileName: files[1].originalname,
-                contentType: files[1].mimetype,
-                s3Bucket: config_1.AWS_S3.BUCKET_NAME,
-                filePath: (_f = data[1]) === null || _f === void 0 ? void 0 : _f.savedFileKey,
-                fileUrl: (_g = data[1]) === null || _g === void 0 ? void 0 : _g.savedLocation,
-                isPublic: true,
-                metaData: null,
-            };
-            const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUID);
+            // const imageDetails = {
+            //   fileName: data[1]?.savedFileName,
+            //   originalFileName: files[1].originalname,
+            //   contentType:files[1].mimetype,
+            //   s3Bucket: AWS_S3.BUCKET_NAME,
+            //   filePath: data[1]?.savedFileKey,
+            //   fileUrl: data[1]?.savedLocation,
+            //   isPublic: true,
+            //   metaData: null,
+            // }
+            const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUid);
             if (existedCourseID) {
-                const existedCourse = yield mysql_1.adminLms.updateuploadCourse(fileDetails, imageDetails, courseUID, course);
+                const existedCourse = yield mysql_1.adminLms.updateuploadCourse(fileDetails, courseUid, course);
                 const data = {
                     existedCourse
                 };
@@ -197,14 +198,15 @@ function updateuploadCourse(courseUID, files, course) {
     });
 }
 exports.updateuploadCourse = updateuploadCourse;
-function deleteuploadCourse(courseUID) {
+function deleteuploadCourse(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getRecruiterProfile() ==> `, courseUID);
+        logger_1.default.info(`${TAG}.getRecruiterProfile() ==> `, courseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUID);
-            if (existedCourseID) {
-                const existedCourse = yield mysql_1.adminLms.deleteuploadCourse(courseUID);
+            const existedCourseUid = yield mysql_1.adminLms.checkCourseIdExist(courseUid);
+            if (existedCourseUid) {
+                const existedCourse = yield mysql_1.adminLms.deleteuploadCourse(courseUid);
+                serviceResponse.message = "Course Overview successfully deleted!";
                 return serviceResponse;
             }
             else {
@@ -260,22 +262,21 @@ function coursePartUser(user) {
     });
 }
 exports.coursePartUser = coursePartUser;
-function getCoursePart(course_id, part_id) {
+function getCoursePart(partUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getCoursePart() ==> `, course_id, part_id);
+        logger_1.default.info(`${TAG}.getCoursePart() ==> `, partUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(course_id);
-            console.log(part_id);
-            const getCourseUid = yield mysql_1.adminLms.checkCoureUid(course_id);
-            console.log(getCourseUid);
-            if (!getCourseUid) {
-                serviceResponse.message = "Invalid course part UID";
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
-                return serviceResponse;
-            }
-            const coursePart = yield mysql_1.adminLms.getPart(part_id);
+            console.log(partUid);
+            // const getCourseUid = await adminLms.checkCoureUid(courseUid);
+            // console.log(getCourseUid);
+            // if (!getCourseUid) {
+            //   serviceResponse.message = "Invalid course part UID";
+            //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            //   return serviceResponse;
+            // }
+            const coursePart = yield mysql_1.adminLms.getPart(partUid);
             const data = {
                 coursePart
             };
@@ -308,22 +309,21 @@ function courseModulesUser(user) {
     });
 }
 exports.courseModulesUser = courseModulesUser;
-function getCourseModules(part_id, module_id) {
+function getCourseModules(moduleUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getCourseModules() ==> `, module_id);
+        logger_1.default.info(`${TAG}.getCourseModules() ==> `, moduleUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(part_id);
-            const getPartUid = yield mysql_1.adminLms.checkPartUid(part_id);
-            console.log(getPartUid);
-            if (!getPartUid) {
-                serviceResponse.message = "Invalid course part UID";
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
-                return serviceResponse;
-            }
-            const courseModules = yield mysql_1.adminLms.getModule(module_id);
+            console.log(moduleUid);
+            // const getModule= await adminLms.checkPartUid(partUid);
+            // console.log(getModule);
+            // if (!getPartUid) {
+            //   serviceResponse.message = "Invalid course part UID";
+            //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            //   return serviceResponse;
+            // }
+            const courseModules = yield mysql_1.adminLms.getModule(moduleUid);
             const data = {
                 courseModules
             };
@@ -342,9 +342,9 @@ function lessonUser(lessonData) {
         logger_1.default.info(`${TAG}.lessonUser() ==> `, lessonData);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const courseModules = yield mysql_1.adminLms.lessonPost(lessonData);
+            const lessonModulePost = yield mysql_1.adminLms.lessonPost(lessonData);
             const data = {
-                courseModules
+                lessonModulePost
             };
             serviceResponse.data = data;
         }
@@ -361,9 +361,9 @@ function testUser(testData) {
         logger_1.default.info(`${TAG}.testUser() ==> `, testData);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const courseModules = yield mysql_1.adminLms.testPost(testData);
+            const testModulesPost = yield mysql_1.adminLms.testPost(testData);
             const data = {
-                courseModules
+                testModulesPost
             };
             serviceResponse.data = data;
         }
@@ -380,9 +380,9 @@ function exerciseUser(exerciseData) {
         logger_1.default.info(`${TAG}.exerciseUser() ==> `, exerciseData);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const courseModules = yield mysql_1.adminLms.exercisesPost(exerciseData);
+            const exerciseModulesPost = yield mysql_1.adminLms.exercisesPost(exerciseData);
             const data = {
-                courseModules
+                exerciseModulesPost
             };
             serviceResponse.data = data;
         }
@@ -394,26 +394,22 @@ function exerciseUser(exerciseData) {
     });
 }
 exports.exerciseUser = exerciseUser;
-function getModulesLesspon(module_id, lesson_id) {
+function getModulesLesson(lessonUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getModulesLesspon() ==> `, module_id);
+        logger_1.default.info(`${TAG}.getModulesLesspon() ==> `, lessonUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(lesson_id);
-            const getLesonid = yield mysql_1.adminLms.checkModuleUid(module_id);
-            console.log(getLesonid);
-            if (!getLesonid) {
-                serviceResponse.message = "Invalid course lesson UID";
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
-                return serviceResponse;
-            }
-            const courseModules = yield mysql_1.adminLms.getLessonPost(lesson_id);
-            const data = {
-                courseModules
-            };
-            serviceResponse.data = data;
+            console.log(lessonUid);
+            // const getLesonid = await adminLms.checkModuleUid(lessonUid);
+            // console.log(getLesonid);
+            // if (!getLesonid) {
+            //   serviceResponse.message = "Invalid course lesson UID";
+            //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            //   return serviceResponse;
+            // }
+            const getLessonModules = yield mysql_1.adminLms.checkLessonUid(lessonUid);
+            serviceResponse.data = getLessonModules;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getModulesLesspon`, error);
@@ -422,16 +418,15 @@ function getModulesLesspon(module_id, lesson_id) {
         return serviceResponse;
     });
 }
-exports.getModulesLesspon = getModulesLesspon;
-function deleteModulesLesspon(module_id, lesson_id) {
+exports.getModulesLesson = getModulesLesson;
+function deleteModulesLesspon(lessonUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.deleteModulesLesspon() ==> `, module_id);
+        logger_1.default.info(`${TAG}.deleteModulesLesspon() ==> `, lessonUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(lesson_id);
+            console.log(lessonUid);
             console.log("aaaaaaaaaaaaaaaaaa");
-            const getLessonid = yield mysql_1.adminLms.checkModuleUid(module_id);
+            const getLessonid = yield mysql_1.adminLms.checkLessonUid(lessonUid);
             console.log(getLessonid);
             if (!getLessonid) {
                 serviceResponse.message = "Invalid course lesson UID";
@@ -439,7 +434,7 @@ function deleteModulesLesspon(module_id, lesson_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const courseModules = yield mysql_1.adminLms.deleteLessonPost(lesson_id);
+            const courseModules = yield mysql_1.adminLms.deleteLessonPost(lessonUid);
             const data = {
                 courseModules
             };
@@ -453,26 +448,22 @@ function deleteModulesLesspon(module_id, lesson_id) {
     });
 }
 exports.deleteModulesLesspon = deleteModulesLesspon;
-function getModulesTest(module_id, test_id) {
+function getModulesTest(testUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getModulesTest() ==> `, test_id);
+        logger_1.default.info(`${TAG}.getModulesTest() ==> `, testUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(test_id);
-            const getLesonid = yield mysql_1.adminLms.checkModuleUid(module_id);
-            console.log(getLesonid);
-            if (!getLesonid) {
-                serviceResponse.message = "Invalid course test UID";
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
-                return serviceResponse;
-            }
-            const courseModules = yield mysql_1.adminLms.getTestPost(test_id);
-            const data = {
-                courseModules
-            };
-            serviceResponse.data = data;
+            console.log(testUid);
+            // const getLesonid = await adminLms.checkModuleUid(moduleUid);
+            // console.log(getLesonid);
+            // if (!getLesonid) {
+            //   serviceResponse.message = "Invalid course test UID";
+            //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            //   return serviceResponse;
+            // }
+            const courseModules = yield mysql_1.adminLms.checkTestUid(testUid);
+            serviceResponse.data = courseModules;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getModulesTest`, error);
@@ -482,22 +473,21 @@ function getModulesTest(module_id, test_id) {
     });
 }
 exports.getModulesTest = getModulesTest;
-function deleteModulesTest(module_id, test_id) {
+function deleteModulesTest(testUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.deleteModulesLesspon() ==> `, test_id);
+        logger_1.default.info(`${TAG}.deleteModulesLesspon() ==> `, testUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(test_id);
-            const getLessonid = yield mysql_1.adminLms.checkModuleUid(module_id);
-            console.log(getLessonid);
-            if (!getLessonid) {
+            console.log(testUid);
+            const getTestUid = yield mysql_1.adminLms.checkTestUid(testUid);
+            console.log(getTestUid);
+            if (!getTestUid) {
                 serviceResponse.message = "Invalid course test UID";
                 serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const courseModules = yield mysql_1.adminLms.deleteTestPost(test_id);
+            const courseModules = yield mysql_1.adminLms.deleteTestPost(testUid);
             const data = {
                 courseModules
             };
@@ -511,26 +501,22 @@ function deleteModulesTest(module_id, test_id) {
     });
 }
 exports.deleteModulesTest = deleteModulesTest;
-function getModulesExercise(module_id, exercise_id) {
+function getModulesExercise(exerciseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getModulesExercise() ==> `, exercise_id);
+        logger_1.default.info(`${TAG}.getModulesExercise() ==> `, exerciseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(exercise_id);
-            const getLesonid = yield mysql_1.adminLms.checkModuleUid(module_id);
-            console.log(getLesonid);
-            if (!getLesonid) {
-                serviceResponse.message = "Invalid course exercise UID";
-                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
-                return serviceResponse;
-            }
-            const courseModules = yield mysql_1.adminLms.getExercisePost(exercise_id);
-            const data = {
-                courseModules
-            };
-            serviceResponse.data = data;
+            console.log(exerciseUid);
+            // const getLesonid = await adminLms.checkModuleUid(moduleUid);
+            // console.log(getLesonid);
+            // if (!getLesonid) {
+            //   serviceResponse.message = "Invalid course exercise UID";
+            //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+            //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+            //   return serviceResponse;
+            // }
+            const courseModules = yield mysql_1.adminLms.checkExerciseUid(exerciseUid);
+            serviceResponse.data = courseModules;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getModulesExercise`, error);
@@ -540,14 +526,13 @@ function getModulesExercise(module_id, exercise_id) {
     });
 }
 exports.getModulesExercise = getModulesExercise;
-function deleteModulesExercise(module_id, exercise_id) {
+function deleteModulesExercise(exerciseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.deleteModulesExercise() ==> `, exercise_id);
+        logger_1.default.info(`${TAG}.deleteModulesExercise() ==> `, exerciseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            console.log(exercise_id);
-            const getLessonid = yield mysql_1.adminLms.checkModuleUid(module_id);
+            console.log(exerciseUid);
+            const getLessonid = yield mysql_1.adminLms.checkExerciseUid(exerciseUid);
             console.log(getLessonid);
             if (!getLessonid) {
                 serviceResponse.message = "Invalid course Exercise UID";
@@ -555,7 +540,7 @@ function deleteModulesExercise(module_id, exercise_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const courseModules = yield mysql_1.adminLms.deleteTestPost(exercise_id);
+            const courseModules = yield mysql_1.adminLms.deleteExercisePost(exerciseUid);
             const data = {
                 courseModules
             };
@@ -569,13 +554,13 @@ function deleteModulesExercise(module_id, exercise_id) {
     });
 }
 exports.deleteModulesExercise = deleteModulesExercise;
-function updateCoursePartPost(user, part_id) {
+function updateCoursePartPost(user, partUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateCoursePartPost() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(part_id);
-            const getPartUid = yield mysql_1.adminLms.getPart(part_id);
+            console.log(partUid);
+            const getPartUid = yield mysql_1.adminLms.getPart(partUid);
             console.log(getPartUid);
             if (!getPartUid) {
                 serviceResponse.message = "Invalid course part UID";
@@ -583,7 +568,7 @@ function updateCoursePartPost(user, part_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const response = yield mysql_1.adminLms.updateCoursePartPost(user, part_id);
+            const response = yield mysql_1.adminLms.updateCoursePartPost(user, partUid);
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }
@@ -595,13 +580,13 @@ function updateCoursePartPost(user, part_id) {
     });
 }
 exports.updateCoursePartPost = updateCoursePartPost;
-function updateCourseModulePost(user, module_id) {
+function updateCourseModulePost(user, moduleUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateCourseModulePost() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(module_id);
-            const getModuleUid = yield mysql_1.adminLms.getModule(module_id);
+            console.log(moduleUid);
+            const getModuleUid = yield mysql_1.adminLms.getModule(moduleUid);
             console.log(getModuleUid);
             if (!getModuleUid) {
                 serviceResponse.message = "Invalid course module UID";
@@ -609,7 +594,7 @@ function updateCourseModulePost(user, module_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const response = yield mysql_1.adminLms.updateModulesPost(user, module_id);
+            const response = yield mysql_1.adminLms.updateModulesPost(user, moduleUid);
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }
@@ -621,13 +606,13 @@ function updateCourseModulePost(user, module_id) {
     });
 }
 exports.updateCourseModulePost = updateCourseModulePost;
-function updateLessonPost(user, lesson_id) {
+function updateLessonPost(user, lessonUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateLessonPost() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(lesson_id);
-            const getLessonUid = yield mysql_1.adminLms.getLessonPost(lesson_id);
+            console.log(lessonUid);
+            const getLessonUid = yield mysql_1.adminLms.getLessonPost(lessonUid);
             console.log(getLessonUid);
             if (!getLessonUid) {
                 serviceResponse.message = "Invalid  module lesson UID";
@@ -635,7 +620,7 @@ function updateLessonPost(user, lesson_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const response = yield mysql_1.adminLms.updateModulesPost(user, lesson_id);
+            const response = yield mysql_1.adminLms.updateLessonPost(user, lessonUid);
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }
@@ -647,13 +632,13 @@ function updateLessonPost(user, lesson_id) {
     });
 }
 exports.updateLessonPost = updateLessonPost;
-function updateTestPost(user, test_id) {
+function updateTestPost(user, testUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateTestPost() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(test_id);
-            const getTestUid = yield mysql_1.adminLms.getTestPost(test_id);
+            console.log(testUid);
+            const getTestUid = yield mysql_1.adminLms.getTestPost(testUid);
             console.log(getTestUid);
             if (!getTestUid) {
                 serviceResponse.message = "Invalid  module test UID";
@@ -661,7 +646,7 @@ function updateTestPost(user, test_id) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const response = yield mysql_1.adminLms.updateTestPost(user, test_id);
+            const response = yield mysql_1.adminLms.updateTestPost(user, testUid);
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }
@@ -673,26 +658,26 @@ function updateTestPost(user, test_id) {
     });
 }
 exports.updateTestPost = updateTestPost;
-function updateExercisePost(user, test_id) {
+function updateExercisePost(user, exerciseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.updateLessonPost() ==> `, user);
+        logger_1.default.info(`${TAG}.updateExercisePost() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            console.log(test_id);
-            const getTestUid = yield mysql_1.adminLms.getTestPost(test_id);
+            console.log(exerciseUid);
+            const getTestUid = yield mysql_1.adminLms.getExercisePost(exerciseUid);
             console.log(getTestUid);
             if (!getTestUid) {
-                serviceResponse.message = "Invalid  module test UID";
+                serviceResponse.message = "Invalid  module Exercise UID";
                 serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const response = yield mysql_1.adminLms.updateTestPost(user, test_id);
+            const response = yield mysql_1.adminLms.updateExercisesPost(user, exerciseUid);
             const data = Object.assign({}, response);
             serviceResponse.data = data;
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.updateLessonPost`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateExercisePost`, error);
             serviceResponse.addServerError('Failed to create user due to technical difficulties');
         }
         return serviceResponse;
@@ -724,3 +709,82 @@ function deleteSingleLearn(learnId) {
     });
 }
 exports.deleteSingleLearn = deleteSingleLearn;
+function deleteCoursePart(partUid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.deleteCoursePart() ==> `, partUid);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            const existedCourseID = yield mysql_1.adminLms.getPart(partUid);
+            if (existedCourseID) {
+                const existedCourse = yield mysql_1.adminLms.deleteCoursePart(partUid);
+                serviceResponse.message = "Course part successfully deleted!";
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = "Invalid Course part Uid";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
+            }
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteCoursePart`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+    });
+}
+exports.deleteCoursePart = deleteCoursePart;
+function deleteCourseModule(moduleUid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.deleteCourseModule() ==> `, moduleUid);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            const existedCourseID = yield mysql_1.adminLms.getModule(moduleUid);
+            if (existedCourseID) {
+                const existedCourse = yield mysql_1.adminLms.deleteCourseModule(moduleUid);
+                serviceResponse.message = "Course modules successfully deleted!";
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = "Invalid Course module Uid";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
+            }
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteCourseModule`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+    });
+}
+exports.deleteCourseModule = deleteCourseModule;
+function getCourseAllList(type) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.getCourseAllList() ==> `, type);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            console.log(type);
+            const existedCourse = yield mysql_1.adminLms.getAllCourseList(type);
+            if (existedCourse) {
+                const data = {
+                    existedCourse
+                };
+                serviceResponse.data = data;
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = "Invalid course-overview type";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
+                return serviceResponse;
+            }
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getCourseAllList`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+    });
+}
+exports.getCourseAllList = getCourseAllList;

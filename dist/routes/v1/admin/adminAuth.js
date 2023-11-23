@@ -36,7 +36,7 @@ const validation = __importStar(require("../../../validations/auth"));
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(validation.adminSignIn, controller.adminLogin);
+    .post(validation.adminSignIn, validation.adminLimiter, controller.adminLogin);
 router.route('/signup')
     .post(validation.adminSignIn, controller.signupUser);
 exports.default = router;

@@ -37,7 +37,7 @@ const authentication_1 = require("../../../middlewares/authentication");
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route(APIPaths.LOGIN)
-    .post(validation.SignIn, controller.loginCollege);
+    .post(validation.SignIn, validation.collegeLimiter, controller.loginCollege);
 router.route('/signup')
     .post(authentication_1.isAuthenticated, controller.signupCollege);
 router.route('/change-password')

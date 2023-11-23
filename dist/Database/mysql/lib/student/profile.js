@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudentResume = exports.checkResume = exports.updateResume = exports.uploadResume = exports.checkExist = exports.checkExistEducationAndExperience = exports.studentExperienceDelete = exports.studentEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.checkProfilExist = exports.studentProfileUpdate = exports.studentProfilePost = void 0;
+exports.updateStudentWorkDetails = exports.checkWorkExperienceId = exports.updateStudentEducationDetails = exports.checkEducationId = exports.postWorkExperience = exports.postEducationDetails = exports.checkStudentEducationUid = exports.getStudentResume = exports.checkResume = exports.updateResume = exports.uploadResume = exports.checkExist = exports.checkExistEducationAndExperience = exports.studentExperienceDelete = exports.studentEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.checkProfilExist = exports.studentProfileUpdate = exports.studentProfilePost = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -26,9 +26,10 @@ function studentProfilePost(user) {
         logger_1.default.info(`${TAG}.studentProfilePost()`);
         try {
             const profileInsertQuery = `
-   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, PHONE_NUMBER, LINKEDIN_PROFILE, PROFILE_PIC)
+
+   INSERT INTO STUDENT_PERSONAL_DETAILS (UID,FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC,  LINKEDIN_PROFILE)
     VALUES
-  (:uid, :firstName, :lastName, :email, :dateOfBirth, :phoneNumber, :linkedInProfile, :profilePic)`;
+  (:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber,  :profilePic,:linkedinProfile)`;
             const contactInsertQuery = `
     INSERT INTO STUDENT_CONTACT_DETAILS 
     (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
@@ -49,9 +50,9 @@ function studentProfileUpdate(user) {
         logger_1.default.info(`${TAG}.studentProfileUpdate()`);
         try {
             const profileUpdateQuery = `UPDATE STUDENT_PERSONAL_DETAILS
-    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber,
-    LINKEDIN_PROFILE = :linkedInProfile,
-    PROFILE_PIC = :profilePic
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
     WHERE
     UID = :uid;
     `;
@@ -68,7 +69,9 @@ function studentProfileUpdate(user) {
     `;
             let [contact] = yield (0, sql_query_util_1.executeQuery)(contactUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.contactDetails), { uid: user.uid }));
             let [profile] = yield (0, sql_query_util_1.executeQuery)(profileUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.basicDetails), { uid: user.uid }));
-            return { profile, contact };
+            const contactDetails = user.contactDetails;
+            const basicDetails = user.basicDetails;
+            return { contactDetails, basicDetails };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.studentProfileUpdate()`, error);
@@ -109,9 +112,10 @@ function updateEducationDetails(user) {
         try {
             const response = [];
             const insertQuery = `INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
-      VALUES (:uid, :degree, :dept_branch, :college, :score, :start_year, :end_year)`;
-            const updateQuery = `UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:dept_branch, COLLEGE=:college, SCORE=:score, START_YEAR=start, END_YEAR=end WHERE USER_ID=:userId`;
-            for (const data of user.data) {
+      VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`;
+            const updateQuery = `UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`;
+            let items = Object.values(user.data);
+            for (const data of items) {
                 console.log(data);
                 if (data.id) {
                     const res = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, data));
@@ -122,7 +126,7 @@ function updateEducationDetails(user) {
                     response.push(res);
                 }
             }
-            return Object.assign({}, response);
+            return user;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
@@ -136,13 +140,15 @@ function updateWorkExperience(user) {
         logger_1.default.info(`${TAG}.updateWorkExperience()`);
         try {
             const response = [];
-            const insertQuery = `INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY, ROLE, START_YEAR, END_YEAR) VALUES (:uid, :company, :role, :start_year, :end_year)`;
+            const insertQuery = `INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`;
             const updateQuery = `UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
+      OCCUPATION =:occupation,
       ROLE = :role,
-      START_YEAR = :start,
-      END_YEAR = :end WHERE ID=:id`;
-            for (const data of user.data) {
-                console.log(data);
+      SKILLS =:skills,
+      START_YEAR = :startYear,
+      END_YEAR = :endYear WHERE ID=:id`;
+            let items = Object.values(user.data);
+            for (const data of items) {
                 if (data.id) {
                     const res = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, data));
                     response.push(res);
@@ -152,7 +158,7 @@ function updateWorkExperience(user) {
                     response.push(res);
                 }
             }
-            return Object.assign({}, response);
+            return user;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateWorkExperiencess()`, error);
@@ -300,3 +306,120 @@ function getStudentResume(uid) {
     });
 }
 exports.getStudentResume = getStudentResume;
+function checkStudentEducationUid(uid) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.checkExist() ==>`, uid);
+            const checkQuery = 'SELECT * FROM `STUDENT_EDUCATION_DETAILS` WHERE UID=:uid';
+            const [basic] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            return basic; // Return null if no user is found
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkStudentEducationUid = checkStudentEducationUid;
+function postEducationDetails(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.updateEducationDetails()`);
+        try {
+            const insertQuery = `INSERT INTO STUDENT_EDUCATION_DETAILS (UID, DEGREE, DEPT_BRANCH, COLLEGE, SCORE, START_YEAR, END_YEAR) 
+    VALUES (:uid, :degree, :deptBranch, :college, :score, :startYear, :endYear)`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, user));
+            return user;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+            throw error;
+        }
+    });
+}
+exports.postEducationDetails = postEducationDetails;
+function postWorkExperience(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.postWorkExperience()`);
+        try {
+            const insertQuery = `INSERT INTO STUDENT_WORK_EXPERIENCE (UID, COMPANY,OCCUPATION, ROLE,SKILLS, START_YEAR, END_YEAR) VALUES (:uid, :company,:occupation,:role,:skills, :startYear, :endYear)`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, user));
+            return user;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.postWorkExperience()`, error);
+            throw error;
+        }
+    });
+}
+exports.postWorkExperience = postWorkExperience;
+function checkEducationId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg");
+        console.log(id);
+        logger_1.default.info(`${TAG}. checkEducationId()`);
+        try {
+            const checkQuery = `SELECT * FROM STUDENT_EDUCATION_DETAILS WHERE ID=:id`;
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { id });
+            console.log(userId);
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkEducationId()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkEducationId = checkEducationId;
+function updateStudentEducationDetails(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.updateStudentEducationDetails()`);
+        try {
+            const updateQuery = `UPDATE STUDENT_EDUCATION_DETAILS SET DEGREE=:degree, DEPT_BRANCH=:deptBranch, COLLEGE=:college, SCORE=:score, START_YEAR=:startYear, END_YEAR=:endYear WHERE ID=:id`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
+            return user;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateStudentEducationDetails()`, error);
+            throw error;
+        }
+    });
+}
+exports.updateStudentEducationDetails = updateStudentEducationDetails;
+function checkWorkExperienceId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg");
+        console.log(id);
+        logger_1.default.info(`${TAG}. checkWorkExperienceId()`);
+        try {
+            const checkQuery = `SELECT * FROM STUDENT_WORK_EXPERIENCE WHERE ID=:id`;
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { id });
+            console.log(userId);
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkWorkExperienceId()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkWorkExperienceId = checkWorkExperienceId;
+function updateStudentWorkDetails(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.updateStudentWorkExperienceDetails()`);
+        try {
+            const updateQuery = `UPDATE STUDENT_WORK_EXPERIENCE SET  COMPANY = :company,
+    OCCUPATION =:occupation,
+    ROLE = :role,
+    SKILLS =:skills,
+    START_YEAR = :startYear,
+    END_YEAR = :endYear WHERE ID=:id`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
+            return user;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateStudentWorkDetails()`, error);
+            throw error;
+        }
+    });
+}
+exports.updateStudentWorkDetails = updateStudentWorkDetails;
