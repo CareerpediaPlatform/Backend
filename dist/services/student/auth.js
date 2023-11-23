@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllStudentList = exports.setForgetPassword = exports.forgetPassword = exports.changePassword = exports.resendOTP = exports.verifyOTP = exports.studentUpdateStatus = exports.signinUser = exports.signupWithSocialAccount = exports.signupPhonenumber = exports.signupUser = void 0;
+exports.getStudentSignin = exports.getAllStudentList = exports.setForgetPassword = exports.forgetPassword = exports.changePassword = exports.resendOTP = exports.verifyOTP = exports.studentUpdateStatus = exports.signinUser = exports.signupWithSocialAccount = exports.signupPhonenumber = exports.signupUser = void 0;
 const mysql_1 = require("src/Database/mysql");
 const sql_query_util_1 = require("src/Database/mysql/helpers/sql.query.util");
 const auth_1 = require("src/Database/mysql/lib/student/auth");
@@ -75,7 +75,7 @@ function signupPhonenumber(user) {
                 if (existedUser) {
                     serviceResponse.message = 'Mobile Number is already exist';
                     serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
-                    serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
+                    // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
                     return serviceResponse;
                 }
                 let otp = yield (0, authentication_1.OTP)();
@@ -173,10 +173,10 @@ const signinUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
                     if (compare) {
                         const uid = existedUser.uid;
                         const accessToken = yield (0, authentication_1.generateAccessToken)({ uid: existedUser.uid, signin: true });
-                        console.log(accessToken);
                         const data = {
                             accessToken,
-                            signin: true
+                            signin: true,
+                            role: "student"
                         };
                         serviceResponse.data = data;
                     }
@@ -187,13 +187,14 @@ const signinUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
                     }
                 }
                 else {
-                    let compare = yield (0, encryption_1.comparePasswords)(existedUser.uniqId, user.uuid);
+                    let compare = yield (0, encryption_1.comparePasswords)(existedUser.uniqid, user.uuid);
                     if (compare) {
                         // const uid=existedUser.uid
                         const accessToken = yield (0, authentication_1.generateAccessToken)({ uid: existedUser.uid, signin: true });
                         const data = {
                             accessToken,
-                            signin: true
+                            signin: true,
+                            role: "student"
                         };
                         serviceResponse.data = data;
                     }
@@ -216,13 +217,14 @@ const signinUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
                 else {
                     otpsave = yield mysql_1.StudentAuth.saveOTP(Object.assign(Object.assign({}, existedUser), { accessToken: otpAccessToken, type: "signin", otp, transaction }));
                 }
-                const resendOtpToken = yield (0, authentication_1.generateAccessToken)({ uid: existedUser.uid, otp: true, type: "signin", phoneNumber: user.phoneNumber });
+                const accessToken = yield (0, authentication_1.generateAccessToken)({ uid: existedUser.uid, otp: true, type: "signin", phoneNumber: user.phoneNumber });
                 yield transaction.commit();
                 yield (0, nodemail_1.studentNotification)(Object.assign(Object.assign({}, otpsave.info), { email: existedUser.email }));
                 const data = {
                     // otpAccessToken,
-                    resendOtpToken,
-                    otpsave
+                    accessToken,
+                    otp: otpsave.info.otp,
+                    type: "otp"
                 };
                 serviceResponse.data = data;
             }
@@ -231,7 +233,7 @@ const signinUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             serviceResponse.message = 'wrong or invalid email/mobile';
             serviceResponse.statusCode = status_codes_1.HttpStatusCodes.NOT_FOUND;
-            serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
+            // serviceResponse.addError(new APIError(serviceResponse.message, '', ''));
         }
         return yield serviceResponse;
     }
@@ -323,12 +325,22 @@ function verifyOTP(otpInfo) {
                     }
                     const user = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ phoneNumber: student.phoneNumber });
                     const token = yield (0, authentication_1.generateAccessToken)({ uid: user.uid, type: type });
-                    const data = {
-                        token,
-                        type
-                    };
-                    serviceResponse.message = "otp validated";
-                    serviceResponse.data = data;
+                    if (type == "signin") {
+                        const data = {
+                            token,
+                            signin: true
+                        };
+                        serviceResponse.message = "otp validated";
+                        serviceResponse.data = data;
+                    }
+                    else {
+                        const data = {
+                            token,
+                            type
+                        };
+                        serviceResponse.message = "otp validated";
+                        serviceResponse.data = data;
+                    }
                 }
                 else {
                     serviceResponse.message = 'invalid otp or wrong otp';
@@ -394,8 +406,6 @@ function changePassword(user) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(student.password, user.oldPassword);
                 if (IsValid) {
                     const response = yield mysql_1.StudentAuth.changePassword({ password: user.newPassword, uid: uid.uid });
-                    console.log("response");
-                    console.log(response);
                     serviceResponse.message = "password changed successfully";
                     serviceResponse.data = response;
                 }
@@ -496,3 +506,31 @@ function getAllStudentList(user) {
     });
 }
 exports.getAllStudentList = getAllStudentList;
+function getStudentSignin(headerValue) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.getStudentProfile() ==> `, headerValue);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
+        try {
+            let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
+            const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
+            if (isValid) {
+                const existedProfile = yield mysql_1.StudentAuth.getUserform(decoded.uid);
+                console.log(existedProfile);
+                if (existedProfile) {
+                    serviceResponse.data = existedProfile;
+                    return serviceResponse;
+                }
+            }
+            else {
+                serviceResponse.message = "invalid user id";
+                return serviceResponse;
+            }
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getStudentProfile`, error);
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
+        }
+        return serviceResponse;
+    });
+}
+exports.getStudentSignin = getStudentSignin;

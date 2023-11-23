@@ -44,7 +44,7 @@ router.route('/verify-number')
     .post(authentication_1.isAuthenticated, validation.numberLogin, controller.signupPhonenumber);
 //  signin
 router.route('/email-login')
-    .post(validation.emailLogin, controller.signinUser);
+    .post(validation.studentLimiter, validation.emailLogin, controller.signinUser);
 router.route('/google-signin')
     .post(validation.linkedInLogin, controller.signinUser);
 router.route('/number-login')
@@ -60,4 +60,6 @@ router.route('/forget-password')
     .patch(authentication_1.isAuthenticated, controller.setForgetPassword);
 router.route('/change-password')
     .patch(authentication_1.isAuthenticated, validation.passwordValidation, controller.changePassword);
+router.route('/get-signIn')
+    .get(authentication_1.isAuthenticated, controller.getStudentSignin);
 exports.default = router;

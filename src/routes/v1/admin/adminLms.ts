@@ -96,4 +96,5 @@ router.route('/course-overvie/:coursetype')
 router.route('/course-list/:type')
 .get(isAuthenticated,controller.getCourseListAll);
 
+
 export default router;

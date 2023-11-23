@@ -20,70 +20,69 @@ const api_error_1 = require("src/models/lib/api_error");
 const service_response_1 = require("src/models/lib/service_response");
 const authentication_1 = require("src/helpers/authentication");
 const TAG = 'services.mentor_PersonalAndContactDetails';
-function savePersonalAndContactDetails(user) {
+function savePersonalAndContactDetails(user, headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log(user)
         logger_1.default.info(`${TAG}.savePersonalAndContactDetails() ==> `, user);
-        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, "", false);
+        const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
-            const uid = decoded[0].uid;
-            console.log(user);
-            console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-            const mentorUserId = yield mysql_1.mentorPersonalAndContactData.isValid(uid);
-            const mentor = yield mysql_1.mentorPersonalAndContactData.isValids(uid);
-            console.log(mentor);
-            if (!mentor) {
-                serviceResponse.message = "Invalid mentor ID";
+            let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
+            const uid = decoded.uid;
+            console.log(uid);
+            const isValid = yield mysql_1.mentorPersonalAndContactData.checkMentorUid(uid);
+            if (isValid) {
+                const existedProfile = yield mysql_1.mentorPersonalAndContactData.checkExist(uid);
+                if (existedProfile) {
+                    const postResponse = yield mysql_1.mentorPersonalAndContactData.mentorProfileUpdate(user, uid);
+                    const data = {
+                        postResponse
+                    };
+                    console.log(data);
+                    serviceResponse.data = data;
+                    serviceResponse.message = "successfully updated !";
+                    return serviceResponse;
+                }
+                const response = yield mysql_1.mentorPersonalAndContactData.mentorProfilePost(user, uid);
+                const data = Object.assign({}, response);
+                serviceResponse.data = data;
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = "Invalid Mentor Uid";
                 serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            const existingPersonalDetails = yield mysql_1.mentorPersonalAndContactData.getPersonalDetailsByMentorId(mentorUserId.userId);
-            if (existingPersonalDetails) {
-                existingPersonalDetails.profile_pic = user.profile_pic;
-                existingPersonalDetails.first_name = user.first_name;
-                existingPersonalDetails.last_name = user.last_name;
-                existingPersonalDetails.email = user.email;
-                existingPersonalDetails.mobile_number = user.mobile_number;
-                existingPersonalDetails.date_of_birth = user.date_of_birth;
-                existingPersonalDetails.linkedin_profile = user.linkedin_profile;
-                existingPersonalDetails.address = user.address;
-                existingPersonalDetails.city = user.city;
-                existingPersonalDetails.district = user.district;
-                existingPersonalDetails.state = user.state;
-                existingPersonalDetails.pincode = user.pincode;
-                existingPersonalDetails.country = user.country;
-                const updatedPersonalDataResponse = yield mysql_1.mentorPersonalAndContactData.updatePersonalAndContactDetails(mentorUserId.userId, existingPersonalDetails);
-                serviceResponse.data = {
-                    mentorPersonalAndContactDetailsUid: updatedPersonalDataResponse,
-                };
-            }
-            else {
-                const personalDataResponse = yield mysql_1.mentorPersonalAndContactData.savePersonalAndContactDetails(user, mentorUserId.userId);
-                user.data = {
-                    mentorPersonaDetailsUid: personalDataResponse,
-                };
-            }
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.savePersonalAndContactDetails`, error);
-            serviceResponse.addServerError("Failed to add mentor personal details due to technical difficulties");
+            serviceResponse.addServerError('Failed to create user due to technical difficulties');
         }
         return serviceResponse;
     });
 }
 exports.savePersonalAndContactDetails = savePersonalAndContactDetails;
-function getMentorProfile(userId) {
+function getMentorProfile(headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getRecruiterProfile() ==> `, userId);
+        logger_1.default.info(`${TAG}.getRecruiterProfile() ==> `, headerValue);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const existedProfile = yield mysql_1.mentorWorkExperienceData.checkProfilExist(userId);
-            if (existedProfile) {
+            let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
+            const uid = decoded.uid;
+            console.log(uid);
+            const isValid = yield mysql_1.mentorPersonalAndContactData.checkMentorUid(uid);
+            if (isValid) {
+                const existedProfile = yield mysql_1.mentorWorkExperienceData.checkProfilExist(uid);
                 const data = {
                     existedProfile
                 };
                 serviceResponse.data = data;
+                return serviceResponse;
+            }
+            else {
+                serviceResponse.message = "Invalid Mentor Uid";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
         }

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.userValidation = void 0;
+exports.personaldetails = exports.createUser = exports.userValidation = void 0;
 const error_constants_1 = require("../constants/error_constants");
 const Joi = __importStar(require("joi"));
 const logger_1 = __importDefault(require("../logger"));
@@ -86,3 +86,19 @@ function createUser(req, res, next) {
     });
 }
 exports.createUser = createUser;
+const personaldetails = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        basicDetails: Joi.object({
+            firstName: Joi.string().min(2).max(50).required(),
+            lastName: Joi.string().min(2).max(50).required(),
+            email: Joi.string().email().required(),
+            dateOfBirth: Joi.date().iso().max('now').required(),
+            gender: Joi.string().valid('male', 'female', 'other').required(),
+            phoneNumber: Joi.string().pattern(/^[0-9]{8,15}$/).required(),
+            profilePic: Joi.string().required(),
+            linkedinProfile: Joi.string().uri().required(),
+        }),
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.personaldetails = personaldetails;

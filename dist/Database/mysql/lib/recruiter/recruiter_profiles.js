@@ -25,8 +25,8 @@ function getRecruiterProfile(uid) {
         try {
             logger_1.default.info(`${TAG}.checkProfileExist() ==>`, uid);
             const basicQuery = 'SELECT * FROM `RECRUITER_BASIC_DETAILS` WHERE UID= :uid';
-            const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE UID= :uid';
             const contactQuery = 'SELECT * FROM `RECRUITER_CONTACT_DETAILS` WHERE UID= :uid';
+            const companyQuery = 'SELECT * FROM `RECRUITER_COMPANY_DETAILS` WHERE UID= :uid';
             const [basic] = yield (0, sql_query_util_1.executeQuery)(basicQuery, sequelize_1.QueryTypes.SELECT, { uid: uid });
             const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid: uid });
             const [company] = yield (0, sql_query_util_1.executeQuery)(companyQuery, sequelize_1.QueryTypes.SELECT, { uid: uid });
@@ -80,14 +80,14 @@ function recruiterProfilePost(user) {
         try {
             const basicInsertQuery = `INSERT INTO RECRUITER_BASIC_DETAILS
     ( UID, LOGO, COMPANY_NAME, FOUNDER_NAME, EMAIL, PHONE_NUMBER, WEBSITE, LINKEDIN_PROFILE )
-      values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :websiteUrl, :linkedInUrl)`;
+      values( :uid, :logo, :companyName, :founderName, :email, :phoneNumber, :website, :linkedinProfile)`;
             const contactInsertQuery = `INSERT INTO RECRUITER_CONTACT_DETAILS
       ( UID, ADDRESS, CITY, DISRICT, STATE, PINCODE, COUNTRY)
-        values( :uid, :address, :city, :district, 
+        values( :uid, :address, :city, :disrict, 
           :state, :pincode, :country)`;
             const companyInsertQuery = `INSERT INTO RECRUITER_COMPANY_DETAILS
     ( UID, ESTABLISHED_YEAR, NUMBER_OF_EMPLOYEES, DEPARTMENTS, START_YEAR, ANNUAL_REVENUE)
-      values( :uid, :establishedyear, :numberofemployees, :departments, :startyear, :annualrevenue)`;
+      values( :uid, :establishedYear, :numberOfEmployees, :departments, :startYear, :annualRevenue)`;
             let [basic] = yield (0, sql_query_util_1.executeQuery)(basicInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.Profile), { uid }));
             let [contact] = yield (0, sql_query_util_1.executeQuery)(contactInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.Contact), { uid }));
             let [company] = yield (0, sql_query_util_1.executeQuery)(companyInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.Company), { uid }));
@@ -107,7 +107,7 @@ function recruiterBasicDetailsUpdate(user) {
         try {
             const updateQuery = `UPDATE RECRUITER_BASIC_DETAILS SET
     LOGO = :logo, COMPANY_NAME = :companyName, FOUNDER_NAME = :founderName, 
-    EMAIL = :email, PHONE_NUMBER= :phoneNumber, WEBSITE = :websiteUrl, LINKEDIN_PROFILE = :linkedInUrl WHERE UID = :uid`;
+    EMAIL = :email, PHONE_NUMBER= :phoneNumber, WEBSITE = :website, LINKEDIN_PROFILE = :linkedinProfile WHERE UID = :uid`;
             yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
             return user;
         }
@@ -125,7 +125,7 @@ function recruiterContactUpdate(user) {
         try {
             const updateQuery = `UPDATE RECRUITER_CONTACT_DETAILS SET
     ADDRESS = :address, CITY = :city, 
-    DISRICT = :district, STATE = :state, 
+    DISRICT = :disrict, STATE = :state, 
     PINCODE = :pincode, COUNTRY = :country WHERE UID = :uid`;
             yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
             return user;
@@ -143,8 +143,8 @@ function recruitercompanyDetailUpdate(user) {
         logger_1.default.info(`${TAG}.recruitercompanyDetailUpdate()`);
         try {
             const updateQuery = `UPDATE RECRUITER_COMPANY_DETAILS SET
-    ESTABLISHED_YEAR = :establishedyear, NUMBER_OF_EMPLOYEES = :numberofemployees, DEPARTMENTS = :departments, 
-    START_YEAR = :startyear, ANNUAL_REVENUE = :annualrevenue WHERE UID = :uid`;
+    ESTABLISHED_YEAR = :establishedYear, NUMBER_OF_EMPLOYEES = :numberOfEmployees, DEPARTMENTS = :departments, 
+    START_YEAR = :startYear, ANNUAL_REVENUE = :annualRevenue WHERE UID = :uid`;
             yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
             return user;
         }

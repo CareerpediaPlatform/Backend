@@ -31,11 +31,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
+exports.collegeLimiter = exports.adminLimiter = exports.recruiterLimiter = exports.mentorLimiter = exports.studentLimiter = exports.createRateLimiter = exports.changePassword = exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
 const Joi = __importStar(require("joi"));
 const common_1 = require("./common");
 const error_constants_1 = require("src/constants/error_constants");
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const TAG = 'validations.auth';
 const emailLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const schema = Joi.object().keys({
@@ -88,7 +92,6 @@ const linkedInSignup = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         lastName: Joi.string().required(),
         email: Joi.string().email().required(),
         uuid: Joi.string().required(),
-        role: Joi.string().required(),
         terms_and_condition: Joi.boolean().required()
     });
     yield (0, common_1.validate)(schema, req, res, next);
@@ -145,3 +148,31 @@ const mentorSignup = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     yield (0, common_1.validate)(schema, req, res, next);
 });
 exports.mentorSignup = mentorSignup;
+const changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        newPassword: Joi.string().min(8).required().messages({
+            'string.empty': error_constants_1.ErrorMessages.IS_REQUIRED.replace('$field', 'newPassword'),
+            'string.min': error_constants_1.ErrorMessages.INVALID_LENGTH.replace('$field', 'newPassword')
+        }),
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.changePassword = changePassword;
+// .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+|\-=\\{}\[\]:";'<>?,./]).{8,25}$/)
+// Throttling login attempts
+const createRateLimiter = (windowMs, max, message) => {
+    return (0, express_rate_limit_1.default)({
+        windowMs,
+        max,
+        message: {
+            status: 429,
+            message,
+        },
+    });
+};
+exports.createRateLimiter = createRateLimiter;
+exports.studentLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many student login attempts, please try again later.');
+exports.mentorLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many mentor login attempts, please try again later.');
+exports.recruiterLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many recruiter login attempts, please try again later.');
+exports.adminLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many admin login attempts, please try again later.');
+exports.collegeLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many college-admin login attempts, please try again later.');

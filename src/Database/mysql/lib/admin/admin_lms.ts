@@ -187,12 +187,14 @@ export async function  getAllCourses() {
     }
 
 // course
-export async function uploadCourse(fileDetails: any, course: any, type: any): Promise<any> {
+export async function uploadCourses(fileDetails: any, course: any, type: any): Promise<any> {
+  
   logger.info(`${TAG}.uploadVideoFile()`)
   try {
-
+    const courseUid = crypto.randomUUID()
+   console.log(courseUid)
     const data = {
-      courseUid: crypto.randomUUID(),
+      courseUid:courseUid,
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -203,7 +205,6 @@ export async function uploadCourse(fileDetails: any, course: any, type: any): Pr
       price: course.price,
       discount: course.discount,
       filePath: fileDetails.filePath,
-      learn: course.learn
     };
 
     const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
@@ -213,24 +214,18 @@ export async function uploadCourse(fileDetails: any, course: any, type: any): Pr
     const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
     ( COURSE_UID,LEARN)
      values( :courseUid,:learn )`;
+
     let array = JSON.parse(course.learn);
     for (const singleData of array) {
-      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid: data.courseUid })
+      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid:courseUid })
       response.push(res)
     }
-
+   
     const [coursedata] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
-      ...data, ...type, courseUid: data.courseUid
+      ...data ,...type
     })
 
-    // Include courseUid in the response object
-    const responseObject = {
-      response,
-      coursedata,
-      courseUid: data.courseUid
-    };
-
-    return responseObject;
+    return {coursedata,courseUid,response};
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error

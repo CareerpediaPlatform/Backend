@@ -14,8 +14,6 @@ const upload = (0, multer_1.default)({
     },
     fileFilter: (req, file, cb) => {
         if (file != null) {
-            console.log("tttttttttttttttttttttttttttttttttttttttttttttt");
-            console.log(file);
             const allowedMimeTypes = ['video/mp4', 'video/mpeg', 'video/quicktime', 'image/jpeg', 'image/png', 'image/jpg', 'application/pdf', 'application/zip', 'application/doc', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
             if (allowedMimeTypes.includes(file.mimetype)) {
                 cb(null, true);

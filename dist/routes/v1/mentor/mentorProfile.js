@@ -38,17 +38,29 @@ const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router
     .route("/personal-details")
-    .post(authentication_1.isAuthenticated, profileController.PersonalAndDetails);
+    .patch(authentication_1.isAuthenticated, profileController.PersonalAndDetails);
 router
-    .route("/education-details/:id")
+    .route("/education-detail")
     .put(authentication_1.isAuthenticated, educationController.updateEducationDetail);
 router
-    .route("/work-details/:id")
+    .route("/work-experienc")
     .put(authentication_1.isAuthenticated, workController.updateWorkExperience);
 //mentor all profile details 
-router.route('/mentor-details/:userId')
-    .get(authentication_1.isAuthenticated, profileController.getrecruiterProfile);
+router.route('/mentor-details')
+    .get(authentication_1.isAuthenticated, profileController.getMentorProfile);
 //single mentorlist  profile details 
 router.route('/mentor-list/:userId')
     .get(authentication_1.isAuthenticated, profileController.getMentorSingleList);
+router.route('/education-details')
+    .post(authentication_1.isAuthenticated, educationController.mentorEducationPost);
+router.route('/education-details')
+    .patch(authentication_1.isAuthenticated, educationController.mentorEducationUpdate);
+router.route('/education-details')
+    .delete(authentication_1.isAuthenticated, educationController.mentorEducationDelete);
+router.route('/work-experience')
+    .post(authentication_1.isAuthenticated, workController.mentorWorkExperiencePost);
+router.route('/work-experience')
+    .patch(authentication_1.isAuthenticated, workController.mentorWorkExperienceUpdate);
+router.route('/work-experience')
+    .delete(authentication_1.isAuthenticated, workController.mentorWorkExperienceDelete);
 exports.default = router;

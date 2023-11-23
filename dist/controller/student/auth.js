@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setForgetPassword = exports.forgetPassword = exports.changePassword = exports.resendOTP = exports.verifyOTP = exports.signinUser = exports.studentUpdateStatus = exports.getAllStudentList = exports.signupPhonenumber = exports.signupUser = void 0;
+exports.getStudentSignin = exports.setForgetPassword = exports.forgetPassword = exports.changePassword = exports.resendOTP = exports.verifyOTP = exports.signinUser = exports.studentUpdateStatus = exports.getAllStudentList = exports.signupPhonenumber = exports.signupUser = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const authService = __importStar(require("../../services/student/auth"));
@@ -216,3 +216,20 @@ function setForgetPassword(req, res, next) {
     });
 }
 exports.setForgetPassword = setForgetPassword;
+function getStudentSignin(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.getStudentSignin()`);
+            logger_1.default.debug(`${TAG}.getStudentSignin() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            console.log(headerValue);
+            const authResponse = yield authService.getStudentSignin(headerValue);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getStudentSignin() `, error);
+            next(error);
+        }
+    });
+}
+exports.getStudentSignin = getStudentSignin;

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEducationDetail = void 0;
+exports.mentorEducationDelete = exports.mentorEducationUpdate = exports.mentorEducationPost = exports.updateEducationDetail = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const educationService = __importStar(require("../../services/mentor/mentorEducation"));
@@ -45,10 +45,10 @@ function updateEducationDetail(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.updateEducationDetail()`);
             logger_1.default.debug(`${TAG}.updateEducationDetail() Object = ${JSON.stringify(req.body)}`);
-            //   const headerValue = req.headers.authorization.split(' ')[1]
+            const headerValue = req.headers.authorization.split(' ')[1];
             const data = req.body;
-            const { id } = req.params;
-            const otpResponse = yield educationService.updateEducation({ data, id });
+            // const {id}=req.params
+            const otpResponse = yield educationService.updateEducation({ data, headerValue });
             (0, response_builder_1.responseBuilder)(otpResponse, res, next, req);
         }
         catch (error) {
@@ -58,3 +58,58 @@ function updateEducationDetail(req, res, next) {
     });
 }
 exports.updateEducationDetail = updateEducationDetail;
+// single object education detrails
+function mentorEducationPost(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.mentorEducationPost()`);
+            logger_1.default.debug(`${TAG}.mentorEducationPost() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield educationService.postEducationDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.studentEducationPost() `, error);
+            next(error);
+        }
+    });
+}
+exports.mentorEducationPost = mentorEducationPost;
+function mentorEducationUpdate(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.mentorEducationUpdate()`);
+            logger_1.default.debug(`${TAG}.mentorEducationUpdate() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield educationService.updateEducationDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.mentorEducationUpdate() `, error);
+            next(error);
+        }
+    });
+}
+exports.mentorEducationUpdate = mentorEducationUpdate;
+function mentorEducationDelete(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.mentorEducationDelete()`);
+            logger_1.default.debug(`${TAG}.mentorEducationDelete() Object = ${JSON.stringify(req.body)}`);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const user = req.body;
+            console.log(user);
+            const authResponse = yield educationService.deleteEducationDetails(Object.assign(Object.assign({}, user), { headerValue }));
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.mentorEducationUpdate() `, error);
+            next(error);
+        }
+    });
+}
+exports.mentorEducationDelete = mentorEducationDelete;

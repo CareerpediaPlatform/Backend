@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSingleLearn = exports.updateModuleExercise = exports.updateModuleTest = exports.updateModuleLesson = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesson = exports.getModulesLesson = exports.courseExercisePost = exports.coursetestPost = exports.courseLessonPost = exports.getCourseModule = exports.courseModulesPost = exports.getCourseParts = exports.coursePartPost = exports.coursePost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
+exports.getCourseListAll = exports.deleteCourseModule = exports.deleteCoursePart = exports.deleteSingleLearn = exports.updateModuleExercise = exports.updateModuleTest = exports.updateModuleLesson = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesson = exports.getModulesLesson = exports.courseExercisePost = exports.coursetestPost = exports.courseLessonPost = exports.getCourseModule = exports.courseModulesPost = exports.getCourseParts = exports.coursePartPost = exports.coursePost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const adminlmsServices = __importStar(require("../../services/admin/adminLms"));
@@ -46,8 +46,8 @@ function getCourseOverview(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getCourseOverview()`);
             logger_1.default.debug(`${TAG}.getCourseOverview() Object = ${JSON.stringify(req.body)}`);
-            const courseId = req.params.courseId;
-            const response = yield adminlmsServices.getCourseOverview(courseId);
+            const courseUid = req.params.courseUid;
+            const response = yield adminlmsServices.getCourseOverview(courseUid);
             (0, response_builder_1.responseBuilder)(response, res, next, req);
         }
         catch (error) {
@@ -62,8 +62,10 @@ function getCourses(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getCourses()`);
             logger_1.default.debug(`${TAG}.getCourses()`);
-            const courseType = req.query.type;
-            let response = yield adminlmsServices.getCourses(courseType);
+            // const type = req.query.type;
+            const type = req.params;
+            console.log(type);
+            let response = yield adminlmsServices.getCourses(type);
             (0, response_builder_1.responseBuilder)(response, res, next, req);
         }
         catch (error) {
@@ -98,8 +100,8 @@ function getuploadCourse(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getuploadCourse()`);
             logger_1.default.debug(`${TAG}.getuploadCourse() Object = ${JSON.stringify(req.body)}`);
-            let courseUID = req.params.uid;
-            const authResponse = yield adminlmsServices.getuploadCourse(courseUID);
+            let courseUid = req.params.courseUid;
+            const authResponse = yield adminlmsServices.getuploadCourse(courseUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -114,10 +116,12 @@ function updateuploadCourse(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.updateuploadCourse()`);
             logger_1.default.debug(`${TAG}.updateuploadCourse() Object = ${JSON.stringify(req.body)}`);
-            let courseUID = req.params.uid;
+            let courseUid = req.params.courseUid;
             const file = req.files;
             const course = req.body;
-            const authResponse = yield adminlmsServices.updateuploadCourse(courseUID, file, course);
+            console.log(course);
+            console.log(courseUid);
+            const authResponse = yield adminlmsServices.updateuploadCourse(courseUid, file, course);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -132,8 +136,8 @@ function deleteuploadCourse(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getuploadCourse()`);
             logger_1.default.debug(`${TAG}.getuploadCourse() Object = ${JSON.stringify(req.body)}`);
-            let courseUID = req.params.uid;
-            const authResponse = yield adminlmsServices.deleteuploadCourse(courseUID);
+            let courseUid = req.params.courseUid;
+            const authResponse = yield adminlmsServices.deleteuploadCourse(courseUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -170,9 +174,9 @@ function coursePartPost(req, res, next) {
             logger_1.default.debug(`${TAG}.coursePartPost() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let course_id = req.params.course_id;
-            console.log(course_id);
-            const authResponse = yield adminlmsServices.coursePartUser(Object.assign(Object.assign({}, user), { course_id }));
+            let courseUid = req.params.courseUid;
+            console.log(courseUid);
+            const authResponse = yield adminlmsServices.coursePartUser(Object.assign(Object.assign({}, user), { courseUid }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -187,11 +191,9 @@ function getCourseParts(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getCourseParts()`);
             logger_1.default.debug(`${TAG}.getCourseParts() Object = ${JSON.stringify(req.body)}`);
-            let course_id = req.params.course_id;
-            console.log(course_id);
-            let part_id = req.params.part_id;
-            console.log(part_id);
-            const authResponse = yield adminlmsServices.getCoursePart(course_id, part_id);
+            let partUid = req.params.partUid;
+            console.log(partUid);
+            const authResponse = yield adminlmsServices.getCoursePart(partUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -208,9 +210,9 @@ function courseModulesPost(req, res, next) {
             logger_1.default.debug(`${TAG}.courseModulesPost() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let part_id = req.params.part_id;
-            console.log(part_id);
-            const authResponse = yield adminlmsServices.courseModulesUser(Object.assign(Object.assign({}, user), { part_id }));
+            let partUid = req.params.partUid;
+            console.log(partUid);
+            const authResponse = yield adminlmsServices.courseModulesUser(Object.assign(Object.assign({}, user), { partUid }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -225,11 +227,9 @@ function getCourseModule(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getCourseModule()`);
             logger_1.default.debug(`${TAG}.getCourseModule() Object = ${JSON.stringify(req.body)}`);
-            let part_id = req.params.part_id;
-            console.log(part_id);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            const authResponse = yield adminlmsServices.getCourseModules(part_id, module_id);
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.getCourseModules(moduleUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -246,9 +246,9 @@ function courseLessonPost(req, res, next) {
             logger_1.default.debug(`${TAG}.courseLessonPost() Object = ${JSON.stringify(req.body)}`);
             const lessonData = req.body;
             console.log(lessonData);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            const authResponse = yield adminlmsServices.lessonUser(Object.assign(Object.assign({}, lessonData), { module_id }));
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.lessonUser(Object.assign(Object.assign({}, lessonData), { moduleUid }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -265,9 +265,9 @@ function coursetestPost(req, res, next) {
             logger_1.default.debug(`${TAG}.coursetestPost() Object = ${JSON.stringify(req.body)}`);
             const testData = req.body;
             console.log(testData);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            const authResponse = yield adminlmsServices.testUser(Object.assign(Object.assign({}, testData), { module_id }));
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.testUser(Object.assign(Object.assign({}, testData), { moduleUid }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -284,9 +284,9 @@ function courseExercisePost(req, res, next) {
             logger_1.default.debug(`${TAG}.courseExercisePost() Object = ${JSON.stringify(req.body)}`);
             const exerciseData = req.body;
             console.log(exerciseData);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            const authResponse = yield adminlmsServices.exerciseUser(Object.assign(Object.assign({}, exerciseData), { module_id }));
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.exerciseUser(Object.assign(Object.assign({}, exerciseData), { moduleUid }));
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -301,11 +301,11 @@ function getModulesLesson(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getModulesLesson()`);
             logger_1.default.debug(`${TAG}.getModulesLesson() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let lesson_id = req.params.lesson_id;
-            console.log(lesson_id);
-            const authResponse = yield adminlmsServices.getModulesLesspon(module_id, lesson_id);
+            // let moduleUid = req.params.moduleUid
+            // console.log(moduleUid)
+            let lessonUid = req.params.lessonUid;
+            console.log(lessonUid);
+            const authResponse = yield adminlmsServices.getModulesLesson(lessonUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -320,11 +320,9 @@ function deleteModulesLesson(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.deleteModulesLesson()`);
             logger_1.default.debug(`${TAG}.deleteModulesLesson() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let lesson_id = req.params.lesson_id;
-            console.log(lesson_id);
-            const authResponse = yield adminlmsServices.deleteModulesLesspon(module_id, lesson_id);
+            let lessonUid = req.params.lessonUid;
+            console.log(lessonUid);
+            const authResponse = yield adminlmsServices.deleteModulesLesspon(lessonUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -339,11 +337,11 @@ function getModulesTest(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getModulesTest()`);
             logger_1.default.debug(`${TAG}.getModulesTest() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let test_id = req.params.test_id;
-            console.log(test_id);
-            const authResponse = yield adminlmsServices.getModulesTest(module_id, test_id);
+            // let moduleUid = req.params.moduleUid
+            // console.log(moduleUid)
+            let testUid = req.params.testUid;
+            console.log(testUid);
+            const authResponse = yield adminlmsServices.getModulesTest(testUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -358,11 +356,9 @@ function deleteModulesTest(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.deleteModulesTest()`);
             logger_1.default.debug(`${TAG}.deleteModulesTest() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let test_id = req.params.test_id;
-            console.log(test_id);
-            const authResponse = yield adminlmsServices.deleteModulesTest(module_id, test_id);
+            let testUid = req.params.testUid;
+            console.log(testUid);
+            const authResponse = yield adminlmsServices.deleteModulesTest(testUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -377,11 +373,11 @@ function getModulesExercise(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getModulesExercise()`);
             logger_1.default.debug(`${TAG}.getModulesExercise() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let exercise_id = req.params.exercise_id;
-            console.log(exercise_id);
-            const authResponse = yield adminlmsServices.getModulesTest(module_id, exercise_id);
+            // let moduleUid = req.params.moduleUid
+            // console.log(moduleUid)
+            let exerciseUid = req.params.exerciseUid;
+            console.log(exerciseUid);
+            const authResponse = yield adminlmsServices.getModulesExercise(exerciseUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -396,11 +392,9 @@ function deleteModulesExercise(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.deleteModulesExercise()`);
             logger_1.default.debug(`${TAG}.deleteModulesExercise() Object = ${JSON.stringify(req.body)}`);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            let exercise_id = req.params.exercise_id;
-            console.log(exercise_id);
-            const authResponse = yield adminlmsServices.deleteModulesTest(module_id, exercise_id);
+            let exerciseUid = req.params.exerciseUid;
+            console.log(exerciseUid);
+            const authResponse = yield adminlmsServices.deleteModulesExercise(exerciseUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -417,9 +411,9 @@ function updateCoursePartPost(req, res, next) {
             logger_1.default.debug(`${TAG}.updateCoursePartPost() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let part_id = req.params.part_id;
-            console.log(part_id);
-            const authResponse = yield adminlmsServices.updateCoursePartPost(user, part_id);
+            let partUid = req.params.partUid;
+            console.log(partUid);
+            const authResponse = yield adminlmsServices.updateCoursePartPost(user, partUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -436,9 +430,9 @@ function updateCourseModulePost(req, res, next) {
             logger_1.default.debug(`${TAG}.updateCourseModulePost() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let module_id = req.params.module_id;
-            console.log(module_id);
-            const authResponse = yield adminlmsServices.updateCourseModulePost(user, module_id);
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.updateCourseModulePost(user, moduleUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -455,9 +449,9 @@ function updateModuleLesson(req, res, next) {
             logger_1.default.debug(`${TAG}.updateModuleLesson() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let lesson_id = req.params.lesson_id;
-            console.log(lesson_id);
-            const authResponse = yield adminlmsServices.updateLessonPost(user, lesson_id);
+            let lessonUid = req.params.lessonUid;
+            console.log(lessonUid);
+            const authResponse = yield adminlmsServices.updateLessonPost(user, lessonUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -474,9 +468,9 @@ function updateModuleTest(req, res, next) {
             logger_1.default.debug(`${TAG}.updateModuleTest() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let test_id = req.params.test_id;
-            console.log(test_id);
-            const authResponse = yield adminlmsServices.updateTestPost(user, test_id);
+            let testUid = req.params.testUid;
+            console.log(testUid);
+            const authResponse = yield adminlmsServices.updateTestPost(user, testUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -493,9 +487,9 @@ function updateModuleExercise(req, res, next) {
             logger_1.default.debug(`${TAG}.updateModuleExercise() Object = ${JSON.stringify(req.body)}`);
             const user = req.body;
             console.log(user);
-            let exercise_id = req.params.exercise_id;
-            console.log(exercise_id);
-            const authResponse = yield adminlmsServices.updateExercisePost(user, exercise_id);
+            let exerciseUid = req.params.exerciseUid;
+            console.log(exerciseUid);
+            const authResponse = yield adminlmsServices.updateExercisePost(user, exerciseUid);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -521,3 +515,54 @@ function deleteSingleLearn(req, res, next) {
     });
 }
 exports.deleteSingleLearn = deleteSingleLearn;
+function deleteCoursePart(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.deleteCoursePart()`);
+            logger_1.default.debug(`${TAG}.deleteCoursePart() Object = ${JSON.stringify(req.body)}`);
+            let partUid = req.params.partUid;
+            console.log(partUid);
+            const authResponse = yield adminlmsServices.deleteCoursePart(partUid);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteCoursePart() `, error);
+            next(error);
+        }
+    });
+}
+exports.deleteCoursePart = deleteCoursePart;
+function deleteCourseModule(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.deleteCourseModule()`);
+            logger_1.default.debug(`${TAG}.deleteCourseModule() Object = ${JSON.stringify(req.body)}`);
+            let moduleUid = req.params.moduleUid;
+            console.log(moduleUid);
+            const authResponse = yield adminlmsServices.deleteCourseModule(moduleUid);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteCourseModule() `, error);
+            next(error);
+        }
+    });
+}
+exports.deleteCourseModule = deleteCourseModule;
+function getCourseListAll(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            logger_1.default.info(`${TAG}.getCourseListAll()`);
+            logger_1.default.debug(`${TAG}.getCourseListAll() Object = ${JSON.stringify(req.body)}`);
+            let type = req.params.type;
+            console.log(type);
+            const authResponse = yield adminlmsServices.getCourseAllList(type);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.getCourseListAll() `, error);
+            next(error);
+        }
+    });
+}
+exports.getCourseListAll = getCourseListAll;
