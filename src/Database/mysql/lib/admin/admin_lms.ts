@@ -251,7 +251,6 @@ export async function getuploadCourse(courseUid){
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
     const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUid';
     const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUid';
-    const query= ''
     const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUid});
     const basicCourseLearn= await executeQuery(getQuery, QueryTypes.SELECT, {courseUid});
     return {basicCourse,basicCourseLearn}
@@ -263,7 +262,7 @@ export async function getuploadCourse(courseUid){
 
 export async function updateuploadCourse(fileDetails: any,courseUid: any, course:any){
   try {
-    logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
+    logger.info(`${TAG}.updateuploadCourse() ==>`, courseUid);
     const data = {
       courseUid:courseUid,
       // thumbnail: imageDetails.fileUrl,
@@ -695,13 +694,22 @@ export async function checkLearnId(learnId: any){
 export async function updateLessonPost(user,lessonUid) {
   logger.info(`${TAG}.updateLessonPost()`);
   try {
+    const data = {
+      lessonUid:lessonUid,
+      lessonName: user.lessonName,
+      points: user.points,
+      video: user.video,
+      thumbnail: user.thumbnail,
+      attachments: user.attachments
+
+    }
     let updateLessonPostQuery = `UPDATE LESSON_MODULES SET
     LESSON_NAME= :lessonName, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_UID = :lessonUid`;
   const updateLessonPost= await executeQuery(
     updateLessonPostQuery,
-      QueryTypes.UPDATE,{...user,lessonUid}
+      QueryTypes.UPDATE,{...data,lessonUid}
     );
-    return user;
+    return data;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);
     throw error;

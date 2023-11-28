@@ -13,11 +13,11 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/upload-assignment/:partId').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadAssignment);
- router.route('/assignment/:partId').get(controller.getAllSAssignment);
- router.route('/course/notes').post(controller.uploadNote);
- router.route('/course/notes').get(controller.getAllNotes);
- router.route('/part/thread/:partId').post(controller.uploadThread);
+ router.route('/assignment/:partUid').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadAssignment);
+ router.route('/assignment/:partUid').get(controller.getAllSAssignment);
+ router.route('/course-note/:partUid').post(controller.uploadNote);
+ router.route('/course-note/:partUid').get(controller.getAllNotes);
+ router.route('/part/thread/:partUid').post(controller.uploadThread);
  router.route('/part/thread/:partId/:threadID').get(controller.getSingleThread);
 
     //  router.route('/part/thread').post(controller.uploadThread);

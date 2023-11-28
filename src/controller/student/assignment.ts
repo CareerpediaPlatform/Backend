@@ -12,8 +12,8 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.debug(`${TAG}.uploadAssignment() Object = ${JSON.stringify(req.body)}`)
       log.debug(`${TAG}.uploadAssignment() req file:` + nodeUtil.inspect(req.file))
       const headerValue = req.headers.authorization.split(' ')[1];
-      const partId =req.params
-      const serviceResponse: IServiceResponse = await assignmentService.uploadAssignment(req.files,headerValue,partId)
+      const partUid =req.params
+      const serviceResponse: IServiceResponse = await assignmentService.uploadAssignment(req.files,headerValue,partUid)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
@@ -26,8 +26,8 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.info(`${TAG}.getAllSAssignment()`);
       log.debug(`${TAG}.getAllSAssignment() Object = ${JSON.stringify(req.body)}`)
       const headerValue =req.headers.authorization.split(' ')[1]
-      const partId=req.params
-      const authResponse: IServiceResponse = await assignmentService.getAllAssignments(partId,headerValue)
+      const partUid=req.params
+      const authResponse: IServiceResponse = await assignmentService.getAllAssignments(partUid,headerValue)
 
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
@@ -41,7 +41,8 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.debug(`${TAG}.uploadNote() Object = ${JSON.stringify(req.body)}`)
       const headerValue = req.headers.authorization.split(' ')[1];
       const note = req.body
-      const serviceResponse: IServiceResponse = await assignmentService.uploadNotes(note,headerValue)
+      const partUid =req.params
+      const serviceResponse: IServiceResponse = await assignmentService.uploadNotes(partUid,headerValue,note)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
@@ -55,9 +56,9 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.info(`${TAG}.getAllNotes()`);
       log.debug(`${TAG}.getAllNotes() Object = ${JSON.stringify(req.body)}`)
       const headerValue = req.headers.authorization.split(' ')[1];
-
-      const authResponse: IServiceResponse = await assignmentService.getAllNotes(headerValue)
-
+      const partUid=req.params
+      console.log(partUid)
+      const authResponse: IServiceResponse = await assignmentService.getAllNotes(partUid,headerValue)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getAllSAssignment() `, error)
@@ -71,8 +72,8 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.debug(`${TAG}.uploadThread() Object = ${JSON.stringify(req.body)}`)
       const headerValue =req.headers.authorization.split(' ')[1]
       const thread = req.body
-      const partId =req.params
-      const serviceResponse: IServiceResponse = await assignmentService.uploadThread(thread,headerValue,partId)
+      const partUid =req.params
+      const serviceResponse: IServiceResponse = await assignmentService.uploadThread(thread,headerValue,partUid)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
