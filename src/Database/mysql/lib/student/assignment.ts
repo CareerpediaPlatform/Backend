@@ -6,18 +6,17 @@ const TAG = 'data_stores_mysql_lib_student_assignment';
 
 
 
-
-export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Promise<any> {
+export async function uploadAssignment(fileDetails:any,uid: any,partUid: any): Promise<any> {
     logger.info(`${TAG}.uploadAssignment()`)
     try {
     const data = {
-          uid: uid,
+        uid: uid,
         assignment: fileDetails.fileUrl,
         filePath: fileDetails.filePath,
-        partId: partId.partId 
+        partUid: partUid.partUid 
       };
-      const InsertQuery = `INSERT INTO ASSIGNMENT (UID,  ASSIGNMENT, PART_ID)
-      VALUES(:uid, :assignment, :partId)`
+      const InsertQuery = `INSERT INTO STUDENT_ASSIGNMENT (UID, ASSIGNMENT, PART_UID)
+      VALUES(:uid, :assignment, :partUid)`
   
       const assignmentdata = await executeQuery(InsertQuery, QueryTypes.INSERT, {
         ...data
@@ -29,12 +28,12 @@ export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Pr
     }
   }
 
-  export async function getAllAssignments(partId: any,uid: any){
+  export async function getAllAssignments(partUid: any,uid: any){
     try {
       logger.info(`${TAG}.getAllAssignments() ==>`,uid);
-      const checkQuery = 'SELECT * FROM ASSIGNMENT WHERE UID= :uid and PART_ID= :partId';
+      const checkQuery = 'SELECT * FROM STUDENT_ASSIGNMENT WHERE UID= :uid and PART_UID= :partUid';
       const getAllAssignments= await executeQuery(checkQuery, QueryTypes.SELECT,{
-        uid,partId:partId.partId
+        uid,partUid:partUid.partUid
       });
     
       return getAllAssignments
@@ -45,35 +44,36 @@ export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Pr
     }
   }
 
-  export async function uploadNote(student: any,uid:any): Promise<any> {
+  export async function uploadNote(partUid: any,uid:any,note:any): Promise<any> {
     logger.info(`${TAG}.uploadNote()`)
     try {
   
     const data = {
         uid: uid,
-        note:student.note
+        note:note.note,
+        partUid:partUid.partUid
       };
       console.log(data)
-      const InsertQuery = `INSERT INTO NOTE (UID,  NOTE)
-      VALUES(:uid, :note)`
+      const InsertQuery = `INSERT INTO STUDENT_NOTE (UID, NOTE, PART_UID)
+      VALUES(:uid, :note, :partUid)`
   
       const [notedata] = await executeQuery(InsertQuery, QueryTypes.INSERT, {
         ...data
       })
-      return notedata
+      return data
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.uploadNote()`, error)
       throw error
     }
   }
 
-  export async function getAllNotes(uid: any){
+  export async function getAllNotes(partUid: any,uid: any){
     try {
-      logger.info(`${TAG}.getAllNotes() ==>`,uid);
-   
-      const checkQuery = 'SELECT * FROM NOTE WHERE UID= :uid';
+      logger.info(`${TAG}.getAllNotes() ==>`,partUid);
+      console.log(partUid)
+      const checkQuery = 'SELECT * FROM STUDENT_NOTE WHERE UID= :uid and PART_UID= :partUid';
       const getAllNotes= await executeQuery(checkQuery, QueryTypes.SELECT,{
-        uid
+        uid,partUid:partUid.partUid
       });
     
       return getAllNotes
@@ -84,7 +84,7 @@ export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Pr
     }
   }
 
-  export async function uploadThread(thread: any,uid:any, partId: any): Promise<any> {
+  export async function uploadThread(thread: any,uid:any, partUid: any): Promise<any> {
     logger.info(`${TAG}.uploadThread()`)
     try {
   
@@ -92,11 +92,11 @@ export async function uploadAssignment(fileDetails:any,uid: any,partId: any): Pr
         uid: uid,
         title: thread.title,
         description: thread.description,
-        partId: partId.partId
+        partUid: partUid.partUid
       };
       console.log(data)
-      const InsertQuery = `INSERT INTO STUDENT_THREAD (UID,  TITLE, DESCRIPTION, PART_ID)
-      VALUES(:uid, :title, :description, :partId)`
+      const InsertQuery = `INSERT INTO STUDENT_THREAD (UID,  TITLE, DESCRIPTION, PART_UID)
+      VALUES(:uid, :title, :description, :partUid)`
       const [threaddata] = await executeQuery(InsertQuery, QueryTypes.INSERT, {
         ...data
       })

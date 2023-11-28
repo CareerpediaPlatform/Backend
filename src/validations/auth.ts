@@ -27,7 +27,7 @@ export const passwordValidation= async (req, res, next) => {
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field','password')
     }),
-    // oldPassword:Joi.string().required()
+    oldPassword:Joi.string().required()
 
   });
   await validate(schema, req, res, next);
@@ -198,6 +198,21 @@ export const recruiter= async (req, res, next) => {
     logo: Joi.string().required(),
   companyName: Joi.string().required()
 
+  });
+  await validate(schema, req, res, next);
+};
+
+export const babu= async (req, res, next) => {
+  const schema = Joi.object().keys({
+    newPassword: Joi.string().required().min(8).max(15).messages({
+      'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+      'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+        .replace('$length', '8'),
+      'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field','password')
+    }),
+    oldPassword: Joi.string()
+      .min(8)
+      .required()
   });
   await validate(schema, req, res, next);
 };
