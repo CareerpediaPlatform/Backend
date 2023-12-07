@@ -106,6 +106,7 @@ function getMentorUid(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.getMentorUid()  ==>`, uid);
+            console.log(uid);
             let query = 'select * from MENTOR where UID=:uid';
             const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
                 uid: uid.uid

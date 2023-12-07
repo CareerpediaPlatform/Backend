@@ -18,13 +18,14 @@ const router = Router()
  router.route('/course-note/:partUid').post(controller.uploadNote);
  router.route('/course-note/:partUid').get(controller.getAllNotes);
  router.route('/part/thread/:partUid').post(controller.uploadThread);
- router.route('/part/thread/:partId/:threadID').get(controller.getSingleThread);
+ router.route('/part/thread/:partUid/:threadId').get(controller.getSingleThread);
+ router.route('/part/thread-reply/:partUid/:threadId').post(controller.postThreadreply);
 
     //  router.route('/part/thread').post(controller.uploadThread);
     //  router.route('/part/thread/:threadID/:uid').get(controller.getAllThreads);
     //  router.route('/mentor/reply-thread/:threadID/:uid').post(controller.postThreadreply)
- router.route('/thread/part/:partId').get(controller.getAllThreadsPart)
- router.route('/thread/course/:courseId').get(controller.getAllThreadsCourse)
+ router.route('/part/thread/:partUid').get(controller.getAllThreadsPart)
+ router.route('/course/thread/:courseUid').get(controller.getAllThreadsCourse)
 
 
 

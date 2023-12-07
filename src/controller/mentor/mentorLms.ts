@@ -40,11 +40,11 @@ export async function getAllSAssignments(req: any, res: Response, next: NextFunc
     try {
       log.info(`${TAG}.postThreadreply()`)
       log.debug(`${TAG}.postThreadreply() Object = ${JSON.stringify(req.body)}`)
-      const headerValue =req.headers.authorization.split(' ')[1]
+      const headerValue =req.headers.authorization.split(' ')[1];
       const reply = req.body
+      const partUid = req.params
       const threadId = req.params
-      const partId = req.params
-      const serviceResponse: IServiceResponse = await lmsService.postThreadreply(reply,threadId,headerValue,partId)
+      const serviceResponse: IServiceResponse = await lmsService.postThreadreply(headerValue,reply,partUid,threadId)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {

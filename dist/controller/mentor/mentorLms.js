@@ -82,9 +82,9 @@ function postThreadreply(req, res, next) {
             logger_1.default.debug(`${TAG}.postThreadreply() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
             const reply = req.body;
+            const partUid = req.params;
             const threadId = req.params;
-            const partId = req.params;
-            const serviceResponse = yield lmsService.postThreadreply(reply, threadId, headerValue, partId);
+            const serviceResponse = yield lmsService.postThreadreply(headerValue, reply, partUid, threadId);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {

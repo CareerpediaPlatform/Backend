@@ -107,15 +107,20 @@ export async function uploadAssignment(fileDetails:any,uid: any,partUid: any): P
     }
   }
  //************************* Get Single ThreadId student uid************ */
-  export async function getSingleThread(partId: any,threadId: any,uid: any){
+
+  export async function getSingleThread(partUid: any,threadId: any,uid: any){
 
     try {
-      logger.info(`${TAG}.getSingleThread() ==>`,partId,threadId,uid);
-      const query = `SELECT st.TITLE,st.DESCRIPTION,(
+      console.log(partUid)
+      console.log(threadId)
+      logger.info(`${TAG}.getSingleThread() ==>`,partUid,threadId,uid);
+      const query = `SELECT st.TITLE, st.DESCRIPTION, (
         SELECT JSON_ARRAYAGG(
-            JSON_OBJECT( 'reply', tr.REPLY  )
-        ) FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID)AS replay FROM student_thread st WHERE ST.UID= :uid AND ST.THREAD_ID= :THREAD_ID AND PART_ID= :partId`
-      const Thread = await executeQuery(query,QueryTypes.SELECT,{ partId:partId.partId,THREAD_ID:threadId.threadID,uid})
+            JSON_OBJECT('reply', tr.REPLY)
+        ) FROM THREAD_REPLY tr WHERE tr.THREAD_ID = st.THREAD_ID
+    ) AS replay FROM STUDENT_THREAD st WHERE st.UID = :uid AND st.THREAD_ID = :threadId AND st.PART_UID = :partUid;
+    `
+      const Thread = await executeQuery(query,QueryTypes.SELECT,{ partUid:partUid.partUid,THREAD_ID:threadId.threadId,uid})
       return Thread
     
     } catch (error) {
@@ -125,53 +130,65 @@ export async function uploadAssignment(fileDetails:any,uid: any,partUid: any): P
   }
 
 
-  export async function postThreadreply(reply:any,threadId:any,uid: any) {
+export async function postThreadreply(reply, uid, partUid, threadId) {
     logger.info(`${TAG}.posthtreadreply()`);
-
+  
     try {
-        const response=[]
-      const insertQuery =`INSERT INTO thread_reply (THREAD_ID,Uid,REPLY, REPLYTO) 
-      VALUES (:threadId, :uid, :reply, :replyto)`
+      const response = [];
+      const insertQuery = `INSERT INTO THREAD_REPLY (THREAD_ID, UID, PART_UID, REPLY, REPLYTO) 
+        VALUES (:threadId, :uid, :partUid, :reply, :replyto)`;
   
       for (const data of reply) {
-   
-            const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
-                ...data,uid:uid.uid,threadId:threadId.threadID
-              });
-              response.push(res)    
-      } 
-      return {...response};
+        const postData = {
+          threadId: threadId.threadId,
+          uid: uid,
+          reply: data.reply,     
+          replyto: data.replyto, 
+          partUid: partUid.partUid,
+        };
+  
+        const res = await executeQuery(insertQuery, QueryTypes.INSERT, postData);
+        response.push(res);
+      }
+  
+      return { ...response };
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.posthtreadreply()`, error);
       throw error;
     }
   }
+  
 
-  export async function getAllThreadsCourse(courseId){
+  export async function getAllThreadsCourse(courseUid){
     try {
-      logger.info(`${TAG}.getAllThreadsCourse() ==>`,courseId);
-    
-      const query = `SELECT c.thumbnail,c.title,'part',(
+      logger.info(`${TAG}.getAllThreadsCourse() ==>`,courseUid);
+      
+    //have to add thumbnail 
+      const query = `SELECT c.TITLE, 'part', (
         SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                           'part', cp.partTitle,'threads',(
-                            SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                           'title',st.TITLE,
-                           'description',st.DESCRIPTION,
-                           'reply',(
-                           SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                            'REPLY', tr.REPLY
-                           ))FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID
-                           ))
-                           ) FROM student_thread st WHERE ST.PART_ID=cp.part_id
-                           ) 
-                           )
-                       )  FROM Courses_Parts cp where c.course_id = cp.course_id 
-       ) AS part FROM courses c WHERE course_id=:courseId`
-      const Thread = await executeQuery(query,QueryTypes.SELECT,{courseId:courseId})
+            JSON_OBJECT(
+                'part', cp.TITLE,
+                'threads', (
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'title', st.TITLE,
+                            'description', st.DESCRIPTION,
+                            'reply', (
+                                SELECT JSON_ARRAYAGG(
+                                    JSON_OBJECT(
+                                        'REPLY', tr.REPLY
+                                    )
+                                ) FROM THREAD_REPLY tr WHERE tr.THREAD_ID = st.THREAD_ID
+                            )
+                        )
+                    ) FROM STUDENT_THREAD st WHERE st.PART_UID = cp.COURSE_UID
+                )
+            )
+        ) FROM COURSE_OVERVIEW cp WHERE c.COURSE_UID = cp.COURSE_UID
+    ) AS COURSE_PART FROM COURSE_OVERVIEW c WHERE c.COURSE_UID = :courseUid;
+    `
+      const Thread = await executeQuery(query,QueryTypes.SELECT,{courseUid:courseUid})
       return Thread
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getAllThreadsCourse()`, error);
@@ -179,23 +196,42 @@ export async function uploadAssignment(fileDetails:any,uid: any,partUid: any): P
     }
   }
 
-  export async function getAllThreadsPart(partId){
+  export async function getAllThreadsPart(partUid){
     try {
-      logger.info(`${TAG}.getAllThreadsPart() ==>`,partId);
+      logger.info(`${TAG}.getAllThreadsPart() ==>`,partUid);
+      console.log(partUid)
     
-      const query = `SELECT st.TITLE,st.DESCRIPTION,(
-        SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-                             'reply', tr.REPLY
-            )
-        ) FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID
-        )AS replay FROM student_thread st WHERE ST.PART_ID=:partId;
+      const query = `SELECT st.TITLE, st.DESCRIPTION,
+      (
+          SELECT JSON_ARRAYAGG(
+              JSON_OBJECT('reply', tr.REPLY)
+          ) 
+          FROM THREAD_REPLY tr 
+          WHERE tr.THREAD_ID = st.THREAD_ID
+      ) AS replay 
+  FROM STUDENT_THREAD st 
+  WHERE st.PART_UID = :partUid;
   `
-      const Thread = await executeQuery(query,QueryTypes.SELECT,{partId:partId})
-      return Thread
+      const Thread = await executeQuery(query,QueryTypes.SELECT,{partUid:partUid.partUid})
+      return {...Thread,partUid}
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getAllThreadsPart()`, error);
       throw error;
     }
   }
 
+  export async function checkThreadId(threadId) {
+    try {
+      console.log(threadId)
+      logger.info(`${TAG}.checkPartUid()  ==>`, threadId);
+      let query = 'select * from STUDENT_THREAD where THREAD_ID=:threadId';
+      const [userId] = await executeQuery(query, QueryTypes.SELECT, {
+        threadId:threadId.threadId
+      });
+      return userId;
+    } catch (error) {
+      logger.error(`ERROR occurred in ${TAG}.checkPartUid()`, error); 
+      throw error;
+    }
+  }
+  

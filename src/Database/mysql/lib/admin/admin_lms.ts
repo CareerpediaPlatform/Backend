@@ -161,11 +161,11 @@ export async function  getMyCourses(list) {
       }
     }
     // student
-export async function  getMyCourse(courseId) {
+export async function  getMyCourse(courseUid) {
       try {
         logger.info(`${TAG}.getMyCourse()  ==>`);
-        const query = 'SELECT * FROM courses WHERE course_id=:courseId';
-        const results= await executeQuery(query, QueryTypes.SELECT,{courseId:courseId});
+        const query = 'SELECT * FROM COURSE_OVERVIEW WHERE COURSE_UID=:courseUid';
+        const results= await executeQuery(query, QueryTypes.SELECT,{courseUid:courseUid});
           return results;
       } catch (error) {
         logger.error(`ERROR occurred in ${TAG}.getMyCourse()`, error);

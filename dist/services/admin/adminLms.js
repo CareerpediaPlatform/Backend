@@ -94,9 +94,9 @@ function uploadCourse(files, course, type) {
             //   isPublic: true,
             //   metaData: null,
             // }
-            const fileSavedResp = yield mysql_1.adminLms.uploadCourse(fileDetails, course, type);
+            const fileSavedResp = yield mysql_1.adminLms.uploadCourses(fileDetails, course, type);
             serviceResponse.data = {
-                courseUID: course.courseUID,
+                courseUid: fileSavedResp.courseUid,
                 // thumbnail: imageDetails.fileUrl,
                 video: fileDetails.fileUrl,
                 title: course.title,
@@ -110,6 +110,7 @@ function uploadCourse(files, course, type) {
                 type: type,
                 learn: course.learn
             };
+            return serviceResponse;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.uploadCourse`, error);
@@ -177,10 +178,11 @@ function updateuploadCourse(courseUid, files, course) {
             // }
             const existedCourseID = yield mysql_1.adminLms.checkCourseIdExist(courseUid);
             if (existedCourseID) {
-                const existedCourse = yield mysql_1.adminLms.updateuploadCourse(fileDetails, courseUid, course);
+                const updatedCourse = yield mysql_1.adminLms.updateuploadCourse(fileDetails, courseUid, course);
                 const data = {
-                    existedCourse
+                    updatedCourse
                 };
+                serviceResponse.message = "sucessfully updated";
                 serviceResponse.data = data;
                 return serviceResponse;
             }

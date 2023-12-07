@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collegeLimiter = exports.adminLimiter = exports.recruiterLimiter = exports.mentorLimiter = exports.studentLimiter = exports.createRateLimiter = exports.changePassword = exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
+exports.babu = exports.recruiter = exports.updatePayloadSchema = exports.collegeLimiter = exports.adminLimiter = exports.recruiterLimiter = exports.mentorLimiter = exports.studentLimiter = exports.createRateLimiter = exports.changePassword = exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
 const Joi = __importStar(require("joi"));
 const common_1 = require("./common");
 const error_constants_1 = require("src/constants/error_constants");
@@ -56,12 +56,13 @@ const emailLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.emailLogin = emailLogin;
 const passwordValidation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const schema = Joi.object().keys({
-        newPassword: Joi.string().min(8).max(15).messages({
+        newPassword: Joi.string().required().min(8).max(15).messages({
             'any.required': error_constants_1.ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
             'any.max': error_constants_1.ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
                 .replace('$length', '8'),
             'string.pattern': error_constants_1.ErrorMessages.INVALID_FIELD.replace('$field', 'password')
-        })
+        }),
+        oldPassword: Joi.string().required()
     });
     yield (0, common_1.validate)(schema, req, res, next);
 });
@@ -176,3 +177,59 @@ exports.mentorLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too m
 exports.recruiterLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many recruiter login attempts, please try again later.');
 exports.adminLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many admin login attempts, please try again later.');
 exports.collegeLimiter = (0, exports.createRateLimiter)(15 * 60 * 1000, 5, 'Too many college-admin login attempts, please try again later.');
+// Define validation schema for the Profile
+const profileSchema = Joi.object({
+    logo: Joi.string().required(),
+    companyName: Joi.string().required(),
+    founderName: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phoneNumber: Joi.string().required(),
+    website: Joi.string().required(),
+    linkedinProfile: Joi.string().required(),
+});
+// Define validation schema for the Contact
+const contactSchema = Joi.object({
+    address: Joi.string().required(),
+    city: Joi.string().required(),
+    district: Joi.string().required(),
+    state: Joi.string().required(),
+    pincode: Joi.string().required(),
+    country: Joi.string().required(),
+});
+// Define validation schema for the Company
+const companySchema = Joi.object({
+    establishedYear: Joi.string().required(),
+    numberOfEmployees: Joi.string().required(),
+    departments: Joi.string().required(),
+    startYear: Joi.string().required(),
+    annualRevenue: Joi.string().required(),
+});
+// Define validation schema for the entire payload
+exports.updatePayloadSchema = Joi.object({
+    Profile: profileSchema.required(),
+    Contact: contactSchema.required(),
+    Company: companySchema.required(),
+});
+const recruiter = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object({
+        logo: Joi.string().required(),
+        companyName: Joi.string().required()
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.recruiter = recruiter;
+const babu = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = Joi.object().keys({
+        newPassword: Joi.string().required().min(8).max(15).messages({
+            'any.required': error_constants_1.ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+            'any.max': error_constants_1.ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+                .replace('$length', '8'),
+            'string.pattern': error_constants_1.ErrorMessages.INVALID_FIELD.replace('$field', 'password')
+        }),
+        oldPassword: Joi.string()
+            .min(8)
+            .required()
+    });
+    yield (0, common_1.validate)(schema, req, res, next);
+});
+exports.babu = babu;

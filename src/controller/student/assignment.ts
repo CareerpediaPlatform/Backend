@@ -88,8 +88,10 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
       log.debug(`${TAG}.getSingleThread() Object = ${JSON.stringify(req.body)}`)
       const headerValue =req.headers.authorization.split(' ')[1]
       const threadId=req.params
-      const partId=req.params      
-      const authResponse: IServiceResponse = await assignmentService.getSingleThread(partId,threadId,headerValue)
+      console.log(threadId)
+      const partUid=req.params 
+      console.log(partUid)    
+      const authResponse: IServiceResponse = await assignmentService.getSingleThread(partUid,threadId,headerValue)
 
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
@@ -102,13 +104,12 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
     try {
       log.info(`${TAG}.postThreadreply()`)
       log.debug(`${TAG}.postThreadreply() Object = ${JSON.stringify(req.body)}`)
-      // const headerValue =req.headers.authorization.split(' ')[1]
+      const headerValue =req.headers.authorization.split(' ')[1]
+      console.log(headerValue)
       const reply = req.body
+      const partUid =req.params
       const threadId = req.params
-      const uid = req.params
-      console.log(threadId,uid)
-      const serviceResponse: IServiceResponse = await assignmentService.postThreadreply(reply,threadId,uid)
-  
+      const serviceResponse: IServiceResponse = await assignmentService.postThreadreply(reply,headerValue,partUid,threadId)
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.postThreadreply() `, error)
@@ -121,8 +122,8 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
     try {
       log.info(`${TAG}.getAllThreadsCourse()`)
       log.debug(`${TAG}.getAllThreadsCourse() Object = ${JSON.stringify(req.body)}`)
-      const {courseId} = req.params
-      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsCourse(courseId)
+      const {courseUid} = req.params
+      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsCourse(courseUid)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {
@@ -136,8 +137,10 @@ export async function uploadAssignment(req: any, res: Response, next: NextFuncti
     try {
       log.info(`${TAG}.getAllThreadsPart()`)
       log.debug(`${TAG}.getAllThreadsPart() Object = ${JSON.stringify(req.body)}`)
-      const {partId} = req.params
-      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsPart(partId)
+      const headerValue =req.headers.authorization.split(' ')[1]
+      const partUid = req.params
+      console.log(partUid)
+      const serviceResponse: IServiceResponse = await assignmentService.getAllThreadsPart(partUid,headerValue)
   
       responseBuilder(serviceResponse, res, next, req)
     } catch (error) {

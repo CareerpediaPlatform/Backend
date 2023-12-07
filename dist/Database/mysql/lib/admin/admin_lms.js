@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCourseList = exports.checkExerciseUid = exports.checkTestUid = exports.checkLessonUid = exports.deleteCourseModule = exports.deleteCoursePart = exports.updateExercisesPost = exports.deleteLearnId = exports.updateTestPost = exports.updateLessonPost = exports.checkLearnId = exports.updateModulesPost = exports.updateCoursePartPost = exports.deleteExercisePost = exports.getExercisePost = exports.exercisesPost = exports.deleteTestPost = exports.getTestPost = exports.testPost = exports.deleteLessonPost = exports.getLessonPost = exports.checkModuleUid = exports.lessonPost = exports.getModule = exports.checkPartUid = exports.modulesPost = exports.getPart = exports.coursePartPost = exports.checkCoureUid = exports.coursesPost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.checkCourseIdExist = exports.uploadCourse = exports.getAllCourses = exports.getMyCourse = exports.getMyCourses = exports.getPartDetail = exports.getCourses = exports.getCourseOverview = void 0;
+exports.getAllCourseList = exports.checkExerciseUid = exports.checkTestUid = exports.checkLessonUid = exports.deleteCourseModule = exports.deleteCoursePart = exports.updateExercisesPost = exports.deleteLearnId = exports.updateTestPost = exports.updateLessonPost = exports.checkLearnId = exports.updateModulesPost = exports.updateCoursePartPost = exports.deleteExercisePost = exports.getExercisePost = exports.exercisesPost = exports.deleteTestPost = exports.getTestPost = exports.testPost = exports.deleteLessonPost = exports.getLessonPost = exports.checkModuleUid = exports.lessonPost = exports.getModule = exports.checkPartUid = exports.modulesPost = exports.getPart = exports.coursePartPost = exports.checkCoureUid = exports.coursesPost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.checkCourseIdExist = exports.uploadCourses = exports.getAllCourses = exports.getMyCourse = exports.getMyCourses = exports.getPartDetail = exports.getCourses = exports.getCourseOverview = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -186,12 +186,12 @@ function getMyCourses(list) {
 }
 exports.getMyCourses = getMyCourses;
 // student
-function getMyCourse(courseId) {
+function getMyCourse(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.getMyCourse()  ==>`);
-            const query = 'SELECT * FROM courses WHERE course_id=:courseId';
-            const results = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { courseId: courseId });
+            const query = 'SELECT * FROM COURSE_OVERVIEW WHERE COURSE_UID=:courseUid';
+            const results = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { courseUid: courseUid });
             return results;
         }
         catch (error) {
@@ -218,12 +218,14 @@ function getAllCourses() {
 }
 exports.getAllCourses = getAllCourses;
 // course
-function uploadCourse(fileDetails, course, type) {
+function uploadCourses(fileDetails, course, type) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadVideoFile()`);
         try {
+            const courseUid = crypto.randomUUID();
+            console.log(courseUid);
             const data = {
-                courseUid: crypto.randomUUID(),
+                courseUid: courseUid,
                 video: fileDetails.fileUrl,
                 title: course.title,
                 description: course.description,
@@ -234,7 +236,6 @@ function uploadCourse(fileDetails, course, type) {
                 price: course.price,
                 discount: course.discount,
                 filePath: fileDetails.filePath,
-                learn: course.learn
             };
             const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
     VALUES(:courseUid,:video, :title, :description, :mentor, :lesson, :exercises, :test, :price, :discount, :type )`;
@@ -244,18 +245,11 @@ function uploadCourse(fileDetails, course, type) {
      values( :courseUid,:learn )`;
             let array = JSON.parse(course.learn);
             for (const singleData of array) {
-                const res = yield (0, sql_query_util_1.executeQuery)(learnQuery, sequelize_1.QueryTypes.INSERT, { learn: singleData, courseUid: data.courseUid });
+                const res = yield (0, sql_query_util_1.executeQuery)(learnQuery, sequelize_1.QueryTypes.INSERT, { learn: singleData, courseUid: courseUid });
                 response.push(res);
             }
-            const [coursedata] = yield (0, sql_query_util_1.executeQuery)(videoInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign(Object.assign({}, data), type), { courseUid: data.courseUid }));
-            // Include courseUid in the response object
-            const responseObject = {
-                response,
-                coursedata,
-                courseUid: data.courseUid
-            };
-            console.log(responseObject);
-            return responseObject;
+            const [coursedata] = yield (0, sql_query_util_1.executeQuery)(videoInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), type));
+            return { coursedata, courseUid, response };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.saveFile()`, error);
@@ -263,7 +257,7 @@ function uploadCourse(fileDetails, course, type) {
         }
     });
 }
-exports.uploadCourse = uploadCourse;
+exports.uploadCourses = uploadCourses;
 function checkCourseIdExist(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(courseUid);
@@ -286,7 +280,6 @@ function getuploadCourse(courseUid) {
             logger_1.default.info(`${TAG}.getuploadCourse() ==>`, courseUid);
             const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUid';
             const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUid';
-            const query = '';
             const [basicCourse] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { courseUid });
             const basicCourseLearn = yield (0, sql_query_util_1.executeQuery)(getQuery, sequelize_1.QueryTypes.SELECT, { courseUid });
             return { basicCourse, basicCourseLearn };
@@ -301,8 +294,9 @@ exports.getuploadCourse = getuploadCourse;
 function updateuploadCourse(fileDetails, courseUid, course) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getuploadCourse() ==>`, courseUid);
+            logger_1.default.info(`${TAG}.updateuploadCourse() ==>`, courseUid);
             const data = {
+                courseUid: courseUid,
                 // thumbnail: imageDetails.fileUrl,
                 video: fileDetails.fileUrl,
                 title: course.title,
@@ -326,7 +320,7 @@ function updateuploadCourse(fileDetails, courseUid, course) {
                 const res = yield (0, sql_query_util_1.executeQuery)(learnQuery, sequelize_1.QueryTypes.UPDATE, { learn: singleData, courseUid });
                 response.push(res);
             }
-            return { course };
+            return data;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
@@ -726,10 +720,18 @@ function updateLessonPost(user, lessonUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.updateLessonPost()`);
         try {
+            const data = {
+                lessonUid: lessonUid,
+                lessonName: user.lessonName,
+                points: user.points,
+                video: user.video,
+                thumbnail: user.thumbnail,
+                attachments: user.attachments
+            };
             let updateLessonPostQuery = `UPDATE LESSON_MODULES SET
     LESSON_NAME= :lessonName, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_UID = :lessonUid`;
-            const updateLessonPost = yield (0, sql_query_util_1.executeQuery)(updateLessonPostQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user), { lessonUid }));
-            return user;
+            const updateLessonPost = yield (0, sql_query_util_1.executeQuery)(updateLessonPostQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, data), { lessonUid }));
+            return data;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);

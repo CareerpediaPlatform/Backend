@@ -103,6 +103,7 @@ export async function checkEmailExist(email: string) {
   export async function getMentorUid(uid){
     try {
       logger.info(`${TAG}.getMentorUid()  ==>`, uid);
+      console.log(uid)
       let query = 'select * from MENTOR where UID=:uid';
       const [userId] = await executeQuery(query, QueryTypes.SELECT, {
         uid:uid.uid
