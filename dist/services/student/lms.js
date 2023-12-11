@@ -36,9 +36,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPartDetail = exports.getMyCourses = exports.getCourses = exports.getCourseOverview = void 0;
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const service_response_1 = require("src/models/lib/service_response");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const service_response_1 = require("../../models/lib/service_response");
 const lmsLib = __importStar(require("../../Database/mysql/lib/student/lms"));
 const TAG = 'services.lms.student';
 function getCourseOverview(courseId) {

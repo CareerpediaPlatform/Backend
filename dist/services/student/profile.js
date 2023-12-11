@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.workExperienceDetails = exports.EducationDetails = exports.postWorkExperienceDetails = exports.postEducationDetails = exports.getStudentResume = exports.uploadResume = exports.studentProfileExperienceDelete = exports.studentProfileEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.getSingleStudentProfile = exports.getStudentProfile = exports.studentProfilePost = void 0;
-const mysql_1 = require("src/Database/mysql");
-const config_1 = require("src/Loaders/config");
-const file_constants_1 = require("src/constants/file_constants");
-const status_codes_1 = require("src/constants/status_codes");
-const authentication_1 = require("src/helpers/authentication");
-const s3_media_1 = require("src/helpers/s3_media");
-const logger_1 = __importDefault(require("src/logger"));
-const service_response_1 = require("src/models/lib/service_response");
+const mysql_1 = require("../../Database/mysql");
+const config_1 = require("../../Loaders/config");
+const file_constants_1 = require("../../constants/file_constants");
+const status_codes_1 = require("../../constants/status_codes");
+const authentication_1 = require("../../helpers/authentication");
+const s3_media_1 = require("../../helpers/s3_media");
+const logger_1 = __importDefault(require("../../logger"));
+const service_response_1 = require("../../models/lib/service_response");
 const TAG = "student.service.profile";
 function studentProfilePost(user) {
     return __awaiter(this, void 0, void 0, function* () {

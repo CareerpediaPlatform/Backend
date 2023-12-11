@@ -13,13 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEducationDetails = exports.updateEducationDetails = exports.postEducationDetails = exports.updateEducation = void 0;
-const mysql_1 = require("src/Database/mysql");
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const api_error_1 = require("src/models/lib/api_error");
-const service_response_1 = require("src/models/lib/service_response");
-const authentication_1 = require("src/helpers/authentication");
-const mysql_2 = require("src/Database/mysql");
+const mysql_1 = require("../../Database/mysql");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const api_error_1 = require("../../models/lib/api_error");
+const service_response_1 = require("../../models/lib/service_response");
+const authentication_1 = require("../../helpers/authentication");
+const mysql_2 = require("../../Database/mysql");
 const TAG = 'services.mentor_Education';
 function updateEducation(user) {
     return __awaiter(this, void 0, void 0, function* () {

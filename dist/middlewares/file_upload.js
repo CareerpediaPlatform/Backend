@@ -11,13 +11,13 @@ const ERROR_FILE_FILTER = 'ERROR_FILE_FILTER';
 const TAG = 'middlewares.file_upload';
 exports.upload = (0, multer_1.default)({
     limits: {
-        fileSize: 100 * 1024 * 1024,
+        fileSize: 100 * 1024 * 1024, //100mb
         fieldNameSize: 200 // bytes
     }
 });
 exports.uploadProfileImage = (0, multer_1.default)({
     limits: {
-        fileSize: 1 * 1024 * 1024,
+        fileSize: 1 * 1024 * 1024, //1mb
         fieldNameSize: 200 // bytes
     },
     fileFilter: (req, file, cb) => {

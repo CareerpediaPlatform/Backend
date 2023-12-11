@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkThreadId = exports.getAllThreadsPart = exports.getAllThreadsCourse = exports.postThreadreply = exports.getSingleThread = exports.uploadThread = exports.getAllNotes = exports.uploadNote = exports.getAllAssignments = exports.uploadAssignment = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 const TAG = 'data_stores_mysql_lib_student_assignment';

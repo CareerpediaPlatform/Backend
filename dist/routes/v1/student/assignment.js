@@ -30,9 +30,9 @@ const controller = __importStar(require("../../../controller/student/assignment"
 const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
-const video_upload_1 = require("src/middlewares/video_upload");
-const api_param_constants_1 = require("src/constants/api_param_constants");
-const file_1 = require("src/validations/file");
+const video_upload_1 = require("../../../middlewares/video_upload");
+const api_param_constants_1 = require("../../../constants/api_param_constants");
+const file_1 = require("../../../validations/file");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());

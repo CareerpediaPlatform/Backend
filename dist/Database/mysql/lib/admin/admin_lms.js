@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllCourseList = exports.checkExerciseUid = exports.checkTestUid = exports.checkLessonUid = exports.deleteCourseModule = exports.deleteCoursePart = exports.updateExercisesPost = exports.deleteLearnId = exports.updateTestPost = exports.updateLessonPost = exports.checkLearnId = exports.updateModulesPost = exports.updateCoursePartPost = exports.deleteExercisePost = exports.getExercisePost = exports.exercisesPost = exports.deleteTestPost = exports.getTestPost = exports.testPost = exports.deleteLessonPost = exports.getLessonPost = exports.checkModuleUid = exports.lessonPost = exports.getModule = exports.checkPartUid = exports.modulesPost = exports.getPart = exports.coursePartPost = exports.checkCoureUid = exports.coursesPost = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.checkCourseIdExist = exports.uploadCourses = exports.getAllCourses = exports.getMyCourse = exports.getMyCourses = exports.getPartDetail = exports.getCourses = exports.getCourseOverview = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 var crypto = require("crypto");

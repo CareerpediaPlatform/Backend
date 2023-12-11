@@ -9,8 +9,8 @@ const express_1 = __importDefault(require("express"));
 // 
 exports.default = (app) => {
     const corsOptions = {
-        origin: '*',
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        origin: '*', // Set the allowed origin
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed HTTP methods
         optionsSuccessStatus: 204 // Set the status code for successful preflight requests
     };
     app.use(express_1.default.urlencoded({ extended: true }));

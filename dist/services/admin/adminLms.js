@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCourseAllList = exports.deleteCourseModule = exports.deleteCoursePart = exports.deleteSingleLearn = exports.updateExercisePost = exports.updateTestPost = exports.updateLessonPost = exports.updateCourseModulePost = exports.updateCoursePartPost = exports.deleteModulesExercise = exports.getModulesExercise = exports.deleteModulesTest = exports.getModulesTest = exports.deleteModulesLesspon = exports.getModulesLesson = exports.exerciseUser = exports.testUser = exports.lessonUser = exports.getCourseModules = exports.courseModulesUser = exports.getCoursePart = exports.coursePartUser = exports.courseUser = exports.deleteuploadCourse = exports.updateuploadCourse = exports.getuploadCourse = exports.uploadCourse = exports.getCourses = exports.getCourseOverview = void 0;
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const api_error_1 = require("src/models/lib/api_error");
-const service_response_1 = require("src/models/lib/service_response");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const api_error_1 = require("../../models/lib/api_error");
+const service_response_1 = require("../../models/lib/service_response");
 const mysql_1 = require("../../Database/mysql");
 const config_1 = require("../../Loaders/config");
-const file_constants_1 = require("src/constants/file_constants");
-const s3_media_1 = require("src/helpers/s3_media");
+const file_constants_1 = require("../../constants/file_constants");
+const s3_media_1 = require("../../helpers/s3_media");
 const TAG = 'services.lms.admin';
 function getCourseOverview(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {

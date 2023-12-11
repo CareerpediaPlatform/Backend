@@ -13,16 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllThreadsPart = exports.getAllThreadsCourse = exports.postThreadreply = exports.getSingleThread = exports.uploadThread = exports.getAllNotes = exports.uploadNotes = exports.getAllAssignments = exports.uploadAssignment = void 0;
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const service_response_1 = require("src/models/lib/service_response");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const service_response_1 = require("../../models/lib/service_response");
 const mysql_1 = require("../../Database/mysql");
 const config_1 = require("../../Loaders/config");
-const file_constants_1 = require("src/constants/file_constants");
-const s3_media_1 = require("src/helpers/s3_media");
-const authentication_1 = require("src/helpers/authentication");
-const admin_lms_1 = require("src/Database/mysql/lib/admin/admin_lms");
-const models_1 = require("src/models");
+const file_constants_1 = require("../../constants/file_constants");
+const s3_media_1 = require("../../helpers/s3_media");
+// import nodeUtil from 'util';
+const authentication_1 = require("../../helpers/authentication");
+const admin_lms_1 = require("../../Database/mysql/lib/admin/admin_lms");
+const models_1 = require("../../models");
 const TAG = 'assignment.service';
 function uploadAssignment(files, headerValue, partUid) {
     var _a, _b, _c, _d, _e;

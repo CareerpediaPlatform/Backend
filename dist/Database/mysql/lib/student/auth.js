@@ -13,11 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserEmail = exports.getUserform = exports.checkEmailOrPhoneExist = exports.verifyOTP = exports.deleteOTP = exports.resendOTP = exports.saveOTP = exports.studentUpdateStatus = exports.findTable = exports.getAllStudentList = exports.signupPhonenumbers = exports.signupPhonenumber = exports.changePassword = exports.signupWithSocialAccount = exports.signUp = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
-const encryption_1 = require("src/helpers/encryption");
-const authentication_1 = require("src/helpers/authentication");
+const encryption_1 = require("../../../../helpers/encryption");
+const authentication_1 = require("../../../../helpers/authentication");
 var crypto = require("crypto");
 const TAG = 'data_stores_mysql_lib_user';
 function signUp(user) {

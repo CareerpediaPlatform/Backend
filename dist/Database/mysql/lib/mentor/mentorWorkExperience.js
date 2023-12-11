@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWorkExperience = exports.updateWorKExperience = exports.checkId = exports.postWorkExperience = exports.checkExist = exports.checkProfilExist = exports.isValid = exports.saveWorkExperienceDetails = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 var crypto = require("crypto");

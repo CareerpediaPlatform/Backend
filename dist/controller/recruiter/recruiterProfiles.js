@@ -40,7 +40,7 @@ const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const util_1 = __importDefault(require("util"));
 const models_1 = require("../../models");
-const status_codes_1 = require("src/constants/status_codes");
+const status_codes_1 = require("../../constants/status_codes");
 const recruiterProfileServices = __importStar(require("../../services/recruiter/recruiter_profiles"));
 const TAG = 'controler.recruiterProfile';
 function recruiterProfilePostAndUpdate(req, res, next) {

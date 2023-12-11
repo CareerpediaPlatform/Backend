@@ -39,7 +39,7 @@ exports.adminLogin = exports.signupUser = void 0;
 const response_builder_1 = require("../../helpers/response_builder");
 const logger_1 = __importDefault(require("../../logger"));
 const authService = __importStar(require("../../services/admin/admin_auth"));
-const auth_1 = require("src/helpers/data_mapping/auth");
+const auth_1 = require("../../helpers/data_mapping/auth");
 const TAG = 'services.auth.admin';
 function signupUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {

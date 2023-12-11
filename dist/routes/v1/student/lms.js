@@ -30,7 +30,7 @@ const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
 const controller = __importStar(require("../../../controller/student/lms"));
-const authentication_1 = require("src/middlewares/authentication");
+const authentication_1 = require("../../../middlewares/authentication");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStudentWorkDetails = exports.checkWorkExperienceId = exports.updateStudentEducationDetails = exports.checkEducationId = exports.postWorkExperience = exports.postEducationDetails = exports.checkStudentEducationUid = exports.getStudentResume = exports.checkResume = exports.updateResume = exports.uploadResume = exports.checkExist = exports.checkExistEducationAndExperience = exports.studentExperienceDelete = exports.studentEducationDelete = exports.updateWorkExperience = exports.updateEducationDetails = exports.checkProfilExist = exports.studentProfileUpdate = exports.studentProfilePost = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 const TAG = "student.database-lib.profile";

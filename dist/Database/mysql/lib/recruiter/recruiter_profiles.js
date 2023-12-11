@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRecruiterList = exports.uploadVideoFile = exports.updateCompanylogo = exports.getRecruiterFile = exports.saveFile = exports.deleteRecruiter = exports.recruitercompanyDetailUpdate = exports.recruiterContactUpdate = exports.recruiterBasicDetailsUpdate = exports.recruiterProfilePost = exports.isValid = exports.checkExist = exports.getRecruiterProfile = void 0;
-const logger_1 = __importDefault(require("src/logger"));
+const logger_1 = __importDefault(require("../../../../logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 var crypto = require("crypto");

@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.studentNotification = exports.sendRegistrationNotifications = exports.sendRegistrationNotification = exports.studentOtpEmail = exports.sendSignupEmails = exports.sendSignupEmail = exports.sendmail = exports.createTransport = void 0;
 const nodeMailer = __importStar(require("nodemailer"));
 const logger_1 = __importDefault(require("../logger"));
-const config_1 = require("src/Loaders/config");
+const config_1 = require("../Loaders/config");
 let transport;
 function createTransport() {
     return __awaiter(this, void 0, void 0, function* () {

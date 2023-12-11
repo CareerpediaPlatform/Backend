@@ -16,8 +16,8 @@ exports.OTP = exports.verifyOTPJWT = exports.generateOTPToken = exports.verifyRe
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../Loaders/config");
 const logger_1 = __importDefault(require("../logger"));
-const service_response_1 = require("src/models/lib/service_response");
-const status_codes_1 = require("src/constants/status_codes");
+const service_response_1 = require("../models/lib/service_response");
+const status_codes_1 = require("../constants/status_codes");
 const otpGenerator = require('otp-generator');
 function generateJWT(payload, expiresIn, secret) {
     return jsonwebtoken_1.default.sign(payload, secret, {

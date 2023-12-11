@@ -9,7 +9,7 @@ const user_1 = __importDefault(require("./user"));
 const profile_1 = __importDefault(require("./profile"));
 const assignment_1 = __importDefault(require("./assignment"));
 // import * as APIPaths from '../../../constants/api_path_constants'
-const api_path_constants_1 = require("src/constants/api_path_constants");
+const api_path_constants_1 = require("../../../constants/api_path_constants");
 const lms_1 = __importDefault(require("../student/lms"));
 const router = (0, express_1.Router)();
 router.use(`${api_path_constants_1.ROOT_AUTH}`, auth_1.default);

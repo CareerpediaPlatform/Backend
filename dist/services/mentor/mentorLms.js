@@ -36,13 +36,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSingleRemark = exports.postThreadreply = exports.giveRemark = exports.getAllAssignments = void 0;
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const service_response_1 = require("src/models/lib/service_response");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const service_response_1 = require("../../models/lib/service_response");
 const mentorlms = __importStar(require("../../Database/mysql/lib/mentor/mentorLms"));
-const authentication_1 = require("src/helpers/authentication");
-const mysql_1 = require("src/Database/mysql");
-const models_1 = require("src/models");
+const authentication_1 = require("../../helpers/authentication");
+const mysql_1 = require("../../Database/mysql");
+const models_1 = require("../../models");
 const TAG = 'services.mentor_LMS';
 function getAllAssignments(partId) {
     return __awaiter(this, void 0, void 0, function* () {

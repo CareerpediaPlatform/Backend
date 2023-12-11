@@ -7,7 +7,7 @@ const express_1 = require("express");
 const passport_1 = require("../../../middlewares/passport");
 const passport_2 = __importDefault(require("passport"));
 const authentication_1 = require("../../../middlewares/authentication");
-const lms_1 = require("src/Database/mysql/lib/student/lms");
+const lms_1 = require("../../../Database/mysql/lib/student/lms");
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());

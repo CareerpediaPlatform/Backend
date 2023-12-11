@@ -13,16 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStudentSignin = exports.getAllStudentList = exports.setForgetPassword = exports.forgetPassword = exports.changePassword = exports.resendOTP = exports.verifyOTP = exports.studentUpdateStatus = exports.signinUser = exports.signupWithSocialAccount = exports.signupPhonenumber = exports.signupUser = void 0;
-const mysql_1 = require("src/Database/mysql");
-const sql_query_util_1 = require("src/Database/mysql/helpers/sql.query.util");
-const auth_1 = require("src/Database/mysql/lib/student/auth");
-const status_codes_1 = require("src/constants/status_codes");
-const authentication_1 = require("src/helpers/authentication");
-const encryption_1 = require("src/helpers/encryption");
-const logger_1 = __importDefault(require("src/logger"));
-const api_error_1 = require("src/models/lib/api_error");
-const service_response_1 = require("src/models/lib/service_response");
-const nodemail_1 = require("src/utils/nodemail");
+const mysql_1 = require("../../Database/mysql");
+const sql_query_util_1 = require("../../Database/mysql/helpers/sql.query.util");
+const auth_1 = require("../../Database/mysql/lib/student/auth");
+const status_codes_1 = require("../../constants/status_codes");
+const authentication_1 = require("../../helpers/authentication");
+const encryption_1 = require("../../helpers/encryption");
+const logger_1 = __importDefault(require("../../logger"));
+const api_error_1 = require("../../models/lib/api_error");
+const service_response_1 = require("../../models/lib/service_response");
+const nodemail_1 = require("../../utils/nodemail");
 const TAG = 'services.auth.student';
 function signupUser(user) {
     return __awaiter(this, void 0, void 0, function* () {

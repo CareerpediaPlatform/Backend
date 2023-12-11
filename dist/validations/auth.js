@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.babu = exports.recruiter = exports.updatePayloadSchema = exports.collegeLimiter = exports.adminLimiter = exports.recruiterLimiter = exports.mentorLimiter = exports.studentLimiter = exports.createRateLimiter = exports.changePassword = exports.mentorSignup = exports.SignIn = exports.adminSignIn = exports.formSignup = exports.linkedInSignup = exports.linkedInLogin = exports.numberLogin = exports.passwordValidation = exports.emailLogin = void 0;
 const Joi = __importStar(require("joi"));
 const common_1 = require("./common");
-const error_constants_1 = require("src/constants/error_constants");
+const error_constants_1 = require("../constants/error_constants");
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const TAG = 'validations.auth';
 const emailLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

@@ -9,7 +9,7 @@ const ERROR_FILE_FILTER = 'ERROR_FILE_FILTER';
 const TAG = 'middlewares.video_upload';
 const upload = (0, multer_1.default)({
     limits: {
-        fileSize: 500 * 1024 * 1024,
+        fileSize: 500 * 1024 * 1024, // 500mb
         fieldNameSize: 200, // bytes
     },
     fileFilter: (req, file, cb) => {

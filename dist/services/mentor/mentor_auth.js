@@ -13,17 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mentorUpdateStatus = exports.changePassword = exports.loginUser = exports.signupUser = void 0;
-const mysql_1 = require("src/Database/mysql");
-const mentorAuth_1 = require("src/Database/mysql/lib/mentor/mentorAuth");
-const status_codes_1 = require("src/constants/status_codes");
-const logger_1 = __importDefault(require("src/logger"));
-const api_error_1 = require("src/models/lib/api_error");
-const service_response_1 = require("src/models/lib/service_response");
+const mysql_1 = require("../../Database/mysql");
+const mentorAuth_1 = require("../../Database/mysql/lib/mentor/mentorAuth");
+const status_codes_1 = require("../../constants/status_codes");
+const logger_1 = __importDefault(require("../../logger"));
+const api_error_1 = require("../../models/lib/api_error");
+const service_response_1 = require("../../models/lib/service_response");
 const authentication_1 = require("../../helpers/authentication");
-const encryption_1 = require("src/helpers/encryption");
-const sql_query_util_1 = require("src/Database/mysql/helpers/sql.query.util");
+const encryption_1 = require("../../helpers/encryption");
+const sql_query_util_1 = require("../../Database/mysql/helpers/sql.query.util");
 const nodemail_1 = require("../../utils/nodemail");
-const encryption_2 = require("src/helpers/encryption");
+const encryption_2 = require("../../helpers/encryption");
 const TAG = 'services.auth';
 function signupUser(user) {
     return __awaiter(this, void 0, void 0, function* () {
