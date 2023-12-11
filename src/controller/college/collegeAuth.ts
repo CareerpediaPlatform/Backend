@@ -4,7 +4,7 @@ import log from '../../logger'
 import {IServiceResponse} from '../../models'
 import * as authService from '../../services/college/college_auth'
 import {collegeDataMapping} from "../../helpers/data_mapping/auth";
-import { ICollege} from 'src/models/lib/auth'
+import { ICollege} from '../../models/lib/auth'
 const TAG = 'services.auth'
 
 export async function signupCollege (req: any, res: Response, next: NextFunction): Promise<void> {

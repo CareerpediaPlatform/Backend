@@ -3,7 +3,7 @@ import { responseBuilder } from '../../helpers/response_builder';
 import log from '../../logger';
 import nodeUtil from 'util';
 import {IServiceResponse,ServiceResponse} from '../../models';
-import { HttpStatusCodes } from "src/constants/status_codes";
+import { HttpStatusCodes } from "../../constants/status_codes";
 import * as recruiterProfileServices from '../../services/recruiter/recruiter_profiles';
 import * as validation from '../../validations/auth'
 

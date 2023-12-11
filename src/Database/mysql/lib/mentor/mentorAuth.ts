@@ -1,8 +1,8 @@
-import logger from "src/logger";
+import logger from "../../../../logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-import { hashPassword , generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
-import { IMentor } from "src/models/lib/auth";
+import { hashPassword , generatePasswordWithPrefixAndLength } from "../../../../helpers/encryption";
+import { IMentor } from "../../../../models/lib/auth";
 var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_mentorAuth'

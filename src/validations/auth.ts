@@ -1,7 +1,7 @@
 import * as Joi from 'joi'
 import log from '../logger'
 import { validate } from './common'
-import { ErrorMessages } from 'src/constants/error_constants'
+import { ErrorMessages } from '../constants/error_constants'
 import rateLimit , {Options} from 'express-rate-limit';
 
 const TAG = 'validations.auth'

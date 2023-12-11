@@ -4,7 +4,7 @@ import log from '../../logger'
 import {IServiceResponse, IUser} from '../../models'
 import * as authService from '../../services/mentor/mentor_auth'
 import {mentorDataMapping} from "../../helpers/data_mapping/auth";
-import { IMentor } from 'src/models/lib/auth'
+import { IMentor } from '../../models/lib/auth'
 
 const TAG = 'services.auth'
 

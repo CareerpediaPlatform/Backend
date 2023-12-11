@@ -4,7 +4,7 @@ import {getSingleStudentProfile} from "../../../controller/student/profile"
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-import { isAuthenticated } from 'src/middlewares/authentication'
+import { isAuthenticated } from '../../../middlewares/authentication'
 
 passportConfiguration(passport)
 

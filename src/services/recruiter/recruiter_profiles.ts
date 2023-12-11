@@ -1,23 +1,23 @@
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { APIError } from "../../models/lib/api_error";
 import {
   IServiceResponse,
   ServiceResponse,
-} from "src/models/lib/service_response";
+} from "../../models/lib/service_response";
 import {
   RecruiterAuth,
   RecruiterProfileDetailsData,
 } from "../../Database/mysql";
 import { AWS_S3 } from "../../Loaders/config";
-import { DIRECTORIES } from "src/constants/file_constants";
+import { DIRECTORIES } from "../../constants/file_constants";
 import {
   getFileUrl,
   getSanitizedFileName,
   saveFile,
-} from "src/helpers/s3_media";
+} from "../../helpers/s3_media";
 import nodeUtil from "util";
-import { verifyAccessToken } from "src/helpers/authentication";
+import { verifyAccessToken } from "../../helpers/authentication";
 
 const TAG = "services.profile";
 

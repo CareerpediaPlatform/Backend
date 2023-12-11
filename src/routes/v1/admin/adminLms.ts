@@ -2,11 +2,11 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import * as controller from '../../../controller/admin/adminLms'
-import { isAuthenticated } from 'src/middlewares/authentication'
+import { isAuthenticated } from '../../../middlewares/authentication'
 
-import { videoFileReader } from 'src/middlewares/video_upload'
-import { FormParams } from 'src/constants/api_param_constants'
-import { emptyCheck, emptyChecks } from 'src/validations/file'
+import { videoFileReader } from '../../../middlewares/video_upload'
+import { FormParams } from '../../../constants/api_param_constants'
+import { emptyCheck, emptyChecks } from '../../../validations/file'
 
 
 passportConfiguration(passport)

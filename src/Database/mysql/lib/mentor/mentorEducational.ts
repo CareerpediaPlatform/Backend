@@ -1,4 +1,4 @@
-import logger from "src/logger";
+import logger from "../../../../logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
 var crypto=require("crypto")

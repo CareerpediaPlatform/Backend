@@ -1,17 +1,17 @@
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
 import { StudentAuth, attachment } from "../../Database/mysql"
 import { AWS_S3 } from '../../Loaders/config';
-import { DIRECTORIES } from "src/constants/file_constants";
+import { DIRECTORIES } from "../../constants/file_constants";
 
-import { saveFile } from "src/helpers/s3_media";
-import nodeUtil from 'util';
+import { saveFile } from "../../helpers/s3_media";
+// import nodeUtil from 'util';
 
-import { verifyAccessToken } from "src/helpers/authentication";
+import { verifyAccessToken } from "../../helpers/authentication";
 
-import { getMyCourse } from "src/Database/mysql/lib/admin/admin_lms";
-import { APIError } from "src/models";
+import { getMyCourse } from "../../Database/mysql/lib/admin/admin_lms";
+import { APIError } from "../../models";
 const TAG = 'assignment.service'
 
 export async function uploadAssignment(files:any,headerValue: any, partUid: any): Promise<IServiceResponse> {

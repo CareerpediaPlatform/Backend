@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-import * as controller from 'src/controller/recruiter/recruiterAuth'
+import * as controller from '../../../controller/recruiter/recruiterAuth'
 
 passportConfiguration(passport)
 

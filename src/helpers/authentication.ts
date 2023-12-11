@@ -6,9 +6,9 @@ import {
   JWT_REFRESH_TOKEN_EXPIRY_TIME, OTP_EXPIRY_TIME
 } from '../Loaders/config'
 import logger from '../logger'
-import { IServiceResponse, ServiceResponse } from 'src/models/lib/service_response'
-import { APIError } from "src/models/lib/api_error";
-import { HttpStatusCodes } from 'src/constants/status_codes'
+import { IServiceResponse, ServiceResponse } from '../models/lib/service_response'
+import { APIError } from "../models/lib/api_error";
+import { HttpStatusCodes } from '../constants/status_codes'
 const otpGenerator = require('otp-generator')
 
 

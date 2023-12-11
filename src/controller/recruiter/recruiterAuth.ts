@@ -4,7 +4,7 @@ import log from '../../logger'
 import {IServiceResponse} from '../../models'
 import * as authService from '../../services/recruiter/recruiter_auth'
 import {recruiterDataMapping} from "../../helpers/data_mapping/auth";
-import { IRecruiter} from 'src/models/lib/auth'
+import { IRecruiter} from '../../models/lib/auth'
 const TAG = 'services.auth'
 
 export async function signupRecruiter (req: any, res: Response, next: NextFunction): Promise<void> {

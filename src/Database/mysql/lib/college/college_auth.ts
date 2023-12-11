@@ -1,8 +1,8 @@
-import logger from "src/logger";
+import logger from "../../../../logger";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-import { hashPassword } from "src/helpers/encryption";
-import { ICollege } from "src/models/lib/auth";
+import { hashPassword } from "../../../../helpers/encryption";
+import { ICollege } from "../../../../models/lib/auth";
 var crypto=require("crypto")
 
 const TAG = 'data_stores_mysql_lib_user'

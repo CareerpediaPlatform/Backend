@@ -5,7 +5,7 @@ import passport from 'passport'
 import { imageFileReader } from '../../../middlewares/file_upload'
 import { FormParams } from '../../../constants/api_param_constants'
 import { emptyCheck, emptyChecks } from '../../../validations/file'
-import { videoFileReader } from 'src/middlewares/video_upload'
+import { videoFileReader } from '../../../middlewares/video_upload'
 import {isAuthenticated} from '../../../middlewares/authentication'
 import * as validation from '../../../validations/auth'
 

@@ -3,10 +3,10 @@ import * as controller from '../../../controller/student/assignment'
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-import { videoFileReader } from 'src/middlewares/video_upload'
-import { FormParams } from 'src/constants/api_param_constants'
-import {  emptyChecks } from 'src/validations/file'
-import { isAuthenticated } from 'src/middlewares/authentication'
+import { videoFileReader } from '../../../middlewares/video_upload'
+import { FormParams } from '../../../constants/api_param_constants'
+import {  emptyChecks } from '../../../validations/file'
+import { isAuthenticated } from '../../../middlewares/authentication'
 
 
 passportConfiguration(passport)

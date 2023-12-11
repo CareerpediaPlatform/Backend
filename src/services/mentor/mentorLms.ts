@@ -1,10 +1,10 @@
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
 import * as mentorlms from "../../Database/mysql/lib/mentor/mentorLms";
-import { verifyAccessToken } from "src/helpers/authentication";
-import { MentorAuth, StudentAuth } from "src/Database/mysql";
-import { APIError } from "src/models";
+import { verifyAccessToken } from "../../helpers/authentication";
+import { MentorAuth, StudentAuth } from "../../Database/mysql";
+import { APIError } from "../../models";
 
 const TAG = 'services.mentor_LMS';
 

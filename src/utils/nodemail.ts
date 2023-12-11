@@ -2,7 +2,7 @@ import * as nodeMailer from 'nodemailer';
 import logger from '../logger';
 
 
-import { SENDER_EMAIL_ID } from 'src/Loaders/config';
+import { SENDER_EMAIL_ID } from '../Loaders/config';
 let transport;
 
 export async function createTransport() {

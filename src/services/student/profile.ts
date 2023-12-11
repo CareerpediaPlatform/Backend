@@ -1,15 +1,15 @@
-import { StudentAuth, StudentProfile } from "src/Database/mysql";
-import { AWS_S3 } from "src/Loaders/config";
-import { DIRECTORIES } from "src/constants/file_constants";
-import { HttpStatusCodes } from "src/constants/status_codes";
-import { verifyAccessToken } from "src/helpers/authentication";
-import { saveFile } from "src/helpers/s3_media";
-import log from "src/logger";
+import { StudentAuth, StudentProfile } from "../../Database/mysql";
+import { AWS_S3 } from "../../Loaders/config";
+import { DIRECTORIES } from "../../constants/file_constants";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import { verifyAccessToken } from "../../helpers/authentication";
+import { saveFile } from "../../helpers/s3_media";
+import log from "../../logger";
 import {
   IServiceResponse,
   ServiceResponse,
-} from "src/models/lib/service_response";
-import { APIError } from "src/models/lib/api_error";
+} from "../../models/lib/service_response";
+import { APIError } from "../../models/lib/api_error";
 
 const TAG = "student.service.profile";
 

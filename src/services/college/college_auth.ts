@@ -1,15 +1,15 @@
-import { CollegeAuth } from "src/Database/mysql";
-import { checkEmailExist,checkUidExist } from "src/Database/mysql/lib/college/college_auth";
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
+import { CollegeAuth } from "../../Database/mysql";
+import { checkEmailExist,checkUidExist } from "../../Database/mysql/lib/college/college_auth";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { APIError } from "../../models/lib/api_error";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
 import {generateAccessToken, verifyAccessToken} from '../../helpers/authentication'
-import { comparePasswords ,comparehashPasswords} from "src/helpers/encryption";;
-import { ICollege } from "src/models/lib/auth";
-import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
+import { comparePasswords ,comparehashPasswords} from "../../helpers/encryption";;
+import { ICollege } from "../../models/lib/auth";
+import { getTransaction } from "../../Database/mysql/helpers/sql.query.util";
 import { sendRegistrationNotifications } from "../../utils/nodemail";
-import { generatePasswordWithPrefixAndLength } from "src/helpers/encryption";
+import { generatePasswordWithPrefixAndLength } from "../../helpers/encryption";
 const TAG = 'services.auth'
 
 export async function signupUser(user: ICollege) {

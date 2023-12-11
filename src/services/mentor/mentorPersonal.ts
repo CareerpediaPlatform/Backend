@@ -1,9 +1,9 @@
-import {  mentorPersonalAndContactData,mentorWorkExperienceData } from "src/Database/mysql";
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import { verifyAccessToken } from "src/helpers/authentication";
+import {  mentorPersonalAndContactData,mentorWorkExperienceData } from "../../Database/mysql";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { APIError } from "../../models/lib/api_error";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
+import { verifyAccessToken } from "../../helpers/authentication";
 
 
 

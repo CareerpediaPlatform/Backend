@@ -1,10 +1,10 @@
-import logger from "src/logger";
-import { IUser } from "src/models";
+import logger from "../../../../logger";
+import { IUser } from "../../../../models";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-import { hashPassword } from "src/helpers/encryption";
-import { OTP } from "src/helpers/authentication";
-import { userOTP } from "src/models";
+import { hashPassword } from "../../../../helpers/encryption";
+import { OTP } from "../../../../helpers/authentication";
+import { userOTP } from "../../../../models";
 var crypto=require("crypto") 
 
 

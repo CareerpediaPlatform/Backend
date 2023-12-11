@@ -1,10 +1,10 @@
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import { IcollegeProfile } from "src/models/lib/profile";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { APIError } from "../../models/lib/api_error";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
+import { IcollegeProfile } from "../../models/lib/profile";
 import * as collegeProfileLib from "../../Database/mysql/lib/college/college_profile"
-import { verifyAccessToken } from "src/helpers/authentication";
+import { verifyAccessToken } from "../../helpers/authentication";
 const TAG = 'services.profile'
 
 

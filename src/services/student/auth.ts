@@ -1,15 +1,15 @@
-import { StudentAuth} from "src/Database/mysql";
-import { getTransaction } from "src/Database/mysql/helpers/sql.query.util";
-import { checkEmailOrPhoneExist } from "src/Database/mysql/lib/student/auth";
-import { HttpStatusCodes } from "src/constants/status_codes";
-import { OTP, generateAccessToken, generateOTPToken, verifyAccessToken, verifyOTPJWT } from "src/helpers/authentication";
-import { comparePasswords } from "src/helpers/encryption";
-import log from "src/logger";
-import { IUser } from "src/models";
-import { APIError } from "src/models/lib/api_error";
-import { ISingin, MyObject } from "src/models/lib/auth";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import { studentNotification, studentOtpEmail } from "src/utils/nodemail";
+import { StudentAuth} from "../../Database/mysql";
+import { getTransaction } from "../../Database/mysql/helpers/sql.query.util";
+import { checkEmailOrPhoneExist } from "../../Database/mysql/lib/student/auth";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import { OTP, generateAccessToken, generateOTPToken, verifyAccessToken, verifyOTPJWT } from "../../helpers/authentication";
+import { comparePasswords } from "../../helpers/encryption";
+import log from "../../logger";
+import { IUser } from "../../models";
+import { APIError } from "../../models/lib/api_error";
+import { ISingin, MyObject } from "../../models/lib/auth";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
+import { studentNotification, studentOtpEmail } from "../../utils/nodemail";
 
 const TAG = 'services.auth.student'
 export async function signupUser(user: IUser) {

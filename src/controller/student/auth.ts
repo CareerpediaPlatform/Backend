@@ -3,7 +3,7 @@ import { responseBuilder } from '../../helpers/response_builder'
 import log from '../../logger'
 import {IServiceResponse, IUser, UserSession} from '../../models'
 import * as authService from '../../services/student/auth'
-import { ISingin } from 'src/models/lib/auth'
+import { ISingin } from '../../models/lib/auth'
 const TAG = 'controler-student.auth'
 
 export async function signupUser (req: any, res: Response, next: NextFunction): Promise<void> {

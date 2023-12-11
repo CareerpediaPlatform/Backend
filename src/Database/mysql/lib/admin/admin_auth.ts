@@ -1,8 +1,8 @@
-import logger from "src/logger";
-import { IAdmin } from "src/models";
+import logger from "../../../../logger";
+import { IAdmin } from "../../../../models";
 import { executeQuery } from "../../helpers/sql.query.util";
 import { QueryTypes } from "sequelize";
-import { hashPassword } from "src/helpers/encryption";
+import { hashPassword } from "../../../../helpers/encryption";
 var crypto=require("crypto") 
 
 const TAG = 'data_stores_mysql_lib_user'

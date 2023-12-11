@@ -1,11 +1,11 @@
-import {  mentorEducationData } from "src/Database/mysql";
-import { HttpStatusCodes } from "src/constants/status_codes";
-import log from "src/logger";
-import { APIError } from "src/models/lib/api_error";
-import { IServiceResponse, ServiceResponse } from "src/models/lib/service_response";
-import {  mentorPersonalAndContactData,mentorWorkExperienceData } from "src/Database/mysql";
-import { verifyAccessToken } from "src/helpers/authentication";
-import { MentorAuth } from "src/Database/mysql";
+import {  mentorEducationData } from "../../Database/mysql";
+import { HttpStatusCodes } from "../../constants/status_codes";
+import log from "../../logger";
+import { APIError } from "../../models/lib/api_error";
+import { IServiceResponse, ServiceResponse } from "../../models/lib/service_response";
+import {  mentorPersonalAndContactData,mentorWorkExperienceData } from "../../Database/mysql";
+import { verifyAccessToken } from "../../helpers/authentication";
+import { MentorAuth } from "../../Database/mysql";
 
 const TAG = 'services.mentor_Education'
 

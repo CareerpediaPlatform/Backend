@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express'
 import { responseBuilder } from '../../helpers/response_builder'
 import log from '../../logger'
 import {IServiceResponse} from '../../models'
-import { IcollegeProfile } from 'src/models/lib/profile'
+import { IcollegeProfile } from '../../models/lib/profile'
 import * as collegeProfileServices from '../../services/college/college_profile'
 
 const TAG = 'controler.collegeProfile'

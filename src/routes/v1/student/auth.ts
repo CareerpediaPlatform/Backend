@@ -3,7 +3,7 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import * as validation from '../../../validations/auth'
-import { isAuthenticated } from 'src/middlewares/authentication'
+import { isAuthenticated } from '../../../middlewares/authentication'
 
 passportConfiguration(passport)
 

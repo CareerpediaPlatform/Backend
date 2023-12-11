@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
-import * as controller from 'src/controller/college/collegeAuth'
-import { isAuthenticated } from 'src/middlewares/authentication'
+import * as controller from '../../../controller/college/collegeAuth'
+import { isAuthenticated } from '../../../middlewares/authentication'
 
 passportConfiguration(passport)
 

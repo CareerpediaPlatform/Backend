@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { passportConfiguration } from '../../../middlewares/passport'
 import passport from 'passport'
 import {isAuthenticated} from '../../../middlewares/authentication'
-import { getCourseOverview } from "src/Database/mysql/lib/student/lms";
+import { getCourseOverview } from "../../../Database/mysql/lib/student/lms";
 
 passportConfiguration(passport)
 
