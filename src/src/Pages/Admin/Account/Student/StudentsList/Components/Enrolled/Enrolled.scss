@@ -1,0 +1,89 @@
+@import "../../../../../../../index.scss";
+
+.enrolled-students {
+  // position: relative;
+  .course-filters {
+    display: flex;
+    gap: 12px;
+    position: absolute;
+    top: 14vh;
+    right: 30px;
+    @media (max-width: 1700px) {
+      right: 25px;
+    }
+    @media (max-width: 1450px) {
+      right: 20px;
+    }
+    .course-dropdown {
+      border: none;
+      outline: none;
+      padding: 10px 5px;
+      color: $heading;
+      font-weight: 600;
+      width: 157px;
+      border-radius: 10px;
+      font-size: 14px;
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .mentorList {
+    border-bottom: none;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .mentor-list-table {
+      width: 100%;
+
+      .table-head {
+        .table-head-data {
+          font-size: 14px;
+          color: $heading;
+          font-weight: 700;
+          overflow: hidden;
+          align-items: center;
+          font-family: "Montserrat", sans-serif;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .table-body {
+        tr {
+          cursor: pointer;
+          &:hover {
+            background-color: $table-hover;
+          }
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border: none;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+          img {
+            height: 40px;
+            border-radius: 10px;
+          }
+        }
+      }
+      // border: none;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@import "../../../../index.scss";
+.basic {
+  width: 100vw;
+  display: flex;
+
+  .basic-data {
+    margin-top: 10vh;
+    padding: 30px 30px 30px;
+    min-height: 90vh;
+    background-color: $background;
+    @media (max-width: 1700px) {
+      padding: 25px 25px 30px;
+    }
+    @media (max-width: 1450px) {
+      padding: 20px 20px 30px;
+    }
+  }
+}

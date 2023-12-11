@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkExist = exports.checkProfilExist = exports.isValid = exports.saveWorkExperienceDetails = void 0;
+exports.deleteWorkExperience = exports.updateWorKExperience = exports.checkId = exports.postWorkExperience = exports.checkExist = exports.checkProfilExist = exports.isValid = exports.saveWorkExperienceDetails = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -25,23 +25,23 @@ function saveWorkExperienceDetails(user) {
         try {
             const response = [];
             const insertQuery = `INSERT INTO  MENTOR_WORK_EXPERIENCE
-      (USER_ID, UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
-       values(:userId, :uid,:occupation ,:job_role, :start_date,:end_date,:year_of_experience)`;
+      ( UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
+       values( :uid,:occupation ,:jobRole, :startDate,:endDate,:yearOfExperience)`;
             const updateQuery = `UPDATE MENTOR_WORK_EXPERIENCE SET
-      OCCUPATION = :occupation, JOB_ROLE = :job_role, START_DATE = :start_date, END_DATE = :end_date , YEAR_OF_EXPERIENCE = :year_of_experience WHERE id = :id`;
-            for (const data of user.data) {
-                let uid = crypto.randomUUID();
+      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :id`;
+            let items = Object.values(user.data);
+            for (const data of items) {
                 console.log(data);
                 if (data.id) {
                     const res = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, data));
                     response.push(res);
                 }
                 else {
-                    const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid, userId: user.id }));
+                    const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid: user.uid }));
                     response.push(res);
                 }
             }
-            return Object.assign({}, response);
+            return user;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.saveWorkExperienceDetails()`, error);
@@ -69,17 +69,22 @@ function isValid(userId) {
 }
 exports.isValid = isValid;
 //geting all data  
-function checkProfilExist(userId) {
+function checkProfilExist(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.checkProfileExist() ==>`, userId);
-            const basicQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE USER_ID= :userId';
-            const educationQuery = 'SELECT * FROM MENTOR_EDUCATION_DETAILS WHERE USER_ID=:userId';
-            const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE USER_ID=:userId';
-            const [basic] = yield (0, sql_query_util_1.executeQuery)(basicQuery, sequelize_1.QueryTypes.SELECT, { userId });
-            const [work] = yield (0, sql_query_util_1.executeQuery)(workQuery, sequelize_1.QueryTypes.SELECT, { userId });
-            const [eduaction] = yield (0, sql_query_util_1.executeQuery)(educationQuery, sequelize_1.QueryTypes.SELECT, { userId });
-            return { basic, eduaction, work };
+            logger_1.default.info(`${TAG}.checkProfileExist() ==>`, uid);
+            const basicQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE UID= :uid';
+            const contactQuery = 'SELECT * FROM `MENTOR_CONTACT_DETAILS` WHERE UID= :uid';
+            const educationQuery = 'SELECT * FROM MENTOR_EDUACTION_DETAILS WHERE UID= :uid';
+            const workQuery = 'SELECT * FROM `MENTOR_WORK_EXPERIENCE` WHERE UID= :uid';
+            const [basic] = yield (0, sql_query_util_1.executeQuery)(basicQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            const work = yield (0, sql_query_util_1.executeQuery)(workQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            const eduaction = yield (0, sql_query_util_1.executeQuery)(educationQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            const data = {
+                basic, contact, education: Object.values(eduaction), experience: Object.values(work)
+            };
+            return Object.assign({}, data);
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
@@ -125,3 +130,72 @@ exports.checkExist = checkExist;
 //     throw error;
 //   }
 // }
+//sigle object of work experience
+function postWorkExperience(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.postWorExperience()`);
+        try {
+            const insertQuery = `INSERT INTO  MENTOR_WORK_EXPERIENCE
+      ( UID,OCCUPATION, JOB_ROLE, START_DATE,END_DATE,YEAR_OF_EXPERIENCE)
+       values( :uid,:occupation ,:jobRole, :startDate,:endDate,:yearOfExperience)`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, user));
+            return profile;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.postWorExperience()`, error);
+            throw error;
+        }
+    });
+}
+exports.postWorkExperience = postWorkExperience;
+function checkId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}. checkId()`);
+        try {
+            const checkQuery = `SELECT * FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID=:id`;
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { id });
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checId()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkId = checkId;
+function updateWorKExperience(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.updateWorKExperience()`);
+        try {
+            const insertQuery = `UPDATE MENTOR_WORK_EXPERIENCE SET
+      OCCUPATION = :occupation, JOB_ROLE = :jobRole, START_DATE = :startDate, END_DATE = :endDate , YEAR_OF_EXPERIENCE = :yearOfExperience WHERE USER_ID = :userId`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
+            return profile;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateWorKExperience()`, error);
+            throw error;
+        }
+    });
+}
+exports.updateWorKExperience = updateWorKExperience;
+function deleteWorkExperience(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.deleteWorkExperience()`);
+        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        console.log(user);
+        console.log(user.userId);
+        try {
+            const insertQuery = `DELETE FROM MENTOR_WORK_EXPERIENCE WHERE USER_ID = :userId`;
+            let userId = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.DELETE, {
+                userId: user.userId
+            });
+            return user.userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteEducation()`, error);
+            throw error;
+        }
+    });
+}
+exports.deleteWorkExperience = deleteWorkExperience;

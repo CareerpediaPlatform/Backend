@@ -1,0 +1,250 @@
+@import "../../../../index.scss";
+
+.education-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+
+
+  @media (max-width: 1700px) {
+    gap: 18px;
+  }
+  @media (max-width: 1450px) {
+    gap: 16px;
+  }
+
+  .education-details-heading {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    h2 {
+      color: $heading;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+      @media (max-width: 1700px) {
+        font-size: 15px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 14px;
+      }
+
+    }
+  }
+
+  .education-details-single-card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;     
+   
+     @media (max-width: 1700px) {
+        gap: 18px;
+      }
+      @media (max-width: 1450px) {
+        gap: 16px;
+      }
+
+
+    .education-details-card {
+      width: 33%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      border: 2px solid $border;
+      border-radius: 5px;
+      padding: 20px;
+  
+      @media (max-width: 1700px) {
+        gap: 18px;
+        padding: 18px;
+      }
+      @media (max-width: 1450px) {
+        gap: 16px;
+        padding: 16px;
+      }
+
+
+      h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: $heading;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+ 
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+         
+        }
+
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 400;
+        color: $light-blue;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+ 
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+         
+        }
+      }
+
+      .education-details-degree-profession {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;
+        @media (max-width: 1700px) {
+          gap: 9px;
+  
+        }
+        @media (max-width: 1450px) {
+          gap: 8px;
+        }
+      }
+
+      .education-details-university {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        @media (max-width: 1700px) {
+          gap: 9px;
+  
+        }
+        @media (max-width: 1450px) {
+          gap: 8px;
+        }
+
+        img {
+          width: 12px;
+          height: 12px;
+          @media (max-width: 1700px) {
+            width: 11px;
+            height: 11px;
+    
+          }
+          @media (max-width: 1450px) {
+            width: 10px;
+            height: 10px;
+          }
+        }
+        h3 {
+          font-size: 14px;
+          font-weight: 600;
+          color: $light-blue;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+   
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+           
+          }
+        }
+      }
+
+      .education-details-gpa {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        
+        @media (max-width: 1700px) {
+          gap: 100px;
+  
+        }
+        @media (max-width: 1450px) {
+          gap: 75px;
+        }
+
+        h3{
+          font-size: 36px;
+          font-weight: 600;
+          color: $heading;
+          @media (max-width: 1700px) {
+            font-size: 34px;
+   
+          }
+          @media (max-width: 1450px) {
+            font-size: 32px;
+           
+          }
+          
+        }
+        #gpa {
+          font-size: 14px;
+          font-weight: 500;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+   
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+           
+          }
+        }
+      }
+
+      .education-details-year {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        @media (max-width: 1700px) {
+          gap: 7px;
+  
+        }
+        @media (max-width: 1450px) {
+          gap: 6px;
+        }
+
+        img {
+          width: 18px;
+          height: 18px;
+          @media (max-width: 1700px) {
+            width: 16px;
+            height: 16px;
+    
+          }
+          @media (max-width: 1450px) {
+            width: 14px;
+            height: 14px;
+          }
+
+        }
+        span {
+          font-size: 12px;
+          color: #2f4362;
+          font-weight: 400;
+          @media (max-width: 1700px) {
+            font-size: 11px;
+    
+          }
+          @media (max-width: 1450px) {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}

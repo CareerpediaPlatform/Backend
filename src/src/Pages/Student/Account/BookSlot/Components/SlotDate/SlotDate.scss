@@ -1,0 +1,202 @@
+@import "../../../../../../index.scss";
+
+.SlotDate-Section {
+  width: 100%;
+
+  border-radius: 15px;
+
+  .Slot-booking {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid $border;
+    border-radius: 20px;
+    .SlotDate-class {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      cursor: pointer;
+      @media (max-width: 1700px) {
+        height: 55px;
+      }
+      @media (max-width: 1450px) {
+        height: 50px;
+      }
+      &:hover {
+        background-color: $yellow;
+      }
+
+      &.clicked {
+        background-color: $yellow;
+        cursor: pointer;
+        color: $white;
+      }
+
+      &.booked {
+        // background-color: #f8f8f8 !important;
+        color: $blue;
+        cursor: not-allowed;
+      }
+    }
+
+    .SlotDate-days {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+      #SlotDate-class-id {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 14px;
+        font-weight: 700;
+        color: $heading;
+        border-left: 2px solid $border;
+        border-bottom: 2px solid $border;
+        @media (max-width: 1700px) {
+          height: 55px;
+        }
+        @media (max-width: 1450px) {
+          height: 50px;
+        }
+
+        cursor: arrow;
+        // padding: 0 10px;
+        &:first-child {
+          border-left: none;
+        }
+        @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+        &:hover {
+          background-color: transparent;
+        }
+
+        &.current-day {
+          color: $yellow;
+        }
+      }
+    }
+
+    .Slot-timings {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+      .SlotDate-timings {
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        border-left: 2px solid $border;
+        &:first-child {
+          border-left: none;
+        }
+      }
+    }
+
+    .bookSlot-button {
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+      @media (max-width: 1700px) {
+        padding: 30px 0;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px 0;
+      }
+
+      button {
+        font-size: 14px;
+        font-weight: 600;
+        background-color: $yellow;
+        color: $white;
+        border: none;
+        width: 180px;
+        height: 50px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        @media (max-width: 1700px) {
+          width: 170px;
+          height: 45px;
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          width: 160px;
+          height: 40px;
+          font-size: 12px;
+        }
+      }
+
+      #booked {
+        font-size: 12px;
+        font-weight: 400;
+        color: $blue;
+        border-bottom: none;
+        @media (max-width: 1700px) {
+          font-size: 11px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 10px;
+        }
+      }
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      color: $blue;
+      border-bottom: 2px solid $border;
+      // &:last-child{
+      //  border-bottom: none;
+      // }
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
+// #root
+//   > div.student-dashboard
+//   > div.dashboard-content
+//   > div.dashboard-data
+//   > div
+//   > div.SlotDate
+//   > div
+//   > div
+//   > div.Slot-timings
+//   > div:nth-child(1)
+//   > p:nth-child(12) {
+//   border-bottom-left-radius: 15px;
+// }
+
+// #root
+//   > div.student-dashboard
+//   > div.dashboard-content
+//   > div.dashboard-data
+//   > div
+//   > div.SlotDate
+//   > div
+//   > div
+//   > div.Slot-timings
+//   > div:nth-child(5)
+//   > p:nth-child(12) {
+//   border-bottom-right-radius: 15px;
+// }

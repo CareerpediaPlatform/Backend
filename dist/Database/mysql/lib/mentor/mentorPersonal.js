@@ -12,51 +12,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMentorList = exports.isValids = exports.isValid = exports.getPersonalDetailsByMentorId = exports.updatePersonalAndContactDetails = exports.savePersonalAndContactDetails = void 0;
+exports.getMentorList = exports.checkExist = exports.checkMentorUid = exports.getPersonalDetailsByMentorId = exports.mentorProfileUpdate = exports.mentorProfilePost = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 var crypto = require("crypto");
 const TAG = 'data_stores_mysql_lib_mentorPersonal';
-function savePersonalAndContactDetails(mentorPersonalData, userId) {
+function mentorProfilePost(user, uid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.savePersonalAndContactDetails()`);
+        logger_1.default.info(`${TAG}.mentorProfilePost()`);
         try {
-            mentorPersonalData["mentorUserId"] = userId;
-            let personalDetailQuery = `INSERT INTO MENTOR_PERSONAL_DETAILS 
-                                   (USER_ID,UID, PROFILE_PIC, FIRST_NAME, LAST_NAME, EMAIL, MOBILE_NUMBER, DATE_OF_BIRTH, LINKEDIN_PROFILE, ADDRESS, 
-                                    CITY, DISTRICT, STATE, PINCODE, COUNTRY)
-                                   values(:mentorUserId,:uid,:profile_pic ,:first_name, :last_name, :email, :mobile_number, :date_of_birth, :linkedin_profile, 
-                                          :address, :city, :district, :state, :pincode, :country)`;
-            console.log(`mentor personal data in data store`, mentorPersonalData);
-            yield (0, sql_query_util_1.executeQuery)(personalDetailQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, mentorPersonalData));
-            return mentorPersonalData.uid;
+            const profileInsertQuery = `
+    INSERT INTO MENTOR_PERSONAL_DETAILS (UID, FIRST_NAME, LAST_NAME, EMAIL, DATE_OF_BIRTH, GENDER, PHONE_NUMBER, PROFILE_PIC, LINKEDIN_PROFILE)
+    VALUES(:uid, :firstName, :lastName, :email, :dateOfBirth, :gender, :phoneNumber, :profilePic, :linkedinProfile)`;
+            const contactInsertQuery = `
+    INSERT INTO MENTOR_CONTACT_DETAILS 
+    (UID, ADDRESS, DISTRICT, CITY, STATE, PIN_CODE, COUNTRY) 
+    VALUES (:uid, :address, :district, :city,  :state, :pinCode, :country)`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(profileInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.basicDetails), { uid }));
+            let [contact] = yield (0, sql_query_util_1.executeQuery)(contactInsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, user.contactDetails), { uid }));
+            return { profile, contact };
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.savePersonalAndContactDetails()`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.mentorProfilePost()`, error);
             throw error;
         }
     });
 }
-exports.savePersonalAndContactDetails = savePersonalAndContactDetails;
-function updatePersonalAndContactDetails(userId, mentorPersonalData) {
+exports.mentorProfilePost = mentorProfilePost;
+function mentorProfileUpdate(user, uid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.updatePersonalAndContactDetails()`);
+        logger_1.default.info(`${TAG}.mentorProfileUpdate()`);
         try {
-            // mentorPersonalData["updatedBy"] = userId;
-            let updatePersonalDetailQuery = `UPDATE MENTOR_PERSONAL_DETAILS SET
-      PROFILE_PIC= :profile_pic, FIRST_NAME = :first_name, LAST_NAME = :last_name, EMAIL = :email, MOBILE_NUMBER =:mobile_number, DATE_OF_BIRTH = :date_of_birth, LINKEDIN_PROFILE = :linkedin_profile ,
-      ADDRESS = :address, CITY = :city, DISTRICT = :district, STATE = :state, PINCODE =:pincode, COUNTRY = :country WHERE UID = :uid`;
-            yield (0, sql_query_util_1.executeQuery)(updatePersonalDetailQuery, sequelize_1.QueryTypes.UPDATE, mentorPersonalData);
-            return mentorPersonalData.uid;
+            const profileUpdateQuery = `UPDATE MENTOR_PERSONAL_DETAILS
+    SET FIRST_NAME = :firstName,LAST_NAME = :lastName, EMAIL = :email,DATE_OF_BIRTH = :dateOfBirth,PHONE_NUMBER = :phoneNumber, GENDER=:gender,
+    PROFILE_PIC = :profilePic,
+    LINKEDIN_PROFILE = :linkedinProfile
+    WHERE
+    UID = :uid;
+    `;
+            const contactUpdateQuery = `UPDATE MENTOR_CONTACT_DETAILS
+    SET
+    ADDRESS = :address,
+    DISTRICT = :district,
+    CITY = :city, 
+    STATE = :state,
+    PIN_CODE = :pinCode,
+    COUNTRY = :country
+    WHERE
+    UID = :uid;
+    `;
+            let [contact] = yield (0, sql_query_util_1.executeQuery)(contactUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.contactDetails), { uid }));
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(profileUpdateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign(Object.assign({}, user.basicDetails), { uid }));
+            const contactDetails = user.contactDetails;
+            const basicDetails = user.basicDetails;
+            return { contactDetails, basicDetails };
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.updatePersonalAndContactDetails()`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.mentorProfileUpdate()`, error);
             throw error;
         }
     });
 }
-exports.updatePersonalAndContactDetails = updatePersonalAndContactDetails;
+exports.mentorProfileUpdate = mentorProfileUpdate;
 function getPersonalDetailsByMentorId(mentorId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -74,42 +92,39 @@ function getPersonalDetailsByMentorId(mentorId) {
     });
 }
 exports.getPersonalDetailsByMentorId = getPersonalDetailsByMentorId;
-function isValid(uid) {
+function checkMentorUid(uid) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj");
         console.log(uid);
         try {
-            logger_1.default.info(`${TAG}.isValid() ==>`, uid);
-            console.log("1234567890");
-            const contactQuery = 'SELECT USER_ID FROM `MENTOR` WHERE UID=:uid';
-            const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid: uid });
-            return contact; // Return null if no user is found
+            logger_1.default.info(`${TAG}.checkMentorUid()  ==>`, uid);
+            let query = 'select * from MENTOR where UID=:uid';
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
+                uid
+            });
+            return userId;
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.isValid()`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkMentorUid()`, error);
             throw error;
         }
     });
 }
-exports.isValid = isValid;
-function isValids(uid) {
+exports.checkMentorUid = checkMentorUid;
+function checkExist(uid) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("asdfghjklkjhgfdsdfghmjhgfdsdfghj");
-        console.log(uid);
         try {
-            logger_1.default.info(`${TAG}.isValid() ==>`, uid);
-            console.log("1234567890");
-            const contactQuery = 'SELECT * FROM `MENTOR` WHERE UID=:uid';
-            const [contact] = yield (0, sql_query_util_1.executeQuery)(contactQuery, sequelize_1.QueryTypes.SELECT, { uid: uid });
-            return contact; // Return null if no user is found
+            logger_1.default.info(`${TAG}.checkExist() ==>`, uid);
+            const checkQuery = 'SELECT * FROM `MENTOR_PERSONAL_DETAILS` WHERE UID=:uid';
+            const [basic] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { uid });
+            return basic; // Return null if no user is found
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.isValid()`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkProfilExist()`, error);
             throw error;
         }
     });
 }
-exports.isValids = isValids;
+exports.checkExist = checkExist;
 function getMentorList(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

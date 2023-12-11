@@ -5,75 +5,72 @@ var crypto=require("crypto")
 const TAG = 'data_stores_mysql_lib_user_lms'
 
 export async function  getCourseOverview(courseUid) {
-  let id=courseUid
+  console.log(courseUid)
     try {
       logger.info(`${TAG}.getCourseOverview()  ==>`);
-
+console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
   let query=`SELECT
-  c.thumbnail AS thumbnail,
   c.video AS video,
   c.title AS title,
-MAX(c.description) AS description,
-MAX(c.mentor) AS mentor,
-MAX(c.id) AS id,
-MAX(c.type) AS type,
-  GROUP_CONCAT(DISTINCT wyl.point) AS whatYouLearn,
-(
- select JSON_ARRAYAGG(
+  MAX(c.description) AS description,
+  MAX(c.mentor) AS mentor,
+  MAX(c.COURSE_UID) AS id,
+  MAX(c.type) AS type,
+  (
+   select JSON_ARRAYAGG(
       JSON_OBJECT(
-          'part', cp.partTitle,
-          'description', cp.description,
-          'modules', (
-              SELECT JSON_ARRAYAGG(
-                
-                  JSON_OBJECT(
-                      'name', m.moduleName,
-                      'desc', m.moduleDescription,
-                       'lesson', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                   'name', l.lessonName,
-                                  'points', l.lessonPoints,
-                                  'duration', l.lessonDuration
-                  )
-              ) 
-              FROM lesson AS l WHERE m.id = l.moduleId
-          ),
-                          'exercises', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                                   'name', e.exerciseName,
-                          'points', e.exercisePoints
-                  )
-              ) 
-              FROM Exercise AS e WHERE m.id = e.moduleId
-          ),
-                      'test', (
-              SELECT JSON_ARRAYAGG(
-                  JSON_OBJECT(
-                    'name', t.testName,
-                          'points', t.testPoints
-                  )
-              ) 
-              FROM Test AS t WHERE m.id = t.moduleId
-          )
-                  )
-              ) 
-              FROM Module AS m 
-              WHERE cp.id = m.coursePartId
-          )
-      ) 
-  ) FROM CoursePart cp where c.id = cp.courseId 
-)AS part
-FROM Course AS c 
-LEFT JOIN WhatYouLearn AS wyl ON c.id = wyl.courseId WHERE c.id=:id
+      'id',wyl.ID,
+      'learn',wyl.LEARN
+      )
+      ) FROM WHAT_YOU_LEARN AS wyl WHERE wyl.COURSE_UID=c.COURSE_UID
+  ) AS whatyoulearn,
+    (
+   select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'partUid',p.PART_UID,
+      'title',p.PART_TITLE,
+    'modules',(
+     select JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'moduleId',m.MODULE_UID,
+      'name',m.MODULE_NAME,
+      'Lessons',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'lessonId',l.LESSON_UID,
+      'lesson',l.LESSON_NAME,
+      'points',l.POINTS
+      )) FROM LESSON_MODULES AS l WHERE l.MODULE_UID=m.MODULE_UID),
+        'tests',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'testId',t.TEST_UID,
+      'test',t.TEST_NAME,
+      'points',t.POINTS,
+      'marks',t.MARKS
+      )) FROM TEST_MODULES AS t WHERE t.MODULE_UID=m.MODULE_UID),
+            'exercise',(
+         select JSON_ARRAYAGG(
+      JSON_OBJECT(
+      'exerciseId',e.EXERCISE_UID,
+      'exercise',e.QUESTION_NAME,
+      'points',e.POINTS,
+      'marks',e.MARKS
+      )) FROM EXERCISE_MODULES AS e WHERE e.MODULE_UID=m.MODULE_UID)
+      )
+      ) FROM COURSE_MODULE AS m  where m.PART_UID=p.PART_UID)
+      )
+      ) FROM COURSE_PART AS p  WHERE p.COURSE_UID=c.COURSE_UID
+  ) AS courseParts
+FROM COURSE_OVERVIEW AS c
+WHERE c.COURSE_UID = :courseUid
 GROUP BY
-  c.thumbnail,
   c.video,
   c.title,
-  c.description,
-  c.mentor,c.id,c.type;`
-      const results= await executeQuery(query, QueryTypes.SELECT,{id:id});
+  c.mentor,
+  c.COURSE_UID,
+  c.type;`
+      const results= await executeQuery(query, QueryTypes.SELECT,{courseUid:courseUid});
         return results;
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.getCourseOverview()`, error);
@@ -81,13 +78,13 @@ GROUP BY
     }
   }
 
-export async function  getCourses(courseType) {
-    // let id=courseId
+export async function  getCourses(type) {
+ console.log(type)
       try {
         logger.info(`${TAG}.getCourses()  ==>`);
   
-    let query=`SELECT * FROM COURSE WHERE TYPE=:type`
-        const results= await executeQuery(query, QueryTypes.SELECT,{type:courseType});
+    let query=`SELECT * FROM COURSE_OVERVIEW WHERE TYPE=:type` 
+        const results= await executeQuery(query, QueryTypes.SELECT,{type:type});
           return results;
       } catch (error) {
         logger.error(`ERROR occurred in ${TAG}.getCourses()`, error);
@@ -164,11 +161,11 @@ export async function  getMyCourses(list) {
       }
     }
     // student
-  export async function  getMyCourse(courseId) {
+export async function  getMyCourse(courseUid) {
       try {
         logger.info(`${TAG}.getMyCourse()  ==>`);
-        const query = 'SELECT * FROM courses WHERE course_id=:courseId';
-        const results= await executeQuery(query, QueryTypes.SELECT,{courseId:courseId});
+        const query = 'SELECT * FROM COURSE_OVERVIEW WHERE COURSE_UID=:courseUid';
+        const results= await executeQuery(query, QueryTypes.SELECT,{courseUid:courseUid});
           return results;
       } catch (error) {
         logger.error(`ERROR occurred in ${TAG}.getMyCourse()`, error);
@@ -190,12 +187,14 @@ export async function  getAllCourses() {
     }
 
 // course
-export async function uploadCourse(fileDetails: any, course: any, type: any): Promise<any> {
+export async function uploadCourses(fileDetails: any, course: any, type: any): Promise<any> {
+  
   logger.info(`${TAG}.uploadVideoFile()`)
   try {
-
+    const courseUid = crypto.randomUUID()
+   console.log(courseUid)
     const data = {
-      courseUid: crypto.randomUUID(),
+      courseUid:courseUid,
       video: fileDetails.fileUrl,
       title: course.title,
       description: course.description,
@@ -206,7 +205,6 @@ export async function uploadCourse(fileDetails: any, course: any, type: any): Pr
       price: course.price,
       discount: course.discount,
       filePath: fileDetails.filePath,
-      learn: course.learn
     };
 
     const videoInsertQuery = `INSERT INTO COURSE_OVERVIEW (COURSE_UID, VIDEO, TITLE, DESCRIPTION, MENTOR, LESSON, EXERCISES, TEST, PRICE, DISCOUNT, TYPE )
@@ -216,24 +214,18 @@ export async function uploadCourse(fileDetails: any, course: any, type: any): Pr
     const learnQuery = `INSERT INTO  WHAT_YOU_LEARN
     ( COURSE_UID,LEARN)
      values( :courseUid,:learn )`;
+
     let array = JSON.parse(course.learn);
     for (const singleData of array) {
-      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid: data.courseUid })
+      const res = await executeQuery(learnQuery, QueryTypes.INSERT, { learn: singleData, courseUid:courseUid })
       response.push(res)
     }
-
+   
     const [coursedata] = await executeQuery(videoInsertQuery, QueryTypes.INSERT, {
-      ...data, ...type, courseUid: data.courseUid
+      ...data ,...type
     })
 
-    // Include courseUid in the response object
-    const responseObject = {
-      response,
-      coursedata,
-      courseUid: data.courseUid
-    };
-
-    return responseObject;
+    return {coursedata,courseUid,response};
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.saveFile()`, error)
     throw error
@@ -259,7 +251,6 @@ export async function getuploadCourse(courseUid){
     logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
     const checkQuery = 'SELECT * FROM `COURSE_OVERVIEW` WHERE COURSE_UID= :courseUid';
     const getQuery = 'SELECT * FROM `WHAT_YOU_LEARN` WHERE COURSE_UID= :courseUid';
-    const query= ''
     const [basicCourse] = await executeQuery(checkQuery, QueryTypes.SELECT, {courseUid});
     const basicCourseLearn= await executeQuery(getQuery, QueryTypes.SELECT, {courseUid});
     return {basicCourse,basicCourseLearn}
@@ -271,8 +262,9 @@ export async function getuploadCourse(courseUid){
 
 export async function updateuploadCourse(fileDetails: any,courseUid: any, course:any){
   try {
-    logger.info(`${TAG}.getuploadCourse() ==>`, courseUid);
+    logger.info(`${TAG}.updateuploadCourse() ==>`, courseUid);
     const data = {
+      courseUid:courseUid,
       // thumbnail: imageDetails.fileUrl,
       video: fileDetails.fileUrl,
       title: course.title,
@@ -298,7 +290,7 @@ export async function updateuploadCourse(fileDetails: any,courseUid: any, course
       const res=await executeQuery( learnQuery, QueryTypes.UPDATE,{ learn:singleData,courseUid})
       response.push(res)
      }
-    return {course}
+    return data;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateuploadCourse()`, error);
     throw error;
@@ -430,7 +422,7 @@ export async function getModule(moduleUid) {
     logger.info(`${TAG}.getModule()  ==>`, moduleUid);
 
     let query ="select * from COURSE_MODULE where MODULE_UID = :moduleUid";
-    const personalDetails = await executeQuery(query, QueryTypes.SELECT, {
+    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
       moduleUid
     });
     return personalDetails;
@@ -685,7 +677,7 @@ export async function checkLearnId(learnId: any){
   try {
     logger.info(`${TAG}.checkLearnId()  ==>`, learnId);
 
-    let query = 'select * from whatyoulearn where ID= :learnId';
+    let query = 'select * from WHAT_YOU_LEARN where ID= :learnId';
     const [learnID] = await executeQuery(query, QueryTypes.SELECT, {
       learnId:learnId.id
     });
@@ -702,13 +694,22 @@ export async function checkLearnId(learnId: any){
 export async function updateLessonPost(user,lessonUid) {
   logger.info(`${TAG}.updateLessonPost()`);
   try {
+    const data = {
+      lessonUid:lessonUid,
+      lessonName: user.lessonName,
+      points: user.points,
+      video: user.video,
+      thumbnail: user.thumbnail,
+      attachments: user.attachments
+
+    }
     let updateLessonPostQuery = `UPDATE LESSON_MODULES SET
     LESSON_NAME= :lessonName, POINTS = :points, VIDEO = :video, THUMBNAIL = :thumbnail, ATTACHMENTS =:attachments WHERE LESSON_UID = :lessonUid`;
   const updateLessonPost= await executeQuery(
     updateLessonPostQuery,
-      QueryTypes.UPDATE,{...user,lessonUid}
+      QueryTypes.UPDATE,{...data,lessonUid}
     );
-    return user;
+    return data;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.updateLessonPost()`, error);
     throw error;
@@ -733,7 +734,7 @@ export async function deleteLearnId(learnId) {
   try {
     logger.info(`${TAG}.deleteLearnId()  ==>`,learnId);
     console.log(learnId)
-    let query = "DELETE FROM whatyoulearn WHERE ID = :Id";
+    let query = "DELETE FROM WHAT_YOU_LEARN WHERE ID = :Id";
     const [learnDetails] = await executeQuery(query, QueryTypes.DELETE, {
       Id: learnId.id
     });
@@ -796,10 +797,10 @@ export async function checkLessonUid(lessonUid) {
   try {
     logger.info(`${TAG}.checkLessonUid()  ==>`, lessonUid);
     let query ="select * from LESSON_MODULES where LESSON_UID = :lessonUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [lessonDetails] = await executeQuery(query, QueryTypes.SELECT, {
       lessonUid
     });
-    return personalDetails;
+    return lessonDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkLessonUid()`,
@@ -813,10 +814,10 @@ export async function checkTestUid(testUid) {
   try {
     logger.info(`${TAG}.checkTestUid()  ==>`, testUid);
     let query ="select * from TEST_MODULES where TEST_UID = :testUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [testDetails] = await executeQuery(query, QueryTypes.SELECT, {
       testUid
     });
-    return personalDetails;
+    return testDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkTestUid()`,
@@ -830,13 +831,35 @@ export async function checkExerciseUid(exerciseUid) {
   try {
     logger.info(`${TAG}.checkExerciseUid()  ==>`, exerciseUid);
     let query ="select * from EXERCISE_MODULES where EXERCISE_UID = :exerciseUid";
-    const [personalDetails] = await executeQuery(query, QueryTypes.SELECT, {
+    const [exerciseDetails] = await executeQuery(query, QueryTypes.SELECT, {
       exerciseUid
     });
-    return personalDetails;
+    return exerciseDetails;
   } catch (error) {
     logger.error(
       `ERROR occurred in ${TAG}.checkExerciseUid()`,
+      error
+    );
+    throw error;
+  }
+}
+
+
+export async function getAllCourseList(type) {
+  try {
+    logger.info(`${TAG}.getAllCourseList()  ==>`,type);
+console.log(type)
+    let query ="select * from COURSE_OVERVIEW where TYPE = :type";
+    const courseList = await executeQuery(query, QueryTypes.SELECT, {
+      type
+    });
+    // const data={
+    //   exerciseDetails: Object.values(exerciseDetails)
+    // }
+    return courseList;
+  } catch (error) {
+    logger.error(
+      `ERROR occurred in ${TAG}.getAllCourseList()`,
       error
     );
     throw error;

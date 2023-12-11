@@ -1,0 +1,68 @@
+@import "../../../../../../index.scss";
+
+.applied-jobs {
+  width: 100%;
+  border: 2px solid $border;
+  border-radius: 20px;
+
+  .jobList {
+    border-bottom: none;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .job-list-table {
+      width: 100%;
+
+      .table-head {
+        width: 100%;
+        .table-head-data {
+          font-size: 14px;
+          color: $heading;
+          font-weight: 700;
+          border-bottom: 2px solid $border;
+          font-family: "Montserrat", sans-serif;
+          @media (max-width: 1700px) {
+            font-size: 13px ;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px ;
+          }
+        }
+      }
+
+      .table-body {
+        width: 100%;
+        cursor: pointer;
+        tr {
+          &:hover {
+            background-color: $table-hover;
+          }
+        }
+        .selected-status {
+          font-weight: 700 !important;
+          color: $green !important;
+        }
+
+        .rejected-status {
+          font-weight: 700 !important;
+          color: $red !important;
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+        }
+      }
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+@import "../../../../../index.scss";
+.student-coursePlayer {
+  display: flex;
+  gap: 16px;
+
+  .css-1aquho2-MuiTabs-indicator {
+    background-color: #5e5873 !important;
+  }
+  .coursePlayer-content {
+    .coursePlayer-data {
+      margin-top: 10vh;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      background-color: $background;
+
+      @media (max-width: 1700px) {
+        padding: 25px;
+        gap: 30px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px;
+        gap: 24px;
+      }
+      .coursePlayer-container {
+        background-color: white;
+        border-radius: 20px;
+        padding: 30px;
+        @media (max-width: 1700px) {
+          padding: 25px;
+        }
+        @media (max-width: 1450px) {
+          padding: 20px;
+        }
+        .mui-tabs {
+          width: 100%;
+          padding: 20px 0;
+          .tab {
+            font-size: 14px;
+            font-weight: 700;
+            color: $heading;
+            @media (max-width: 1700px) {
+              font-size: 13px;
+            }
+            @media (max-width: 1450px) {
+              font-size: 12px;
+            }
+          }
+          & .Mui-selected {
+            color: $yellow;
+          }
+        }
+        .MuiTabs-flexContainer {
+          display: flex;
+          gap: 7.5%;
+          border-bottom: 2px solid $border;
+          
+        }
+      }
+    }
+  }
+}

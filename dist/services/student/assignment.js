@@ -24,7 +24,7 @@ const authentication_1 = require("src/helpers/authentication");
 const admin_lms_1 = require("src/Database/mysql/lib/admin/admin_lms");
 const models_1 = require("src/models");
 const TAG = 'assignment.service';
-function uploadAssignment(files, headerValue, partId) {
+function uploadAssignment(files, headerValue, partUid) {
     var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadAssignment()`);
@@ -47,7 +47,7 @@ function uploadAssignment(files, headerValue, partId) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                const response = yield mysql_1.attachment.uploadAssignment(fileDetails, uid, partId);
+                const response = yield mysql_1.attachment.uploadAssignment(fileDetails, uid, partUid);
             }
             else {
                 serviceResponse.message = "invalid user id";
@@ -68,7 +68,7 @@ function uploadAssignment(files, headerValue, partId) {
     });
 }
 exports.uploadAssignment = uploadAssignment;
-function getAllAssignments(partId, headerValue) {
+function getAllAssignments(partUid, headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
@@ -77,7 +77,7 @@ function getAllAssignments(partId, headerValue) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                response = yield mysql_1.attachment.getAllAssignments(partId, uid);
+                response = yield mysql_1.attachment.getAllAssignments(partUid, uid);
             }
             else {
                 serviceResponse.message = "Invalid User Id";
@@ -97,7 +97,7 @@ function getAllAssignments(partId, headerValue) {
     });
 }
 exports.getAllAssignments = getAllAssignments;
-function uploadNotes(note, headerValue) {
+function uploadNotes(partUid, headerValue, note) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadNotes() `);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
@@ -107,7 +107,7 @@ function uploadNotes(note, headerValue) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                response = yield mysql_1.attachment.uploadNote(note, uid);
+                response = yield mysql_1.attachment.uploadNote(partUid, uid, note);
             }
             else {
                 serviceResponse.message = "invalid user id";
@@ -115,7 +115,7 @@ function uploadNotes(note, headerValue) {
                 serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
-            serviceResponse.data = { response, note };
+            serviceResponse.data = response;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.uploadNotes`, error);
@@ -125,7 +125,7 @@ function uploadNotes(note, headerValue) {
     });
 }
 exports.uploadNotes = uploadNotes;
-function getAllNotes(headerValue) {
+function getAllNotes(partUid, headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
@@ -134,7 +134,7 @@ function getAllNotes(headerValue) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                response = yield mysql_1.attachment.getAllNotes(uid);
+                response = yield mysql_1.attachment.getAllNotes(partUid, uid);
             }
             else {
                 serviceResponse.message = "Invalid user Id";
@@ -155,7 +155,7 @@ function getAllNotes(headerValue) {
     });
 }
 exports.getAllNotes = getAllNotes;
-function uploadThread(thread, headerValue, partId) {
+function uploadThread(thread, headerValue, partUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadThread() `);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
@@ -165,7 +165,7 @@ function uploadThread(thread, headerValue, partId) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                response = yield mysql_1.attachment.uploadThread(thread, uid, partId);
+                response = yield mysql_1.attachment.uploadThread(thread, uid, partUid);
             }
             else {
                 serviceResponse.message = "Invalid user Id";
@@ -185,7 +185,7 @@ function uploadThread(thread, headerValue, partId) {
     });
 }
 exports.uploadThread = uploadThread;
-function getSingleThread(partId, threadId, headerValue) {
+function getSingleThread(partUid, threadId, headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
@@ -194,7 +194,7 @@ function getSingleThread(partId, threadId, headerValue) {
             const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
             const uid = decoded.uid;
             if (isValid) {
-                response = yield mysql_1.attachment.getSingleThread(partId, threadId, uid);
+                response = yield mysql_1.attachment.getSingleThread(partUid, threadId, uid);
             }
             else {
                 serviceResponse.message = "Invalid user Id";
@@ -215,14 +215,33 @@ function getSingleThread(partId, threadId, headerValue) {
     });
 }
 exports.getSingleThread = getSingleThread;
-function postThreadreply(reply, threadId, uid) {
+function postThreadreply(reply, headerValue, partUid, threadId) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.postThreadreply() ==> `, reply, threadId, uid);
+        logger_1.default.info(`${TAG}.postThreadreply() ==> `, reply, partUid, threadId);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const response = yield mysql_1.attachment.postThreadreply(reply, threadId, uid);
-            const data = Object.assign({}, response);
-            serviceResponse.data = data;
+            let response;
+            console.log(headerValue);
+            let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
+            const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
+            const uid = decoded.uid;
+            console.log(uid);
+            if (isValid) {
+                console.log(threadId);
+                const checkId = yield mysql_1.attachment.checkThreadId(threadId);
+                if (checkId) {
+                    response = yield mysql_1.attachment.postThreadreply(reply, uid, partUid, threadId);
+                }
+            }
+            else {
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
+                return serviceResponse;
+            }
+            serviceResponse.data = {
+                reply
+            };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.postThreadreply`, error);
@@ -232,15 +251,17 @@ function postThreadreply(reply, threadId, uid) {
     });
 }
 exports.postThreadreply = postThreadreply;
-function getAllThreadsCourse(courseId) {
+function getAllThreadsCourse(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getAllThreadsCourse() ==> `, courseId);
+        logger_1.default.info(`${TAG}.getAllThreadsCourse() ==> `, courseUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const exist = yield (0, admin_lms_1.getMyCourse)(courseId);
+            const exist = yield (0, admin_lms_1.getMyCourse)(courseUid);
             if (exist.length > 0) {
-                const response = yield mysql_1.attachment.getAllThreadsCourse(courseId);
-                const data = Object.assign({}, response);
+                const response = yield mysql_1.attachment.getAllThreadsCourse(courseUid);
+                const data = {
+                    response,
+                };
                 serviceResponse.data = data;
             }
             else {
@@ -257,14 +278,31 @@ function getAllThreadsCourse(courseId) {
     });
 }
 exports.getAllThreadsCourse = getAllThreadsCourse;
-function getAllThreadsPart(partId) {
+function getAllThreadsPart(partUid, headerValue) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.getAllThreadsPart() ==> `, partId);
+        logger_1.default.info(`${TAG}.getAllThreadsPart() ==> `, partUid);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
-            const response = yield mysql_1.attachment.getAllThreadsPart(partId);
+            let response;
+            console.log(headerValue);
+            let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
+            const isValid = yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid });
+            const uid = decoded.uid;
+            console.log(uid);
+            console.log(uid);
+            if (isValid) {
+                const response = yield mysql_1.attachment.getAllThreadsPart(partUid);
+            }
+            else {
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
+                return serviceResponse;
+            }
             const data = Object.assign({}, response);
+            console.log(data);
             serviceResponse.data = data;
+            return serviceResponse;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getAllThreadsPart`, error);

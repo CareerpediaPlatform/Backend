@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllThreadsPart = exports.getAllThreadsCourse = exports.postThreadreply = exports.getSingleThread = exports.uploadThread = exports.getAllNotes = exports.uploadNote = exports.getAllAssignments = exports.uploadAssignment = void 0;
+exports.checkThreadId = exports.getAllThreadsPart = exports.getAllThreadsCourse = exports.postThreadreply = exports.getSingleThread = exports.uploadThread = exports.getAllNotes = exports.uploadNote = exports.getAllAssignments = exports.uploadAssignment = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
 const TAG = 'data_stores_mysql_lib_student_assignment';
-function uploadAssignment(fileDetails, uid, partId) {
+function uploadAssignment(fileDetails, uid, partUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadAssignment()`);
         try {
@@ -25,10 +25,10 @@ function uploadAssignment(fileDetails, uid, partId) {
                 uid: uid,
                 assignment: fileDetails.fileUrl,
                 filePath: fileDetails.filePath,
-                partId: partId.partId
+                partUid: partUid.partUid
             };
-            const InsertQuery = `INSERT INTO ASSIGNMENT (UID,  ASSIGNMENT, PART_ID)
-      VALUES(:uid, :assignment, :partId)`;
+            const InsertQuery = `INSERT INTO STUDENT_ASSIGNMENT (UID, ASSIGNMENT, PART_UID)
+      VALUES(:uid, :assignment, :partUid)`;
             const assignmentdata = yield (0, sql_query_util_1.executeQuery)(InsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return assignmentdata;
         }
@@ -39,13 +39,13 @@ function uploadAssignment(fileDetails, uid, partId) {
     });
 }
 exports.uploadAssignment = uploadAssignment;
-function getAllAssignments(partId, uid) {
+function getAllAssignments(partUid, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             logger_1.default.info(`${TAG}.getAllAssignments() ==>`, uid);
-            const checkQuery = 'SELECT * FROM ASSIGNMENT WHERE UID= :uid and PART_ID= :partId';
+            const checkQuery = 'SELECT * FROM STUDENT_ASSIGNMENT WHERE UID= :uid and PART_UID= :partUid';
             const getAllAssignments = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, {
-                uid, partId: partId.partId
+                uid, partUid: partUid.partUid
             });
             return getAllAssignments;
         }
@@ -56,19 +56,20 @@ function getAllAssignments(partId, uid) {
     });
 }
 exports.getAllAssignments = getAllAssignments;
-function uploadNote(student, uid) {
+function uploadNote(partUid, uid, note) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadNote()`);
         try {
             const data = {
                 uid: uid,
-                note: student.note
+                note: note.note,
+                partUid: partUid.partUid
             };
             console.log(data);
-            const InsertQuery = `INSERT INTO NOTE (UID,  NOTE)
-      VALUES(:uid, :note)`;
+            const InsertQuery = `INSERT INTO STUDENT_NOTE (UID, NOTE, PART_UID)
+      VALUES(:uid, :note, :partUid)`;
             const [notedata] = yield (0, sql_query_util_1.executeQuery)(InsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
-            return notedata;
+            return data;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.uploadNote()`, error);
@@ -77,13 +78,14 @@ function uploadNote(student, uid) {
     });
 }
 exports.uploadNote = uploadNote;
-function getAllNotes(uid) {
+function getAllNotes(partUid, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getAllNotes() ==>`, uid);
-            const checkQuery = 'SELECT * FROM NOTE WHERE UID= :uid';
+            logger_1.default.info(`${TAG}.getAllNotes() ==>`, partUid);
+            console.log(partUid);
+            const checkQuery = 'SELECT * FROM STUDENT_NOTE WHERE UID= :uid and PART_UID= :partUid';
             const getAllNotes = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, {
-                uid
+                uid, partUid: partUid.partUid
             });
             return getAllNotes;
         }
@@ -94,7 +96,7 @@ function getAllNotes(uid) {
     });
 }
 exports.getAllNotes = getAllNotes;
-function uploadThread(thread, uid, partId) {
+function uploadThread(thread, uid, partUid) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.uploadThread()`);
         try {
@@ -102,11 +104,11 @@ function uploadThread(thread, uid, partId) {
                 uid: uid,
                 title: thread.title,
                 description: thread.description,
-                partId: partId.partId
+                partUid: partUid.partUid
             };
             console.log(data);
-            const InsertQuery = `INSERT INTO STUDENT_THREAD (UID,  TITLE, DESCRIPTION, PART_ID)
-      VALUES(:uid, :title, :description, :partId)`;
+            const InsertQuery = `INSERT INTO STUDENT_THREAD (UID,  TITLE, DESCRIPTION, PART_UID)
+      VALUES(:uid, :title, :description, :partUid)`;
             const [threaddata] = yield (0, sql_query_util_1.executeQuery)(InsertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, data));
             return threaddata;
         }
@@ -118,15 +120,19 @@ function uploadThread(thread, uid, partId) {
 }
 exports.uploadThread = uploadThread;
 //************************* Get Single ThreadId student uid************ */
-function getSingleThread(partId, threadId, uid) {
+function getSingleThread(partUid, threadId, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getSingleThread() ==>`, partId, threadId, uid);
-            const query = `SELECT st.TITLE,st.DESCRIPTION,(
+            console.log(partUid);
+            console.log(threadId);
+            logger_1.default.info(`${TAG}.getSingleThread() ==>`, partUid, threadId, uid);
+            const query = `SELECT st.TITLE, st.DESCRIPTION, (
         SELECT JSON_ARRAYAGG(
-            JSON_OBJECT( 'reply', tr.REPLY  )
-        ) FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID)AS replay FROM student_thread st WHERE ST.UID= :uid AND ST.THREAD_ID= :THREAD_ID AND PART_ID= :partId`;
-            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { partId: partId.partId, THREAD_ID: threadId.threadID, uid });
+            JSON_OBJECT('reply', tr.REPLY)
+        ) FROM THREAD_REPLY tr WHERE tr.THREAD_ID = st.THREAD_ID
+    ) AS replay FROM STUDENT_THREAD st WHERE st.UID = :uid AND st.THREAD_ID = :threadId AND st.PART_UID = :partUid;
+    `;
+            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { partUid: partUid.partUid, THREAD_ID: threadId.threadId, uid });
             return Thread;
         }
         catch (error) {
@@ -136,15 +142,22 @@ function getSingleThread(partId, threadId, uid) {
     });
 }
 exports.getSingleThread = getSingleThread;
-function postThreadreply(reply, threadId, uid) {
+function postThreadreply(reply, uid, partUid, threadId) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.posthtreadreply()`);
         try {
             const response = [];
-            const insertQuery = `INSERT INTO thread_reply (THREAD_ID,Uid,REPLY, REPLYTO) 
-      VALUES (:threadId, :uid, :reply, :replyto)`;
+            const insertQuery = `INSERT INTO THREAD_REPLY (THREAD_ID, UID, PART_UID, REPLY, REPLYTO) 
+        VALUES (:threadId, :uid, :partUid, :reply, :replyto)`;
             for (const data of reply) {
-                const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid: uid.uid, threadId: threadId.threadID }));
+                const postData = {
+                    threadId: threadId.threadId,
+                    uid: uid,
+                    reply: data.reply,
+                    replyto: data.replyto,
+                    partUid: partUid.partUid,
+                };
+                const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, postData);
                 response.push(res);
             }
             return Object.assign({}, response);
@@ -156,30 +169,35 @@ function postThreadreply(reply, threadId, uid) {
     });
 }
 exports.postThreadreply = postThreadreply;
-function getAllThreadsCourse(courseId) {
+function getAllThreadsCourse(courseUid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getAllThreadsCourse() ==>`, courseId);
-            const query = `SELECT c.thumbnail,c.title,'part',(
+            logger_1.default.info(`${TAG}.getAllThreadsCourse() ==>`, courseUid);
+            //have to add thumbnail 
+            const query = `SELECT c.TITLE, 'part', (
         SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                           'part', cp.partTitle,'threads',(
-                            SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                           'title',st.TITLE,
-                           'description',st.DESCRIPTION,
-                           'reply',(
-                           SELECT JSON_ARRAYAGG(
-                           JSON_OBJECT(
-                            'REPLY', tr.REPLY
-                           ))FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID
-                           ))
-                           ) FROM student_thread st WHERE ST.PART_ID=cp.part_id
-                           ) 
-                           )
-                       )  FROM Courses_Parts cp where c.course_id = cp.course_id 
-       ) AS part FROM courses c WHERE course_id=:courseId`;
-            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { courseId: courseId });
+            JSON_OBJECT(
+                'part', cp.TITLE,
+                'threads', (
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'title', st.TITLE,
+                            'description', st.DESCRIPTION,
+                            'reply', (
+                                SELECT JSON_ARRAYAGG(
+                                    JSON_OBJECT(
+                                        'REPLY', tr.REPLY
+                                    )
+                                ) FROM THREAD_REPLY tr WHERE tr.THREAD_ID = st.THREAD_ID
+                            )
+                        )
+                    ) FROM STUDENT_THREAD st WHERE st.PART_UID = cp.COURSE_UID
+                )
+            )
+        ) FROM COURSE_OVERVIEW cp WHERE c.COURSE_UID = cp.COURSE_UID
+    ) AS COURSE_PART FROM COURSE_OVERVIEW c WHERE c.COURSE_UID = :courseUid;
+    `;
+            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { courseUid: courseUid });
             return Thread;
         }
         catch (error) {
@@ -189,20 +207,24 @@ function getAllThreadsCourse(courseId) {
     });
 }
 exports.getAllThreadsCourse = getAllThreadsCourse;
-function getAllThreadsPart(partId) {
+function getAllThreadsPart(partUid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.getAllThreadsPart() ==>`, partId);
-            const query = `SELECT st.TITLE,st.DESCRIPTION,(
-        SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-                             'reply', tr.REPLY
-            )
-        ) FROM thread_reply tr WHERE TR.THREAD_ID=ST.THREAD_ID
-        )AS replay FROM student_thread st WHERE ST.PART_ID=:partId;
+            logger_1.default.info(`${TAG}.getAllThreadsPart() ==>`, partUid);
+            console.log(partUid);
+            const query = `SELECT st.TITLE, st.DESCRIPTION,
+      (
+          SELECT JSON_ARRAYAGG(
+              JSON_OBJECT('reply', tr.REPLY)
+          ) 
+          FROM THREAD_REPLY tr 
+          WHERE tr.THREAD_ID = st.THREAD_ID
+      ) AS replay 
+  FROM STUDENT_THREAD st 
+  WHERE st.PART_UID = :partUid;
   `;
-            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { partId: partId });
-            return Thread;
+            const Thread = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, { partUid: partUid.partUid });
+            return Object.assign(Object.assign({}, Thread), { partUid });
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.getAllThreadsPart()`, error);
@@ -211,3 +233,21 @@ function getAllThreadsPart(partId) {
     });
 }
 exports.getAllThreadsPart = getAllThreadsPart;
+function checkThreadId(threadId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log(threadId);
+            logger_1.default.info(`${TAG}.checkPartUid()  ==>`, threadId);
+            let query = 'select * from STUDENT_THREAD where THREAD_ID=:threadId';
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(query, sequelize_1.QueryTypes.SELECT, {
+                threadId: threadId.threadId
+            });
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checkPartUid()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkThreadId = checkThreadId;

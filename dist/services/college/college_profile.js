@@ -38,20 +38,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCollegeList = exports.getCollegeProfile = exports.collegeProfile = void 0;
 const status_codes_1 = require("src/constants/status_codes");
 const logger_1 = __importDefault(require("src/logger"));
+const api_error_1 = require("src/models/lib/api_error");
 const service_response_1 = require("src/models/lib/service_response");
 const collegeProfileLib = __importStar(require("../../Database/mysql/lib/college/college_profile"));
 const authentication_1 = require("src/helpers/authentication");
 const TAG = 'services.profile';
 function collegeProfile(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(user);
         logger_1.default.info(`${TAG}.collegeProfile() ==> `, user);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(user.headerValue);
-            const isValid = yield collegeProfileLib.isValid(decoded[0].uid);
+            const isValid = yield collegeProfileLib.isValid(decoded.uid);
             if (isValid) {
-                const existedProfile = yield collegeProfileLib.checkExist(decoded[0].uid);
+                const existedProfile = yield collegeProfileLib.checkExist(decoded.uid);
                 if (existedProfile) {
                     const postResponse = yield collegeProfileLib.collegeProfileUpdate(Object.assign(Object.assign({}, user.basicDetails), { id: existedProfile.id }));
                     const contactDetails = yield collegeProfileLib.collegeContactUpdate(Object.assign(Object.assign({}, user.contactDetails), { id: existedProfile.id }));
@@ -64,18 +64,20 @@ function collegeProfile(user) {
                     serviceResponse.data = data;
                     return serviceResponse;
                 }
-                const response = yield collegeProfileLib.collegeProfilePost(Object.assign(Object.assign({}, user), { uid: decoded[0].uid }));
+                const response = yield collegeProfileLib.collegeProfilePost(Object.assign(Object.assign({}, user), { uid: decoded.uid }));
                 const data = Object.assign({}, response);
                 serviceResponse.data = data;
                 return serviceResponse;
             }
             else {
                 serviceResponse.message = "invalid user id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, "", ""));
                 return serviceResponse;
             }
         }
         catch (error) {
-            logger_1.default.error(`ERROR occurred in ${TAG}.signupUser`, error);
+            logger_1.default.error(`ERROR occurred in ${TAG}.college_profile`, error);
             serviceResponse.addServerError('Failed to create user due to technical difficulties');
         }
         return serviceResponse;
@@ -88,9 +90,9 @@ function getCollegeProfile(headerValue) {
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
-            const isValid = yield collegeProfileLib.isValid(decoded[0].uid);
+            const isValid = yield collegeProfileLib.isValid(decoded.uid);
             if (isValid) {
-                const existedProfile = yield collegeProfileLib.checkProfilExist(decoded[0].uid);
+                const existedProfile = yield collegeProfileLib.checkProfilExist(decoded.uid);
                 if (existedProfile) {
                     const data = {
                         existedProfile

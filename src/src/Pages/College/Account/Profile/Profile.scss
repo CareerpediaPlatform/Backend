@@ -1,0 +1,50 @@
+@import "../../../../index.scss";
+
+.college-admin-profile {
+  width: 100%;
+  display: flex;
+
+  .college-admin-profile-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .college-admin-profile-details {
+      width: 100%;
+      margin-top: 10vh;
+      padding: 30px 30px 30px ;
+      @media (max-width: 1700px) {
+        padding: 25px 25px 30px ;       
+      }
+      @media (max-width: 1450px) {
+        padding: 25px 25px 30px ;       
+      }
+      background-color: $background;
+      .college-admin-profile-components {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 2px solid $border;
+        border-radius: 15px;
+        background-color: $white;
+        gap: 40px;
+        padding: 60px;
+        position: relative;
+        @media (max-width: 1700px) {
+          padding: 50px;
+        }
+        @media (max-width: 1450px) {
+          padding: 40px;
+        }
+        .division {
+          width: 100%;
+          height: 2px;
+          background-color: $border;
+          border: none;
+        }
+      }
+    }
+  }
+}

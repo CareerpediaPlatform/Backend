@@ -38,10 +38,10 @@ router.route('/course-overvie/:coursetype')
  router.route('/exercise/:moduleUid')
  .post(isAuthenticated,controller.courseExercisePost);
 
- router.route('/part/:courseUid/:partUid')
+ router.route('/part/:partUid')
  .get(isAuthenticated,controller.getCourseParts);
 
- router.route('/module/:partUid')
+ router.route('/module/:moduleUid')
  .get(isAuthenticated,controller.getCourseModule);
 
  router.route('/lesson/:lessonUid')
@@ -90,9 +90,11 @@ router.route('/course-overvie/:coursetype')
  router.route('/module/:moduleUid')
  .delete(isAuthenticated,controller.deleteCourseModule);
 
- router.route('/-overviecoursew')
+ router.route('/single-course-overview/:courseUid')
 .get(isAuthenticated,controller.getCourseOverview);
 
- 
+router.route('/course-list/:type')
+.get(isAuthenticated,controller.getCourseListAll);
+
 
 export default router;

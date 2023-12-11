@@ -1,0 +1,183 @@
+@import "../../../../index.scss";
+
+.SignUp-Container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .SignUpForm {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .form-container {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 32px;
+      @media (max-width: 1700px) {
+        gap: 30px;
+      }
+      @media (max-width: 1450px) {
+        width: 60%;
+        gap: 25px;
+      }
+
+      // Sign up heading
+      .SigUp-Heading {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        color: $blue;
+        @media (max-width: 1700px) {
+          font-size: 22px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 20px;
+        }
+      }
+
+      .input-data {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        .names {
+          width: 100%;
+          display: flex;
+          gap: 15px;
+          .name-input {
+            width: 50%;
+          }
+        }
+        .email-input {
+          width: 100%;
+        }
+        .password-filed {
+          width: 100%;
+          .password-input {
+            border-radius: 10px;
+          }
+        }
+        label {
+          font-family: "Montserrat", sans-serif;
+          font-size: 16px;
+          color: $light-grey;
+          @media (max-width: 1700px) {
+            font-size: 15px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 14px;
+          }
+        }
+        input {
+          font-family: "Montserrat", sans-serif;
+          font-size: 16px;
+          color: $light-blue;
+          @media (max-width: 1700px) {
+            font-size: 15px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 14px;
+          }
+        }
+      }
+      .SigUp-Checkbox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        #Checkbox-Para {
+          font-size: 12px;
+          color: $light-blue;
+          line-height: 20px;
+        }
+
+        .Checkbox {
+          color: $blue;
+          font-weight: 600;
+        }
+      }
+      .SignUp-Button {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 700;
+        height: 55px;
+        border-radius: 10px;
+        background-color: $blue;
+        color: $white;
+        border: 0;
+        @media (max-width: 1700px) {
+          height: 50px;
+          font-size: 15px;
+        }
+        @media (max-width: 1450px) {
+          height: 45px;
+          font-size: 14px;
+        }
+      }
+      .FormControl {
+        width: 100%;
+       p{
+        color:$light-blue;
+        font-size: 12px;
+       }
+      }
+      #SignUp-Media {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+
+        // Buttons alignment
+        #btn2,
+        #btn1 {
+          width: 50%;
+          height: 55px;
+          background-color: transparent;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.2px;
+          color: $blue;
+          border: 1px solid $border;
+          cursor: pointer;
+          @media (max-width: 1700px) {
+            height: 50px;
+            font-size: 15px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 14px;
+          }
+        }
+      }
+
+      // SignUp text
+      .SignUp-text {
+        font-size: 14px;
+        font-weight: 400;
+        align-self: center;
+        color: $light-blue;
+        .text-blue {
+          color: $blue;
+          font-weight: bold;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

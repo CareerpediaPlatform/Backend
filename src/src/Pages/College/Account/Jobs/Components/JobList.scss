@@ -1,0 +1,141 @@
+@import "../../../../../index.scss";
+
+.college-jobs {
+  width: 100%;
+
+  .course-filters {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 12px;
+    padding: 0 0 20px;
+
+    @media (max-width: 1700px) {
+      gap: 11px;
+    }
+    @media (max-width: 1450px) {
+      gap: 10px;
+    }
+    h3 {
+      font-size: 16px;
+      color: $heading;
+      font-weight: 700;
+      @media (max-width: 1700px) {
+        font-size: 14px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+    .course-dropdown {
+      border: 2px solid $border !important;
+      outline: none;
+      padding: 8px 13px;
+      color: $heading;
+      font-weight: 700;
+      width: 157px;
+      height: 40px;
+      border-radius: 10px;
+      @media (max-width: 1700px) {
+        padding: 7px 12px;
+
+        width: 153px;
+        height: 38px;
+      }
+      @media (max-width: 1450px) {
+        padding: 6px 11px;
+
+        width: 150px;
+        height: 36px;
+      }
+    }
+  }
+
+  .jobList {
+    border-bottom: none;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: none !important;
+
+    .job-list-table {
+      width: 100%;
+
+      .table-head {
+        width: 100%;
+        .table-head-data {
+          font-size: 14px !important;
+          color: $heading;
+          font-weight: 700;
+          overflow: hidden;
+          align-items: center;
+          border-bottom: 2px solid $border;
+          font-family: "Montserrat", sans-serif;
+          @media (max-width: 1700px) {
+            font-size: 13px !important;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px !important;
+          }
+        }
+      }
+
+      .table-body {
+        width: 100%;
+        tr {
+          cursor: pointer;
+          &:hover {
+            background-color: $table-hover;
+          }
+        }
+        .selected-status {
+          font-weight: 700 !important;
+
+          color: $green !important;
+        }
+
+        .rejected-status {
+          font-weight: 700 !important;
+
+          color: $red !important;
+        }
+        .table-body-data {
+          font-size: 14px;
+          color: $light-blue;
+          font-weight: 500;
+          font-family: "Montserrat", sans-serif;
+          border-bottom: 2px solid $border;
+          @media (max-width: 1700px) {
+            font-size: 13px;
+          }
+          @media (max-width: 1450px) {
+            font-size: 12px;
+          }
+
+          img {
+            width: 40px;
+            border-radius: 10px;
+            @media (max-width: 1700px) {
+              width: 38px;
+            }
+            @media (max-width: 1450px) {
+              width: 36px;
+            }
+          }
+          #controlImage {
+            width: 18px;
+            cursor: pointer;
+            @media (max-width: 1700px) {
+              width: 16px;
+            }
+            @media (max-width: 1450px) {
+              width: 14px;
+            }
+          }
+        }
+      }
+      border: none;
+    }
+  }
+}

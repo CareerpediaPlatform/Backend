@@ -2,6 +2,7 @@ import * as Joi from 'joi'
 import log from '../logger'
 import { validate } from './common'
 import { ErrorMessages } from 'src/constants/error_constants'
+import rateLimit , {Options} from 'express-rate-limit';
 
 const TAG = 'validations.auth'
 
@@ -20,12 +21,14 @@ export const emailLogin= async (req, res, next) => {
 
 export const passwordValidation= async (req, res, next) => {
   const schema = Joi.object().keys({
-    newPassword: Joi.string().min(8).max(15).messages({
+    newPassword: Joi.string().required().min(8).max(15).messages({
       'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
       'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
         .replace('$length', '8'),
       'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field','password')
-    })
+    }),
+    oldPassword:Joi.string().required()
+
   });
   await validate(schema, req, res, next);
 };
@@ -133,3 +136,83 @@ export const changePassword = async (req, res, next) => {
  await validate(schema, req, res, next);
 };
 // .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+|\-=\\{}\[\]:";'<>?,./]).{8,25}$/)
+
+// Throttling login attempts
+  
+ export const createRateLimiter = (windowMs, max, message) => {
+  return rateLimit({
+    windowMs,
+    max,
+    message: {
+      status: 429,
+      message,
+    },
+  });
+};
+
+ export const studentLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many student login attempts, please try again later.');
+ export const mentorLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many mentor login attempts, please try again later.');
+ export const recruiterLimiter = createRateLimiter(15 * 60 * 1000, 5,  'Too many recruiter login attempts, please try again later.');
+ export const adminLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many admin login attempts, please try again later.');
+ export const collegeLimiter = createRateLimiter(15 * 60 * 1000, 5, 'Too many college-admin login attempts, please try again later.');
+
+// Define validation schema for the Profile
+const profileSchema = Joi.object({
+  logo: Joi.string().required(),
+  companyName: Joi.string().required(),
+  founderName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().required(),
+  website: Joi.string().required(),
+  linkedinProfile: Joi.string().required(),
+});
+
+// Define validation schema for the Contact
+const contactSchema = Joi.object({
+  address: Joi.string().required(),
+  city: Joi.string().required(),
+  district: Joi.string().required(),
+  state: Joi.string().required(),
+  pincode: Joi.string().required(),
+  country: Joi.string().required(),
+});
+
+// Define validation schema for the Company
+const companySchema = Joi.object({
+  establishedYear: Joi.string().required(),
+  numberOfEmployees: Joi.string().required(),
+  departments: Joi.string().required(),
+  startYear: Joi.string().required(),
+  annualRevenue: Joi.string().required(),
+});
+
+// Define validation schema for the entire payload
+export const updatePayloadSchema = Joi.object({
+  Profile: profileSchema.required(),
+  Contact: contactSchema.required(),
+  Company: companySchema.required(),
+});
+
+export const recruiter= async (req, res, next) => {
+  const schema = Joi.object({
+    logo: Joi.string().required(),
+  companyName: Joi.string().required()
+
+  });
+  await validate(schema, req, res, next);
+};
+
+export const babu= async (req, res, next) => {
+  const schema = Joi.object().keys({
+    newPassword: Joi.string().required().min(8).max(15).messages({
+      'any.required': ErrorMessages.IS_REQUIRED.replace('$field', 'password'),
+      'any.max': ErrorMessages.INVALID_LENGTH.replace('$field', 'password')
+        .replace('$length', '8'),
+      'string.pattern': ErrorMessages.INVALID_FIELD.replace('$field','password')
+    }),
+    oldPassword: Joi.string()
+      .min(8)
+      .required()
+  });
+  await validate(schema, req, res, next);
+};

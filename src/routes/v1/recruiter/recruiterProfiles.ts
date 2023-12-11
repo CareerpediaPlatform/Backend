@@ -7,6 +7,7 @@ import { FormParams } from '../../../constants/api_param_constants'
 import { emptyCheck, emptyChecks } from '../../../validations/file'
 import { videoFileReader } from 'src/middlewares/video_upload'
 import {isAuthenticated} from '../../../middlewares/authentication'
+import * as validation from '../../../validations/auth'
 
 passportConfiguration(passport)
 
@@ -15,7 +16,7 @@ const router = Router()
  router.use(passport.initialize())
 
  router.route('/details')
- .patch(isAuthenticated,controller.recruiterProfilePostAndUpdate);
+ .patch(validation.recruiter,isAuthenticated,controller.recruiterProfilePostAndUpdate);
  
  router.route('/details')
  .get(isAuthenticated,controller.getrecruiterProfile);

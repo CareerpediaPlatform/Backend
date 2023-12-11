@@ -13,18 +13,19 @@ passportConfiguration(passport)
 const router = Router()
  router.use(passport.initialize())
 
- router.route('/upload-assignment/:partId').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadAssignment);
- router.route('/assignment/:partId').get(controller.getAllSAssignment);
- router.route('/course/notes').post(controller.uploadNote);
- router.route('/course/notes').get(controller.getAllNotes);
- router.route('/part/thread/:partId').post(controller.uploadThread);
- router.route('/part/thread/:partId/:threadID').get(controller.getSingleThread);
+ router.route('/assignment/:partUid').post(videoFileReader(FormParams.FILE_FIELD,1),emptyChecks,controller.uploadAssignment);
+ router.route('/assignment/:partUid').get(controller.getAllSAssignment);
+ router.route('/course-note/:partUid').post(controller.uploadNote);
+ router.route('/course-note/:partUid').get(controller.getAllNotes);
+ router.route('/part/thread/:partUid').post(controller.uploadThread);
+ router.route('/part/thread/:partUid/:threadId').get(controller.getSingleThread);
+ router.route('/part/thread-reply/:partUid/:threadId').post(controller.postThreadreply);
 
     //  router.route('/part/thread').post(controller.uploadThread);
     //  router.route('/part/thread/:threadID/:uid').get(controller.getAllThreads);
     //  router.route('/mentor/reply-thread/:threadID/:uid').post(controller.postThreadreply)
- router.route('/thread/part/:partId').get(controller.getAllThreadsPart)
- router.route('/thread/course/:courseId').get(controller.getAllThreadsCourse)
+ router.route('/part/thread/:partUid').get(controller.getAllThreadsPart)
+ router.route('/course/thread/:courseUid').get(controller.getAllThreadsCourse)
 
 
 

@@ -42,6 +42,7 @@ const service_response_1 = require("src/models/lib/service_response");
 const mentorlms = __importStar(require("../../Database/mysql/lib/mentor/mentorLms"));
 const authentication_1 = require("src/helpers/authentication");
 const mysql_1 = require("src/Database/mysql");
+const models_1 = require("src/models");
 const TAG = 'services.mentor_LMS';
 function getAllAssignments(partId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -98,23 +99,29 @@ function giveRemark(remark, assignmentId, headerValue) {
     });
 }
 exports.giveRemark = giveRemark;
-function postThreadreply(reply, threadId, headerValue, partId) {
+function postThreadreply(headerValue, reply, partUid, threadId) {
     return __awaiter(this, void 0, void 0, function* () {
-        logger_1.default.info(`${TAG}.postThreadreply() ==> `, reply, threadId, headerValue);
+        logger_1.default.info(`${TAG}.postThreadreply() ==> `, reply, partUid, threadId);
         const serviceResponse = new service_response_1.ServiceResponse(status_codes_1.HttpStatusCodes.CREATED, '', false);
         try {
             let response;
+            console.log(headerValue);
             let decoded = yield (0, authentication_1.verifyAccessToken)(headerValue);
-            const uid = decoded.uid; //change will change mentor_uid
-            const isValid = (yield mysql_1.StudentAuth.checkEmailOrPhoneExist({ uid: decoded.uid })) || (yield mysql_1.MentorAuth.getMentorUid(uid));
+            const isValid = yield mysql_1.MentorAuth.getMentorUid({ uid: decoded.uid });
+            const uid = decoded.uid;
+            console.log(uid);
             if (isValid) {
-                response = yield mentorlms.postThreadreply(reply, threadId, uid, partId);
+                response = yield mentorlms.postThreadreply(reply, uid, partUid, threadId);
             }
             else {
-                serviceResponse.message = "Invalid USER ID";
+                serviceResponse.message = "Invalid user Id";
+                serviceResponse.statusCode = status_codes_1.HttpStatusCodes.BAD_REQUEST;
+                serviceResponse.addError(new models_1.APIError(serviceResponse.message, "", ""));
+                return serviceResponse;
             }
-            const data = Object.assign({}, response);
-            serviceResponse.data = data;
+            serviceResponse.data = {
+                reply
+            };
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.postThreadreply`, error);

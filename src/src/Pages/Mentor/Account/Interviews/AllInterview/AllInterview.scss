@@ -1,0 +1,264 @@
+@import "../../../../../index.scss";
+
+.mentorList {
+  border: 2px solid $border;
+  border-bottom: none;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  .course-filters {
+    display: flex;
+    gap: 12px;
+    position: absolute;
+    top: 14vh;
+    right: 30px;
+    @media (max-width: 1700px) {
+      right: 25px;
+    }
+    @media (max-width: 1450px) {
+      right: 20px;
+    }
+    .course-dropdown {
+      border: none;
+      outline: none;
+      padding: 10px 5px;
+      color: $heading;
+      font-weight: 600;
+      width: 157px;
+      border-radius: 10px;
+      font-size: 14px;
+      @media (max-width: 1700px) {
+        font-size: 13px;
+      }
+      @media (max-width: 1450px) {
+        font-size: 12px;
+      }
+    }
+  }
+  .mentor-list-table {
+    width: 100%;
+
+    tr {
+      border-bottom: 2px solid $border;
+      &:hover {
+        background-color: $table-hover;
+      }
+      cursor: pointer;
+    }
+
+    .table-head {
+      .table-head-data {
+        font-size: 14px !important;
+        color: $heading;
+        font-weight: 700;
+        overflow: hidden;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+    }
+    .table-body {
+      .table-data-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
+      .table-body-data {
+        font-size: 14px;
+        color: $light-blue;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+        cursor: pointer;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+
+        .promoted {
+          padding: 8px 16px;
+          color: $green;
+          font-size: 14px;
+          font-weight: 700;
+          background-color: transparent;
+          border: none;
+          @media (max-width: "1500px") {
+            font-size: 13px;
+          }
+          @media (max-width: "1300px") {
+            font-size: 12px;
+          }
+        }
+        .demoted {
+          padding: 8px 16px;
+          color: $yellow;
+          font-size: 14px;
+          font-weight: 700;
+          background-color: transparent;
+          border: none;
+          @media (max-width: "1500px") {
+            font-size: 13px;
+          }
+          @media (max-width: "1300px") {
+            font-size: 12px;
+          }
+        }
+        .declined {
+          padding: 8px 16px;
+          color: $red;
+          font-size: 14px;
+          font-weight: 700;
+          background-color: transparent;
+          border: none;
+          @media (max-width: "1500px") {
+            font-size: 13px;
+          }
+          @media (max-width: "1300px") {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+.popup-main-Container {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 30px;
+  position: relative;
+  padding: 40px;
+  .close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+
+    cursor: pointer;
+  }
+  .popup-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: $heading;
+    @media (max-width: "1500px") {
+      font-size: 16px;
+    }
+    @media (max-width: "1300px") {
+      font-size: 15px;
+    }
+  }
+
+  .popup-mains {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+
+    .popup-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 30px;
+      h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: $heading;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+      .value {
+        font-size: 14px;
+        color: $light-grey;
+        font-weight: 400;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+      .promoted {
+        color: $green;
+
+        font-weight: 700;
+
+        background-color: transparent;
+        border: none;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+      .demoted {
+        color: $yellow;
+        font-weight: 700;
+        background-color: transparent;
+        border: none;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+      .declined {
+        color: $red;
+        font-weight: 700;
+        background-color: transparent;
+        border: none;
+        @media (max-width: "1500px") {
+          font-size: 13px;
+        }
+        @media (max-width: "1300px") {
+          font-size: 12px;
+        }
+      }
+
+      .label {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        color: $heading;
+        font-weight: 500;
+        .input {
+          padding: 10px 14px;
+          font-size: 14px;
+          color: $blue;
+          font-weight: 400;
+          border-radius: 10px;
+          border: 2px solid $border;
+          resize: none;
+          outline: none;
+          &::placeholder {
+            font-size: 14px;
+            color: $light-grey;
+          }
+        }
+      }
+    }
+  }
+}

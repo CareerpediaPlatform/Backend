@@ -39,13 +39,11 @@ function signupUser(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
-            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(20, "Careerpedia-College");
+            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(15, "Careerpedia");
             transaction = yield (0, sql_query_util_1.getTransaction)();
             const college_admin = yield mysql_1.CollegeAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
-
             (0, nodemail_1.sendRegistrationNotifications)(user, generatePassword);
-
             const uid = college_admin.uid;
             const email = college_admin.email;
             const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
@@ -94,7 +92,7 @@ function loginUser(user) {
                 const email = existedUser.uid;
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
                 const data = {
-                    accessToken,
+                    accessToken, type: "college-signin", role: "college"
                 };
                 serviceResponse.data = data;
             }
@@ -117,10 +115,9 @@ function changePassword(user) {
             if (mentor) {
                 const IsValid = yield (0, encryption_1.comparePasswords)(mentor.password, user.oldPassword);
                 if (IsValid) {
-                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });        
+                    const response = yield mysql_1.CollegeAuth.changePassword({ password: user.newPassword, uid: uid.uid });
                     serviceResponse.message = "password changed successfully";
-                    serviceResponse.data = response;
-
+                    // serviceResponse.data=response
                 }
                 else {
                     serviceResponse.message = 'old password is wrong';

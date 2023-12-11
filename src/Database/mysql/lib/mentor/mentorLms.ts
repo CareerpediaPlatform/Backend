@@ -44,29 +44,36 @@ export async function getAllAssignments(partId: any, ){
       throw error;
     }
   }
-  export async function postThreadreply(reply:any,threadId:any,uid: any,partId: any) {
-    logger.info(`${TAG}.posthtreadreply()`);
 
+  export async function postThreadreply(reply, uid, partUid, threadId) {
+    logger.info(`${TAG}.posthtreadreply()`);
+  
     try {
-        const response=[]
-      const insertQuery =`INSERT INTO thread_reply (THREAD_ID,Uid,REPLY, REPLYTO, PART_ID) 
-      VALUES (:threadId, :uid, :reply, :replyto, :partId)`
+      const response = [];
+      const insertQuery = `INSERT INTO THREAD_REPLY (THREAD_ID, UID, PART_UID, REPLY, REPLYTO) 
+        VALUES (:threadId, :uid, :partUid, :reply, :replyto)`;
   
       for (const data of reply) {
-   
-            const res=await executeQuery(insertQuery, QueryTypes.INSERT, {
-                ...data,uid,threadId:threadId.threadID,partId:partId.partId
-              });
-              response.push(res)    
-      } 
-      return {...response};
+        const postData = {
+          threadId: threadId.threadId,
+          uid: uid,
+          reply: data.reply,     
+          replyto: data.replyto, 
+          partUid: partUid.partUid,
+        };
+  
+        const res = await executeQuery(insertQuery, QueryTypes.INSERT, postData);
+        response.push(res);
+      }
+  
+      return { ...response };
   
     } catch (error) {
       logger.error(`ERROR occurred in ${TAG}.posthtreadreply()`, error);
       throw error;
     }
   }
-
+  
   export async function getSingleRemark(uid: any,remarkId: any){
     console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
     console.log(remarkId)

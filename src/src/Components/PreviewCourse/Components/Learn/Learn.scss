@@ -1,0 +1,18 @@
+@import "../../../../index.scss";
+
+.Learn-main{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;   
+    @media(max-width:1700px){
+        gap: 15px;
+    }
+    @media(max-width:1700px){
+        gap: 12px;
+    }
+    .li{
+        font-size: 12px;
+        font-weight: 400;
+        color: $light-blue;
+       }
+}

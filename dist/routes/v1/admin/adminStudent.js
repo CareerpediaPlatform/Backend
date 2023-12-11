@@ -14,8 +14,8 @@ const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route('/status/:status/:uid')
     .patch(authentication_1.isAuthenticated, auth_1.studentUpdateStatus);
-router.route('/List')
+router.route('/all-list')
     .get(authentication_1.isAuthenticated, auth_1.getAllStudentList);
-router.route('/:uid')
+router.route('/list/:uid')
     .get(authentication_1.isAuthenticated, profile_1.getSingleStudentProfile);
 exports.default = router;

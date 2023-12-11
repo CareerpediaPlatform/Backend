@@ -5,6 +5,7 @@ import {IServiceResponse, IAdmin} from '../../models'
 import * as adminlmsServices from '../../services/admin/adminLms'
 import nodeUtil from 'util'
 
+
 const TAG = 'controller.lms.admin'
 
 export async function getCourseOverview(req: any, res: Response, next: NextFunction):Promise<void>{
@@ -24,9 +25,10 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try{
       log.info(`${TAG}.getCourses()`);
       log.debug(`${TAG}.getCourses()`)
-      
-      const courseType = req.query.type;
-      let response:IServiceResponse= await adminlmsServices.getCourses(courseType)
+      // const type = req.query.type;
+      const type = req.params
+      console.log(type)
+      let response:IServiceResponse= await adminlmsServices.getCourses(type)
       responseBuilder(response, res, next, req)
     }catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourses() `, error)
@@ -135,11 +137,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getCourseParts()`);
       log.debug(`${TAG}.getCourseParts() Object = ${JSON.stringify(req.body)}`)
-      let courseUid = req.params.courseUid
-      console.log(courseUid)
       let partUid = req.params.partUid
       console.log(partUid)
-      const authResponse= await adminlmsServices.getCoursePart(courseUid,partUid)
+      const authResponse= await adminlmsServices.getCoursePart(partUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseParts() `, error)
@@ -168,11 +168,9 @@ export async function getCourses(req: any, res: Response, next: NextFunction):Pr
     try {
       log.info(`${TAG}.getCourseModule()`);
       log.debug(`${TAG}.getCourseModule() Object = ${JSON.stringify(req.body)}`)
-      let partUid = req.params.partUid
-      console.log(partUid)
-      // let moduleUid = req.params.moduleUid
-      // console.log(moduleUid)
-      const authResponse= await adminlmsServices.getCourseModules(partUid)
+      let moduleUid = req.params.moduleUid
+      console.log(moduleUid)
+      const authResponse= await adminlmsServices.getCourseModules(moduleUid)
       responseBuilder(authResponse, res, next, req)
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseModule() `, error)
@@ -447,5 +445,17 @@ export async function deleteCoursePart(req: any, res: Response, next: NextFuncti
     }
   }
 
-
+  export async function getCourseListAll(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      log.info(`${TAG}.getCourseListAll()`);
+      log.debug(`${TAG}.getCourseListAll() Object = ${JSON.stringify(req.body)}`)
+      let type = req.params.type
+      console.log(type)
+      const authResponse= await adminlmsServices.getCourseAllList(type)
+      responseBuilder(authResponse, res, next, req)
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCourseListAll() `, error)
+      next(error)
+    }
+  }
 

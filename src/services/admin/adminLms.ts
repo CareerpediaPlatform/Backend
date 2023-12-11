@@ -28,22 +28,19 @@ export async function getCourseOverview(courseUid){
   
   }
   
-export async function getCourses(coursetype){
+export async function getCourses(type){
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
-    let response;
+
     try{
-      if(coursetype){
-        response=await adminLms.getCourses(coursetype)
+    console.log(type)
+      const existedCourse=await adminLms.getCourses(type)
+      const data = {
+        existedCourse 
       }
-      else{
-        response=await adminLms.getAllCourses()
-      }
-          
-          const data=[
-            ...response
-          ]
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+      console.log(data)
           serviceResponse.data=data
-          return await serviceResponse
+          return serviceResponse
     }catch (error) {
       log.error(`ERROR occurred in ${TAG}.getCourseOverview`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');
@@ -86,10 +83,10 @@ export async function getCourses(coursetype){
       //   isPublic: true,
       //   metaData: null,
       // }
-      const fileSavedResp = await adminLms.uploadCourse(fileDetails,course,type)
+      const fileSavedResp = await adminLms.uploadCourses(fileDetails,course,type)
     
         serviceResponse.data = {
-        courseUID: course.courseUID,
+        courseUid:fileSavedResp.courseUid,
         // thumbnail: imageDetails.fileUrl,
         video: fileDetails.fileUrl,
         title: course.title,
@@ -103,6 +100,7 @@ export async function getCourses(coursetype){
         type:type,
         learn: course.learn
       }
+      return serviceResponse
 
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.uploadCourse`, error)
@@ -169,10 +167,11 @@ export async function updateuploadCourse(courseUid:any, files:any, course:any) {
 
       const existedCourseID=await adminLms.checkCourseIdExist(courseUid)
       if(existedCourseID){
-        const existedCourse=await adminLms.updateuploadCourse(fileDetails,courseUid,course)
-        const data = {
-          existedCourse 
-        }    
+        const updatedCourse=await adminLms.updateuploadCourse(fileDetails,courseUid,course)
+         const data = {
+          updatedCourse
+         }
+         serviceResponse.message= "sucessfully updated"
         serviceResponse.data = data
         return serviceResponse
       }
@@ -249,21 +248,20 @@ export async function coursePartUser(user) {
     return serviceResponse;
   }
 
-export async function getCoursePart(courseUid,partUid) {
-    log.info(`${TAG}.getCoursePart() ==> `, courseUid,partUid);
+export async function getCoursePart(partUid) {
+    log.info(`${TAG}.getCoursePart() ==> `, partUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(courseUid)
       console.log(partUid)
-      const getCourseUid = await adminLms.checkCoureUid(courseUid);
-      console.log(getCourseUid);
-      if (!getCourseUid) {
-        serviceResponse.message = "Invalid course part UID";
-        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
-        return serviceResponse;
-      }
+      // const getCourseUid = await adminLms.checkCoureUid(courseUid);
+      // console.log(getCourseUid);
+      // if (!getCourseUid) {
+      //   serviceResponse.message = "Invalid course part UID";
+      //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+      //   return serviceResponse;
+      // }
       const coursePart = await adminLms.getPart(partUid)
       const data = {
         coursePart       
@@ -294,23 +292,23 @@ export async function courseModulesUser(user) {
     return serviceResponse;
   } 
   
-export async function getCourseModules(partUid) {
-    log.info(`${TAG}.getCourseModules() ==> `, partUid);
+export async function getCourseModules(moduleUid) {
+    log.info(`${TAG}.getCourseModules() ==> `, moduleUid);
       
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      console.log(partUid)
-      const getPartUid = await adminLms.checkPartUid(partUid);
-      console.log(getPartUid);
+      console.log(moduleUid)
+      // const getModule= await adminLms.checkPartUid(partUid);
+      // console.log(getModule);
       // if (!getPartUid) {
       //   serviceResponse.message = "Invalid course part UID";
       //   serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       //   serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
       //   return serviceResponse;
       // }
-      // const courseModules = await adminLms.getModule(moduleUid)
+      const courseModules = await adminLms.getModule(moduleUid)
       const data = {
-        getPartUid       
+        courseModules       
       }    
       serviceResponse.data = data
     } catch (error) {
@@ -713,7 +711,7 @@ export async function deleteCourseModule(moduleUid:any) {
       const existedCourseID=await adminLms.getModule(moduleUid)
       if(existedCourseID){
         const existedCourse=await adminLms.deleteCourseModule(moduleUid)
-        serviceResponse.message = "Course module successfully deleted!"
+        serviceResponse.message = "Course modules successfully deleted!"
         return serviceResponse
       }
       else{
@@ -728,7 +726,33 @@ export async function deleteCourseModule(moduleUid:any) {
     return serviceResponse;
   }
 
+export async function getCourseAllList(type) {
+    log.info(`${TAG}.getCourseAllList() ==> `, type);
+      
+    const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
+    try {
+      console.log(type)
+      const existedCourse=await adminLms.getAllCourseList(type)
+      if(existedCourse){
+        const data = {
+          existedCourse 
+        }    
+        serviceResponse.data = data
+        return serviceResponse
 
+      }else{
+        serviceResponse.message = "Invalid course-overview type";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse;
 
+      }
+      
+    } catch (error) {
+      log.error(`ERROR occurred in ${TAG}.getCourseAllList`, error);
+      serviceResponse.addServerError('Failed to create user due to technical difficulties');
+    }
+    return serviceResponse;
+  }
 
 

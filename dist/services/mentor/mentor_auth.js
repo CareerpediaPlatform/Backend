@@ -38,15 +38,17 @@ function signupUser(user) {
                 serviceResponse.addError(new api_error_1.APIError(serviceResponse.message, '', ''));
                 return serviceResponse;
             }
-            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(25, "Careerpedia-Mentor");
+            const generatePassword = yield (0, encryption_2.generatePasswordWithPrefixAndLength)(14, "Careerpedia");
             transaction = yield (0, sql_query_util_1.getTransaction)();
             const mentor = yield mysql_1.MentorAuth.signUp(user, generatePassword, transaction);
             yield transaction.commit();
             console.log(user);
             (0, nodemail_1.sendRegistrationNotifications)(user, generatePassword);
-            const accessToken = yield (0, authentication_1.generateAccessToken)({ mentor });
+            const uid = mentor.uid;
+            const email = mentor.email;
+            const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
             const data = {
-                accessToken, type: "mentor-signup"
+                accessToken
             };
             serviceResponse.data = data;
         }
@@ -84,9 +86,8 @@ function loginUser(user) {
                 const uid = existedUser.uid;
                 const email = existedUser.email;
                 const accessToken = yield (0, authentication_1.generateAccessToken)({ uid, email });
-
                 const data = {
-                    accessToken
+                    accessToken, type: "mentor-signin", role: "mentor"
                 };
                 serviceResponse.data = data;
             }

@@ -48,8 +48,8 @@ function uploadAssignment(req, res, next) {
             logger_1.default.debug(`${TAG}.uploadAssignment() Object = ${JSON.stringify(req.body)}`);
             logger_1.default.debug(`${TAG}.uploadAssignment() req file:` + util_1.default.inspect(req.file));
             const headerValue = req.headers.authorization.split(' ')[1];
-            const partId = req.params;
-            const serviceResponse = yield assignmentService.uploadAssignment(req.files, headerValue, partId);
+            const partUid = req.params;
+            const serviceResponse = yield assignmentService.uploadAssignment(req.files, headerValue, partUid);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {
@@ -65,8 +65,8 @@ function getAllSAssignment(req, res, next) {
             logger_1.default.info(`${TAG}.getAllSAssignment()`);
             logger_1.default.debug(`${TAG}.getAllSAssignment() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
-            const partId = req.params;
-            const authResponse = yield assignmentService.getAllAssignments(partId, headerValue);
+            const partUid = req.params;
+            const authResponse = yield assignmentService.getAllAssignments(partUid, headerValue);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -83,7 +83,8 @@ function uploadNote(req, res, next) {
             logger_1.default.debug(`${TAG}.uploadNote() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
             const note = req.body;
-            const serviceResponse = yield assignmentService.uploadNotes(note, headerValue);
+            const partUid = req.params;
+            const serviceResponse = yield assignmentService.uploadNotes(partUid, headerValue, note);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {
@@ -99,7 +100,9 @@ function getAllNotes(req, res, next) {
             logger_1.default.info(`${TAG}.getAllNotes()`);
             logger_1.default.debug(`${TAG}.getAllNotes() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
-            const authResponse = yield assignmentService.getAllNotes(headerValue);
+            const partUid = req.params;
+            console.log(partUid);
+            const authResponse = yield assignmentService.getAllNotes(partUid, headerValue);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -116,8 +119,8 @@ function uploadThread(req, res, next) {
             logger_1.default.debug(`${TAG}.uploadThread() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
             const thread = req.body;
-            const partId = req.params;
-            const serviceResponse = yield assignmentService.uploadThread(thread, headerValue, partId);
+            const partUid = req.params;
+            const serviceResponse = yield assignmentService.uploadThread(thread, headerValue, partUid);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {
@@ -134,8 +137,10 @@ function getSingleThread(req, res, next) {
             logger_1.default.debug(`${TAG}.getSingleThread() Object = ${JSON.stringify(req.body)}`);
             const headerValue = req.headers.authorization.split(' ')[1];
             const threadId = req.params;
-            const partId = req.params;
-            const authResponse = yield assignmentService.getSingleThread(partId, threadId, headerValue);
+            console.log(threadId);
+            const partUid = req.params;
+            console.log(partUid);
+            const authResponse = yield assignmentService.getSingleThread(partUid, threadId, headerValue);
             (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
@@ -150,12 +155,12 @@ function postThreadreply(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.postThreadreply()`);
             logger_1.default.debug(`${TAG}.postThreadreply() Object = ${JSON.stringify(req.body)}`);
-            // const headerValue =req.headers.authorization.split(' ')[1]
+            const headerValue = req.headers.authorization.split(' ')[1];
+            console.log(headerValue);
             const reply = req.body;
+            const partUid = req.params;
             const threadId = req.params;
-            const uid = req.params;
-            console.log(threadId, uid);
-            const serviceResponse = yield assignmentService.postThreadreply(reply, threadId, uid);
+            const serviceResponse = yield assignmentService.postThreadreply(reply, headerValue, partUid, threadId);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {
@@ -170,8 +175,8 @@ function getAllThreadsCourse(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getAllThreadsCourse()`);
             logger_1.default.debug(`${TAG}.getAllThreadsCourse() Object = ${JSON.stringify(req.body)}`);
-            const { courseId } = req.params;
-            const serviceResponse = yield assignmentService.getAllThreadsCourse(courseId);
+            const { courseUid } = req.params;
+            const serviceResponse = yield assignmentService.getAllThreadsCourse(courseUid);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {
@@ -186,8 +191,10 @@ function getAllThreadsPart(req, res, next) {
         try {
             logger_1.default.info(`${TAG}.getAllThreadsPart()`);
             logger_1.default.debug(`${TAG}.getAllThreadsPart() Object = ${JSON.stringify(req.body)}`);
-            const { partId } = req.params;
-            const serviceResponse = yield assignmentService.getAllThreadsPart(partId);
+            const headerValue = req.headers.authorization.split(' ')[1];
+            const partUid = req.params;
+            console.log(partUid);
+            const serviceResponse = yield assignmentService.getAllThreadsPart(partUid, headerValue);
             (0, response_builder_1.responseBuilder)(serviceResponse, res, next, req);
         }
         catch (error) {

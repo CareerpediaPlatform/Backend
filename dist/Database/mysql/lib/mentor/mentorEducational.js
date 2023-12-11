@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEducationDetails = exports.saveEducationDetails = void 0;
+exports.deleteEducation = exports.updateEducationDetails = exports.checkId = exports.postEducationDetails = exports.deleteEducationDetails = exports.saveEducationDetails = void 0;
 const logger_1 = __importDefault(require("src/logger"));
 const sql_query_util_1 = require("../../helpers/sql.query.util");
 const sequelize_1 = require("sequelize");
@@ -25,24 +25,24 @@ function saveEducationDetails(user) {
         try {
             const response = [];
             console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            const educationDetailsQuery = `INSERT INTO  MENTOR_EDUCATION_DETAILS
-        (USER_ID, UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
-         values(:userId, :uid,:degree ,:dept_branch, :start_year,:end_year)`;
-            const updateEducationDetailQuery = `UPDATE MENTOR_EDUCATION_DETAILS SET
-    DEGREE = :degree, DEPT_BRANCH = :dept_branch, START_YEAR = :start_year, END_YEAR = :end_year WHERE id = :id`;
-            for (const data of user.data) {
-                let uid = crypto.randomUUID();
+            const educationDetailsQuery = `INSERT INTO  MENTOR_EDUACTION_DETAILS
+        ( UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
+         values( :uid,:degree ,:deptBranch, :startYear,:endYear)`;
+            const updateEducationDetailQuery = `UPDATE MENTOR_EDUACTION_DETAILS SET
+    DEGREE = :degree, DEPT_BRANCH = :deptBranch, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :id`;
+            let items = Object.values(user.data);
+            for (const data of items) {
                 console.log(data);
                 if (data.id) {
                     const res = yield (0, sql_query_util_1.executeQuery)(updateEducationDetailQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, data));
                     response.push(res);
                 }
                 else {
-                    const res = yield (0, sql_query_util_1.executeQuery)(educationDetailsQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid, userId: user.id }));
+                    const res = yield (0, sql_query_util_1.executeQuery)(educationDetailsQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid: user.uid }));
                     response.push(res);
                 }
             }
-            return Object.assign({}, response);
+            return user;
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.saveEducationDetails()`, error);
@@ -54,7 +54,7 @@ exports.saveEducationDetails = saveEducationDetails;
 function deleteEducationDetails(uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            logger_1.default.info(`${TAG}.deleteRecruiter() ==>`, uid);
+            logger_1.default.info(`${TAG}.deleteEducationDetails() ==>`, uid);
             console.log(" **************************llib*************");
             console.log(uid);
             const response = [];
@@ -76,28 +76,80 @@ function deleteEducationDetails(uid) {
     });
 }
 exports.deleteEducationDetails = deleteEducationDetails;
-// export async function saveEducationDetail(user) {
-//     logger.info(`${TAG}.saveEducationDetails()`);
-//     console.log(user)
-//     try {
-//         const response=[]
-//         const educationDetailsQuery = `INSERT INTO  MENTOR_EDUCATION_DETAILS
-//         (USER_ID, UID,DEGREE, DEPT_BRANCH, START_YEAR,END_YEAR)
-//          values(:userId, :uid,:degree ,:dept_branch, :start_year,:end_year)`;
-//     //   const updateEducationDetailQuery = `UPDATE MENTOR_EDUCATION_DETAILS SET
-//     // DEGREE = :degree, DEPT_BRANCH = :dept_branch, START_YEAR = :start_year, END_YEAR = :end_year WHERE id = :id`;
-//       for (const data of user.data) {
-//         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-//         let uid=crypto.randomUUID()
-//         console.log(data)
-//         const res=await executeQuery(educationDetailsQuery, QueryTypes.INSERT, {
-//             ...data,uid
-//           });
-//           response.push(res)
-//       }
-//     return {...response};
-//     } catch (error) {
-//       logger.error(`ERROR occurred in ${TAG}.saveEducationDetails()`, error);
-//       throw error;
-//     }
-//   }
+//sigle object of education details
+function postEducationDetails(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+        console.log(user);
+        logger_1.default.info(`${TAG}.postEducationDetails()`);
+        try {
+            const insertQuery = `INSERT INTO  MENTOR_EDUACTION_DETAILS
+      ( UID,DEGREE, DEPT_BRANCH, PERCENTAGE, START_YEAR,END_YEAR)
+       values( :uid,:degree ,:deptBranch, :percentage
+        , :startYear, :endYear)`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign({}, user));
+            return user;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+            throw error;
+        }
+    });
+}
+exports.postEducationDetails = postEducationDetails;
+function checkId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg");
+        console.log(id);
+        logger_1.default.info(`${TAG}. checkId()`);
+        try {
+            const checkQuery = `SELECT * FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID=:id`;
+            const [userId] = yield (0, sql_query_util_1.executeQuery)(checkQuery, sequelize_1.QueryTypes.SELECT, { id });
+            console.log(userId);
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.checId()`, error);
+            throw error;
+        }
+    });
+}
+exports.checkId = checkId;
+function updateEducationDetails(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.updateEducationDetails()`);
+        try {
+            console.log("hsgdjASHCJahsjcASC");
+            console.log(user);
+            const updateQuery = `UPDATE MENTOR_EDUACTION_DETAILS SET
+      DEGREE = :degree, DEPT_BRANCH = :deptBranch, PERCENTAGE= :percentage, START_YEAR = :startYear, END_YEAR = :endYear WHERE USER_ID = :userId`;
+            let [profile] = yield (0, sql_query_util_1.executeQuery)(updateQuery, sequelize_1.QueryTypes.UPDATE, Object.assign({}, user));
+            return profile;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.updateEducationDetails()`, error);
+            throw error;
+        }
+    });
+}
+exports.updateEducationDetails = updateEducationDetails;
+function deleteEducation(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${TAG}.deleteEducation()`);
+        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        console.log(user);
+        console.log(user.id);
+        try {
+            const insertQuery = `DELETE FROM MENTOR_EDUACTION_DETAILS WHERE USER_ID = :userId`;
+            let userId = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.DELETE, {
+                userId: user.userId
+            });
+            return userId;
+        }
+        catch (error) {
+            logger_1.default.error(`ERROR occurred in ${TAG}.deleteEducation()`, error);
+            throw error;
+        }
+    });
+}
+exports.deleteEducation = deleteEducation;

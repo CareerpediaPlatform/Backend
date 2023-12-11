@@ -1,0 +1,57 @@
+@import "../../../../../../../index.scss";
+
+.mentor-list {
+  width: 100%;
+  border: 2px solid $border;
+  border-bottom: none;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  background-color: $white;
+  .mentor-list-table {
+    width: 100%;
+
+    tr {
+      border-bottom: 2px solid $border;
+    }
+
+    .table-head {
+      .table-head-data {
+        font-size: 14px;
+        color: $heading;
+        font-weight: 700;
+        overflow: hidden;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+      }
+    }
+    .table-body {
+      tr {
+        &:hover {
+          background-color: $table-hover;
+        }
+      }
+      cursor: pointer;
+      .table-body-data {
+        font-size: 14px;
+        color: $light-blue;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+        @media (max-width: 1700px) {
+          font-size: 13px;
+        }
+        @media (max-width: 1450px) {
+          font-size: 12px;
+        }
+        img{
+          height: 40px;
+        }
+      }
+    }
+  }
+}

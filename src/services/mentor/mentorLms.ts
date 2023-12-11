@@ -4,6 +4,7 @@ import { IServiceResponse, ServiceResponse } from "src/models/lib/service_respon
 import * as mentorlms from "../../Database/mysql/lib/mentor/mentorLms";
 import { verifyAccessToken } from "src/helpers/authentication";
 import { MentorAuth, StudentAuth } from "src/Database/mysql";
+import { APIError } from "src/models";
 
 const TAG = 'services.mentor_LMS';
 
@@ -66,25 +67,30 @@ export async function getAllAssignments(partId: any){
   }
 
 
-  export async function postThreadreply(reply:any, threadId:any, headerValue:any, partId: any) {
-    log.info(`${TAG}.postThreadreply() ==> `,reply,threadId,headerValue);  
+  export async function postThreadreply(headerValue: any,reply:any, partUid:any, threadId:any) {
+    log.info(`${TAG}.postThreadreply() ==> `,reply,partUid,threadId);  
     const serviceResponse: IServiceResponse = new ServiceResponse(HttpStatusCodes.CREATED, '', false);
     try {
-      let response;
+      let response:any;
+      console.log(headerValue)
       let decoded=await verifyAccessToken(headerValue)
-      const uid=decoded.uid //change will change mentor_uid
-      const isValid=await StudentAuth.checkEmailOrPhoneExist({uid:decoded.uid}) || await MentorAuth.getMentorUid(uid) 
+      const isValid=await MentorAuth.getMentorUid({uid:decoded.uid})
+      const uid=decoded.uid
+      console.log(uid)
       if(isValid){
-      response = await mentorlms.postThreadreply(reply,threadId,uid,partId)
+        response = await mentorlms.postThreadreply(reply,uid,partUid,threadId)
       }
       else{
-        serviceResponse.message="Invalid USER ID"
+        serviceResponse.message="Invalid user Id";
+        serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+        serviceResponse.addError(new APIError(serviceResponse.message, "", ""));
+        return serviceResponse
+      }
+      
+      serviceResponse.data = {  
+        reply
       }
   
-      const data = {
-        ...response,
-      }
-      serviceResponse.data = data
     } catch (error) {
       log.error(`ERROR occurred in ${TAG}.postThreadreply`, error);
       serviceResponse.addServerError('Failed to create user due to technical difficulties');

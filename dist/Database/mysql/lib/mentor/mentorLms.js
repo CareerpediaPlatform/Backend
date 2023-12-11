@@ -64,15 +64,22 @@ function checkAssignmentId(id) {
     });
 }
 exports.checkAssignmentId = checkAssignmentId;
-function postThreadreply(reply, threadId, uid, partId) {
+function postThreadreply(reply, uid, partUid, threadId) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${TAG}.posthtreadreply()`);
         try {
             const response = [];
-            const insertQuery = `INSERT INTO thread_reply (THREAD_ID,Uid,REPLY, REPLYTO, PART_ID) 
-      VALUES (:threadId, :uid, :reply, :replyto, :partId)`;
+            const insertQuery = `INSERT INTO THREAD_REPLY (THREAD_ID, UID, PART_UID, REPLY, REPLYTO) 
+        VALUES (:threadId, :uid, :partUid, :reply, :replyto)`;
             for (const data of reply) {
-                const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, Object.assign(Object.assign({}, data), { uid, threadId: threadId.threadID, partId: partId.partId }));
+                const postData = {
+                    threadId: threadId.threadId,
+                    uid: uid,
+                    reply: data.reply,
+                    replyto: data.replyto,
+                    partUid: partUid.partUid,
+                };
+                const res = yield (0, sql_query_util_1.executeQuery)(insertQuery, sequelize_1.QueryTypes.INSERT, postData);
                 response.push(res);
             }
             return Object.assign({}, response);

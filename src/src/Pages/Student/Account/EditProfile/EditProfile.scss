@@ -1,0 +1,107 @@
+@import "../../../../index.scss";
+.student-EditProfile{
+    display: flex;
+    gap:16px;
+    .edit-profile-content{
+        .edit-profile-data{    
+            margin-top: 10vh;
+            padding:30px 30px 30px;
+            background-color: $background;
+            @media(max-width:1700px){
+                padding: 25px 25px 30px;
+            }
+            @media(max-width:1450px){
+                padding:20px 20px 30px;
+            }
+            .edit-profile-components{
+                border-radius: 20px; 
+                border: 2px solid #F8F8F8;
+                background: #FFF;
+                display: flex;
+                padding: 30px 25px;
+         
+               
+
+                .edit-profile-components-left{
+                    width: 30%;
+                    border-right:solid #F8F8F8;
+                    position: relative;
+                    display: flex;
+                    gap:40px;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: 80vh;
+                    overflow-y: scroll;
+                    @media(max-width:1670px){
+                        gap:33px;
+                    }
+                    @media(max-width:1470px){
+                        gap:25px;
+                    }
+             .taskBars{
+                display: flex;
+                flex-direction: column;
+                gap:6px;
+             }
+
+                  
+                }
+                .edit-profile-components-right{
+                    width: 70%;
+                    height: 80vh;
+                    overflow-y: scroll;
+                    display: flex;
+                    flex-direction: column;
+                    gap:40px;
+                    padding:0px 0px 0px 35px;
+
+                    .buttons{
+                        width: 44%;
+                        display: flex;
+                        justify-content: space-between;
+
+                        button{
+                            width: 44%;
+                            color: #FFFFFF;
+                            background-color:#467FFF;
+                            border: none;
+                            padding:11px 0px ;
+                            font-size: 16px;
+                            font-weight: 400;
+                            border-radius: 10px;
+                            justify-content: center;
+                            position: relative;
+                                display: flex;
+                                gap:6px;
+                                @media(max-width:1770px){
+                                    font-size: 15px;       
+                                                         }
+                                @media(max-width:1500px){
+                                    font-size: 14px;       
+                                                         }
+                                @media(max-width:1470px){
+                                    font-size: 12px;       
+                                                         }
+                                img{
+                                    width: 20px;
+                                    @media(max-width:1770px){
+                                        width: 19px;
+                                    }
+                                    @media(max-width:1500px){
+                                        width: 18px;
+                                    }
+                                    @media(max-width:1470px){
+                                        width: 16px;
+                                    }
+                                }
+                            }
+                        }
+                        #save{
+                            background-color:#FF9F43;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    

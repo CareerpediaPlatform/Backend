@@ -1,0 +1,128 @@
+.player-navbar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111011;
+    padding:12px 20px;
+    @media(max-width:1800px){
+        padding:12px 18px;
+    }
+    @media(max-width:1600px){
+        padding:11px 15px;
+    }
+    @media(max-width:1470px){
+        padding:10px 13px;
+    }
+ 
+    // dropdown
+    .dropdown {
+        width: 18%;
+        position: relative;
+
+        .dropdown-btn {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            background-color: #000 ;
+            color: #FFF;
+            font-size: 16px;
+            font-weight: 600;
+            @media(max-width:1800px){
+                            font-size: 15px;
+                        }
+                        @media(max-width:1600px){
+                            font-size: 14px;
+                        }
+                        @media(max-width:1500px){
+                            font-size: 12px;
+                        }
+          }
+
+          .dropdown-content {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            background-color: #000 ;
+
+            .item {
+                padding: 10px;
+                cursor: pointer;
+                color: #FFF;
+                font-size: 16px;
+                font-weight: 500;
+                @media(max-width:1800px){
+                    font-size: 15px;
+                }
+                @media(max-width:1600px){
+                    font-size: 14px;
+                }
+                @media(max-width:1500px){
+                    font-size: 12px;
+                }
+              }
+              .item:hover {
+                background: #fcfcfc;
+                color: #000;
+              }
+          }
+      }
+
+      .player-navbar-search{
+        width: 22%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color:#000;
+        border-radius: 17.5px;
+        border: 1px solid #FFF;
+        padding: 9px 25px;
+        @media(max-width:1800px){
+            padding: 8px 24px;
+        }
+        @media(max-width:1600px){
+            padding: 7px 23px;
+        }
+        @media(max-width:1500px){
+            padding: 6px 22px;
+        }
+        @media(max-width:1400px){
+            padding: 6px 21px;
+        }
+        input{
+            background-color: transparent;
+            border: none;
+            color: #FFF;
+            height: 100%;
+            border: 1px solid #000;
+            font-size: 16px;
+            @media(max-width:1800px){
+                font-size: 15px;
+            }
+            @media(max-width:1600px){
+                font-size: 14px;
+            }
+            @media(max-width:1500px){
+                font-size: 13px;
+            }
+        }
+        img{
+            width: 16px;
+            height: 16px;
+            @media(max-width:1800px){
+                width: 15px;
+            height: 15px;
+            }
+            @media(max-width:1600px){
+                width: 14px;
+            height: 14px;
+            }
+            @media(max-width:1500px){
+                width: 13px;
+                height: 13px;
+                        }
+        }
+      } 
+}

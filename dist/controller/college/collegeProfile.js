@@ -48,7 +48,7 @@ function collegeProfilePostAndUpdate(req, res, next) {
             const user = req.body;
             const headerValue = req.headers.authorization.split(' ')[1];
             const authResponse = yield collegeProfileServices.collegeProfile(Object.assign(Object.assign({}, user), { headerValue }));
-            (0, response_builder_1.responseBuilder)(headerValue, res, next, req);
+            (0, response_builder_1.responseBuilder)(authResponse, res, next, req);
         }
         catch (error) {
             logger_1.default.error(`ERROR occurred in ${TAG}.collegeProfilePostAndUpdate() `, error);

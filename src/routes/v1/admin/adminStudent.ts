@@ -14,10 +14,10 @@ const router = Router()
  router.route('/status/:status/:uid')
      .patch(isAuthenticated,studentUpdateStatus);
 
- router.route('/List')
+ router.route('/all-list')
      .get(isAuthenticated,getAllStudentList);
 
- router.route('/:uid')
+ router.route('/list/:uid')
      .get(isAuthenticated,getSingleStudentProfile);
 
 

@@ -35,11 +35,12 @@ const api_param_constants_1 = require("../../../constants/api_param_constants");
 const file_1 = require("../../../validations/file");
 const video_upload_1 = require("src/middlewares/video_upload");
 const authentication_1 = require("../../../middlewares/authentication");
+const validation = __importStar(require("../../../validations/auth"));
 (0, passport_1.passportConfiguration)(passport_2.default);
 const router = (0, express_1.Router)();
 router.use(passport_2.default.initialize());
 router.route('/details')
-    .patch(authentication_1.isAuthenticated, controller.recruiterProfilePostAndUpdate);
+    .patch(validation.recruiter, authentication_1.isAuthenticated, controller.recruiterProfilePostAndUpdate);
 router.route('/details')
     .get(authentication_1.isAuthenticated, controller.getrecruiterProfile);
 router.route('/details/:userID')

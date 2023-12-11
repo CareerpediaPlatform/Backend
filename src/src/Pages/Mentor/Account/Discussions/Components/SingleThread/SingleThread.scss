@@ -1,0 +1,77 @@
+@import "../../../../../../index.scss";
+
+.responses{
+    border: 2px solid $border;
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    .student-response{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .details{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            h3{
+                color: $heading;
+                font-size: 14px;
+                font-weight: 700;
+                @media(max-width:1700px){
+                    font-size: 13px;
+                }
+                @media(max-width:1700px){
+                    font-size: 12px;
+                }
+            }
+            p{
+                color: $light-grey;
+                font-size: 12px;
+                font-weight: 600;
+                @media(max-width:1700px){
+                    font-size: 11px;
+                }
+                @media(max-width:1700px){
+                    font-size: 10px;
+                }
+            }
+        }
+        .response{
+            width: 90%;
+            font-size: 14px;
+            color: $light-blue;
+            @media(max-width:1700px){
+                font-size: 13px;
+            }
+            @media(max-width:1700px){
+                font-size: 12px;
+            }
+        }
+    }
+    .mentor-response{
+        width: 100%;
+        textarea{
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid $input-border;
+            border-radius: 5px;
+            resize: none;
+            outline: none;
+            font-size: 14px;
+            color: $light-blue;
+            @media(max-width:1700px){
+                height: 90px;
+                font-size: 13px;
+            }
+            @media(max-width:1450px){
+                height: 80px;
+                font-size: 12px;
+            }
+        }
+    }
+}

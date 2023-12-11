@@ -24,4 +24,5 @@ exports.ErrorMessages = {
     SESSION_EXPIRED: 'Session Expired.',
     INVALID_MIN_LENGTH: '$field is less than $length length.',
     INVALID_MAX_LENGTH: '$field is more than $length length.',
+    INVALID_CHAR: '$field is at least one Capital letter and one special character.'
 };

@@ -1,0 +1,207 @@
+@import "../../../../index.scss";
+
+.student-bookSlot {
+  width: 100%;
+  display: flex;
+
+  .bookSlot-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .bookSlot-data {
+      width: 100%;
+      margin-top: 10vh;
+      padding: 30px;
+      background-color: $background;
+      @media (max-width: 1700px) {
+        padding: 25px;
+      }
+      @media (max-width: 1450px) {
+        padding: 20px;
+      }
+
+      .bookSlot {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+        background-color: $white;
+        border-radius: 20px;
+        padding: 30px;
+        @media (max-width: 1700px) {
+          gap: 18px;
+          padding: 25px;
+        }
+        @media (max-width: 1450px) {
+          gap: 16px;
+          padding: 20px;
+        }
+        .bookSlot-top {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-direction: row;
+          border: 2px solid $border;
+          border-radius: 15px;
+          padding: 20px;
+          @media (max-width: 1700px) {
+            padding: 18px;
+          }
+          @media (max-width: 1450px) {
+            padding: 16px;
+          }
+          .bookSlot-top-left {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            @media (max-width: 1700px) {
+              gap: 18px;
+            }
+            @media (max-width: 1450px) {
+              gap: 16px;
+            }
+            .bookSlot-heading {
+              display: flex;
+              align-items: flex-start;
+              justify-content: center;
+              flex-direction: column;
+              gap: 10px;
+              h3 {
+                font-size: 20px;
+                font-weight: 700;
+                color: $heading;
+                @media (max-width: 1700px) {
+                  font-size: 18px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 16px;
+                }
+              }
+              p {
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 20px;
+                color: $light-blue;
+                @media (max-width: 1700px) {
+                  font-size: 11px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 10px;
+                }
+              }
+            }
+            .bookSlot-optional {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              flex-direction: row;
+              gap: 10px;
+              img {
+                height: 20px;
+                @media (max-width: 1700px) {
+                  height: 18px;
+                }
+                @media (max-width: 1450px) {
+                  height: 15px;
+                }
+              }
+              p {
+                font-size: 12px;
+                font-weight: 400;
+                color: $light-blue;
+                @media (max-width: 1700px) {
+                  font-size: 11px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 10px;
+                }
+              }
+            }
+          }
+          .bookSlot-top-right {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            @media (max-width: 1700px) {
+              gap: 18px;
+            }
+            @media (max-width: 1450px) {
+              gap: 16px;
+            }
+            .bookSlot-date {
+              display: flex;
+              h4 {
+                font-size: 14px;
+                font-weight: 600;
+                color: $heading;
+                @media (max-width: 1700px) {
+                  font-size: 13px;
+                }
+                @media (max-width: 1450px) {
+                  font-size: 12px;
+                }
+              }
+            }
+
+            .bookSlot-dayBox {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction: row;
+              gap: 20px;
+              @media (max-width: 1700px) {
+                gap: 18px;
+              }
+              @media (max-width: 1450px) {
+                gap: 16px;
+              }
+
+              .bookSlot-dateBox {
+                width: 50px;
+                height: 50px;
+                background-color: #f8f8f8;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
+                color: $heading;
+                @media (max-width: 1700px) {
+                  width: 48px;
+                  height: 48px;
+                }
+                @media (max-width: 1450px) {
+                  width: 46px;
+                  height: 46px;
+                }
+
+                &.current-day {
+                  background-color: $yellow;
+                  color: white;
+                }
+                span {
+                  font-size: 10px;
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+        }
+
+        .SlotDate {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
